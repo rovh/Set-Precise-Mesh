@@ -19,4 +19,4 @@ If you enable "Change adjacent edge", the edge adjacent to the angle will be cha
 
 To change the length of the edge it is necessary to select two verteces. The last selected vertex (active vertex) will change its length, i.e. last selected vertex will be moved.
 
-if you enable "Change two directions" the length will change based on the two selected vertexes i.e. two selceted vertexes will be moved.
+If you enable "Change two directions" the length will change based on the two selected vertexes i.e. two selceted vertexes will be moved.
