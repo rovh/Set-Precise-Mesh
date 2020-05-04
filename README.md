@@ -13,7 +13,7 @@ If you enable "Change adjacent edge", the edge adjacent to the angle will be cha
 
 ---
 ### Set Length
-<a href="https://i.imgur.com/SW8Vsg8.mp4" target="_self">
+<a href="https://www.dropbox.com/h?preview=0001-0256.mp4" target="_self">
 <img src="https://i.imgur.com/E0R4Zla.png" width=50% height=50% alt"Angle" style="border-radius: 30px">
 </a>
 
