@@ -17,3 +17,4 @@ If you use adjacent mode, the edge adjacent to the angle will be changed, otherw
 <img src="https://i.imgur.com/E0R4Zla.png" width=50% height=50% alt"Angle" style="border-radius: 30px">
 </a>
 
+To change the length of the edge it is necessary to select two verteces. The last selected vertex will change its length, i.e. it will be moved.
