@@ -9,7 +9,7 @@ You can set exact value of the angle between three vertexes.
 
 To change the angle it is necessary to select three vertices. The last selected vertex will be active and will affect on the angle change, i.e. active vertex will be moved.
 
-If you use adjacent mode, the edge adjacent to the angle will be changed, otherwise the edge opposite to the angle will be changed.
+If you enable "Change adjacent edge", the edge adjacent to the angle will be changed, otherwise the edge opposite to the angle will be changed.
 
 ---
 ### Set Length
@@ -18,3 +18,5 @@ If you use adjacent mode, the edge adjacent to the angle will be changed, otherw
 </a>
 
 To change the length of the edge it is necessary to select two verteces. The last selected vertex will change its length, i.e. it will be moved.
+
+if you enable "Change two directions" the length will change based on the two selected vertexes i.e. two vertexes will be moved.
