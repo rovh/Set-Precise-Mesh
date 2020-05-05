@@ -11,7 +11,8 @@ To change the angle it is necessary to select three vertices. The last selected 
 
 If you enable "Change adjacent edge", the edge adjacent to the angle will be changed, otherwise the edge opposite to the angle will be changed.
 
-To change the angle script uses a normal based on the three selected vertexes
+To change the angle script uses a normal based on the three selected vertexes:
+
 <a href="https://i.imgur.com/O57QpOt.mp4" target="_self">
 <img src="https://i.imgur.com/TQXxCan.png" width=50% height=50% alt"Angle" style="border-radius: 30px">
 </a>
