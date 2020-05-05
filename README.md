@@ -13,10 +13,11 @@ If you enable "Change adjacent edge", the edge adjacent to the angle will be cha
 
 ---
 ### Set Length
-<a href="https:https://i.imgur.com/yYdrFmv.mp4" target="_self">
+<a href="https://i.imgur.com/yYdrFmv.mp4" target="_self">
 <img src="https://i.imgur.com/Wovj1ub.png" width=50% height=50% alt"Angle" style="border-radius: 30px">
 </a>
 
 To change the length of the edge it is necessary to select two verteces. The last selected vertex (active vertex) will change its length, i.e. last selected vertex will be moved.
 
 If you enable "Change two directions" the length will change based on the two selected vertexes i.e. two selceted vertexes will be moved.
+
