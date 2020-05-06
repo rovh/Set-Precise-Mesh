@@ -97,7 +97,7 @@ class SetAngle(bpy.types.Operator):
         oldv3=vec[2]
         
 
-
+        # Angle between verteses
         v1ch=v1-v2
         v3ch=v3-v2
         angle = v3ch.angle(v1ch, 0.0)
@@ -179,8 +179,8 @@ class SetAngle(bpy.types.Operator):
             
         else:
             
-              
-            R = Matrix.Rotation(angle+radians(-height), 4, (normal))
+            
+            R = Matrix.Rotation(angle-height, 4, (normal))
             
             bmesh.ops.rotate(bm, 
                     matrix=R,        
