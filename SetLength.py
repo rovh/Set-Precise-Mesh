@@ -47,9 +47,17 @@ def check(self):
 def check2(self):
     obj = bpy.context.object
 
-    text = 'Your object delta transform is not correct. Please, change it. \n How to do it: Properties Editor > Object Properties > Transform > Delta Transform \n Needed parameters: \n All Rotations = 0 \n All Scales = 1'
+    text = 'Your object delta transform is not correct. Please, change it. \n How to do it: Properties Editor > Object Properties > Transform > Delta Transform > You need to set values: \n All Locations = 0 \n All Rotations = 0 \n All Scales = 1'
     
     war = "ERROR"
+
+    #Check delta location
+    if obj.delta_location[0] != 0:
+        self.report({war}, text)
+    elif obj.delta_location[1] != 0:
+        self.report({war}, text)
+    elif obj.delta_location[2] != 0:
+        self.report({war}, text)
 
     # Check delta rotation
     if obj.delta_rotation_euler[0] != 0:
