@@ -173,6 +173,7 @@ def register():
         min=0.0, max=360.0,
         default=0.0,
         step = 100.0,
+        unit="ROTATION",
     )
 
     bpy.types.Object.anglebool = bpy.props.BoolProperty(
@@ -192,6 +193,7 @@ def register():
         description="Length of the edge",
         default=1.0,
         step = 100.0,
+        unit='LENGTH',
     )
 
     bpy.types.Object.lengthbool = bpy.props.BoolProperty(
