@@ -141,15 +141,13 @@ class SetAngle(bpy.types.Operator):
         bm.verts[ind[2]].select = 1
 
 
-        bpy.context.scene.cursor.location = v2
-
-
         context = bpy.context
         scene = context.scene
         ob = context.edit_object
 
-        #pp - Cusror location
-        pp = bpy.context.scene.cursor.location
+        #pp = Cursor location
+        bpy.context.scene.cursor.location = v2
+        pp = v2
 
 
 
@@ -183,9 +181,7 @@ class SetAngle(bpy.types.Operator):
         S.translation -= pp      
         
         
-        if bool2 == 1:
-        
-                
+        if bool2 == 1:              
             R = Matrix.Rotation(angle, 4, (normal))
             
             bmesh.ops.rotate(bm, 
@@ -193,10 +189,8 @@ class SetAngle(bpy.types.Operator):
                     verts=[v for v in bm.verts if v.select],
                     space=S,
                     )
-                    
             bpy.context.scene.tool_settings.transform_pivot_point = 'CURSOR'
 
-            
                         
             bpy.context.object.update_from_editmode()
             bmesh.update_edit_mesh(me, True, True)
