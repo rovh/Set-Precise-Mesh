@@ -60,7 +60,7 @@ def check2(self):
         self.report({war}, text)
 
     # Check delta rotation
-    if obj.delta_rotation_euler[0] != 0:
+    elif obj.delta_rotation_euler[0] != 0:
         self.report({war}, text)
     elif obj.delta_rotation_euler[1] != 0:
         self.report({war}, text)
