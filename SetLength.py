@@ -67,7 +67,7 @@ def check2(self):
     elif obj.delta_rotation_euler[2] != 0:
         self.report({war}, text)
 
-    # Cheak delta scale
+    # Check delta scale
     elif obj.delta_scale[0] != 1:
         self.report({war}, text)
     elif obj.delta_scale[1] != 1:
