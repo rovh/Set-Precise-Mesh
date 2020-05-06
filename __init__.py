@@ -174,6 +174,7 @@ def register():
         default=0.0,
         step = 100.0,
         unit="ROTATION",
+        precision = 6,
     )
 
     bpy.types.Object.anglebool = bpy.props.BoolProperty(
@@ -194,6 +195,7 @@ def register():
         default=1.0,
         step = 100.0,
         unit='LENGTH',
+        precision = 6,
     )
 
     bpy.types.Object.lengthbool = bpy.props.BoolProperty(
