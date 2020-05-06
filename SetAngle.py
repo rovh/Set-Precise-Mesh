@@ -173,11 +173,24 @@ class SetAngle(bpy.types.Operator):
         rot_quat = direction.to_track_quat('-Z', 'Y')
 
         obj_camera.rotation_euler = rot_quat.to_euler()
+
+
         
-        
+        # create a location matrix
+        mat_loc =  mathutils.Matrix.Translation(( 0.0 ,  0.0 ,  0.0 )) 
+
+        # create an identitiy matrix
+        mat_sca =  mathutils.Matrix.Scale( 1.0 ,  4 ,  ( 0.0 ,  0.0 ,  1.0 )) 
+
+        # create a rotation matrix
+        mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
+
+        # combine transformations
+        mat_out =  mat_loc @  mat_rot @  mat_sca
 
 
         S = ob.matrix_world.copy()
+        # S = mat_out
         S.translation -= pp      
         
         
