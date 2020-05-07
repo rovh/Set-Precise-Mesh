@@ -176,7 +176,7 @@ class SetAngle(bpy.types.Operator):
 
 
         # S = ob.matrix_world.copy()
-
+        # S = ob.matrix_local.copy()
         
         # create a location matrix
         mat_loc =  mathutils.Matrix.Translation(( 0.0 ,  0.0 ,  0.0 )) 
@@ -197,6 +197,7 @@ class SetAngle(bpy.types.Operator):
         
         bpy.context.scene.cursor.location = v2
         pp = v2
+
 
 
         S = mat_out
