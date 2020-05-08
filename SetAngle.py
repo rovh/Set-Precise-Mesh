@@ -215,20 +215,27 @@ class SetAngle(bpy.types.Operator):
 
         loc, rot, sca = bpy.context.object.matrix_world.decompose()
 
-        mat_loc =  mathutils.Matrix.Translation(( 0.0 ,  0.0 ,  0.0 )) 
-        
+        mat_loc =  mathutils.Matrix.Translation(( 0.0 ,  0.0 ,  0.0 ))        
         mat_sca =  mathutils.Matrix.Scale( 1.0 ,  4 ,  ( 0.0 ,  0.0 ,  1.0 ))
-
         mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
 
-        # S = mat_rot
-        # combine transformations
         mat_out =  mat_loc @  mat_rot @  mat_sca
 
-        print(mat_sca)
-        print(mat_rot)
-        print(mat_loc)
-        print(sca)
+        # mat_out[0][0] = bpy.context.object.matrix_world[0][0]
+        # mat_out[1][1] = bpy.context.object.matrix_world[1][1]
+        # mat_out[2][2] = bpy.context.object.matrix_world[2][2]
+
+       
+
+        print(mat_out)
+
+        S = mat_rot
+        # combine transformations
+        
+        # print(mat_sca)
+        # print(mat_rot)
+        # print(mat_loc)
+        # print(sca)
 
         #pp = Cursor location
         
@@ -238,16 +245,12 @@ class SetAngle(bpy.types.Operator):
 
         # mat_out = mat_out
 
-        S = mat_out
+        # S = S @ mat_out
 
-        # S.Translation = ( 0.0 ,  0.0 ,  0.0 )
-
-        # S = ob.matrix_world.copy()
+        print(S)
 
         S.translation -= pp      
-        
-        # normal = normal
-        # angle = angle + rot
+
 
         if bool2 == 1:              
             R = Matrix.Rotation(angle, 4, (normal))

@@ -94,8 +94,8 @@ class SetLength(bpy.types.Operator):
 
     def execute(self, context):
         
-        check(self)
-        check2(self)
+        # check(self)
+        # check2(self)
 
         
         length = bpy.data.objects[bpy.context.active_object.name_full].length
@@ -133,14 +133,15 @@ class SetLength(bpy.types.Operator):
         context = bpy.context
         scene = context.scene
         ob = context.edit_object
+        loc, rot, sca = bpy.context.object.matrix_world.decompose()
         
         #Set Cursor        
         if bool== 1:
             
-            bpy.context.scene.cursor.location = mv
+            bpy.context.scene.cursor.location = mv + loc
             pp = bpy.context.scene.cursor.location
         else:
-            bpy.context.scene.cursor.location = v1
+            bpy.context.scene.cursor.location = v1 + loc
             pp = bpy.context.scene.cursor.location
             
             
@@ -163,7 +164,18 @@ class SetLength(bpy.types.Operator):
         
         
         
-        S = ob.matrix_world.copy()
+        # S = ob.matrix_world.copy()
+
+        loc, rot, sca = bpy.context.object.matrix_world.decompose()
+
+        mat_loc =  mathutils.Matrix.Translation(( 0.0 ,  0.0 ,  0.0 ))        
+        mat_sca =  mathutils.Matrix.Scale( 1.0 ,  4 ,  ( 0.0 ,  0.0 ,  1.0 ))
+        mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
+
+        mat_out =  mat_loc @  mat_rot @  mat_sca
+
+        S = mat_out
+
         S.translation -= pp
         
         
