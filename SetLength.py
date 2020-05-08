@@ -134,16 +134,14 @@ class SetLength(bpy.types.Operator):
         scene = context.scene
         ob = context.edit_object
         
-        loc, rot, sca = bpy.context.object.matrix_world.decompose()
-
         #Set Cursor        
         if bool== 1:
             
-            bpy.context.scene.cursor.location = mv + loc
-            pp = mv
+            bpy.context.scene.cursor.location = mv
+            pp = bpy.context.scene.cursor.location
         else:
-            bpy.context.scene.cursor.location = v1 + loc
-            pp = v1
+            bpy.context.scene.cursor.location = v1
+            pp = bpy.context.scene.cursor.location
             
             
         
@@ -160,16 +158,12 @@ class SetLength(bpy.types.Operator):
 
         obj_camera.rotation_euler = rot_quat.to_euler()
         
-        # loc, rot, sca 
-        mat_loc =  mathutils.Matrix.Translation(( 0.0 ,  0.0 ,  0.0 ))        
-        mat_sca =  mathutils.Matrix.Scale( 1.0 ,  4 ,  ( 0.0 ,  0.0 ,  1.0 ))
-        mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
-
-        mat_out =  mat_loc @  mat_rot @  mat_sca
-
-        S = mat_out
         
         
+        
+        
+        
+        S = ob.matrix_world.copy()
         S.translation -= pp
         
         
