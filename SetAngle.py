@@ -145,11 +145,6 @@ class SetAngle(bpy.types.Operator):
         scene = context.scene
         ob = context.edit_object
 
-        #pp = Cursor location
-        bpy.context.scene.cursor.location = v2
-        pp = v2
-
-
 
 
         vec1 = v1
@@ -173,12 +168,26 @@ class SetAngle(bpy.types.Operator):
         rot_quat = direction.to_track_quat('-Z', 'Y')
 
         obj_camera.rotation_euler = rot_quat.to_euler()
+
         
-        
+        loc, rot, sca = bpy.context.object.matrix_world.decompose()
+
+        mat_loc =  mathutils.Matrix.Translation(( 0.0 ,  0.0 ,  0.0 ))        
+        mat_sca =  mathutils.Matrix.Scale( 1.0 ,  4 ,  ( 0.0 ,  0.0 ,  1.0 ))
+        mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
+
+        mat_out =  mat_loc @  mat_rot @  mat_sca
+
+        S = mat_out
+
+        #pp = Cursor location
+        bpy.context.scene.cursor.location = v2 + loc
+        pp = v2   
 
 
-        S = ob.matrix_world.copy()
-        S.translation -= pp      
+        S.translation -= pp   
+
+        
         
         
         if bool2 == 1:              
