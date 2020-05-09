@@ -94,8 +94,8 @@ class SetAngle(bpy.types.Operator):
 
     def execute(self, context):
                 
-        check(self)
-        check2(self)
+        # check(self)
+        # check2(self)
 
         bpy.context.object.update_from_editmode()
 
@@ -146,15 +146,15 @@ class SetAngle(bpy.types.Operator):
         ob = context.edit_object
 
         #pp = Cursor location
-        bpy.context.scene.cursor.location = v2
+        bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world  @ v2
         pp = v2
 
 
 
 
-        vec1 = v1
-        vec2 = v2
-        vec3 = v3
+        vec1 = bpy.context.active_object.matrix_world  @ v1
+        vec2 = bpy.context.active_object.matrix_world  @ v2
+        vec3 = bpy.context.active_object.matrix_world  @ v3
          
          
         normallist = [vec1,vec2,vec3]
@@ -174,10 +174,16 @@ class SetAngle(bpy.types.Operator):
 
         obj_camera.rotation_euler = rot_quat.to_euler()
         
-        
 
 
-        S = ob.matrix_world.copy()
+        mat_loc =  mathutils.Matrix.Translation(( 0.0 ,  0.0 ,  0.0 ))        
+        mat_sca =  mathutils.Matrix.Scale( 1.0 ,  4 ,  ( 0.0 ,  0.0 ,  1.0 ))
+        mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
+
+        mat_out =  mat_loc @  mat_rot @  mat_sca
+
+
+        S = mat_out
         S.translation -= pp      
         
         
