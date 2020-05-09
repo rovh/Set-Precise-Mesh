@@ -20,25 +20,31 @@ from mathutils import Vector, Matrix, Quaternion, Euler
 
 def check(self):
     obj = bpy.context.object
-
     text = 'Your object scale is not correct. Please, apply "Scale" \n Shortcut: Objetc Mode > Ctrl A > Apply "Scale"'
-    
     war = "ERROR"
     
     #Check scale
     if obj.scale != Vector((1.0, 1.0, 1.0)):      
         self.report({war}, text)
 
+
+
 def check2(self):
     obj = bpy.context.object
-
     text = 'Your object delta transform scale is not correct. Please, change it. \n How to do it: Properties Editor > Object Properties > Transform > Delta Transform > You need to set values: \n All Scales = 1'
-    
     war = "ERROR"
 
     # Check delta scale
     if bpy.context.object.delta_scale != Vector((1.0, 1.0, 1.0)):
         self.report({war}, text)
+
+def check3(self):
+    obj = bpy.context.object
+    text = "You need to select 3 vertices"
+    war = "ERROR"
+    self.report({war}, text)
+
+    
 
 
 
@@ -76,11 +82,20 @@ class SetAngle(bpy.types.Operator):
         
         vec = []
         ind = []
-        for g in bm.select_history:
-            if len(vec)<3:
-                vec.append(bm.verts[g.index].co)
 
+        for g in bm.select_history:
+            # if len(vec)<3:
+                vec.append(bm.verts[g.index].co)
                 ind.append(g.index)
+
+
+        # Check number
+        if len(vec)<3:
+            check3(self)
+            return{"FINISHED"}
+
+
+            
 
         
         bmesh.update_edit_mesh(me, True, True)
@@ -110,25 +125,24 @@ class SetAngle(bpy.types.Operator):
 
         #pp = Cursor location
         bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world  @ v2
-        pp = v2
-
-
+        
 
 
         vec1 = bpy.context.active_object.matrix_world  @ v1
         vec2 = bpy.context.active_object.matrix_world  @ v2
         vec3 = bpy.context.active_object.matrix_world  @ v3
          
+
         # Calculate global normal
         normallistgl = [vec1,vec2,vec3]
         normalgl = mathutils.geometry.normal(normallistgl)
+
 
         # Calculate local normal
         normallist = [v1,v2,v3]
         normal = mathutils.geometry.normal(normallist)
 
          
-
         # Set cursor direction
         obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor
         loc_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor.matrix.to_translation()         
@@ -147,6 +161,7 @@ class SetAngle(bpy.types.Operator):
 
 
         S = mat_out
+        pp = v2
         S.translation -= pp      
         
         

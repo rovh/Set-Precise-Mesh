@@ -16,14 +16,9 @@ from mathutils import Vector, Matrix, Quaternion, Euler
 
 
 
-
-
-
 def check(self):
     obj = bpy.context.object
-
     text = 'Your object scale is not correct. Please, apply "Scale" \n Shortcut: Objetc Mode > Ctrl A > Apply "Scale"'
-    
     war = "ERROR"
         
     #Check scale
@@ -32,14 +27,18 @@ def check(self):
 
 def check2(self):
     obj = bpy.context.object
-
     text = 'Your object delta transform scale is not correct. Please, change it. \n How to do it: Properties Editor > Object Properties > Transform > Delta Transform > You need to set values: \n All Scales = 1'
-    
     war = "ERROR"
 
     # Check delta scale
     if bpy.context.object.delta_scale != Vector((1.0, 1.0, 1.0)):
         self.report({war}, text)
+
+def check3(self):
+    obj = bpy.context.object
+    text = "You need to select 2 vertices"
+    war = "ERROR"
+    self.report({war}, text)
 
 
 
@@ -76,11 +75,19 @@ class SetLength(bpy.types.Operator):
         ind = []
         
         for g in bm.select_history:
-            if len(vec)<3:
+            # if len(vec)<3:
                 vec.append(bm.verts[g.index].co)
-#                print(g.index)
                 ind.append(g.index)
                 
+
+
+        # Check number
+        if len(vec)<2:
+            check3(self)
+            return{"FINISHED"}
+
+
+
         v1=vec[0]
         v2=vec[1]
         lv=v2-v1
@@ -91,8 +98,7 @@ class SetLength(bpy.types.Operator):
         norv2 = bpy.context.active_object.matrix_world  @ v2
         normalgl = norv2 - norv1
 
-         
-
+        
 
         # Length of the edge
         lengthtrue =lv.length
@@ -104,11 +110,15 @@ class SetLength(bpy.types.Operator):
         # Scale factor
         length = lengthtrue/length
         
+
+
         context = bpy.context
         scene = context.scene
         ob = context.edit_object
         
-        #Set Cursor        
+
+
+        #Set Cursor location and mode      
         if bool== 1:
             
             bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world  @ mv
