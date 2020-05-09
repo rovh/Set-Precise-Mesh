@@ -169,7 +169,7 @@ class SetLength(bpy.types.Operator):
         else:
         
         
-            R = Matrix.Scale(1/length, 3, (lv))
+            R = Matrix.Scale(1/length, 4, (lv))
   
             bmesh.ops.rotate(bm, 
                     matrix=R,        

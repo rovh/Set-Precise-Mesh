@@ -128,7 +128,7 @@ class SetAngle(bpy.types.Operator):
         bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world  @ v2
         
 
-
+        # Create global coordinates
         vec1 = bpy.context.active_object.matrix_world  @ v1
         vec2 = bpy.context.active_object.matrix_world  @ v2
         vec3 = bpy.context.active_object.matrix_world  @ v3
