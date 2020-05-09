@@ -156,26 +156,26 @@ class SetAngle(bpy.types.Operator):
         vec2 = bpy.context.active_object.matrix_world  @ v2
         vec3 = bpy.context.active_object.matrix_world  @ v3
          
-         
-        normallist = [vec1,vec2,vec3]
+        # Calculate global normal
+        normallistgl = [vec1,vec2,vec3]
+        normalgl = mathutils.geometry.normal(normallistgl)
+
+        # Calculate local normal
+        normallist = [v1,v2,v3]
         normal = mathutils.geometry.normal(normallist)
+
          
 
-
+        # Set cursor direction
         obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor
-
-        loc_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor.matrix.to_translation()
-         
-        point =  normal
-         
-        direction = point 
+        loc_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor.matrix.to_translation()         
+        direction = normalgl
         # point the cameras '-Z' and use its 'Y' as up
         rot_quat = direction.to_track_quat('-Z', 'Y')
-
         obj_camera.rotation_euler = rot_quat.to_euler()
         
 
-
+        # Create Matrix
         mat_loc =  mathutils.Matrix.Translation(( 0.0 ,  0.0 ,  0.0 ))        
         mat_sca =  mathutils.Matrix.Scale( 1.0 ,  4 ,  ( 0.0 ,  0.0 ,  1.0 ))
         mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
