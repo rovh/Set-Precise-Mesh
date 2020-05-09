@@ -21,61 +21,24 @@ from mathutils import Vector, Matrix, Quaternion, Euler
 def check(self):
     obj = bpy.context.object
 
-    text = 'Your object transforms are not correct. Please, apply "All Transforms" \n Shortcut: Objetc Mode > Ctrl A > Apply "All Transforms"'
+    text = 'Your object scale is not correct. Please, apply "Scale" \n Shortcut: Objetc Mode > Ctrl A > Apply "Scale"'
     
     war = "ERROR"
-        #Check rotation
-    if obj.rotation_quaternion != Quaternion((1.0, 0.0, 0.0, 0.0)):
-        self.report({war}, text)
-        
-    elif obj.rotation_euler[0] != 0.0:
-        self.report({war}, text)
-    elif obj.rotation_euler[1] != 0.0:
-        self.report({war}, text)
-    elif obj.rotation_euler[2] != 0.0 :
-        self.report({war}, text)
-        
-        #Check location
-    elif obj.location != Vector((0.0, 0.0, 0.0)):
-        self.report({war}, text)
-        
-        #Check scale
-    elif obj.scale != Vector((1.0, 1.0, 1.0)):      
+    
+    #Check scale
+    if obj.scale != Vector((1.0, 1.0, 1.0)):      
         self.report({war}, text)
 
 def check2(self):
     obj = bpy.context.object
 
-    text = 'Your object delta transform is not correct. Please, change it. \n How to do it: Properties Editor > Object Properties > Transform > Delta Transform > You need to set values: \n All Locations = 0 \n All Rotations = 0 \n All Scales = 1'
+    text = 'Your object delta transform scale is not correct. Please, change it. \n How to do it: Properties Editor > Object Properties > Transform > Delta Transform > You need to set values: \n All Scales = 1'
     
     war = "ERROR"
 
-        #Check delta rotation        
-    if obj.delta_location[0] != 0:
+    # Check delta scale
+    if bpy.context.object.delta_scale != Vector((1.0, 1.0, 1.0)):
         self.report({war}, text)
-    elif obj.delta_location[1] != 0:
-        self.report({war}, text)
-    elif obj.delta_location[2] != 0:
-        self.report({war}, text)
-
-    # Check delta rotation
-    elif obj.delta_rotation_euler[0] != 0:
-        self.report({war}, text)
-    elif obj.delta_rotation_euler[1] != 0:
-        self.report({war}, text)
-    elif obj.delta_rotation_euler[2] != 0:
-        self.report({war}, text)
-
-    # Cheak delta scale
-    elif obj.delta_scale[0] != 1:
-        self.report({war}, text)
-    elif obj.delta_scale[1] != 1:
-        self.report({war}, text)
-    elif obj.delta_scale[2] != 1:
-        self.report({war}, text)
-
-
-
 
 
 
@@ -94,8 +57,8 @@ class SetAngle(bpy.types.Operator):
 
     def execute(self, context):
                 
-        # check(self)
-        # check2(self)
+        check(self)
+        check2(self)
 
         bpy.context.object.update_from_editmode()
 
