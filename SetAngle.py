@@ -96,9 +96,9 @@ class SetAngle(bpy.types.Operator):
 
 
             
-
-        
         bmesh.update_edit_mesh(me, True, True)
+
+
         
         mind=ind[1]
 
@@ -114,6 +114,7 @@ class SetAngle(bpy.types.Operator):
         angle = v3ch.angle(v1ch, 0.0)
 
 
+        # Select vertices
         bm.verts[ind[0]].select = 0
         bm.verts[ind[1]].select = 0
         bm.verts[ind[2]].select = 1
