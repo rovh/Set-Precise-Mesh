@@ -47,6 +47,39 @@ bpy.types.Scene.my2 = bpy.props.BoolProperty(
         default=True,
     )
 
+
+class DialogWarningOperator(bpy.types.Operator):
+    bl_idname = "object.dialog_warning_operator"
+    bl_label = "Warning Panel Operator"
+
+    def execute(self, context):
+        return {'FINISHED'}
+
+
+    def invoke(self, context, event): 
+
+        bool123 = bpy.data.scenes[bpy.context.scene.name_full].bool_warning
+        # bool123 = 1
+        if bool123 == 1:
+            # return context.window_manager.invoke_props_dialog(self)
+            return context.window_manager.invoke_popup(self)
+            # return context.window_manager.invoke_props_popup(self, event)
+            # return context.window_manager.invoke_confirm(self, event)
+        else:
+            return {'FINISHED'}
+
+
+    def draw(self, context):
+
+        layout = self.layout
+        layout.label(text="1111111111", icon="ERROR")
+
+        layout = self.layout
+        layout.prop(context.scene, "bool_warning", text="Show this Warning Panel next time")
+
+
+
+
 class SetPresiceMesh(bpy.types.Panel):
     
     bl_label = "Set Presice Mesh"
@@ -158,6 +191,7 @@ blender_classes = [
     Dupli2,
     SetAngle,
     SetLength,
+    DialogWarningOperator,
 
 ]
 
