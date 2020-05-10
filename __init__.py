@@ -35,19 +35,6 @@ from bpy.props import (
 
 
 
-
-bpy.types.Scene.my = bpy.props.BoolProperty(
-        name="my",
-        description="Radius",
-        default=True,
-    )
-bpy.types.Scene.my2 = bpy.props.BoolProperty(
-        name="my2",
-        description="Radius",
-        default=True,
-    )
-
-
 class DialogWarningOperator(bpy.types.Operator):
     bl_idname = "object.dialog_warning_operator"
     bl_label = "Warning Panel Operator"
@@ -201,6 +188,24 @@ def register():
         bpy.utils.register_class(blender_class)
     # pynput.register()
 
+
+
+    bpy.types.Scene.my = bpy.props.BoolProperty(
+        name="my",
+        description="Radius",
+        default=True,
+    )
+    bpy.types.Scene.my2 = bpy.props.BoolProperty(
+        name="my2",
+        description="Radius",
+        default=True,
+    )
+    bpy.types.Scene.bool_warning = bpy.props.BoolProperty(
+        name="123",
+        description="123",
+        default=1,
+        options = {"SKIP_SAVE"}
+    )
     bpy.types.Object.angle = bpy.props.FloatProperty(
         name="Angle",
         description="Radius",
@@ -210,19 +215,16 @@ def register():
         unit="ROTATION",
         precision = 6,
     )
-
     bpy.types.Object.anglebool = bpy.props.BoolProperty(
         name="Change adjacent edge",
         description="Change the length of the opposite edge OR Change the length of the adjacent edge",
         default=False,
     )
-
     bpy.types.Object.angleinput = bpy.props.BoolProperty(
         name="Input Mode",
         description="",
         default=False,
     )
-
     bpy.types.Object.length = bpy.props.FloatProperty(
         name="Length",
         description="Length of the edge",
@@ -231,13 +233,11 @@ def register():
         unit='LENGTH',
         precision = 6,
     )
-
     bpy.types.Object.lengthbool = bpy.props.BoolProperty(
         name="Use two directions",
         description='Change length in two directions OR in the direction of the active vertex',
         default=False,
     )
-
     bpy.types.Object.lengthinput = bpy.props.BoolProperty(
         name="Input Mode",
         description='User Mode',
@@ -253,6 +253,9 @@ def unregister():
     del bpy.types.Object.length
     del bpy.types.Object.lengthbool
     del bpy.types.Object.lengthinput
+
+    del bpy.types.Scene.my
+    del bpy.types.Scene.my2
 
 if __name__ == "__main__":
     register()
