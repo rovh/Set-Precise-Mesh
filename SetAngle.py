@@ -24,9 +24,10 @@ def check(self):
     war = "ERROR"
     
     #Check scale
-    if obj.scale != Vector((1.0, 1.0, 1.0)):      
+    if obj.scale != Vector((1.0, 1.0, 1.0)):
+             
         # self.report({war}, text)
-        bpy.ops.object.dialog_warning_operator('INVOKE_DEFAULT')
+        bpy.ops.object.dialog_warning_operator('INVOKE_DEFAULT') 
 
 
 
@@ -37,8 +38,10 @@ def check2(self):
 
     # Check delta scale
     if bpy.context.object.delta_scale != Vector((1.0, 1.0, 1.0)):
+        
         # self.report({war}, text)
         bpy.ops.object.dialog_warning_operator('INVOKE_DEFAULT')
+        
 
 def check3(self):
     obj = bpy.context.object

@@ -16,7 +16,7 @@ bl_info = {
     "author" : "Rovh",
     "description" : "This addon allows you to set exact values for the mesh",
     "blender" : (2, 82, 0),
-    "version" : (1.0, "Beta"),
+    "version" : (1,0,1),
     "location" : "View3D > Sidebar in Edit Mode > Item Tab and View Tab",
     "warning" : "",
     "category" : "Mesh"
@@ -46,10 +46,10 @@ class DialogWarningOperator(bpy.types.Operator):
     def invoke(self, context, event): 
 
         bool123 = bpy.data.scenes[bpy.context.scene.name_full].bool_warning
-        # bool123 = 1
+        bool123 = 1
         if bool123 == 1:
             # return context.window_manager.invoke_props_dialog(self)
-            return context.window_manager.invoke_popup(self)
+            return context.window_manager.invoke_popup(self, width=400, height=500)
             # return context.window_manager.invoke_props_popup(self, event)
             # return context.window_manager.invoke_confirm(self, event)
         else:
@@ -58,12 +58,22 @@ class DialogWarningOperator(bpy.types.Operator):
 
     def draw(self, context):
 
+        # layout = self.layout
         layout = self.layout
-        layout.label(text="1111111111", icon="ERROR")
-
+        layout.label(text='Your object scale is not correct. Please, apply "Scale"' , icon="ERROR")
+        
+        layout = self.layout
+        layout.label(text='Shortcut: Objetc Mode > Ctrl A > Apply "Scale"')
+        
         layout = self.layout
         layout.prop(context.scene, "bool_warning", text="Show this Warning Panel next time")
 
+
+        layout = self.layout
+        layout.label(text='You can find more info about this warning in README.md on Github page')
+
+
+        
 
 
 
