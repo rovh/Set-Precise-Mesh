@@ -33,3 +33,5 @@ If you enable "Change two directions" the length will change based on the two se
 ### Explanation for Warning Panel
 
 https://www.canva.com/design/DAD7-RCbGng/view
+
+https://www.canva.com/design/DAD7-f0Kyt0/view
