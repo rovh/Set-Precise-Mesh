@@ -189,24 +189,11 @@ class SetAngle(bpy.types.Operator):
         
         if bool == 1:
             
-            obj = context.active_object
-
-        
+            obj = context.active_object        
         
             newv3 = obj.data.vertices[ind[2]].co
 
-            print(oldv3, "old")
-            print(newv3, "new")
-            print(newv3, "new")
-            print(bool, "bool")
-            
 
-
-
-            print(v1, "iv1")
-            print(oldv3, "iv2")
-            print(v2, "iv3")
-            print(newv3, "iv4")
 
             
             iv1=v1
@@ -214,13 +201,6 @@ class SetAngle(bpy.types.Operator):
             iv3=v2
             iv4=oldv3
             
-            print(iv1, "iv1")
-            print(iv2, "iv2")
-            print(iv3, "iv3")
-            print(iv4, "iv4")
-            
-            
-             
 
             iv = geometry.intersect_line_line(iv1, iv2, iv3, iv4)
             if iv:
