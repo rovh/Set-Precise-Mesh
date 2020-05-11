@@ -49,34 +49,44 @@ class DialogWarningOperator(bpy.types.Operator):
         # bool123 = 1
         if bool123 == 1:
             # return context.window_manager.invoke_props_dialog(self)
-            return context.window_manager.invoke_popup(self, width=400, height=500)
+            return context.window_manager.invoke_popup(self, width=600, height=500)
+            # return context.window_manager.invoke_popup(self)
             # return context.window_manager.invoke_props_popup(self, event)
             # return context.window_manager.invoke_confirm(self, event)
         else:
             return {'FINISHED'}
 
+        
+        # self.report({war}, text)
+        # bpy.ops.object.dialog_warning_operator('INVOKE_DEFAULT') 
+
+    # elif bpy.context.object.delta_scale != Vector((1.0, 1.0, 1.0)):
+        # text = 'Your object delta transform scale is not correct. Please, change it. \n How to do it: Properties Editor > Object Properties > Transform > Delta Transform > You need to set values: \n All Scales = 1 \n You can find more info about this warning in README.md on Github page'
+        # self.report({war}, text)
+        # bpy.ops.object.dialog_warning_operator('INVOKE_DEFAULT')
+
+
 
     def draw(self, context):
-
         layout = self.layout
         layout.label(text='Warning' , icon="ERROR")
 
-        layout = self.layout
-        layout.label(text='Your object scale is not correct. Please, apply "Scale"')
-        
-        layout = self.layout
-        layout.label(text='Shortcut: Objetc Mode > Ctrl A > Apply "Scale"')
-        
-        layout = self.layout
-        layout.prop(context.scene, "bool_warning", text="Show this Warning Panel next time")
+        if bpy.context.object.scale != Vector((1.0, 1.0, 1.0)):
+            
+            layout.label(text='Your object scale is not correct. Please, apply "Scale"')
+            layout.label(text='Shortcut: Objetc Mode > Ctrl A > Apply "Scale"')
 
+        elif bpy.context.object.delta_scale != Vector((1.0, 1.0, 1.0)):
 
-        layout = self.layout
-        layout.label(text='You can find more info about this warning in README.md on Github page')
+            layout.label(text='Your object delta transform scale is not correct. Please, change it')
+            layout.label(text='How to do it: Properties Editor > Object Properties > Transform > Delta Transform >')
+            layout.label(text='> You need to set values: All Scales = 1')
 
+        layout.prop(context.scene, "bool_warning", text="Show Warning Panel next time")
+        layout.label(text="Warning Panel will appear if object scale or delta scale is not correct")
+        layout.label(text='You can find more info about this warning in README.md on Github page or in files')
 
-        
-
+     
 
 
 class SetPresiceMesh(bpy.types.Panel):
@@ -214,7 +224,7 @@ def register():
     )
     bpy.types.Scene.bool_warning = bpy.props.BoolProperty(
         name="Show this warning panel next time",
-        description="",
+        description="Warning Panel will appear if object scale or delta scale is not correct \n You can enable it or disable in \n Property Editor > Scene Properties > Custom Properties",
         default=1,
         options = {"SKIP_SAVE"}
     )

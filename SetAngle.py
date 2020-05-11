@@ -20,21 +20,12 @@ from mathutils import Vector, Matrix, Quaternion, Euler
 
 def check(self):
     obj = bpy.context.object
-    war = "ERROR"
-    
-    #Check scale
-    if obj.scale != Vector((1.0, 1.0, 1.0)):
-        text = 'Your object scale is not correct. Please, apply "Scale" \n Shortcut: Objetc Mode > Ctrl A > Apply "Scale" \n You can find more info about this warning in README.md on Github page'            
-        # self.report({war}, text)
+
+    # Check scale
+    if obj.scale != Vector((1.0, 1.0, 1.0)) or obj.delta_scale != Vector((1.0, 1.0, 1.0)):
         bpy.ops.object.dialog_warning_operator('INVOKE_DEFAULT') 
-
-    elif bpy.context.object.delta_scale != Vector((1.0, 1.0, 1.0)):
-        text = 'Your object delta transform scale is not correct. Please, change it. \n How to do it: Properties Editor > Object Properties > Transform > Delta Transform > You need to set values: \n All Scales = 1 \n You can find more info about this warning in README.md on Github page'
-        # self.report({war}, text)
-        bpy.ops.object.dialog_warning_operator('INVOKE_DEFAULT')
-       
+    
         
-
 def check3(self):
     obj = bpy.context.object
     text = "You need to select 3 vertices"
@@ -61,6 +52,8 @@ class SetAngle(bpy.types.Operator):
     def execute(self, context):
                 
         check(self)
+
+        # bpy.ops.object.dialog_warning_operator('INVOKE_DEFAULT')
 
         bpy.context.object.update_from_editmode()
 
