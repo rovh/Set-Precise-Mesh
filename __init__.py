@@ -48,8 +48,8 @@ class DialogWarningOperator(bpy.types.Operator):
         bool123 = bpy.data.scenes[bpy.context.scene.name_full].bool_warning
         if bool123 == 1:
             # return context.window_manager.invoke_props_dialog(self)
-            return context.window_manager.invoke_popup(self, width=600, height=500)
-            # return context.window_manager.invoke_popup(self)
+            # return context.window_manager.invoke_popup(self, width=600, height=500)
+            return context.window_manager.invoke_popup(self)
             # return context.window_manager.invoke_props_popup(self, event)
             # return context.window_manager.invoke_confirm(self, event)
         else:
