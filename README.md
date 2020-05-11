@@ -30,9 +30,9 @@ To change the length of the edge it is necessary to select two verteces. The las
 
 If you enable "Change two directions" the length will change based on the two selected vertexes i.e. two selceted vertexes will be moved.
 
+---
 ### Explanation for Warning Panel
 
----
 https://www.canva.com/design/DAD7-RCbGng/view
 
 https://www.canva.com/design/DAD7-f0Kyt0/view
