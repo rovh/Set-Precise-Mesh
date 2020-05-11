@@ -12,14 +12,14 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 bl_info = {
-    "name" : "Set Presice Mesh",
+    "name" : "Set Presice Mesh /CAD",
     "author" : "Rovh",
     "description" : "This addon allows you to set exact values for the mesh",
     "blender" : (2, 82, 0),
     "version" : (1),
     "location" : "View3D > Sidebar in Edit Mode > Item Tab and View Tab",
     "warning" : "",
-    # "wiki_url": "https://github.com/rovh/Set-Precise-Mesh",
+    "wiki_url": "https://github.com/rovh/Set-Precise-Mesh",
     "category" : "Mesh"
 }
 
@@ -250,7 +250,7 @@ def unregister():
 
     del bpy.types.Scene.bool_panel_arrow
     del bpy.types.Scene.bool_panel_arrow2
-    del bpy.types.Scene.bool_warning
+    # del bpy.types.Scene.bool_warning
 
 if __name__ == "__main__":
     register()
