@@ -15,9 +15,6 @@ from mathutils import Vector, Matrix, Quaternion, Euler
 # keyboard = Controller()
 
 
-
-
-
 def check(self):
     obj = bpy.context.object
 
@@ -31,9 +28,6 @@ def check3(self):
     text = "You need to select 3 vertices"
     war = "ERROR"
     self.report({war}, text)
-
-    
-
 
 
 class SetAngle(bpy.types.Operator):

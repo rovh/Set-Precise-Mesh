@@ -12,13 +12,14 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 bl_info = {
-    "name" : "Set Presice Mesh",
+    "name" : "Set Presice Mesh /CAD",
     "author" : "Rovh",
     "description" : "This addon allows you to set exact values for the mesh",
     "blender" : (2, 82, 0),
     "version" : (1,0,1),
     "location" : "View3D > Sidebar in Edit Mode > Item Tab and View Tab",
     "warning" : "",
+    "wiki_url": "https://github.com/rovh/Set-Precise-Mesh",
     "category" : "Mesh"
 }
 
@@ -73,6 +74,7 @@ class DialogWarningOperator(bpy.types.Operator):
         layout.prop(context.scene, "bool_warning", text="Show Warning Panel next time")
         layout.label(text="Warning Panel will appear if object scale or delta scale is not correct")
         layout.label(text='You can find more info about this warning in README.md on Github page or in files')
+        # layout.label(text='https://github.com/rovh/Set-Precise-Mesh')
 
 
 class SetPresiceMesh(bpy.types.Panel):
@@ -85,6 +87,7 @@ class SetPresiceMesh(bpy.types.Panel):
     bl_context = "mesh_edit"
     bl_options = {'DEFAULT_CLOSED'}
     bl_label = "Set Precise Mesh / CAD"
+    
 
 
     def draw(self, context):
@@ -152,6 +155,7 @@ class Dupli(SetPresiceMesh):
     bl_region_type = 'UI'
     bl_category = "View"
     bl_label = "Set Precise Mesh /CAD"
+    # bl_order = 1
  
 class Dupli2(SetPresiceMesh):
     bl_label = "Set Presice Mesh2"
@@ -160,6 +164,7 @@ class Dupli2(SetPresiceMesh):
     bl_region_type = 'UI'
     bl_category = "Item"
     bl_label = "Set Precise Mesh /CAD"
+    # bl_order = 1
     
  
 blender_classes = [
