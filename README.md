@@ -5,7 +5,7 @@ Right now “Set Precise Mesh” allows users to set exact values of the angle b
 ---
 ### Set Angle
 <a href="https://drive.google.com/file/d/138wmaauvSyV0Aqim1AJA02god0OnEpcg/preview" target="_self">
-<img src="https://i.imgur.com/E0R4Zla.png" width=50% height=50% alt"Angle" style="border-radius: 30px">
+<img src="https://i.imgur.com/XBiNgOg.png" width=50% height=50% alt"Angle" style="border-radius: 30px">
 </a>
 
 You can set exact value of the angle between three vertexes. 
