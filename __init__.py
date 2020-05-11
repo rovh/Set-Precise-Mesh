@@ -19,7 +19,7 @@ bl_info = {
     "version" : (1,0,1),
     "location" : "View3D > Sidebar in Edit Mode > Item Tab and View Tab",
     "warning" : "",
-    "wiki_url": "https://github.com/rovh/Set-Precise-Mesh",
+    # "wiki_url": "https://github.com/rovh/Set-Precise-Mesh",
     "category" : "Mesh"
 }
 
@@ -250,6 +250,7 @@ def unregister():
 
     del bpy.types.Scene.bool_panel_arrow
     del bpy.types.Scene.bool_panel_arrow2
+    del bpy.types.Scene.bool_warning
 
 if __name__ == "__main__":
     register()
