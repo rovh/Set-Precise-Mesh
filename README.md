@@ -4,7 +4,7 @@ Right now “Set Precise Mesh” allows users to set exact values of the angle b
 
 ---
 ### Set Angle
-<a href="https://www.canva.com/design/DAD7-Wi4L2s/view" target="_self">
+<a href="https://www.canva.com/design/DAD7-Wi4L2s/s45D4N0h6-JAR4SBwxe5lA/edit?category=tADs1de8MlY" target="_self">
 <img src="https://i.imgur.com/E0R4Zla.png" width=50% height=50% alt"Angle" style="border-radius: 30px">
 </a>
 
