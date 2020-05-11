@@ -46,7 +46,7 @@ class DialogWarningOperator(bpy.types.Operator):
     def invoke(self, context, event): 
 
         bool123 = bpy.data.scenes[bpy.context.scene.name_full].bool_warning
-        bool123 = 1
+        # bool123 = 1
         if bool123 == 1:
             # return context.window_manager.invoke_props_dialog(self)
             return context.window_manager.invoke_popup(self, width=400, height=500)
@@ -58,9 +58,11 @@ class DialogWarningOperator(bpy.types.Operator):
 
     def draw(self, context):
 
-        # layout = self.layout
         layout = self.layout
-        layout.label(text='Your object scale is not correct. Please, apply "Scale"' , icon="ERROR")
+        layout.label(text='Warning' , icon="ERROR")
+
+        layout = self.layout
+        layout.label(text='Your object scale is not correct. Please, apply "Scale"')
         
         layout = self.layout
         layout.label(text='Shortcut: Objetc Mode > Ctrl A > Apply "Scale"')
@@ -211,8 +213,8 @@ def register():
         default=True,
     )
     bpy.types.Scene.bool_warning = bpy.props.BoolProperty(
-        name="123",
-        description="123",
+        name="Show this warning panel next time",
+        description="",
         default=1,
         options = {"SKIP_SAVE"}
     )
