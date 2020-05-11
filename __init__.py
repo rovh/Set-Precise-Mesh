@@ -12,13 +12,14 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 bl_info = {
-    "name" : "Set Presice Mesh",
+    "name" : "Set Presice Mesh /CAD",
     "author" : "Rovh",
     "description" : "This addon allows you to set exact values for the mesh",
     "blender" : (2, 82, 0),
-    "version" : (1.0, "Beta"),
+    "version" : (1,0,1),
     "location" : "View3D > Sidebar in Edit Mode > Item Tab and View Tab",
     "warning" : "",
+    "wiki_url": "https://github.com/rovh/Set-Precise-Mesh",
     "category" : "Mesh"
 }
 
@@ -35,17 +36,46 @@ from bpy.props import (
 
 
 
+class DialogWarningOperator(bpy.types.Operator):
+    bl_idname = "object.dialog_warning_operator"
+    bl_label = "Warning Panel Operator"
 
-bpy.types.Scene.my = bpy.props.BoolProperty(
-        name="my",
-        description="Radius",
-        default=True,
-    )
-bpy.types.Scene.my2 = bpy.props.BoolProperty(
-        name="my2",
-        description="Radius",
-        default=True,
-    )
+    def execute(self, context):
+        return {'FINISHED'}
+
+
+    def invoke(self, context, event): 
+        bool123 = bpy.data.scenes[bpy.context.scene.name_full].bool_warning
+        if bool123 == 1:
+            # return context.window_manager.invoke_props_dialog(self)
+            # return context.window_manager.invoke_popup(self, width=600, height=500)
+            return context.window_manager.invoke_popup(self)
+            # return context.window_manager.invoke_props_popup(self, event)
+            # return context.window_manager.invoke_confirm(self, event)
+        else:
+            return {'FINISHED'}
+
+
+    def draw(self, context):
+        layout = self.layout
+        layout.label(text='Warning' , icon="ERROR")
+
+        if bpy.context.object.scale != Vector((1.0, 1.0, 1.0)):
+            
+            layout.label(text='Your object scale is not correct. Please, apply "Scale"')
+            layout.label(text='Shortcut: Objetc Mode > Ctrl A > Apply "Scale"')
+
+        elif bpy.context.object.delta_scale != Vector((1.0, 1.0, 1.0)):
+
+            layout.label(text='Your object delta transform scale is not correct. Please, change it')
+            layout.label(text='How to do it: Properties Editor > Object Properties > Transform > Delta Transform >')
+            layout.label(text='> You need to set values: All Scales = 1')
+
+        layout.prop(context.scene, "bool_warning", text="Show Warning Panel next time")
+        layout.label(text="Warning Panel will appear if object scale or delta scale is not correct")
+        layout.label(text='You can find more info about this warning in README.md on Github page or in files')
+        # layout.label(text='https://github.com/rovh/Set-Precise-Mesh')
+
 
 class SetPresiceMesh(bpy.types.Panel):
     
@@ -57,81 +87,63 @@ class SetPresiceMesh(bpy.types.Panel):
     bl_context = "mesh_edit"
     bl_options = {'DEFAULT_CLOSED'}
     bl_label = "Set Precise Mesh / CAD"
+    
 
 
     def draw(self, context):
         layout = self.layout
 
-        
         scene = context.scene
         sc = scene
         ob = context.object
 
-        my = bpy.data.scenes[bpy.context.scene.name_full].my
-        my2 = bpy.data.scenes[bpy.context.scene.name_full].my2
+        bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
+        bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
 
         col = layout.column(align=True)
 
         
         split = col.split(factor=0.85, align=True)
-        split.scale_y =1.2
-        
+        split.scale_y =1.2      
 
-        
         split.operator("mesh.change_angle", icon="DRIVER_ROTATIONAL_DIFFERENCE")
 
         
     
-        if sc.my:
-            split.prop(sc, "my", text="", icon='DOWNARROW_HLT')
+        if sc.bool_panel_arrow:
+            split.prop(sc, "bool_panel_arrow", text="", icon='DOWNARROW_HLT')
         else:
-            split.prop(sc, "my", text="", icon='RIGHTARROW')
+            split.prop(sc, "bool_panel_arrow", text="", icon='RIGHTARROW')
 
-        if sc.my:
+        if sc.bool_panel_arrow:
             
             box = col.column(align=True).box().column()
-            
             col_top = box.column(align=True)
             
-            
             col_top.prop(ob, "angle")
-            
             col_top.prop(ob, "anglebool" )
-            
             # col_top.prop(ob, "angleinput")         
                     
-            
-            
         col = layout.column(align=False)
-
         col = layout.column(align=True)
 
         
         split = col.split(factor=0.85, align=True)
         split.scale_y =1.2
         
-        
         split.operator("mesh.change_length",icon="DRIVER_DISTANCE")
         
     
-        if sc.my2:
-            split.prop(sc, "my2", text="", icon='DOWNARROW_HLT')
+        if sc.bool_panel_arrow2:
+            split.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
         else:
-            split.prop(sc, "my2", text="", icon='RIGHTARROW')
-        if sc.my2:
-            
-            box = col.column(align=True).box().column()
-            
+            split.prop(sc, "bool_panel_arrow2", text="", icon='RIGHTARROW')
+
+        if sc.bool_panel_arrow2:            
+            box = col.column(align=True).box().column()            
             col_top = box.column(align=True)
-
-
-            
-            
-
-            col_top.prop(ob, "length")
-            
-            col_top.prop(ob, "lengthbool")
-            
+            col_top.prop(ob, "length")            
+            col_top.prop(ob, "lengthbool")            
             # col_top.prop(ob, "lengthinput")
         
         
@@ -143,6 +155,7 @@ class Dupli(SetPresiceMesh):
     bl_region_type = 'UI'
     bl_category = "View"
     bl_label = "Set Precise Mesh /CAD"
+    # bl_order = 1
  
 class Dupli2(SetPresiceMesh):
     bl_label = "Set Presice Mesh2"
@@ -151,6 +164,7 @@ class Dupli2(SetPresiceMesh):
     bl_region_type = 'UI'
     bl_category = "Item"
     bl_label = "Set Precise Mesh /CAD"
+    # bl_order = 1
     
  
 blender_classes = [
@@ -158,6 +172,7 @@ blender_classes = [
     Dupli2,
     SetAngle,
     SetLength,
+    DialogWarningOperator,
 
 ]
 
@@ -167,6 +182,24 @@ def register():
         bpy.utils.register_class(blender_class)
     # pynput.register()
 
+
+
+    bpy.types.Scene.bool_panel_arrow = bpy.props.BoolProperty(
+        name="bool_panel_arrow",
+        description="",
+        default=True,
+    )
+    bpy.types.Scene.bool_panel_arrow2 = bpy.props.BoolProperty(
+        name="bool_panel_arrow2",
+        description="",
+        default=True,
+    )
+    bpy.types.Scene.bool_warning = bpy.props.BoolProperty(
+        name="Show this warning panel next time",
+        description="Warning Panel will appear if object scale or delta scale is not correct \n You can enable it or disable in \n Property Editor > Scene Properties > Custom Properties",
+        default=1,
+        options = {"SKIP_SAVE"}
+    )
     bpy.types.Object.angle = bpy.props.FloatProperty(
         name="Angle",
         description="Radius",
@@ -176,19 +209,16 @@ def register():
         unit="ROTATION",
         precision = 6,
     )
-
     bpy.types.Object.anglebool = bpy.props.BoolProperty(
         name="Change adjacent edge",
         description="Change the length of the opposite edge OR Change the length of the adjacent edge",
         default=False,
     )
-
     bpy.types.Object.angleinput = bpy.props.BoolProperty(
         name="Input Mode",
         description="",
         default=False,
     )
-
     bpy.types.Object.length = bpy.props.FloatProperty(
         name="Length",
         description="Length of the edge",
@@ -197,13 +227,11 @@ def register():
         unit='LENGTH',
         precision = 6,
     )
-
     bpy.types.Object.lengthbool = bpy.props.BoolProperty(
         name="Use two directions",
         description='Change length in two directions OR in the direction of the active vertex',
         default=False,
     )
-
     bpy.types.Object.lengthinput = bpy.props.BoolProperty(
         name="Input Mode",
         description='User Mode',
@@ -219,6 +247,10 @@ def unregister():
     del bpy.types.Object.length
     del bpy.types.Object.lengthbool
     del bpy.types.Object.lengthinput
+
+    del bpy.types.Scene.bool_panel_arrow
+    del bpy.types.Scene.bool_panel_arrow2
+    # del bpy.types.Scene.bool_warning
 
 if __name__ == "__main__":
     register()
