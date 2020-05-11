@@ -16,13 +16,13 @@ If you enable "Change adjacent edge", the edge adjacent to the angle will be cha
 
 To change the angle script uses a normal based on the three selected vertexes:
 
-<a href="https://i.imgur.com/O57QpOt.mp4" target="_self">
+<a href="https://drive.google.com/file/d/1h1jN_dQiBQmWjAWwXHdD8--rdVeyq41O/preview" target="_self">
 <img src="https://i.imgur.com/TQXxCan.png" width=50% height=50% alt"Angle" style="border-radius: 30px">
 </a>
 
 ---
 ### Set Length
-<a href="https://drive.google.com/file/d/1h1jN_dQiBQmWjAWwXHdD8--rdVeyq41O/preview" target="_self">
+<a href="https://drive.google.com/file/d/1NndKw_OcC51AqroSHMey70PDRMuPhotp/preview" target="_self">
 <img src="https://i.imgur.com/Wovj1ub.png" width=50% height=50% alt"Angle" style="border-radius: 30px">
 </a>
 
