@@ -63,9 +63,11 @@ class SetAngle(bpy.types.Operator):
 
         bmesh.update_edit_mesh(me, True, True)
         
+        #Create lists
         vec = []
         ind = []
 
+        #Append to lists
         for g in bm.select_history:
             # if len(vec)<3:
                 vec.append(bm.verts[g.index].co)
@@ -78,24 +80,30 @@ class SetAngle(bpy.types.Operator):
             return{"FINISHED"}
 
 
-        if len(vec) =4:
-            merge = 1
-        else:
-            merge = 0
-
-
-
             
         bmesh.update_edit_mesh(me, True, True)
 
 
-        
-        mind=ind[1]
+        if len(vec) == 4:
+            merge = 1
 
-        v1=vec[0]
-        v2=vec[1]
-        v3=vec[2]
-        oldv3=vec[2]
+            mind=ind[2]
+
+            v0=vec[0] # 1 selected
+            v1=vec[1] # 2 selected
+            v2=vec[2] # 3 selected
+            v3=vec[3] # 4 selected
+            oldv3=vec[3] # 4 selected
+
+        else:
+            merge = 0
+
+            mind=ind[1]
+
+            v1=vec[0] # 1 selected
+            v2=vec[1] # 2 selected
+            v3=vec[2] #  3 selected
+            oldv3=vec[2] # 3 selected
         
 
         # Angle between verteses
@@ -104,10 +112,18 @@ class SetAngle(bpy.types.Operator):
         angle = v3ch.angle(v1ch, 0.0)
 
 
-        # Select vertices
-        bm.verts[ind[0]].select = 0
-        bm.verts[ind[1]].select = 0
-        bm.verts[ind[2]].select = 1
+
+        if merge == 1:
+            # Select vertices
+            bm.verts[ind[0]].select = 0
+            bm.verts[ind[1]].select = 0
+            bm.verts[ind[2]].select = 0
+            bm.verts[ind[3]].select = 1
+        else:
+                # Select vertices
+            bm.verts[ind[0]].select = 0
+            bm.verts[ind[1]].select = 0
+            bm.verts[ind[2]].select = 1
 
 
         context = bpy.context
@@ -198,20 +214,26 @@ class SetAngle(bpy.types.Operator):
             
             obj = context.active_object
 
-            if merge = 1:
-                newv3 = obj.data.vertices[ind[2]].co
+            if merge == 1:
 
-                iv1=v1
-                iv2=newv3
-                iv3=v2
-                iv4=oldv3
+                newv3 = obj.data.vertices[ind[3]].co
+
+                #New position
+                iv1=v2
+                # iv2=newv3
+                iv2=oldv3
+
+                #Old position
+                iv3=v0
+                # iv4=oldv3
+                iv4=newv3
                 
 
                 iv = geometry.intersect_line_line(iv1, iv2, iv3, iv4)
                 if iv:
                     iv = (iv[0] + iv[1]) / 2
 
-                    bm.verts[ind[2]].co = iv
+                    bm.verts[ind[3]].co = iv
                     
                     
                     bpy.context.object.update_from_editmode()
