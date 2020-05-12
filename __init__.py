@@ -62,17 +62,17 @@ class DialogWarningOperator(bpy.types.Operator):
 
         if bpy.context.object.scale != Vector((1.0, 1.0, 1.0)):
             
-            layout.label(text='Your object scale is not correct. Please, apply "Scale"')
+            layout.label(text='Your object scale is not by default. Please, apply "Scale"')
             layout.label(text='Shortcut: Objetc Mode > Ctrl A > Apply "Scale"')
 
         elif bpy.context.object.delta_scale != Vector((1.0, 1.0, 1.0)):
 
-            layout.label(text='Your object delta transform scale is not correct. Please, change it')
+            layout.label(text='Your object delta transform scale is not by default. Please, change it')
             layout.label(text='How to do it: Properties Editor > Object Properties > Transform > Delta Transform >')
             layout.label(text='> You need to set values: All Scales = 1')
 
         layout.prop(context.scene, "bool_warning", text="Show Warning Panel next time")
-        layout.label(text="Warning Panel will appear if object scale or delta scale is not correct")
+        layout.label(text="Warning Panel will appear if object scale or delta scale is not by default")
         layout.label(text='You can find more info about this warning in README.md on Github page or in files')
         # layout.label(text='https://github.com/rovh/Set-Precise-Mesh')
 
