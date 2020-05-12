@@ -78,6 +78,13 @@ class SetAngle(bpy.types.Operator):
             return{"FINISHED"}
 
 
+        if len(vec) =4:
+            merge = 1
+        else:
+            merge = 0
+
+
+
             
         bmesh.update_edit_mesh(me, True, True)
 
@@ -189,28 +196,46 @@ class SetAngle(bpy.types.Operator):
         
         if bool == 1:
             
-            obj = context.active_object        
+            obj = context.active_object
+
+            if merge = 1:
+                newv3 = obj.data.vertices[ind[2]].co
+
+                iv1=v1
+                iv2=newv3
+                iv3=v2
+                iv4=oldv3
+                
+
+                iv = geometry.intersect_line_line(iv1, iv2, iv3, iv4)
+                if iv:
+                    iv = (iv[0] + iv[1]) / 2
+
+                    bm.verts[ind[2]].co = iv
+                    
+                    
+                    bpy.context.object.update_from_editmode()
+                    bmesh.update_edit_mesh(me, True, True)
+
+            else:     
         
-            newv3 = obj.data.vertices[ind[2]].co
-
-
-
-            
-            iv1=v1
-            iv2=newv3
-            iv3=v2
-            iv4=oldv3
-            
-
-            iv = geometry.intersect_line_line(iv1, iv2, iv3, iv4)
-            if iv:
-                iv = (iv[0] + iv[1]) / 2
-
-                bm.verts[ind[2]].co = iv
+                newv3 = obj.data.vertices[ind[2]].co
                 
+                iv1=v1
+                iv2=newv3
+                iv3=v2
+                iv4=oldv3
                 
-                bpy.context.object.update_from_editmode()
-                bmesh.update_edit_mesh(me, True, True)
+
+                iv = geometry.intersect_line_line(iv1, iv2, iv3, iv4)
+                if iv:
+                    iv = (iv[0] + iv[1]) / 2
+
+                    bm.verts[ind[2]].co = iv
+                    
+                    
+                    bpy.context.object.update_from_editmode()
+                    bmesh.update_edit_mesh(me, True, True)
             
 
         
