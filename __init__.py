@@ -87,7 +87,7 @@ class SetPreciseMeshPreferences(bpy.types.AddonPreferences):
     direction_of_length: BoolProperty(
             name="bool",
             description="Change direction",
-            default=0,
+            default=False,
             )
 
     def draw(self, context):
