@@ -16,7 +16,7 @@ bl_info = {
     "author" : "Rovh",
     "description" : "This addon allows you to set exact values for the mesh",
     "blender" : (2, 82, 0),
-    "version" : (1,0,1),
+    "version" : (1,0,2),
     "location" : "View3D > Sidebar in Edit Mode > Item Tab and View Tab",
     "warning" : "",
     "wiki_url": "https://github.com/rovh/Set-Precise-Mesh",
@@ -31,9 +31,9 @@ from .SetLength import *
 from bpy import types
 from bpy.props import (
         FloatProperty,
-        BoolProperty
+        BoolProperty,
+        PointerProperty
         )
-
 
 
 class DialogWarningOperator(bpy.types.Operator):
@@ -43,15 +43,20 @@ class DialogWarningOperator(bpy.types.Operator):
     def execute(self, context):
         return {'FINISHED'}
 
-
     def invoke(self, context, event): 
-        bool123 = bpy.data.scenes[bpy.context.scene.name_full].bool_warning
-        if bool123 == 1:
-            # return context.window_manager.invoke_props_dialog(self)
-            # return context.window_manager.invoke_popup(self, width=600, height=500)
-            return context.window_manager.invoke_popup(self)
-            # return context.window_manager.invoke_props_popup(self, event)
-            # return context.window_manager.invoke_confirm(self, event)
+        bool_warning = bpy.data.scenes[bpy.context.scene.name_full].bool_warning
+        settings = bpy.context.preferences.addons[__name__].preferences
+        bool_warning_global = settings.bool_warning_global
+
+        if bool_warning_global == 1:
+            if bool_warning == 1:
+                # return context.window_manager.invoke_props_dialog(self)
+                # return context.window_manager.invoke_popup(self, width=600, height=500)
+                return context.window_manager.invoke_popup(self)
+                # return context.window_manager.invoke_props_popup(self, event)
+                # return context.window_manager.invoke_confirm(self, event)
+            else:
+                return {'FINISHED'}
         else:
             return {'FINISHED'}
 
@@ -62,34 +67,40 @@ class DialogWarningOperator(bpy.types.Operator):
 
         if bpy.context.object.scale != Vector((1.0, 1.0, 1.0)):
             
-            layout.label(text='Your object scale is not correct. Please, apply "Scale"')
+            layout.label(text='Your object scale is not by default. Please, apply "Scale"')
             layout.label(text='Shortcut: Objetc Mode > Ctrl A > Apply "Scale"')
 
         elif bpy.context.object.delta_scale != Vector((1.0, 1.0, 1.0)):
 
-            layout.label(text='Your object delta transform scale is not correct. Please, change it')
+            layout.label(text='Your object delta transform scale is not by default. Please, change it')
             layout.label(text='How to do it: Properties Editor > Object Properties > Transform > Delta Transform >')
             layout.label(text='> You need to set values: All Scales = 1')
 
-        layout.prop(context.scene, "bool_warning", text="Show Warning Panel next time")
-        layout.label(text="Warning Panel will appear if object scale or delta scale is not correct")
+        layout.prop(context.scene, "bool_warning", text="Show Warning Panel next time (It will show up then you re-open Blender)")
+        layout.label(text="If you need to disable it globally (so that it does not show up after re-opening Blender), you need to go to Set Precise Mesh Preferences")
+        layout.label(text="Warning Panel will appear if object scale or delta scale is not by default")
         layout.label(text='You can find more info about this warning in README.md on Github page or in files')
         # layout.label(text='https://github.com/rovh/Set-Precise-Mesh')
 
+class MenuSetPreciseMeshOperator(bpy.types.Operator):
+    bl_idname = "wm.menu_setprecisemesh_operator"
+    bl_label = "Pop-up Menu"
+    bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
+         (For exaple Alt+R )\n \
+        How to do it: > right-click on this button > Assign Shortcut"
+        
+    def execute(self, context):
+        return {'FINISHED'}
 
-class SetPresiceMesh(bpy.types.Panel):
+    def invoke(self, context, event): 
+        
+        # return context.window_manager.invoke_props_dialog(self)
+        # return context.window_manager.invoke_popup(self, width=600, height=500)
+        return context.window_manager.invoke_popup(self)
+        # return context.window_manager.invoke_props_popup(self, event)
+        # return context.window_manager.invoke_confirm(self, event)
+
     
-    bl_label = "Set Presice Mesh"
-    bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh"
-    bl_space_type = 'VIEW_3D'
-    bl_region_type = 'UI'
-    bl_category = "Item"
-    bl_context = "mesh_edit"
-    bl_options = {'DEFAULT_CLOSED'}
-    bl_label = "Set Precise Mesh / CAD"
-    
-
-
     def draw(self, context):
         layout = self.layout
 
@@ -97,6 +108,9 @@ class SetPresiceMesh(bpy.types.Panel):
         sc = scene
         ob = context.object
 
+        w_m = context.window_manager.setprecisemesh
+
+        # Get values
         bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
         bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
 
@@ -120,8 +134,8 @@ class SetPresiceMesh(bpy.types.Panel):
             box = col.column(align=True).box().column()
             col_top = box.column(align=True)
             
-            col_top.prop(ob, "angle")
-            col_top.prop(ob, "anglebool" )
+            col_top.prop(w_m, "angle")
+            col_top.prop(w_m, "anglebool" )
             # col_top.prop(ob, "angleinput")         
                     
         col = layout.column(align=False)
@@ -142,13 +156,163 @@ class SetPresiceMesh(bpy.types.Panel):
         if sc.bool_panel_arrow2:            
             box = col.column(align=True).box().column()            
             col_top = box.column(align=True)
-            col_top.prop(ob, "length")            
-            col_top.prop(ob, "lengthbool")            
+            col_top.prop(w_m, "length")            
+            col_top.prop(w_m, "lengthbool")            
             # col_top.prop(ob, "lengthinput")
+
+
+class SetPreciseMeshPreferences(bpy.types.AddonPreferences):
+    # this must match the addon name, use '__package__'
+    # when defining this in a submodule of a python package.
+    bl_idname = __name__
+
+
+    direction_of_length: BoolProperty(
+            name="bool",
+            description="Change direction",
+            default=False,
+            )
+
+    direction_of_angle: BoolProperty(
+            name="bool",
+            description="Change direction",
+            default=False,
+            )
+    bool_warning_global: BoolProperty(
+            name="bool",
+            description="Global",
+            default=True,
+            )
+
+
+    def draw(self, context):
+        layout = self.layout
+        layout.label(icon="PREFERENCES")
+
+        row = layout.row()
+        col = row.column()
+        # col.label(text="Tab Category:")
+        col.prop(self, "direction_of_length", text='Invert "Set Length" direction')
+        # col.prop(self, "direction_of_angle", text='Invert "Set Angle" direction')
+        col.operator("wm.menu_setprecisemesh_operator",icon="MENU_PANEL", text="Pop-up Menu (Hover cursor on it for more information)")
+        col.prop(self, "bool_warning_global", text='Show Warning Panel in Blender after re-opening (Global show)')
+
+
+class SetPresiceMeshPanel(bpy.types.Panel):
+    
+    bl_label = "Set Presice Mesh"
+    bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = "Item"
+    bl_context = "mesh_edit"
+    bl_options = {'DEFAULT_CLOSED'}
+    bl_label = "Set Precise Mesh / CAD"
+    
+    def draw(self, context):
+        layout = self.layout
+
+        scene = context.scene
+        sc = scene
+        ob = context.object
+
+        w_m = context.window_manager.setprecisemesh
+
+        # Get values
+        bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
+        bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
+
+        col = layout.column(align=True)
+
         
+        split = col.split(factor=0.85, align=True)
+        split.scale_y =1.2      
+
+        split.operator("mesh.change_angle", icon="DRIVER_ROTATIONAL_DIFFERENCE")
+
         
     
-class Dupli(SetPresiceMesh):
+        if sc.bool_panel_arrow:
+            split.prop(sc, "bool_panel_arrow", text="", icon='DOWNARROW_HLT')
+        else:
+            split.prop(sc, "bool_panel_arrow", text="", icon='RIGHTARROW')
+
+        if sc.bool_panel_arrow:
+            
+            box = col.column(align=True).box().column()
+            col_top = box.column(align=True)
+            
+            col_top.prop(w_m, "angle")
+            col_top.prop(w_m, "anglebool" )
+            # col_top.prop(ob, "angleinput")         
+                    
+        col = layout.column(align=False)
+        col = layout.column(align=True)
+
+        
+        split = col.split(factor=0.85, align=True)
+        split.scale_y =1.2
+        
+        split.operator("mesh.change_length",icon="DRIVER_DISTANCE")
+        
+    
+        if sc.bool_panel_arrow2:
+            split.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
+        else:
+            split.prop(sc, "bool_panel_arrow2", text="", icon='RIGHTARROW')
+
+        if sc.bool_panel_arrow2:            
+            box = col.column(align=True).box().column()            
+            col_top = box.column(align=True)
+            col_top.prop(w_m, "length")            
+            col_top.prop(w_m, "lengthbool")            
+            # col_top.prop(ob, "lengthinput")
+
+class SetPreciseMeshProps(bpy.types.PropertyGroup):
+    """
+    Fake module like class
+    bpy.context.window_manager.setprecisemesh
+    """
+    angle: bpy.props.FloatProperty(
+        name="Angle",
+        description="Radius",
+        min=0.0, max=360.0,
+        default=0.0,
+        step = 100.0,
+        unit="ROTATION",
+        precision = 6,
+    )
+    anglebool: bpy.props.BoolProperty(
+        name="Change adjacent edge",
+        description="Change the length of the opposite edge OR Change the length of the adjacent edge",
+        default=False,
+    )
+    angleinput: bpy.props.BoolProperty(
+        name="Input Mode",
+        description="",
+        default=False,
+    )
+    length: bpy.props.FloatProperty(
+        name="Length",
+        description="Length of the edge",
+        default=1.0,
+        step = 100.0,
+        unit='LENGTH',
+        precision = 6,
+    )
+    lengthbool: bpy.props.BoolProperty(
+        name="Use two directions",
+        description='Change length in two directions OR in the direction of the active vertex',
+        default=False,
+    )
+    lengthinput: bpy.props.BoolProperty(
+        name="Input Mode",
+        description='User Mode',
+        default=False,
+    )
+        
+    
+class Dupli(SetPresiceMeshPanel):
     bl_label = "Set Presice Mesh1"
     bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh1"
     bl_space_type = 'VIEW_3D'
@@ -157,7 +321,7 @@ class Dupli(SetPresiceMesh):
     bl_label = "Set Precise Mesh /CAD"
     # bl_order = 1
  
-class Dupli2(SetPresiceMesh):
+class Dupli2(SetPresiceMeshPanel):
     bl_label = "Set Presice Mesh2"
     bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh2"
     bl_space_type = 'VIEW_3D'
@@ -173,6 +337,9 @@ blender_classes = [
     SetAngle,
     SetLength,
     DialogWarningOperator,
+    SetPreciseMeshProps,
+    SetPreciseMeshPreferences,
+    MenuSetPreciseMeshOperator,
 
 ]
 
@@ -182,6 +349,7 @@ def register():
         bpy.utils.register_class(blender_class)
     # pynput.register()
 
+    bpy.types.WindowManager.setprecisemesh = PointerProperty(type=SetPreciseMeshProps)
 
 
     bpy.types.Scene.bool_panel_arrow = bpy.props.BoolProperty(
@@ -200,53 +368,13 @@ def register():
         default=1,
         options = {"SKIP_SAVE"}
     )
-    bpy.types.Object.angle = bpy.props.FloatProperty(
-        name="Angle",
-        description="Radius",
-        min=0.0, max=360.0,
-        default=0.0,
-        step = 100.0,
-        unit="ROTATION",
-        precision = 6,
-    )
-    bpy.types.Object.anglebool = bpy.props.BoolProperty(
-        name="Change adjacent edge",
-        description="Change the length of the opposite edge OR Change the length of the adjacent edge",
-        default=False,
-    )
-    bpy.types.Object.angleinput = bpy.props.BoolProperty(
-        name="Input Mode",
-        description="",
-        default=False,
-    )
-    bpy.types.Object.length = bpy.props.FloatProperty(
-        name="Length",
-        description="Length of the edge",
-        default=1.0,
-        step = 100.0,
-        unit='LENGTH',
-        precision = 6,
-    )
-    bpy.types.Object.lengthbool = bpy.props.BoolProperty(
-        name="Use two directions",
-        description='Change length in two directions OR in the direction of the active vertex',
-        default=False,
-    )
-    bpy.types.Object.lengthinput = bpy.props.BoolProperty(
-        name="Input Mode",
-        description='User Mode',
-        default=False,
-    )
+
 
 def unregister():
     for blender_class in blender_classes:
         bpy.utils.unregister_class(blender_class)
 
-    del bpy.types.Object.angle
-    del bpy.types.Object.anglebool
-    del bpy.types.Object.length
-    del bpy.types.Object.lengthbool
-    del bpy.types.Object.lengthinput
+    del bpy.types.WindowManager.setprecisemesh
 
     del bpy.types.Scene.bool_panel_arrow
     del bpy.types.Scene.bool_panel_arrow2

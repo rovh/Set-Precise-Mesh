@@ -24,9 +24,6 @@ def check(self):
         bpy.ops.object.dialog_warning_operator('INVOKE_DEFAULT') 
 
 
-
-
-
 def check3(self):
     obj = bpy.context.object
     text = "You need to select 2 vertices"
@@ -47,39 +44,46 @@ class SetLength(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        
         return context.active_object is not None
 
     def execute(self, context):
         
         check(self)
 
-        
-        length = bpy.data.objects[bpy.context.active_object.name_full].length
-        bool = bpy.data.objects[bpy.context.active_object.name_full].lengthbool
-        bool2 = bpy.data.objects[bpy.context.active_object.name_full].lengthinput
+        # Set values
+        length = bpy.context.window_manager.setprecisemesh.length
+        bool = bpy.context.window_manager.setprecisemesh.lengthbool
+        bool2 = bpy.context.window_manager.setprecisemesh.lengthinput
         
         obj = bpy.context.edit_object
         me = obj.data
         bm = bmesh.from_edit_mesh(me)
         
+        # Create list
         vec = []
         ind = []
         
+        #Append to lists
         for g in bm.select_history:
             # if len(vec)<3:
                 vec.append(bm.verts[g.index].co)
                 ind.append(g.index)
                 
-
-
         # Check number
         if len(vec)<2:
             check3(self)
             return{"FINISHED"}
 
+        # Get values
+        settings = bpy.context.preferences.addons['Set-Precise-Mesh'].preferences
+        invert_direction = settings.direction_of_length
 
+        # Invert direction for edge
+        if invert_direction == 1:
+            vec.reverse()
+            ind.reverse()
 
+        # Set values
         v1=vec[0]
         v2=vec[1]
         lv=v2-v1
