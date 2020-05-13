@@ -51,8 +51,8 @@ class DialogWarningOperator(bpy.types.Operator):
         if bool_warning_global == 1:
             if bool_warning == 1:
                 # return context.window_manager.invoke_props_dialog(self)
-                # return context.window_manager.invoke_popup(self, width=600, height=500)
-                return context.window_manager.invoke_popup(self)
+                return context.window_manager.invoke_popup(self, width=700)
+                # return context.window_manager.invoke_popup(self)
                 # return context.window_manager.invoke_props_popup(self, event)
                 # return context.window_manager.invoke_confirm(self, event)
             else:
