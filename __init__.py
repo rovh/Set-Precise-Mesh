@@ -84,7 +84,7 @@ class SetPreciseMeshPreferences(bpy.types.AddonPreferences):
     bl_idname = __name__
 
 
-    direction_for_length: BoolProperty(
+    direction_of_length: BoolProperty(
             name="bool",
             description="Change direction",
             default=0,
@@ -97,7 +97,7 @@ class SetPreciseMeshPreferences(bpy.types.AddonPreferences):
         row = layout.row()
         col = row.column()
         # col.label(text="Tab Category:")
-        col.prop(self, "direction_for_length", text='Invert "Set Length" direction')
+        col.prop(self, "direction_of_length", text='Invert "Set Length" direction')
 
 
 class SetPresiceMesh(bpy.types.Panel):

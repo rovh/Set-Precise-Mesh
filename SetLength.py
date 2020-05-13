@@ -78,11 +78,23 @@ class SetLength(bpy.types.Operator):
             check3(self)
             return{"FINISHED"}
 
+        # settings = bpy.context.preferences.addons[__name__].preferences
+        # invert_direction = settings.direction_of_length
+
+        
+        invert_direction = bpy.context.preferences.addons['Set-Precise-Mesh'].preferences['direction_of_length']
+            
+        if invert_direction == 1:
+            v1=vec[1]
+            v2=vec[0]
+            lv=v2-v1
+        else:
+            v1=vec[0]
+            v2=vec[1]
+            lv=v2-v1
 
 
-        v1=vec[0]
-        v2=vec[1]
-        lv=v2-v1
+
 
 
         # Get global normal 
