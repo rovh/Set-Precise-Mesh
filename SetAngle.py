@@ -42,12 +42,16 @@ class SetAngle(bpy.types.Operator):
     def poll(cls, context):
         return context.active_object is not None
 
+    
+    
+    
 
     def execute(self, context):
                 
         check(self)
 
         # bpy.ops.object.dialog_warning_operator('INVOKE_DEFAULT')
+        # bpy.ops.object.menu_setprecisemesh_operator('INVOKE_DEFAULT')
 
         bpy.context.object.update_from_editmode()
 

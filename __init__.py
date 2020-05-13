@@ -77,6 +77,89 @@ class DialogWarningOperator(bpy.types.Operator):
         layout.label(text='You can find more info about this warning in README.md on Github page or in files')
         # layout.label(text='https://github.com/rovh/Set-Precise-Mesh')
 
+class MenuSetPreciseMeshOperator(bpy.types.Operator):
+    # bl_idname = "object.menu_setprecisemesh_operator"
+    bl_idname = "wm.menu_setprecisemesh_operator"
+
+    bl_label = "Splash Menu"
+
+    def execute(self, context):
+        return {'FINISHED'}
+
+
+    def invoke(self, context, event): 
+        
+        
+        # return context.window_manager.invoke_props_dialog(self)
+        # return context.window_manager.invoke_popup(self, width=600, height=500)
+        return context.window_manager.invoke_popup(self)
+        # return context.window_manager.invoke_props_popup(self, event)
+        # return context.window_manager.invoke_confirm(self, event)
+
+        # return {'FINISHED'}
+
+
+    
+    def draw(self, context):
+        layout = self.layout
+
+        scene = context.scene
+        sc = scene
+        ob = context.object
+
+        w_m = context.window_manager.setprecisemesh
+
+
+
+        bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
+        bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
+
+        col = layout.column(align=True)
+
+        
+        split = col.split(factor=0.85, align=True)
+        split.scale_y =1.2      
+
+        split.operator("mesh.change_angle", icon="DRIVER_ROTATIONAL_DIFFERENCE")
+
+        
+    
+        if sc.bool_panel_arrow:
+            split.prop(sc, "bool_panel_arrow", text="", icon='DOWNARROW_HLT')
+        else:
+            split.prop(sc, "bool_panel_arrow", text="", icon='RIGHTARROW')
+
+        if sc.bool_panel_arrow:
+            
+            box = col.column(align=True).box().column()
+            col_top = box.column(align=True)
+            
+            col_top.prop(w_m, "angle")
+            col_top.prop(w_m, "anglebool" )
+            # col_top.prop(ob, "angleinput")         
+                    
+        col = layout.column(align=False)
+        col = layout.column(align=True)
+
+        
+        split = col.split(factor=0.85, align=True)
+        split.scale_y =1.2
+        
+        split.operator("mesh.change_length",icon="DRIVER_DISTANCE")
+        
+    
+        if sc.bool_panel_arrow2:
+            split.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
+        else:
+            split.prop(sc, "bool_panel_arrow2", text="", icon='RIGHTARROW')
+
+        if sc.bool_panel_arrow2:            
+            box = col.column(align=True).box().column()            
+            col_top = box.column(align=True)
+            col_top.prop(w_m, "length")            
+            col_top.prop(w_m, "lengthbool")            
+            # col_top.prop(ob, "lengthinput")
+
 
 class SetPreciseMeshPreferences(bpy.types.AddonPreferences):
     # this must match the addon name, use '__package__'
@@ -95,6 +178,11 @@ class SetPreciseMeshPreferences(bpy.types.AddonPreferences):
             description="Change direction",
             default=False,
             )
+    splash_menu_mode: BoolProperty(
+            name="bool",
+            description="Menu",
+            default=False,
+            )
 
 
     def draw(self, context):
@@ -106,9 +194,11 @@ class SetPreciseMeshPreferences(bpy.types.AddonPreferences):
         # col.label(text="Tab Category:")
         col.prop(self, "direction_of_length", text='Invert "Set Length" direction')
         # col.prop(self, "direction_of_angle", text='Invert "Set Angle" direction')
+        col.operator("wm.menu_setprecisemesh_operator",icon="MENU_PANEL")
+        # col.prop(self, "splash_menu_mode", text='Mode')
 
 
-class SetPresiceMesh(bpy.types.Panel):
+class SetPresiceMeshPanel(bpy.types.Panel):
     
     bl_label = "Set Presice Mesh"
     bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh"
@@ -225,7 +315,7 @@ class SetPreciseMeshProps(bpy.types.PropertyGroup):
     )
         
     
-class Dupli(SetPresiceMesh):
+class Dupli(SetPresiceMeshPanel):
     bl_label = "Set Presice Mesh1"
     bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh1"
     bl_space_type = 'VIEW_3D'
@@ -234,7 +324,7 @@ class Dupli(SetPresiceMesh):
     bl_label = "Set Precise Mesh /CAD"
     # bl_order = 1
  
-class Dupli2(SetPresiceMesh):
+class Dupli2(SetPresiceMeshPanel):
     bl_label = "Set Presice Mesh2"
     bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh2"
     bl_space_type = 'VIEW_3D'
@@ -252,6 +342,7 @@ blender_classes = [
     DialogWarningOperator,
     SetPreciseMeshProps,
     SetPreciseMeshPreferences,
+    MenuSetPreciseMeshOperator,
 
 ]
 
