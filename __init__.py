@@ -78,6 +78,28 @@ class DialogWarningOperator(bpy.types.Operator):
         # layout.label(text='https://github.com/rovh/Set-Precise-Mesh')
 
 
+class SetPreciseMeshPreferences(bpy.types.AddonPreferences):
+    # this must match the addon name, use '__package__'
+    # when defining this in a submodule of a python package.
+    bl_idname = __name__
+
+
+    direction_for_length: BoolProperty(
+            name="bool",
+            description="Change direction",
+            default=0,
+            )
+
+    def draw(self, context):
+        layout = self.layout
+        layout.label(icon="PREFERENCES")
+
+        row = layout.row()
+        col = row.column()
+        # col.label(text="Tab Category:")
+        col.prop(self, "direction_for_length", text='Invert "Set Length" direction')
+
+
 class SetPresiceMesh(bpy.types.Panel):
     
     bl_label = "Set Presice Mesh"
@@ -220,7 +242,8 @@ blender_classes = [
     SetAngle,
     SetLength,
     DialogWarningOperator,
-    SetPreciseMeshProps
+    SetPreciseMeshProps,
+    SetPreciseMeshPreferences,
 
 ]
 
