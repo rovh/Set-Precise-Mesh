@@ -78,9 +78,9 @@ class SetLength(bpy.types.Operator):
             check3(self)
             return{"FINISHED"}
 
+
         settings = bpy.context.preferences.addons['Set-Precise-Mesh'].preferences
         invert_direction = settings.direction_of_length
-
 
         # Invert direction for edge
         if invert_direction == 1:
