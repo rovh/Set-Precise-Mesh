@@ -76,7 +76,8 @@ class DialogWarningOperator(bpy.types.Operator):
             layout.label(text='How to do it: Properties Editor > Object Properties > Transform > Delta Transform >')
             layout.label(text='> You need to set values: All Scales = 1')
 
-        layout.prop(context.scene, "bool_warning", text="Show Warning Panel next time")
+        layout.prop(context.scene, "bool_warning", text="Show Warning Panel next time (It will show up then you re-open Blender)")
+        layout.label(text="If you need to disable it globally (so that it does not show up after re-opening Blender), you need to go to Set Precise Mesh Preferences")
         layout.label(text="Warning Panel will appear if object scale or delta scale is not by default")
         layout.label(text='You can find more info about this warning in README.md on Github page or in files')
         # layout.label(text='https://github.com/rovh/Set-Precise-Mesh')
