@@ -105,7 +105,7 @@ class SetPreciseMeshPreferences(bpy.types.AddonPreferences):
         col = row.column()
         # col.label(text="Tab Category:")
         col.prop(self, "direction_of_length", text='Invert "Set Length" direction')
-        col.prop(self, "direction_of_angle", text='Invert "Set Angle" direction')
+        # col.prop(self, "direction_of_angle", text='Invert "Set Angle" direction')
 
 
 class SetPresiceMesh(bpy.types.Panel):
