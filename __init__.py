@@ -36,14 +36,12 @@ from bpy.props import (
         )
 
 
-
 class DialogWarningOperator(bpy.types.Operator):
     bl_idname = "object.dialog_warning_operator"
     bl_label = "Warning Panel Operator"
 
     def execute(self, context):
         return {'FINISHED'}
-
 
     def invoke(self, context, event): 
         bool123 = bpy.data.scenes[bpy.context.scene.name_full].bool_warning
@@ -83,22 +81,16 @@ class MenuSetPreciseMeshOperator(bpy.types.Operator):
     bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
     How to do it: > right-click on this button > Assign Shortcut"
         
-
     def execute(self, context):
         return {'FINISHED'}
 
-
     def invoke(self, context, event): 
-        
         
         # return context.window_manager.invoke_props_dialog(self)
         # return context.window_manager.invoke_popup(self, width=600, height=500)
         return context.window_manager.invoke_popup(self)
         # return context.window_manager.invoke_props_popup(self, event)
         # return context.window_manager.invoke_confirm(self, event)
-
-        # return {'FINISHED'}
-
 
     
     def draw(self, context):
@@ -110,8 +102,7 @@ class MenuSetPreciseMeshOperator(bpy.types.Operator):
 
         w_m = context.window_manager.setprecisemesh
 
-
-
+        # Get values
         bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
         bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
 
@@ -205,8 +196,6 @@ class SetPresiceMeshPanel(bpy.types.Panel):
     bl_options = {'DEFAULT_CLOSED'}
     bl_label = "Set Precise Mesh / CAD"
     
-
-
     def draw(self, context):
         layout = self.layout
 
@@ -216,8 +205,7 @@ class SetPresiceMeshPanel(bpy.types.Panel):
 
         w_m = context.window_manager.setprecisemesh
 
-
-
+        # Get values
         bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
         bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
 
@@ -374,12 +362,6 @@ def unregister():
         bpy.utils.unregister_class(blender_class)
 
     del bpy.types.WindowManager.setprecisemesh
-
-    # del bpy.types.Object.angle
-    # del bpy.types.Object.anglebool
-    # del bpy.types.Object.length
-    # del bpy.types.Object.lengthbool
-    # del bpy.types.Object.lengthinput
 
     del bpy.types.Scene.bool_panel_arrow
     del bpy.types.Scene.bool_panel_arrow2
