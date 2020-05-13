@@ -13,6 +13,8 @@ from mathutils import geometry
 from mathutils import Matrix
 from mathutils import Vector, Matrix, Quaternion, Euler
 
+from . import __name__
+
 
 
 
@@ -75,7 +77,7 @@ class SetLength(bpy.types.Operator):
             return{"FINISHED"}
 
         # Get values
-        settings = bpy.context.preferences.addons['Set-Precise-Mesh'].preferences
+        settings = bpy.context.preferences.addons[__name__].preferences
         invert_direction = settings.direction_of_length
 
         # Invert direction for edge
