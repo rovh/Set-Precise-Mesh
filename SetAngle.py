@@ -83,12 +83,15 @@ class SetAngle(bpy.types.Operator):
             
         bmesh.update_edit_mesh(me, True, True)
 
+        # settings = bpy.context.preferences.addons['Set-Precise-Mesh'].preferences
+        # invert_direction = settings.direction_of_angle
+
+        # if invert_direction == 1:
+        #     vec.reverse()
+        #     ind.reverse()
 
         if len(vec) == 4:
             merge = 1
-
-            mind=ind[2]
-
             v0=vec[0] # 1 selected
             v1=vec[1] # 2 selected
             v2=vec[2] # 3 selected
@@ -97,20 +100,16 @@ class SetAngle(bpy.types.Operator):
 
         else:
             merge = 0
-
-            mind=ind[1]
-
             v1=vec[0] # 1 selected
             v2=vec[1] # 2 selected
             v3=vec[2] #  3 selected
             oldv3=vec[2] # 3 selected
-        
+    
 
         # Angle between verteses
         v1ch=v1-v2
         v3ch=v3-v2
         angle = v3ch.angle(v1ch, 0.0)
-
 
 
         if merge == 1:
@@ -120,10 +119,11 @@ class SetAngle(bpy.types.Operator):
             bm.verts[ind[2]].select = 0
             bm.verts[ind[3]].select = 1
         else:
-                # Select vertices
+            # Select vertices
             bm.verts[ind[0]].select = 0
             bm.verts[ind[1]].select = 0
             bm.verts[ind[2]].select = 1
+
 
 
         context = bpy.context
