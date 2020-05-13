@@ -40,22 +40,15 @@ class SetAngle(bpy.types.Operator):
     
     @classmethod
     def poll(cls, context):
-        return context.active_object is not None
-
-    
-    
-    
+        return context.active_object is not None    
 
     def execute(self, context):
                 
         check(self)
 
-        # bpy.ops.object.dialog_warning_operator('INVOKE_DEFAULT')
-        # bpy.ops.object.menu_setprecisemesh_operator('INVOKE_DEFAULT')
-
         bpy.context.object.update_from_editmode()
 
-        
+        # Get values
         height = bpy.context.window_manager.setprecisemesh.angle
         bool = bpy.context.window_manager.setprecisemesh.anglebool
         bool2 = bpy.context.window_manager.setprecisemesh.angleinput
@@ -87,13 +80,7 @@ class SetAngle(bpy.types.Operator):
             
         bmesh.update_edit_mesh(me, True, True)
 
-        # settings = bpy.context.preferences.addons['Set-Precise-Mesh'].preferences
-        # invert_direction = settings.direction_of_angle
-
-        # if invert_direction == 1:
-        #     vec.reverse()
-        #     ind.reverse()
-
+        # Check list of selected vertices
         if len(vec) == 4:
             merge = 1
             v0=vec[0] # 1 selected
@@ -116,6 +103,7 @@ class SetAngle(bpy.types.Operator):
         angle = v3ch.angle(v1ch, 0.0)
 
 
+        # Select cases for number of selected vertices
         if merge == 1:
             # Select vertices
             bm.verts[ind[0]].select = 0
@@ -211,9 +199,6 @@ class SetAngle(bpy.types.Operator):
             )    
         
         
-        
-        
-        
         if bool == 1:
             
             obj = context.active_object
@@ -239,7 +224,6 @@ class SetAngle(bpy.types.Operator):
 
                     bm.verts[ind[3]].co = iv
                     
-                    
                     bpy.context.object.update_from_editmode()
                     bmesh.update_edit_mesh(me, True, True)
 
@@ -252,7 +236,6 @@ class SetAngle(bpy.types.Operator):
                 iv3=v2
                 iv4=oldv3
                 
-
                 iv = geometry.intersect_line_line(iv1, iv2, iv3, iv4)
                 if iv:
                     iv = (iv[0] + iv[1]) / 2
@@ -269,8 +252,7 @@ class SetAngle(bpy.types.Operator):
         bmesh.update_edit_mesh(me, True, True)
 
         
-
-            
+         
         return {'FINISHED'}
 if __name__ == "__main__":
     register()
