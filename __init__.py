@@ -78,10 +78,11 @@ class DialogWarningOperator(bpy.types.Operator):
         # layout.label(text='https://github.com/rovh/Set-Precise-Mesh')
 
 class MenuSetPreciseMeshOperator(bpy.types.Operator):
-    # bl_idname = "object.menu_setprecisemesh_operator"
     bl_idname = "wm.menu_setprecisemesh_operator"
-
-    bl_label = "Splash Menu"
+    bl_label = "Pop-up Menu"
+    bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
+    How to do it: > right-click on this button > Assign Shortcut"
+        
 
     def execute(self, context):
         return {'FINISHED'}
@@ -178,11 +179,6 @@ class SetPreciseMeshPreferences(bpy.types.AddonPreferences):
             description="Change direction",
             default=False,
             )
-    splash_menu_mode: BoolProperty(
-            name="bool",
-            description="Menu",
-            default=False,
-            )
 
 
     def draw(self, context):
@@ -194,7 +190,7 @@ class SetPreciseMeshPreferences(bpy.types.AddonPreferences):
         # col.label(text="Tab Category:")
         col.prop(self, "direction_of_length", text='Invert "Set Length" direction')
         # col.prop(self, "direction_of_angle", text='Invert "Set Angle" direction')
-        col.operator("wm.menu_setprecisemesh_operator",icon="MENU_PANEL")
+        col.operator("wm.menu_setprecisemesh_operator",icon="MENU_PANEL", text="Pop-up Menu (Hover cursor on it for more information)")
         # col.prop(self, "splash_menu_mode", text='Mode')
 
 
