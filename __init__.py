@@ -44,13 +44,19 @@ class DialogWarningOperator(bpy.types.Operator):
         return {'FINISHED'}
 
     def invoke(self, context, event): 
-        bool123 = bpy.data.scenes[bpy.context.scene.name_full].bool_warning
-        if bool123 == 1:
-            # return context.window_manager.invoke_props_dialog(self)
-            # return context.window_manager.invoke_popup(self, width=600, height=500)
-            return context.window_manager.invoke_popup(self)
-            # return context.window_manager.invoke_props_popup(self, event)
-            # return context.window_manager.invoke_confirm(self, event)
+        bool_warning = bpy.data.scenes[bpy.context.scene.name_full].bool_warning
+        settings = bpy.context.preferences.addons[__name__].preferences
+        bool_warning_global = settings.bool_warning_global
+
+        if bool_warning_global == 1:
+            if bool_warning == 1:
+                # return context.window_manager.invoke_props_dialog(self)
+                # return context.window_manager.invoke_popup(self, width=600, height=500)
+                return context.window_manager.invoke_popup(self)
+                # return context.window_manager.invoke_props_popup(self, event)
+                # return context.window_manager.invoke_confirm(self, event)
+            else:
+                return {'FINISHED'}
         else:
             return {'FINISHED'}
 
@@ -170,6 +176,11 @@ class SetPreciseMeshPreferences(bpy.types.AddonPreferences):
             description="Change direction",
             default=False,
             )
+    bool_warning_global: BoolProperty(
+            name="bool",
+            description="Global",
+            default=True,
+            )
 
 
     def draw(self, context):
@@ -182,7 +193,9 @@ class SetPreciseMeshPreferences(bpy.types.AddonPreferences):
         col.prop(self, "direction_of_length", text='Invert "Set Length" direction')
         # col.prop(self, "direction_of_angle", text='Invert "Set Angle" direction')
         col.operator("wm.menu_setprecisemesh_operator",icon="MENU_PANEL", text="Pop-up Menu (Hover cursor on it for more information)")
-        # col.prop(self, "splash_menu_mode", text='Mode')
+        col.prop(self, "bool_warning_global", text='Show Warning Panel in blender\
+            (Global show)\
+            ')
 
 
 class SetPresiceMeshPanel(bpy.types.Panel):
