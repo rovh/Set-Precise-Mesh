@@ -55,9 +55,9 @@ class SetLength(bpy.types.Operator):
         check(self)
 
         
-        length = bpy.data.objects[bpy.context.active_object.name_full].length
-        bool = bpy.data.objects[bpy.context.active_object.name_full].lengthbool
-        bool2 = bpy.data.objects[bpy.context.active_object.name_full].lengthinput
+        length = bpy.context.window_manager.setprecisemesh.length
+        bool = bpy.context.window_manager.setprecisemesh.lengthbool
+        bool2 = bpy.context.window_manager.setprecisemesh.lengthinput
         
         obj = bpy.context.edit_object
         me = obj.data

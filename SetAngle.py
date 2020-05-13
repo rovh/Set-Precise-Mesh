@@ -52,9 +52,9 @@ class SetAngle(bpy.types.Operator):
         bpy.context.object.update_from_editmode()
 
         
-        height = bpy.data.objects[bpy.context.active_object.name_full].angle
-        bool = bpy.data.objects[bpy.context.active_object.name_full].anglebool
-        bool2 = bpy.data.objects[bpy.context.active_object.name_full].angleinput
+        height = bpy.context.window_manager.setprecisemesh.angle
+        bool = bpy.context.window_manager.setprecisemesh.anglebool
+        bool2 = bpy.context.window_manager.setprecisemesh.angleinput
 
         
         obj = bpy.context.edit_object

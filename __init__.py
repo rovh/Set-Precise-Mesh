@@ -16,7 +16,7 @@ bl_info = {
     "author" : "Rovh",
     "description" : "This addon allows you to set exact values for the mesh",
     "blender" : (2, 82, 0),
-    "version" : (1,0,1),
+    "version" : (1,0,2),
     "location" : "View3D > Sidebar in Edit Mode > Item Tab and View Tab",
     "warning" : "",
     "wiki_url": "https://github.com/rovh/Set-Precise-Mesh",
@@ -31,7 +31,8 @@ from .SetLength import *
 from bpy import types
 from bpy.props import (
         FloatProperty,
-        BoolProperty
+        BoolProperty,
+        PointerProperty
         )
 
 
@@ -97,6 +98,10 @@ class SetPresiceMesh(bpy.types.Panel):
         sc = scene
         ob = context.object
 
+        w_m = context.window_manager.setprecisemesh
+
+
+
         bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
         bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
 
@@ -120,8 +125,8 @@ class SetPresiceMesh(bpy.types.Panel):
             box = col.column(align=True).box().column()
             col_top = box.column(align=True)
             
-            col_top.prop(ob, "angle")
-            col_top.prop(ob, "anglebool" )
+            col_top.prop(w_m, "angle")
+            col_top.prop(w_m, "anglebool" )
             # col_top.prop(ob, "angleinput")         
                     
         col = layout.column(align=False)
@@ -142,10 +147,52 @@ class SetPresiceMesh(bpy.types.Panel):
         if sc.bool_panel_arrow2:            
             box = col.column(align=True).box().column()            
             col_top = box.column(align=True)
-            col_top.prop(ob, "length")            
-            col_top.prop(ob, "lengthbool")            
+            col_top.prop(w_m, "length")            
+            col_top.prop(w_m, "lengthbool")            
             # col_top.prop(ob, "lengthinput")
-        
+
+class SetPreciseMeshProps(bpy.types.PropertyGroup):
+    """
+    Fake module like class
+    bpy.context.window_manager.setprecisemesh
+    """
+    angle: bpy.props.FloatProperty(
+        name="Angle",
+        description="Radius",
+        min=0.0, max=360.0,
+        default=0.0,
+        step = 100.0,
+        unit="ROTATION",
+        precision = 6,
+    )
+    anglebool: bpy.props.BoolProperty(
+        name="Change adjacent edge",
+        description="Change the length of the opposite edge OR Change the length of the adjacent edge",
+        default=False,
+    )
+    angleinput: bpy.props.BoolProperty(
+        name="Input Mode",
+        description="",
+        default=False,
+    )
+    length: bpy.props.FloatProperty(
+        name="Length",
+        description="Length of the edge",
+        default=1.0,
+        step = 100.0,
+        unit='LENGTH',
+        precision = 6,
+    )
+    lengthbool: bpy.props.BoolProperty(
+        name="Use two directions",
+        description='Change length in two directions OR in the direction of the active vertex',
+        default=False,
+    )
+    lengthinput: bpy.props.BoolProperty(
+        name="Input Mode",
+        description='User Mode',
+        default=False,
+    )
         
     
 class Dupli(SetPresiceMesh):
@@ -173,6 +220,7 @@ blender_classes = [
     SetAngle,
     SetLength,
     DialogWarningOperator,
+    SetPreciseMeshProps
 
 ]
 
@@ -182,6 +230,7 @@ def register():
         bpy.utils.register_class(blender_class)
     # pynput.register()
 
+    bpy.types.WindowManager.setprecisemesh = PointerProperty(type=SetPreciseMeshProps)
 
 
     bpy.types.Scene.bool_panel_arrow = bpy.props.BoolProperty(
@@ -200,53 +249,19 @@ def register():
         default=1,
         options = {"SKIP_SAVE"}
     )
-    bpy.types.Object.angle = bpy.props.FloatProperty(
-        name="Angle",
-        description="Radius",
-        min=0.0, max=360.0,
-        default=0.0,
-        step = 100.0,
-        unit="ROTATION",
-        precision = 6,
-    )
-    bpy.types.Object.anglebool = bpy.props.BoolProperty(
-        name="Change adjacent edge",
-        description="Change the length of the opposite edge OR Change the length of the adjacent edge",
-        default=False,
-    )
-    bpy.types.Object.angleinput = bpy.props.BoolProperty(
-        name="Input Mode",
-        description="",
-        default=False,
-    )
-    bpy.types.Object.length = bpy.props.FloatProperty(
-        name="Length",
-        description="Length of the edge",
-        default=1.0,
-        step = 100.0,
-        unit='LENGTH',
-        precision = 6,
-    )
-    bpy.types.Object.lengthbool = bpy.props.BoolProperty(
-        name="Use two directions",
-        description='Change length in two directions OR in the direction of the active vertex',
-        default=False,
-    )
-    bpy.types.Object.lengthinput = bpy.props.BoolProperty(
-        name="Input Mode",
-        description='User Mode',
-        default=False,
-    )
+
 
 def unregister():
     for blender_class in blender_classes:
         bpy.utils.unregister_class(blender_class)
 
-    del bpy.types.Object.angle
-    del bpy.types.Object.anglebool
-    del bpy.types.Object.length
-    del bpy.types.Object.lengthbool
-    del bpy.types.Object.lengthinput
+    del bpy.types.WindowManager.setprecisemesh
+
+    # del bpy.types.Object.angle
+    # del bpy.types.Object.anglebool
+    # del bpy.types.Object.length
+    # del bpy.types.Object.lengthbool
+    # del bpy.types.Object.lengthinput
 
     del bpy.types.Scene.bool_panel_arrow
     del bpy.types.Scene.bool_panel_arrow2
