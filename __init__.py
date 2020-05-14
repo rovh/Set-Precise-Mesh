@@ -16,7 +16,7 @@ bl_info = {
     "author" : "Rovh",
     "description" : "This addon allows you to set exact values for the mesh",
     "blender" : (2, 82, 0),
-    "version" : (1,0,2),
+    "version" : (1,0,3),
     "location" : "View3D > Sidebar in Edit Mode > Item Tab and View Tab",
     "warning" : "",
     "wiki_url": "https://github.com/rovh/Set-Precise-Mesh",
