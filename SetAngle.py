@@ -72,9 +72,9 @@ class SetAngle(bpy.types.Operator):
 
 
         # Check number
-        if len(vec)<3:
-            check3(self)
-            return{"FINISHED"}
+        # if len(vec)<3:
+            # check3(self)
+            # return{"FINISHED"}
 
 
             
@@ -89,6 +89,15 @@ class SetAngle(bpy.types.Operator):
             v3=vec[3] # 4 selected
             oldv3=vec[3] # 4 selected
 
+        elif len(vec)==2:
+            merge =0
+            v2=vec[0] # 2 selected
+            v3=vec[1] #  3 selected
+            oldv3=vec[1] # 3 selected
+
+            v1 = mathutils.Vector((v3[0], v3[1] , 0)) # 1 selected simulate
+            ind.append(ind[1])
+
         else:
             merge = 0
             v1=vec[0] # 1 selected
@@ -96,7 +105,6 @@ class SetAngle(bpy.types.Operator):
             v3=vec[2] #  3 selected
             oldv3=vec[2] # 3 selected
     
-
         # Angle between verteses
         v1ch=v1-v2
         v3ch=v3-v2
