@@ -38,8 +38,8 @@ def check3(self):
 class SetLength(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_length"
-    bl_label = "Set Length"
-    bl_description = 'Set Length \n You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut'
+    bl_label = "Set Length / Distance"
+    bl_description = 'Set Length / Distance \n You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut'
     bl_options = {'REGISTER', 'UNDO'}
 
  
