@@ -96,33 +96,60 @@ class SetAngle(bpy.types.Operator):
             v3=vec[1] #  3 selected
             oldv3=vec[1] # 3 selected
 
-            progection_global_matrix = 1
+            progection_global_matrix = 0
+            progection_local_matrix = 1
+
             if progection_global_matrix == 1:
 
                 v2_prg = bpy.context.active_object.matrix_world  @ v2
                 # v2 = bpy.context.active_object.matrix_world  @ v2
                 # v3 = bpy.context.active_object.matrix_world  @ v3
                 # oldv3 = bpy.context.active_object.matrix_world  @ oldv3
-
-
                 v1 = bpy.context.active_object.matrix_world  @ v3
-
-                # v1 = v3
-
                 # v1 = bpy.context.scene.cursor.matrix @ v3
-
                 v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
-
                 wm = bpy.context.active_object.matrix_world.copy()
                 wm = wm.inverted()
-
                 v1 = wm @ v1  
-
                 # v1 = bpy.context.scene.cursor.matrix @ v1
-
                 ind.append(ind[1])
-
                 # v1 = bpy.context.active_object.matrix_world  @ v1
+
+            elif progection_local_matrix == 1:
+
+                # v2_prg = bpy.context.active_object.matrix_world  @ v2
+                v2_prg = v2
+                # v2 = bpy.context.active_object.matrix_world  @ v2
+                # v3 = bpy.context.active_object.matrix_world  @ v3
+                # oldv3 = bpy.context.active_object.matrix_world  @ oldv3
+                # v1 = bpy.context.active_object.matrix_world  @ v3
+                v1 = v3
+                # v1 = bpy.context.scene.cursor.matrix @ v3
+                v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
+                # wm = bpy.context.active_object.matrix_world.copy()
+                # wm = wm.inverted()
+                # v1 = wm @ v1  
+                # v1 = bpy.context.scene.cursor.matrix @ v1
+                ind.append(ind[1])
+                # v1 = bpy.context.active_object.matrix_world  @ v1
+                
+            elif progection_cursor == 1:
+                                # v2_prg = bpy.context.active_object.matrix_world  @ v2
+                v2_prg = v2
+                # v2 = bpy.context.active_object.matrix_world  @ v2
+                # v3 = bpy.context.active_object.matrix_world  @ v3
+                # oldv3 = bpy.context.active_object.matrix_world  @ oldv3
+                # v1 = bpy.context.active_object.matrix_world  @ v3
+                v1 = v3
+                # v1 = bpy.context.scene.cursor.matrix @ v3
+                v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
+                # wm = bpy.context.active_object.matrix_world.copy()
+                # wm = wm.inverted()
+                # v1 = wm @ v1  
+                # v1 = bpy.context.scene.cursor.matrix @ v1
+                ind.append(ind[1])
+                # v1 = bpy.context.active_object.matrix_world  @ v1
+
 
         else:
             merge = 0
