@@ -97,7 +97,8 @@ class SetAngle(bpy.types.Operator):
             oldv3=vec[1] # 3 selected
 
             progection_global_matrix = 0
-            progection_local_matrix = 1
+            progection_local_matrix = 0
+            progection_cursor = 1
 
             if progection_global_matrix == 1:
 
@@ -132,20 +133,21 @@ class SetAngle(bpy.types.Operator):
                 # v1 = bpy.context.scene.cursor.matrix @ v1
                 ind.append(ind[1])
                 # v1 = bpy.context.active_object.matrix_world  @ v1
-                
+
             elif progection_cursor == 1:
-                                # v2_prg = bpy.context.active_object.matrix_world  @ v2
-                v2_prg = v2
+                # v2_prg = bpy.context.active_object.matrix_world  @ v2
+                # v2_prg = bpy.context.scene.cursor.location 
                 # v2 = bpy.context.active_object.matrix_world  @ v2
                 # v3 = bpy.context.active_object.matrix_world  @ v3
                 # oldv3 = bpy.context.active_object.matrix_world  @ oldv3
                 # v1 = bpy.context.active_object.matrix_world  @ v3
-                v1 = v3
+                v1 = bpy.context.scene.cursor.location
+                # v1 = v3
                 # v1 = bpy.context.scene.cursor.matrix @ v3
-                v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
-                # wm = bpy.context.active_object.matrix_world.copy()
-                # wm = wm.inverted()
-                # v1 = wm @ v1  
+                # v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
+                wm = bpy.context.active_object.matrix_world.copy()
+                wm = wm.inverted()
+                v1 = wm @ v1  
                 # v1 = bpy.context.scene.cursor.matrix @ v1
                 ind.append(ind[1])
                 # v1 = bpy.context.active_object.matrix_world  @ v1
@@ -184,7 +186,8 @@ class SetAngle(bpy.types.Operator):
         ob = context.edit_object
 
         #pp = Cursor location
-        bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world  @ v2
+        if progection_cursor==0:
+            bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world  @ v2
         
 
         # Create global coordinates
@@ -204,12 +207,13 @@ class SetAngle(bpy.types.Operator):
 
          
         # Set cursor direction
-        obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor
-        loc_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor.matrix.to_translation()         
-        direction = normalgl
-        # point the cameras '-Z' and use its 'Y' as up
-        rot_quat = direction.to_track_quat('-Z', 'Y')
-        obj_camera.rotation_euler = rot_quat.to_euler()
+        if progection_cursor ==0:
+            obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor
+            loc_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor.matrix.to_translation()         
+            direction = normalgl
+            # point the cameras '-Z' and use its 'Y' as up
+            rot_quat = direction.to_track_quat('-Z', 'Y')
+            obj_camera.rotation_euler = rot_quat.to_euler()
         
 
         # Create Matrix
