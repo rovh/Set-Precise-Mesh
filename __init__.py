@@ -379,7 +379,7 @@ def unregister():
 
     del bpy.types.Scene.bool_panel_arrow
     del bpy.types.Scene.bool_panel_arrow2
-    # del bpy.types.Scene.bool_warning
+    del bpy.types.Scene.bool_warning
 
 if __name__ == "__main__":
     register()
