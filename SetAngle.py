@@ -95,8 +95,11 @@ class SetAngle(bpy.types.Operator):
             v3=vec[1] #  3 selected
             oldv3=vec[1] # 3 selected
 
-            v1 = mathutils.Vector((v3[0], v3[1] , 0)) # 1 selected simulate
+            v1 = bpy.context.active_object.matrix_world  @ v3
+            v1 = mathutils.Vector((v1[0], v1[1] , v2[2])) # 1 selected simulate
             ind.append(ind[1])
+
+            # v1 = bpy.context.active_object.matrix_world  @ v1
 
         else:
             merge = 0
