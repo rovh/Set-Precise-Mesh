@@ -382,11 +382,11 @@ class SetPreciseMeshProps(bpy.types.PropertyGroup):
     projection_type: bpy.props.EnumProperty(
         name="Projection type",
         items=(
-            ("global_matrix"  , "Global Matrix"  , "Global Matrix"  , "WORLD_DATA" , 0),
-            ("local_matrix"   , "Local Matrix"   , "Local Matrix"   ,          ),
-            ("cursor_location", "Cursor Location", "Cursor Location",        ),
-            ("cursor_matrix"  , "Cursor Matrix"  , "Cursor Matrix"  ,         ),
-            ("custon_object"  , "Custon Object"  , "Custon Object"  ,           ),
+            ("global_matrix"  , "Global Matrix"  , "Global Matrix"  , "WORLD_DATA", 0),
+            ("local_matrix"   , "Local Matrix"   , "Local Matrix"   , "OBJECT_DATA", 1),
+            ("cursor_location", "Cursor Location", "Cursor Location",  ),
+            ("cursor_matrix"  , "Cursor Matrix"  , "Cursor Matrix"  ,  ),
+            ("custom_object"  , "Custom Object"  , "Custon Object"  ,  "OBJECT_DATA", 4),
         ),
         description="Algorithm used for interpolation",
         default='global_matrix'
