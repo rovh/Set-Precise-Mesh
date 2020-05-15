@@ -103,6 +103,7 @@ class SetAngle(bpy.types.Operator):
             progection_custom = 1
 
             # progection_type = "globalmatrix"
+            
 
             if progection_global_matrix == 1:
 

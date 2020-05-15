@@ -210,18 +210,28 @@ class Header_Set_Precise_Mesh(bpy.types.Operator):
     def execute(self, context):
         return {'FINISHED'}
 
-    # def invoke(self, context, event): 
+    def invoke(self, context, event): 
         
         # return context.window_manager.invoke_props_dialog(self)
         # return context.window_manager.invoke_popup(self, width=600, height=500)
-        # return context.window_manager.invoke_popup(self)
+        return context.window_manager.invoke_popup(self)
         # return context.window_manager.invoke_popup(self, width = 200)
         # return context.window_manager.invoke_props_popup(self, event)
         # return context.window_manager.invoke_confirm(self, event)
     def draw(self, context):
-        row = layout.row()
-        col = row.column()
-        col.prop(orient_slot, "type", expand=True)
+        # row = layout.row()
+        # col = row.column()
+        # col.prop(orient_slot, "type", expand=True)
+        # w_m = context.window_manager.setprecisemesh
+        # col.prop(w_m, "projection_type" , expand=True)
+        layout=self.layout
+
+        column = layout.column(align=True)
+        # row = column.row()
+        # row.prop(self, "tabs", expand=True)
+        w_m = context.window_manager.setprecisemesh
+        column.prop(w_m, "projection_type" , expand=True)
+
 
 
 
@@ -239,7 +249,7 @@ def header_search_draw2(self, context):
         sub = row.row()
         sub.ui_units_x = 3
         layout.separator()
-        row.operator("wm.menu_setprecisemesh_operator", text="Projection type", icon = "AXIS_TOP")
+        row.operator("wm.header_setprecisemesh_operator", text="Projection type", icon = "AXIS_TOP")
 
 
 class SetPresiceMeshPanel(bpy.types.Panel):
