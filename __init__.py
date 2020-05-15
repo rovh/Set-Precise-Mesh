@@ -199,136 +199,48 @@ class SetPreciseMeshPreferences(bpy.types.AddonPreferences):
         col.operator("wm.menu_setprecisemesh_operator",icon="MENU_PANEL", text="Pop-up Menu (Hover cursor on it for more information)")
         col.prop(self, "bool_warning_global", text='Show Warning Panel in Blender (Global)')
 
-class VIEW3D_PT_Set_Precise_Mesh(bpy.types.Header):
-    bl_space_type = 'VIEW_3D'
-    bl_region_type = 'TOOL_HEADER'
-
-
-
-    def draw(self, context):
-    # def draw_xform_template(layout, context):
-        layout = self.layout
-
-        # layout.row(align=True).template_header()
-
-        # self.draw_tool_settings(context)
-
-        # layout.separator_spacer()
-
-        # bpy.types.VIEW3D_HT_header.draw_xform_template(layout, context)
-
-        # layout.separator_spacer()
-
-        # self.draw_mode_settings(context)
-
-        tool_settings = context.tool_settings
-        view = context.space_data
-        shading = view.shading
-        show_region_tool_header = view.show_region_tool_header
-
-        # if not show_region_tool_header:
-        #     layout.row(align=True).template_header()   
-         # layout.row(align=1).template_header()
-        object_mode = context.active_object.mode
-
-
-        if object_mode in {'EDIT'}:
-            # layout.prop(tool_settings, "transform_pivot_point", text="", icon_only=True)
-            # layout.separator(factor=1.0)
-            # layout.separator()
-            # sub = row.row(align=True)
-            # layout.separator()
-            # layout.separator(factor = 4.0)
-            # layout.separator_spacer()
-            # if context.space_data.show_region_tool_header == True or context.mode[:4] not in ('EDIT', 'OBJE'):
-            # layout.separator_spacer()
-            # layout.separator(factor=20.0)
-            # layout.separator_spacer()
-            # layout.separator(factor=-20.0)
-            # layout.row(align=True).template_header()
-
-
-            layout.separator_spacer()
-
-            VIEW3D_HT_header.draw_xform_template(layout, context)
-
-            layout.separator_spacer()
-
-            # layout.menu("VIEW3D_HT_header.draw_xform_template(layout, context)")
-            
-            row = layout.row(align=1)
-            
-            sub = row.row()
-            sub.ui_units_x = 4
-            # layout.separator(factor=0)
-            # layout.separator()
-            row.operator("wm.menu_setprecisemesh_operator", text="Projection type", icon = "ADD")
-            # layout.separator()
-
-        # row = layout.row(align=True)
-        # sub = row.row(align=True)
-
+class Header_Set_Precise_Mesh(bpy.types.Operator):
+   
+    bl_idname = "wm.header_setprecisemesh_operator"
+    bl_label = "Header Menu"
+    bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
+         (For exaple Alt+R )\n \
+        How to do it: > right-click on this button > Assign Shortcut"
         
-        # mode_string = context.mode
-        # object_mode = 'EDIT' if obj is None else obj.mode
-        # object_mode = obj.mode
+    def execute(self, context):
+        return {'FINISHED'}
+
+    # def invoke(self, context, event): 
+        
+        # return context.window_manager.invoke_props_dialog(self)
+        # return context.window_manager.invoke_popup(self, width=600, height=500)
+        # return context.window_manager.invoke_popup(self)
+        # return context.window_manager.invoke_popup(self, width = 200)
+        # return context.window_manager.invoke_props_popup(self, event)
+        # return context.window_manager.invoke_confirm(self, event)
+    def draw(self, context):
+        row = layout.row()
+        col = row.column()
+        col.prop(orient_slot, "type", expand=True)
+
+
 
 def header_search_draw2(self, context):
     layout = self.layout
-
-
-    # tool_settings = context.tool_settings
-    # view = context.space_data
-    # shading = view.shading
-    # show_region_tool_header = view.show_region_tool_header
-
-    # if not show_region_tool_header:
-    #     layout.row(align=True).template_header()   
-        # layout.row(align=1).template_header()
     object_mode = context.active_object.mode
 
 
     if object_mode in {'EDIT'}:
-        # layout.prop(tool_settings, "transform_pivot_point", text="", icon_only=True)
-        # layout.separator(factor=1.0)
-        # layout.separator()
-        # sub = row.row(align=True)
-        # layout.separator()
-        # layout.separator(factor = 4.0)
-        # layout.separator_spacer()
-        # if context.space_data.show_region_tool_header == True or context.mode[:4] not in ('EDIT', 'OBJE'):
-        # layout.separator_spacer()
-        # layout.separator(factor=20.0)
-        # layout.separator_spacer()
-        # layout.separator(factor=-20.0)
-        # layout.row(align=True).template_header()
-
-
-        # layout.separator_spacer()
-
-        # VIEW3D_HT_header.draw_xform_template(layout, context)
-
-        # layout.separator_spacer()
 
         # layout.menu("VIEW3D_HT_header.draw_xform_template(layout, context)")
         
         row = layout.row(align=1)
         
         sub = row.row()
-        sub.ui_units_x = 4
-        # layout.separator(factor=0)
+        sub.ui_units_x = 3
         layout.separator()
-        row.operator("wm.menu_setprecisemesh_operator", text="Projection type", icon = "ADD")
-        # layout.separator()
+        row.operator("wm.menu_setprecisemesh_operator", text="Projection type", icon = "AXIS_TOP")
 
-    # row = layout.row(align=True)
-    # sub = row.row(align=True)
-
-    
-    # mode_string = context.mode
-    # object_mode = 'EDIT' if obj is None else obj.mode
-    # object_mode = obj.mode
-    
 
 class SetPresiceMeshPanel(bpy.types.Panel):
     
@@ -499,7 +411,8 @@ blender_classes = [
     SetPreciseMeshProps,
     SetPreciseMeshPreferences,
     MenuSetPreciseMeshOperator,
-    VIEW3D_PT_Set_Precise_Mesh,
+    Header_Set_Precise_Mesh,
+
 
 ]
 

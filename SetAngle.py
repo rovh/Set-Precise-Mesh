@@ -102,6 +102,8 @@ class SetAngle(bpy.types.Operator):
             progection_cursor_matrix = 0
             progection_custom = 1
 
+            # progection_type = "globalmatrix"
+
             if progection_global_matrix == 1:
 
                 v2_prg = bpy.context.active_object.matrix_world  @ v2
