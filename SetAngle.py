@@ -99,7 +99,8 @@ class SetAngle(bpy.types.Operator):
             progection_global_matrix = 0
             progection_local_matrix = 0
             progection_cursor = 0
-            progection_cursor_matrix = 1
+            progection_cursor_matrix = 0
+            progection_custom = 1
 
             if progection_global_matrix == 1:
 
@@ -189,7 +190,44 @@ class SetAngle(bpy.types.Operator):
                 ind.append(ind[1])
                 # v1 = bpy.context.active_object.matrix_world  @ v1
 
+            elif progection_custom ==1:
 
+                obj_name = 'Plane'
+                obj_marx = bpy.data.objects[obj_name].matrix_world
+
+                wm = bpy.context.active_object.matrix_world.copy()
+                wm_c = obj_marx.copy()
+
+                wm = wm.inverted()
+                wm_c = wm_c.inverted()
+
+                # v1 = wm @ v1  
+                # v1 = wm_c @ v1 
+
+
+                v2_prg = bpy.context.active_object.matrix_world  @ v2
+                # v2_prg = bpy.context.scene.cursor.matrix  @ v2
+                v2_prg = wm_c  @ v2_prg
+
+                # v2_prg = v2
+
+                v1 = bpy.context.active_object.matrix_world  @ v3
+                v1 = wm_c @ v1
+                
+                # v1 = bpy.context.scene.cursor.matrix @ v3
+                v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
+                
+                # v1 = bpy.context.active_object.matrix_world  @ v1
+                v1 = obj_marx @ v1
+                v1 = wm @ v1
+
+
+                # v1 = wm @ v1  
+                # v1 = wm_c @ v1 
+
+                # v1 = bpy.context.scene.cursor.matrix @ v1
+                ind.append(ind[1])
+                # v1 = bpy.context.active_object.matrix_world  @ v1
 
 
         else:
