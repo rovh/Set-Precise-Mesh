@@ -103,9 +103,9 @@ class SetAngle(bpy.types.Operator):
             progection_custom = 1
 
             # progection_type = "globalmatrix"
-            
+            prog = context.window_manager.setprecisemesh.projection_type
 
-            if progection_global_matrix == 1:
+            if prog == "global_matrix":
 
                 v2_prg = bpy.context.active_object.matrix_world  @ v2
                 # v2 = bpy.context.active_object.matrix_world  @ v2
@@ -121,7 +121,7 @@ class SetAngle(bpy.types.Operator):
                 ind.append(ind[1])
                 # v1 = bpy.context.active_object.matrix_world  @ v1
 
-            elif progection_local_matrix == 1:
+            elif prog == "local_matrix":
 
                 # v2_prg = bpy.context.active_object.matrix_world  @ v2
                 v2_prg = v2
@@ -139,7 +139,7 @@ class SetAngle(bpy.types.Operator):
                 ind.append(ind[1])
                 # v1 = bpy.context.active_object.matrix_world  @ v1
 
-            elif progection_cursor == 1:
+            elif prog == "cursor_location":
                 # v2_prg = bpy.context.active_object.matrix_world  @ v2
                 # v2_prg = bpy.context.scene.cursor.location 
                 # v2 = bpy.context.active_object.matrix_world  @ v2
@@ -157,7 +157,7 @@ class SetAngle(bpy.types.Operator):
                 ind.append(ind[1])
                 # v1 = bpy.context.active_object.matrix_world  @ v1
 
-            elif progection_cursor_matrix == 1:
+            elif prog == "cursor_matrix":
 
                 wm = bpy.context.active_object.matrix_world.copy()
                 wm_c = bpy.context.scene.cursor.matrix.copy()
@@ -193,7 +193,7 @@ class SetAngle(bpy.types.Operator):
                 ind.append(ind[1])
                 # v1 = bpy.context.active_object.matrix_world  @ v1
 
-            elif progection_custom ==1:
+            elif prog == "custon_object":
 
                 obj_name = 'Plane'
                 obj_marx = bpy.data.objects[obj_name].matrix_world

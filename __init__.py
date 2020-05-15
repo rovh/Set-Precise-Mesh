@@ -382,14 +382,14 @@ class SetPreciseMeshProps(bpy.types.PropertyGroup):
     projection_type: bpy.props.EnumProperty(
         name="Projection type",
         items=(
-            ("global matrix", "Global Matrix", "Global Matrix"),
-            ("local matrix", "Local Matrix", "Local Matrix"),
-            ("cursor location", "Cursor Location", "Cursor Location"),
-            ("cursor matrix", "Cursor Matrix", "Cursor Matrix"),
-            ("custon object", "Custon Object", "Custon Object"),
+            ("global_matrix", "Global Matrix", "Global Matrix"),
+            ("local_matrix", "Local Matrix", "Local Matrix"),
+            ("cursor_location", "Cursor Location", "Cursor Location"),
+            ("cursor_matrix", "Cursor Matrix", "Cursor Matrix"),
+            ("custon_object", "Custon Object", "Custon Object"),
             ),
         description="Algorithm used for interpolation",
-        default='global matrix'
+        default='global_matrix'
         )
         
     
