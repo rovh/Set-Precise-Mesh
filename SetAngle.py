@@ -154,16 +154,22 @@ class SetAngle(bpy.types.Operator):
                 # v1 = bpy.context.active_object.matrix_world  @ v1
 
             elif progection_cursor_matrix == 1:
-                v2_prg = bpy.context.scene.cursor.matrix  @ v2
-                # v2 = bpy.context.active_object.matrix_world  @ v2
-                # v3 = bpy.context.active_object.matrix_world  @ v3
-                # oldv3 = bpy.context.active_object.matrix_world  @ oldv3
-                v1 = bpy.context.scene.cursor.matrix  @ v3
+                v2_prg = bpy.context.active_object.matrix_world  @ v2
+                # v2_prg = bpy.context.scene.cursor.matrix  @ v2
+          
                 # v1 = bpy.context.scene.cursor.matrix @ v3
+                v1 = bpy.context.active_object.matrix_world  @ v3
                 v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
+                
                 wm = bpy.context.active_object.matrix_world.copy()
+                wm_c = bpy.context.scene.cursor.matrix.copy()
+
                 wm = wm.inverted()
+                wm_c = wm_c.inverted()
+
                 v1 = wm @ v1  
+                # v1 = wm_c @ v1 
+
                 # v1 = bpy.context.scene.cursor.matrix @ v1
                 ind.append(ind[1])
                 # v1 = bpy.context.active_object.matrix_world  @ v1
