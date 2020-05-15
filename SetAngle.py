@@ -266,7 +266,7 @@ class SetAngle(bpy.types.Operator):
         ob = context.edit_object
 
         #pp = Cursor location
-        if progection_cursor==0 and progection_cursor_matrix == 0:
+        if prog !=  "cursor_location" and prog != "cursor_matrix":
             bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world  @ v2
         
 
@@ -287,7 +287,7 @@ class SetAngle(bpy.types.Operator):
 
          
         # Set cursor direction
-        if progection_cursor ==0 and progection_cursor_matrix ==0:
+        if prog != "cursor_location" and prog != "cursor_matrix":
             obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor
             loc_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor.matrix.to_translation()         
             direction = normalgl
