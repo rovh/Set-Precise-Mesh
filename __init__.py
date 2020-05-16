@@ -235,21 +235,39 @@ class Header_Set_Precise_Mesh(bpy.types.Operator):
         w_m = context.window_manager.setprecisemesh
 
 
-        # column = layout.column(align=True)
+        # col = layout.column(align=1)
         # row = layout.row()
-        col = layout.column()
+        col = layout.column(align=1)
         # split.col()
         # col.separator()
-        split = col.split(factor=0.05, align=True)
-
+        # col_left = row.column(align=True)
+        # col_right = row.column(align=True)
+        # split = col.split(factor=0.15, align=0)
+        # split = 
+        row = col.row(align=0)
+        col_left = row.column(align=0)
+        col_right = row.column(align=0)
         # col.operator("transform.create_orientation", text="", icon='ADD', emboss=False).use = True
         # col.operator("transform.create_orientation", text="", icon='ADD', emboss=False).use = True
         # col = row.column()
+
+
+        col_left.label(text="", icon='ADD')
+        
+        # label1.ui_units_y = 2
+        # split = split.row()
+        col_left.label(text="", icon='ADD')
+
+        col_left.label(text="", icon='ADD')
+
+        col_left.label(text="", icon='ADD')
+
+        col_left.label(text="", icon='ADD')
+
+        col_left.label(text="", icon='ADD')
+        # col_left.label()
+        # split.row()
         # split.label(text="", icon='ADD')
-        split.row()
-        split.label(text="", icon='ADD')
-        split.row()
-        split.label(text="", icon='ADD')
 
 
         # col = row.column()
@@ -258,7 +276,7 @@ class Header_Set_Precise_Mesh(bpy.types.Operator):
         # row = column.row()
         # row.prop(self, "tabs", expand=True)
         # w_m = context.window_manager.setprecisemesh
-        split.prop(w_m, "projection_type" , expand=True)
+        col_right.prop(w_m, "projection_type" , expand=True)
 
 
 
