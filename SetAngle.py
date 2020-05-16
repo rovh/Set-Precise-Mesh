@@ -193,7 +193,7 @@ class SetAngle(bpy.types.Operator):
                 ind.append(ind[1])
                 # v1 = bpy.context.active_object.matrix_world  @ v1
 
-            elif prog == "custom_object":
+            elif prog == "custom_object_location":
 
                 obj_name = 'Plane'
                 obj_marx = bpy.data.objects[obj_name].matrix_world
@@ -232,6 +232,8 @@ class SetAngle(bpy.types.Operator):
                 ind.append(ind[1])
                 # v1 = bpy.context.active_object.matrix_world  @ v1
 
+            elif prog == "custom_object_matrix":
+                
 
         else:
             merge = 0

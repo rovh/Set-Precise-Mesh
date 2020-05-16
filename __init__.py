@@ -248,7 +248,8 @@ def header_search_draw2(self, context):
         
         sub = row.row()
         sub.ui_units_x = 3
-        layout.separator()
+        # layout.separator()
+        # sub.prop_with_popover.operator("wm.header_setprecisemesh_operator", text="Projection type", icon = "AXIS_TOP")
         row.operator("wm.header_setprecisemesh_operator", text="Projection type", icon = "AXIS_TOP")
 
 
@@ -386,7 +387,9 @@ class SetPreciseMeshProps(bpy.types.PropertyGroup):
             ("local_matrix"   , "Local Matrix"   , "Local Matrix"   , "OBJECT_DATA", 1),
             ("cursor_location", "Cursor Location", "Cursor Location",  ),
             ("cursor_matrix"  , "Cursor Matrix"  , "Cursor Matrix"  ,  ),
-            ("custom_object"  , "Custom Object"  , "Custon Object"  ,  "OBJECT_DATA", 4),
+            ("custom_object_location"  , "Custom Object"  , "Custon Object"  ,  "OBJECT_DATA", 4),
+            ("custom_object_matrix"  , "Custom Object Matrix"  , "Custon Object Matrix"  ,  "OBJECT_DATA", 5),
+            
         ),
         description="Algorithm used for interpolation",
         default='global_matrix'
