@@ -280,6 +280,13 @@ class Header_Set_Precise_Mesh(bpy.types.Operator):
         if prog == "custom_object_location" or  prog == "custom_object_matrix":
             col_right.prop(context.scene, "my_property", text = "")
 
+            # col_right.operator(ui, "eyedropper_id")
+            # bpy.ops.ui.eyedropper_id()
+            # bpy.ops.ui.button_string_clear()
+
+
+
+
 
 def header_search_draw2(self, context):
     layout = self.layout
@@ -430,8 +437,8 @@ class SetPreciseMeshProps(bpy.types.PropertyGroup):
     projection_type: bpy.props.EnumProperty(
         name="Projection type",
         items=(
-            ("local_matrix"   , "Local Matrix"   , "Local Matrix"   , "GRID"              , 0),
-            ("global_matrix"  , "Global Matrix"  , "Global Matrix"  , "VIEW_PERSPECTIVE"  , 1),
+            ("local_matrix"   , "Local Matrix  (Object)" , "Local Matrix"   , "GRID"              , 0),
+            ("global_matrix"  , "Global Matrix (World)"  , "Global Matrix"  , "VIEW_PERSPECTIVE"  , 1),
             (None),
             ("custom_object_location"  , "Custom Object Location" , "Custon Object Location", "EMPTY_ARROWS" , 2),
             ("custom_object_matrix"    , "Custom Object Matrix"   , "Custon Object Matrix"  , "GRID"         , 3),
