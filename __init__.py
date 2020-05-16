@@ -260,7 +260,9 @@ class Header_Set_Precise_Mesh(bpy.types.Operator):
         sub_col.scale_y = 2.2
         sub_col.label(icon='ADD')           
         
+        col_right.scale_x = 0.5
         col_right.prop(w_m, "projection_type" , expand=True)
+        
 
 
 
