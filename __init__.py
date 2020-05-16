@@ -265,7 +265,7 @@ class Header_Set_Precise_Mesh(bpy.types.Operator):
         # Menu
         col_right.prop(w_m, "projection_type" , expand=True)
 
-        col_right.operator("sculpt.sample_detail_size", text="", icon='EYEDROPPER')
+        # col_right.operator("sculpt.sample_detail_size", text="", icon='EYEDROPPER')
 
         # col_right.ops.(an.rename_datablock_popup("INVOKE_DEFAULT"),
         #     oldName = self.object.name,
@@ -275,8 +275,10 @@ class Header_Set_Precise_Mesh(bpy.types.Operator):
         scene = context.scene
         scene = context.object
 
-        # col_right.prop_search(scene, "my_property", context.scene, "objects")
-        col_right.prop(scene, "my_property")
+        prog = context.window_manager.setprecisemesh.projection_type
+
+        if prog == "custom_object_location" or  prog == "custom_object_matrix":
+            col_right.prop(scene, "my_property", text = "")
         # col_right.prop_with_popover(
         #         orient_slot,
         #         "type",
@@ -290,7 +292,7 @@ def header_search_draw2(self, context):
     object_mode = context.active_object.mode
 
 
-    if object_mode in {'EDIT', "OBJECT", "SCULPT"}:
+    if object_mode in {'EDIT'}:
 
         # layout.menu("VIEW3D_HT_header.draw_xform_template(layout, context)")
         
