@@ -219,46 +219,28 @@ class Header_Set_Precise_Mesh(bpy.types.Operator):
         # return context.window_manager.invoke_props_popup(self, event)
         # return context.window_manager.invoke_confirm(self, event)
     def draw(self, context):
-        # layout=self.layout
-        # column = layout.column(align=True)
-        # w_m = context.window_manager.setprecisemesh
-        # column.prop(w_m, "projection_type" , expand=True)
-
-
-        
-        # row = layout.row()
-        # col = row.column()
-        # col.prop(orient_slot, "type", expand=True)
-        # w_m = context.window_manager.setprecisemesh
-        # col.prop(w_m, "projection_type" , expand=True)
         layout=self.layout
         w_m = context.window_manager.setprecisemesh
 
 
-        # col = layout.column(align=1)
-        # row = layout.row()
-        col = layout.column(align=1)
-        # split.col()
-        # col.separator()
-        # col_left = row.column(align=True)
-        # col_right = row.column(align=True)
-        # split = col.split(factor=0.15, align=0)
-        # split = 
+        col = layout.column(align=0)
         row = col.row(align=0)
         col_left = row.column(align=0)
         col_right = row.column(align=0)
         
+        col_left.scale_x = 0.8
+
         sub_col = col_left.column(align = 0)
         sub_col.scale_y = 2
-        sub_col.label(icon='ADD')
+        sub_col.label(icon='WORLD_DATA')
 
         sub_col = col_left.column(align = 0)
         sub_col.scale_y = 2.2
-        sub_col.label(icon='ADD')
+        sub_col.label(icon='OBJECT_DATA')
 
         sub_col = col_left.column(align = 0)
         sub_col.scale_y = 2.2
-        sub_col.label(icon='ADD')           
+        sub_col.label(icon='PIVOT_CURSOR')           
         
         col_right.scale_x = 0.5
         col_right.prop(w_m, "projection_type" , expand=True)
@@ -415,14 +397,14 @@ class SetPreciseMeshProps(bpy.types.PropertyGroup):
     projection_type: bpy.props.EnumProperty(
         name="Projection type",
         items=(
-            ("local_matrix"   , "Local Matrix"   , "Local Matrix"   , "", 0),
-            ("global_matrix"  , "Global Matrix"  , "Global Matrix"  , "WORLD_DATA", 1),
+            ("local_matrix"   , "Local Matrix"   , "Local Matrix"   , "GRID"              , 0),
+            ("global_matrix"  , "Global Matrix"  , "Global Matrix"  , "VIEW_PERSPECTIVE"  , 1),
             (None),
-            ("cursor_location", "Cursor Location", "Cursor Location",  2),
-            ("cursor_matrix"  , "Cursor Matrix"  , "Cursor Matrix"  ,  3),
+            ("custom_object_location"  , "Custom Object Location" , "Custon Object Location", "EMPTY_ARROWS" , 2),
+            ("custom_object_matrix"    , "Custom Object Matrix"   , "Custon Object Matrix"  , "GRID"         , 3),
             (None),
-            ("custom_object_location"  , "Custom Object"  , "Custon Object"  ,  "OBJECT_DATA", 4),
-            ("custom_object_matrix"  , "Custom Object Matrix"  , "Custon Object Matrix"  ,  "OBJECT_DATA", 5),
+            ("cursor_location", "Cursor Location", "Cursor Location", "EMPTY_ARROWS", 4),
+            ("cursor_matrix"  , "Cursor Matrix"  , "Cursor Matrix"  , "GRID"        , 5),
         ),
         description="Algorithm used for interpolation",
         default='global_matrix'
