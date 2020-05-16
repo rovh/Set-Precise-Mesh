@@ -223,12 +223,12 @@ class Header_Set_Precise_Mesh(bpy.types.Operator):
         w_m = context.window_manager.setprecisemesh
 
 
-        col = layout.column(align=0)
-        row = col.row(align=0)
+        row = layout.row(align=0)
         col_left = row.column(align=0)
         col_right = row.column(align=0)
         
-        col_left.scale_x = 0.8
+        # col_left.scale_y = 0.8
+        # col_right.scale_x = 5.0
 
         sub_col = col_left.column(align = 0)
         sub_col.scale_y = 2
@@ -242,7 +242,6 @@ class Header_Set_Precise_Mesh(bpy.types.Operator):
         sub_col.scale_y = 2.2
         sub_col.label(icon='PIVOT_CURSOR')           
         
-        col_right.scale_x = 0.5
         col_right.prop(w_m, "projection_type" , expand=True)
         
 
