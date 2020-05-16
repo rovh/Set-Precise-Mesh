@@ -159,7 +159,8 @@ class MenuSetPreciseMeshOperator(bpy.types.Operator):
             box = col.column(align=True).box().column()            
             col_top = box.column(align=True)
             col_top.prop(w_m, "length")            
-            col_top.prop(w_m, "lengthbool")            
+            col_top.prop(w_m, "lengthbool") 
+                       
             # col_top.prop(ob, "lengthinput")
 
 
@@ -206,10 +207,10 @@ class Header_Set_Precise_Mesh(bpy.types.Operator):
     bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
          (For exaple Alt+R )\n \
         How to do it: > right-click on this button > Assign Shortcut"
-        
-    def execute(self, context):
-        return {'FINISHED'}
+    # dataType = "Mesh"
+    
 
+    
     def invoke(self, context, event): 
         
         # return context.window_manager.invoke_props_dialog(self)
@@ -217,9 +218,24 @@ class Header_Set_Precise_Mesh(bpy.types.Operator):
         # return context.window_manager.invoke_popup(self)
         return context.window_manager.invoke_popup(self, width = 200)
         # return context.window_manager.invoke_props_popup(self, event)
+        # return context.window_manager.popmenu_begin__internal()
         # return context.window_manager.invoke_confirm(self, event)
+
+        # context.window_manager.invoke_popup(self, width = 200)
+        # context.window_manager.popup_menu("INVOKE_DEFAULT")
+        # context.window_manager.invoke_props_dialog(self)
+        # context.window_manager.invoke_search_popup(self)
+        # context.window_manager.modal_handler_add(self)
+        # return {"PASS_THROUGH"}
+
+    def execute(self, context):
+        return {'FINISHED'}
+        # return {"INTERFACE"}
+
+
     def draw(self, context):
         layout=self.layout
+        
         w_m = context.window_manager.setprecisemesh
 
 
@@ -248,9 +264,25 @@ class Header_Set_Precise_Mesh(bpy.types.Operator):
         
         # Menu
         col_right.prop(w_m, "projection_type" , expand=True)
+
+        col_right.operator("sculpt.sample_detail_size", text="", icon='EYEDROPPER')
+
+        # col_right.ops.(an.rename_datablock_popup("INVOKE_DEFAULT"),
+        #     oldName = self.object.name,
+        #     path = "bpy.data.objects",
+        #     icon = "OBJECT_DATA")
         
+        scene = context.scene
+        scene = context.object
 
-
+        # col_right.prop_search(scene, "my_property", context.scene, "objects")
+        col_right.prop(scene, "my_property")
+        # col_right.prop_with_popover(
+        #         orient_slot,
+        #         "type",
+        #         text="",
+        #         panel="VIEW3D_PT_transform_orientations",
+        #     )
 
 
 def header_search_draw2(self, context):
@@ -258,7 +290,7 @@ def header_search_draw2(self, context):
     object_mode = context.active_object.mode
 
 
-    if object_mode in {'EDIT'}:
+    if object_mode in {'EDIT', "OBJECT", "SCULPT"}:
 
         # layout.menu("VIEW3D_HT_header.draw_xform_template(layout, context)")
         
@@ -351,7 +383,8 @@ class SetPresiceMeshPanel(bpy.types.Panel):
             box = col.column(align=True).box().column()            
             col_top = box.column(align=True)
             col_top.prop(w_m, "length")            
-            col_top.prop(w_m, "lengthbool")            
+            col_top.prop(w_m, "lengthbool") 
+                     
             # col_top.prop(ob, "lengthinput")
 
         
@@ -458,6 +491,8 @@ def register():
     # bpy.types.VIEW3D_MT_editor_menus.append(header_search_draw2)
     # bpy.types.VIEW3D_HT_header.append(header_search_draw2)
     bpy.types.VIEW3D_HT_tool_header.append(header_search_draw2)
+    
+    bpy.types.Object.my_property = PointerProperty(type=bpy.types.Object)
 
     bpy.types.Scene.bool_panel_arrow = bpy.props.BoolProperty(
         name="bool_panel_arrow",
@@ -486,6 +521,8 @@ def unregister():
     del bpy.types.Scene.bool_panel_arrow
     del bpy.types.Scene.bool_panel_arrow2
     del bpy.types.Scene.bool_warning
+
+    del bpy.types.Object.my_property
 
     # bpy.types.VIEW3D_MT_editor_menus.remove(header_search_draw2)
     # bpy.types.VIEW3D_HT_header.remove(header_search_draw2)
