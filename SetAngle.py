@@ -103,9 +103,8 @@ class SetAngle(bpy.types.Operator):
             progection_custom = 1
 
             # progection_type = "globalmatrix"
-            prog = context.window_manager.setprecisemesh.projection_type
+            # prog = context.window_manager.setprecisemesh.projection_type
 
-            obj_name = 'Plane'
 
             if prog == "global_matrix":
 
