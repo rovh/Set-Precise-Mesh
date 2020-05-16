@@ -214,8 +214,8 @@ class Header_Set_Precise_Mesh(bpy.types.Operator):
         
         # return context.window_manager.invoke_props_dialog(self)
         # return context.window_manager.invoke_popup(self, width=600, height=500)
-        return context.window_manager.invoke_popup(self)
-        # return context.window_manager.invoke_popup(self, width = 200)
+        # return context.window_manager.invoke_popup(self)
+        return context.window_manager.invoke_popup(self, width = 200)
         # return context.window_manager.invoke_props_popup(self, event)
         # return context.window_manager.invoke_confirm(self, event)
     def draw(self, context):
@@ -230,18 +230,23 @@ class Header_Set_Precise_Mesh(bpy.types.Operator):
         # col_left.scale_y = 0.8
         # col_right.scale_x = 5.0
 
+
+        # Matrix
         sub_col = col_left.column(align = 0)
-        sub_col.scale_y = 2
+        sub_col.scale_y = 1.9
         sub_col.label(icon='WORLD_DATA')
 
+        # Object
         sub_col = col_left.column(align = 0)
-        sub_col.scale_y = 2.2
+        sub_col.scale_y = 2.7
         sub_col.label(icon='OBJECT_DATA')
 
+        # Cursor
         sub_col = col_left.column(align = 0)
-        sub_col.scale_y = 2.2
+        sub_col.scale_y = 1.65
         sub_col.label(icon='PIVOT_CURSOR')           
         
+        # Menu
         col_right.prop(w_m, "projection_type" , expand=True)
         
 
