@@ -272,19 +272,13 @@ class Header_Set_Precise_Mesh(bpy.types.Operator):
         #     path = "bpy.data.objects",
         #     icon = "OBJECT_DATA")
         
-        scene = context.scene
-        scene = context.object
+        # scene = context.scene
+        # scene = context.object
 
         prog = context.window_manager.setprecisemesh.projection_type
 
         if prog == "custom_object_location" or  prog == "custom_object_matrix":
-            col_right.prop(scene, "my_property", text = "")
-        # col_right.prop_with_popover(
-        #         orient_slot,
-        #         "type",
-        #         text="",
-        #         panel="VIEW3D_PT_transform_orientations",
-        #     )
+            col_right.prop(context.scene, "my_property", text = "")
 
 
 def header_search_draw2(self, context):
@@ -494,7 +488,7 @@ def register():
     # bpy.types.VIEW3D_HT_header.append(header_search_draw2)
     bpy.types.VIEW3D_HT_tool_header.append(header_search_draw2)
     
-    bpy.types.Object.my_property = PointerProperty(type=bpy.types.Object)
+    bpy.types.Scene.my_property = PointerProperty(type=bpy.types.Object)
 
     bpy.types.Scene.bool_panel_arrow = bpy.props.BoolProperty(
         name="bool_panel_arrow",
@@ -524,7 +518,7 @@ def unregister():
     del bpy.types.Scene.bool_panel_arrow2
     del bpy.types.Scene.bool_warning
 
-    del bpy.types.Object.my_property
+    del bpy.types.Scene.my_property
 
     # bpy.types.VIEW3D_MT_editor_menus.remove(header_search_draw2)
     # bpy.types.VIEW3D_HT_header.remove(header_search_draw2)

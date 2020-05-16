@@ -195,7 +195,9 @@ class SetAngle(bpy.types.Operator):
                 ind.append(ind[1])
                 # v1 = bpy.context.active_object.matrix_world  @ v1
 
-            elif prog == "custom_object_location":
+            elif prog == "custom_object_location": 
+
+                obj_name = bpy.data.scenes[bpy.context.scene.name_full].my_property.name_full
 
                 obj_marx = bpy.data.objects[obj_name].matrix_world
                 obj_loc = bpy.data.objects[obj_name].location
@@ -213,6 +215,8 @@ class SetAngle(bpy.types.Operator):
                 # v1 = bpy.context.active_object.matrix_world  @ v1
 
             elif prog == "custom_object_matrix":
+
+                obj_name = bpy.data.scenes[bpy.context.scene.name_full].my_property.name_full
 
                 obj_marx = bpy.data.objects[obj_name].matrix_world
 
