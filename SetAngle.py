@@ -105,6 +105,8 @@ class SetAngle(bpy.types.Operator):
             # progection_type = "globalmatrix"
             prog = context.window_manager.setprecisemesh.projection_type
 
+            obj_name = 'Plane'
+
             if prog == "global_matrix":
 
                 v2_prg = bpy.context.active_object.matrix_world  @ v2
@@ -195,7 +197,6 @@ class SetAngle(bpy.types.Operator):
 
             elif prog == "custom_object_location":
 
-                obj_name = 'Plane'
                 obj_marx = bpy.data.objects[obj_name].matrix_world
 
                 wm = bpy.context.active_object.matrix_world.copy()
@@ -232,7 +233,41 @@ class SetAngle(bpy.types.Operator):
                 ind.append(ind[1])
                 # v1 = bpy.context.active_object.matrix_world  @ v1
 
-            # elif prog == "custom_object_matrix":
+            elif prog == "custom_object_matrix":
+                wm = bpy.context.active_object.matrix_world.copy()
+                wm_c = py.data.objects[obj_name].matrix_world.copy()
+
+                wm = wm.inverted()
+                wm_c = wm_c.inverted()
+
+                # v1 = wm @ v1  
+                # v1 = wm_c @ v1 
+
+
+                v2_prg = bpy.context.active_object.matrix_world  @ v2
+                # v2_prg = bpy.context.scene.cursor.matrix  @ v2
+                v2_prg = wm_c  @ v2_prg
+
+                # v2_prg = v2
+
+                v1 = bpy.context.active_object.matrix_world  @ v3
+                v1 = wm_c @ v1
+                
+                # v1 = bpy.context.scene.cursor.matrix @ v3
+                v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
+                
+                # v1 = bpy.context.active_object.matrix_world  @ v1
+                v1 = py.data.objects[obj_name].matrix_world @ v1
+                v1 = wm @ v1
+
+
+                # v1 = wm @ v1  
+                # v1 = wm_c @ v1 
+
+                # v1 = bpy.context.scene.cursor.matrix @ v1
+                ind.append(ind[1])
+                # v1 = bpy.context.active_object.matrix_world  @ v1
+
                 
 
         else:
