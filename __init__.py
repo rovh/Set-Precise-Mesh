@@ -383,10 +383,12 @@ class SetPreciseMeshProps(bpy.types.PropertyGroup):
     projection_type: bpy.props.EnumProperty(
         name="Projection type",
         items=(
-            ("global_matrix"  , "Global Matrix"  , "Global Matrix"  , "WORLD_DATA", 0),
-            ("local_matrix"   , "Local Matrix"   , "Local Matrix"   , "OBJECT_DATA", 1),
+            ("local_matrix"   , "Local Matrix"   , "Local Matrix"   , "", 0),
+            ("global_matrix"  , "Global Matrix"  , "Global Matrix"  , "WORLD_DATA", 1),
+            (None),
             ("cursor_location", "Cursor Location", "Cursor Location",  ),
             ("cursor_matrix"  , "Cursor Matrix"  , "Cursor Matrix"  ,  ),
+            (None),
             ("custom_object_location"  , "Custom Object"  , "Custon Object"  ,  "OBJECT_DATA", 4),
             ("custom_object_matrix"  , "Custom Object Matrix"  , "Custon Object Matrix"  ,  "OBJECT_DATA", 5),
             

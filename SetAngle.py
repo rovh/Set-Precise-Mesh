@@ -232,7 +232,7 @@ class SetAngle(bpy.types.Operator):
                 ind.append(ind[1])
                 # v1 = bpy.context.active_object.matrix_world  @ v1
 
-            elif prog == "custom_object_matrix":
+            # elif prog == "custom_object_matrix":
                 
 
         else:
