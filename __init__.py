@@ -247,24 +247,34 @@ class Header_Set_Precise_Mesh(bpy.types.Operator):
         row = col.row(align=0)
         col_left = row.column(align=0)
         col_right = row.column(align=0)
+        
         # col.operator("transform.create_orientation", text="", icon='ADD', emboss=False).use = True
         # col.operator("transform.create_orientation", text="", icon='ADD', emboss=False).use = True
         # col = row.column()
+        # sub_col = 
+        sub_col = col_left.column()
+        sub_col.scale_y = 2
+        sub_col.label(icon='ADD')
 
+        sub_col = col_left.column()
+        sub_col.scale_y = 2.2
+        sub_col.label(icon='ADD')
 
-        col_left.label(text="", icon='ADD')
+        sub_col = col_left.column()
+        sub_col.scale_y = 2.2
+        sub_col.label(icon='ADD')           
         
         # label1.ui_units_y = 2
         # split = split.row()
-        col_left.label(text="", icon='ADD')
+        # col_left.label(text="", icon='ADD')
 
-        col_left.label(text="", icon='ADD')
+        # col_left.label(text="", icon='ADD')
 
-        col_left.label(text="", icon='ADD')
+        # col_left.label(text="", icon='ADD')
 
-        col_left.label(text="", icon='ADD')
+        # col_left.label(text="", icon='ADD')
 
-        col_left.label(text="", icon='ADD')
+        # col_left.label(text="", icon='ADD')
         # col_left.label()
         # split.row()
         # split.label(text="", icon='ADD')
