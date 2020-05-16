@@ -219,18 +219,46 @@ class Header_Set_Precise_Mesh(bpy.types.Operator):
         # return context.window_manager.invoke_props_popup(self, event)
         # return context.window_manager.invoke_confirm(self, event)
     def draw(self, context):
+        # layout=self.layout
+        # column = layout.column(align=True)
+        # w_m = context.window_manager.setprecisemesh
+        # column.prop(w_m, "projection_type" , expand=True)
+
+
+        
         # row = layout.row()
         # col = row.column()
         # col.prop(orient_slot, "type", expand=True)
         # w_m = context.window_manager.setprecisemesh
         # col.prop(w_m, "projection_type" , expand=True)
         layout=self.layout
+        w_m = context.window_manager.setprecisemesh
 
-        column = layout.column(align=True)
+
+        # column = layout.column(align=True)
+        # row = layout.row()
+        col = layout.column()
+        # split.col()
+        # col.separator()
+        split = col.split(factor=0.05, align=True)
+
+        # col.operator("transform.create_orientation", text="", icon='ADD', emboss=False).use = True
+        # col.operator("transform.create_orientation", text="", icon='ADD', emboss=False).use = True
+        # col = row.column()
+        # split.label(text="", icon='ADD')
+        split.row()
+        split.label(text="", icon='ADD')
+        split.row()
+        split.label(text="", icon='ADD')
+
+
+        # col = row.column()
+        # col.prop(orient_slot, "type", expand=True)
+
         # row = column.row()
         # row.prop(self, "tabs", expand=True)
-        w_m = context.window_manager.setprecisemesh
-        column.prop(w_m, "projection_type" , expand=True)
+        # w_m = context.window_manager.setprecisemesh
+        split.prop(w_m, "projection_type" , expand=True)
 
 
 
@@ -245,13 +273,13 @@ def header_search_draw2(self, context):
         # layout.menu("VIEW3D_HT_header.draw_xform_template(layout, context)")
         
         row = layout.row(align=1)
-        
         sub = row.row()
         sub.ui_units_x = 3
-        # layout.separator()
-        # sub.prop_with_popover.operator("wm.header_setprecisemesh_operator", text="Projection type", icon = "AXIS_TOP")
         row.operator("wm.header_setprecisemesh_operator", text="Projection type", icon = "AXIS_TOP")
 
+        # row = layout.row()
+        # col = row.column()
+        # col.prop(orient_slot, "type", expand=True)
 
 class SetPresiceMeshPanel(bpy.types.Panel):
     
@@ -386,12 +414,11 @@ class SetPreciseMeshProps(bpy.types.PropertyGroup):
             ("local_matrix"   , "Local Matrix"   , "Local Matrix"   , "", 0),
             ("global_matrix"  , "Global Matrix"  , "Global Matrix"  , "WORLD_DATA", 1),
             (None),
-            ("cursor_location", "Cursor Location", "Cursor Location",  ),
-            ("cursor_matrix"  , "Cursor Matrix"  , "Cursor Matrix"  ,  ),
+            ("cursor_location", "Cursor Location", "Cursor Location",  2),
+            ("cursor_matrix"  , "Cursor Matrix"  , "Cursor Matrix"  ,  3),
             (None),
             ("custom_object_location"  , "Custom Object"  , "Custon Object"  ,  "OBJECT_DATA", 4),
             ("custom_object_matrix"  , "Custom Object Matrix"  , "Custon Object Matrix"  ,  "OBJECT_DATA", 5),
-            
         ),
         description="Algorithm used for interpolation",
         default='global_matrix'
