@@ -163,7 +163,6 @@ class MenuSetPreciseMeshOperator(bpy.types.Operator):
                        
             # col_top.prop(ob, "lengthinput")
 
-
 class SetPreciseMeshPreferences(bpy.types.AddonPreferences):
     # this must match the addon name, use '__package__'
     # when defining this in a submodule of a python package.
@@ -273,10 +272,9 @@ class Header_Set_Precise_Mesh(bpy.types.Operator):
         sub_col.label(icon='PIVOT_CURSOR')           
         
         # Menu
+
         # col_right.prop(w_m, "projection_type" , expand=True)
 
-        
-        
         sub_col = col_right.column(align = 1)
         sub_col.prop_enum( w_m, "projection_type", "local_matrix")
         sub_col.prop_enum( w_m, "projection_type", "global_matrix")
@@ -302,16 +300,23 @@ class Header_Set_Precise_Mesh(bpy.types.Operator):
         sub_col.prop_enum( w_m, "projection_type", "cursor_location")
         sub_col.prop_enum( w_m, "projection_type", "cursor_matrix")
 
+        # col_right.operator(bpy.ops.paint.sample_color.idname())
+        # col_right.operator(bpy.ops.ui.eyedropper_id())
+        # col_right.operator(bpy.ops.ui.eyedropper_id.idname_py())
+        col_right.operator(bpy.ops.ui.eyedropper_id.idname())
+
+        # w = bpy.ops.ui.eyedropper_id()
+
+        # print(w, 1111111111111)
+        # bpy.ops.ui.eyedropper_id.idname_py(
+
 
         
 
             # col_right.operator(ui, "eyedropper_id")
+
             # bpy.ops.ui.eyedropper_id()
             # bpy.ops.ui.button_string_clear()
-
-
-
-
 
 def header_search_draw2(self, context):
     layout = self.layout
@@ -415,8 +420,6 @@ class SetPresiceMeshPanel(bpy.types.Panel):
                      
             # col_top.prop(ob, "lengthinput")
 
-        
-
 class SetPreciseMeshProps(bpy.types.PropertyGroup):
     """
     Fake module like class
@@ -475,7 +478,7 @@ class SetPreciseMeshProps(bpy.types.PropertyGroup):
         default='global_matrix'
         )
         
-    
+
 class Dupli(SetPresiceMeshPanel):
     bl_label = "Set Presice Mesh1"
     bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh1"
