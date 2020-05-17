@@ -37,7 +37,7 @@ from bpy.props import (
         )
 
 
-class DialogWarningOperator(bpy.types.Operator):
+class Dialog_Warning_Operator(bpy.types.Operator):
     bl_idname = "object.dialog_warning_operator"
     bl_label = "Warning Panel Operator"
 
@@ -83,7 +83,7 @@ class DialogWarningOperator(bpy.types.Operator):
         layout.label(text='You can find more info about this warning in README.md on Github page or in files')
         # layout.label(text='https://github.com/rovh/Set-Precise-Mesh')
 
-class MenuSetPreciseMeshOperator(bpy.types.Operator):
+class Popup_Menu_SetPreciseMesh_Operator(bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_operator"
     bl_label = "Pop-up Menu"
     bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
@@ -121,18 +121,7 @@ class MenuSetPreciseMeshOperator(bpy.types.Operator):
         bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
         bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
 
-
-        # sub_col = layout.column(align = 0)
-        # # sub_col.scale_y = 0.55
-        # sub_col = sub_col.row()
-        # sub_col.ui_units_x = 10
-        # sub_col = sub_col.label(text = "Move")
-        
-        # sub_col = sub_col.label(text = "Move")
-         
-
         col = layout.column(align=True)
-
         
         split = col.split(factor=0.85, align=True)
         split.scale_y =1.2      
@@ -178,7 +167,7 @@ class MenuSetPreciseMeshOperator(bpy.types.Operator):
                        
             # col_top.prop(ob, "lengthinput")
 
-class SetPreciseMeshPreferences(bpy.types.AddonPreferences):
+class SetPreciseMesh_Preferences(bpy.types.AddonPreferences):
     # this must match the addon name, use '__package__'
     # when defining this in a submodule of a python package.
     bl_idname = __name__
@@ -214,7 +203,7 @@ class SetPreciseMeshPreferences(bpy.types.AddonPreferences):
         col.operator("wm.menu_setprecisemesh_operator",icon="MENU_PANEL", text="Pop-up Menu (Hover cursor on it for more information)")
         col.prop(self, "bool_warning_global", text='Show Warning Panel in Blender (Global)')
 
-class Header_Set_Precise_Mesh(bpy.types.Operator):
+class Header_SetPreciseMesh(bpy.types.Operator):
    
     bl_idname = "wm.header_setprecisemesh_operator"
     bl_label = "Header Menu"
@@ -333,14 +322,11 @@ class Header_Set_Precise_Mesh(bpy.types.Operator):
             # bpy.ops.ui.eyedropper_id()
             # bpy.ops.ui.button_string_clear()
 
-def header_search_draw2(self, context):
+def header_draw(self, context):
     layout = self.layout
     object_mode = context.active_object.mode
 
-
     if object_mode in {'EDIT'}:
-
-        # layout.menu("VIEW3D_HT_header.draw_xform_template(layout, context)")
         
         row = layout.row(align=1)
         sub = row.row()
@@ -348,19 +334,7 @@ def header_search_draw2(self, context):
         # row.scale_x = 1 
         row.operator("wm.header_setprecisemesh_operator", text="Angle Projection", icon = "AXIS_TOP")
 
-
-
-        # row = layout.row(align=1)
-        # sub = row.row()
-        # row.ui_units_x = 3
-        # row.scale_x = 0.5
-        # row.operator("wm.header_setprecisemesh_operator", text="Angle Projection", icon = "AXIS_TOP")
-
-        # row = layout.row()
-        # col = row.column()
-        # col.prop(orient_slot, "type", expand=True)
-
-class SetPresiceMeshPanel(bpy.types.Panel):
+class SetPresiceMesh_Panel(bpy.types.Panel):
     
     bl_label = "Set Presice Mesh"
     bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh"
@@ -444,7 +418,7 @@ class SetPresiceMeshPanel(bpy.types.Panel):
                      
             # col_top.prop(ob, "lengthinput")
 
-class SetPreciseMeshProps(bpy.types.PropertyGroup):
+class SetPreciseMesh_Props(bpy.types.PropertyGroup):
     """
     Fake module like class
     bpy.context.window_manager.setprecisemesh
@@ -502,7 +476,7 @@ class SetPreciseMeshProps(bpy.types.PropertyGroup):
         default='global_matrix'
         )
         
-class Dupli(SetPresiceMeshPanel):
+class Dupli(SetPresiceMesh_Panel):
     bl_label = "Set Presice Mesh1"
     bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh1"
     bl_space_type = 'VIEW_3D'
@@ -511,7 +485,7 @@ class Dupli(SetPresiceMeshPanel):
     bl_label = "Set Precise Mesh /CAD"
     # bl_order = 1
  
-class Dupli2(SetPresiceMeshPanel):
+class Dupli2(SetPresiceMesh_Panel):
     bl_label = "Set Presice Mesh2"
     bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh2"
     bl_space_type = 'VIEW_3D'
@@ -526,11 +500,11 @@ blender_classes = [
     Dupli2,
     SetAngle,
     SetLength,
-    DialogWarningOperator,
-    SetPreciseMeshProps,
-    SetPreciseMeshPreferences,
-    MenuSetPreciseMeshOperator,
-    Header_Set_Precise_Mesh,
+    Dialog_Warning_Operator,
+    SetPreciseMesh_Props,
+    SetPreciseMesh_Preferences,
+    Popup_Menu_SetPreciseMesh_Operator,
+    Header_SetPreciseMesh,
 
 
 ]
@@ -541,10 +515,9 @@ def register():
         bpy.utils.register_class(blender_class)
     # pynput.register()
 
-    bpy.types.WindowManager.setprecisemesh = PointerProperty(type=SetPreciseMeshProps)
-    # bpy.types.VIEW3D_MT_editor_menus.append(header_search_draw2)
-    # bpy.types.VIEW3D_HT_header.append(header_search_draw2)
-    bpy.types.VIEW3D_HT_tool_header.append(header_search_draw2)
+    bpy.types.WindowManager.setprecisemesh = PointerProperty(type=SetPreciseMesh_Props)
+  
+    bpy.types.VIEW3D_HT_tool_header.append(header_draw)
     
     bpy.types.Scene.my_property = PointerProperty(type=bpy.types.Object)
 
@@ -578,9 +551,7 @@ def unregister():
 
     del bpy.types.Scene.my_property
 
-    # bpy.types.VIEW3D_MT_editor_menus.remove(header_search_draw2)
-    # bpy.types.VIEW3D_HT_header.remove(header_search_draw2)
-    bpy.types.VIEW3D_HT_tool_header.remove(header_search_draw2)
+    bpy.types.VIEW3D_HT_tool_header.remove(header_draw)
 
 
 if __name__ == "__main__":
