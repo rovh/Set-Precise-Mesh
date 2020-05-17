@@ -207,12 +207,10 @@ class Header_SetPreciseMesh(bpy.types.Operator):
    
     bl_idname = "wm.header_setprecisemesh_operator"
     bl_label = "Header Menu"
-    bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
+    bl_description = "To make it convenient to use the this menu You can assign shortcut \n \
          (For exaple Alt+R )\n \
         How to do it: > right-click on this button > Assign Shortcut"
-    # dataType = "Mesh"
-    
-
+  
     
     def invoke(self, context, event): 
         
@@ -224,13 +222,6 @@ class Header_SetPreciseMesh(bpy.types.Operator):
         # return context.window_manager.popmenu_begin__internal()
         # return context.window_manager.invoke_confirm(self, event)
 
-        # context.window_manager.invoke_popup(self, width = 200)
-        # context.window_manager.popup_menu("INVOKE_DEFAULT")
-        # context.window_manager.invoke_props_dialog(self)
-        # context.window_manager.invoke_search_popup(self)
-        # context.window_manager.modal_handler_add(self)
-        # return {"PASS_THROUGH"}
-
     def execute(self, context):
         return {'FINISHED'}
         # return {"INTERFACE"}
@@ -238,9 +229,7 @@ class Header_SetPreciseMesh(bpy.types.Operator):
 
     def draw(self, context):
         layout=self.layout
-        
         w_m = context.window_manager.setprecisemesh
-
 
         row = layout.row(align=0)
         col_left = row.column(align=0)
@@ -363,18 +352,18 @@ class SetPresiceMesh_Panel(bpy.types.Panel):
             
             col_top.prop(w_m, "angle")
             col_top.prop(w_m, "anglebool" )
-            col_top.prop(self, "projection_type")
+            # col_top.prop(self, "projection_type")
             # col_top.prop(ob, "angleinput")
-            row = layout.row(align=True)
+            # row = layout.row(align=True)
 
-            sub = row.row()
-            sub.ui_units_x = 5
-            sub.prop_with_popover(
-                self,
-                "projection_type",
-                text="",
-                panel="VIEW3D_PT_Set_Precise_Mesh",
-            )         
+            # sub = row.row()
+            # sub.ui_units_x = 5
+            # sub.prop_with_popover(
+            #     self,
+            #     "projection_type",
+            #     text="",
+            #     panel="VIEW3D_PT_Set_Precise_Mesh",
+            # )         
                     
         col = layout.column(align=False)
         col = layout.column(align=True)
