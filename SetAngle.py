@@ -103,7 +103,7 @@ class SetAngle(bpy.types.Operator):
             progection_custom = 1
 
             # progection_type = "globalmatrix"
-            # prog = context.window_manager.setprecisemesh.projection_type
+            prog = context.window_manager.setprecisemesh.projection_type
 
 
             if prog == "global_matrix":
@@ -214,6 +214,8 @@ class SetAngle(bpy.types.Operator):
                 # v1 = bpy.context.active_object.matrix_world  @ v1
 
             elif prog == "custom_object_matrix":
+
+                # my_property = bpy.ops.ui.eyedropper_id()
 
                 obj_name = bpy.data.scenes[bpy.context.scene.name_full].my_property.name_full
 
