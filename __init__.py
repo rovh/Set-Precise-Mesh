@@ -99,6 +99,11 @@ class MenuSetPreciseMeshOperator(bpy.types.Operator):
         # return context.window_manager.invoke_popup(self, width=600, height=500)
         # return context.window_manager.invoke_popup(self)
         return context.window_manager.invoke_popup(self, width = 200)
+        # if self.return == {"CANCELLED"}:
+            # context.window_manager.invoke_popup(self, width = 200)
+
+        # return  
+
         # return context.window_manager.invoke_props_popup(self, event)
         # return context.window_manager.invoke_confirm(self, event)
 
@@ -115,6 +120,16 @@ class MenuSetPreciseMeshOperator(bpy.types.Operator):
         # Get values
         bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
         bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
+
+
+        # sub_col = layout.column(align = 0)
+        # # sub_col.scale_y = 0.55
+        # sub_col = sub_col.row()
+        # sub_col.ui_units_x = 10
+        # sub_col = sub_col.label(text = "Move")
+        
+        # sub_col = sub_col.label(text = "Move")
+         
 
         col = layout.column(align=True)
 
@@ -329,8 +344,17 @@ def header_search_draw2(self, context):
         
         row = layout.row(align=1)
         sub = row.row()
-        sub.ui_units_x = 3
+        # row.ui_units_x = 1
+        # row.scale_x = 10
         row.operator("wm.header_setprecisemesh_operator", text="Angle Projection", icon = "AXIS_TOP")
+
+
+
+        # row = layout.row(align=1)
+        # sub = row.row()
+        # row.ui_units_x = 3
+        # row.scale_x = 0.5
+        # row.operator("wm.header_setprecisemesh_operator", text="Angle Projection", icon = "AXIS_TOP")
 
         # row = layout.row()
         # col = row.column()
@@ -478,7 +502,6 @@ class SetPreciseMeshProps(bpy.types.PropertyGroup):
         default='global_matrix'
         )
         
-
 class Dupli(SetPresiceMeshPanel):
     bl_label = "Set Presice Mesh1"
     bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh1"
