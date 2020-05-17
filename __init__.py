@@ -263,22 +263,37 @@ class Header_Set_Precise_Mesh(bpy.types.Operator):
         sub_col.label(icon='PIVOT_CURSOR')           
         
         # Menu
-        col_right.prop(w_m, "projection_type" , expand=True)
+        # col_right.prop(w_m, "projection_type" , expand=True)
 
-        # col_right.operator("sculpt.sample_detail_size", text="", icon='EYEDROPPER')
-
-        # col_right.ops.(an.rename_datablock_popup("INVOKE_DEFAULT"),
-        #     oldName = self.object.name,
-        #     path = "bpy.data.objects",
-        #     icon = "OBJECT_DATA")
         
-        # scene = context.scene
-        # scene = context.object
+        
+        sub_col = col_right.column(align = 1)
+        sub_col.prop_enum( w_m, "projection_type", "local_matrix")
+        sub_col.prop_enum( w_m, "projection_type", "global_matrix")
+
+        sub_col = col_right.column(align = 0)
+        sub_col.scale_y = 0.15
+        sub_col = sub_col.label(text = "")
+        
+
+        sub_col = col_right.column(align = 1)
+        sub_col.prop_enum( w_m, "projection_type", "custom_object_location")
+        sub_col.prop_enum( w_m, "projection_type", "custom_object_matrix")
 
         prog = context.window_manager.setprecisemesh.projection_type
-
         if prog == "custom_object_location" or  prog == "custom_object_matrix":
-            col_right.prop(context.scene, "my_property", text = "")
+            sub_col.prop(context.scene, "my_property", text = "")
+
+        sub_col = col_right.column(align = 0)
+        sub_col.scale_y = 0.15
+        sub_col = sub_col.label(text = "")
+
+        sub_col = col_right.column(align = 1)
+        sub_col.prop_enum( w_m, "projection_type", "cursor_location")
+        sub_col.prop_enum( w_m, "projection_type", "cursor_matrix")
+
+
+        
 
             # col_right.operator(ui, "eyedropper_id")
             # bpy.ops.ui.eyedropper_id()
