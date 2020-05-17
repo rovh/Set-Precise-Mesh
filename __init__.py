@@ -344,8 +344,8 @@ def header_search_draw2(self, context):
         
         row = layout.row(align=1)
         sub = row.row()
-        # row.ui_units_x = 1
-        # row.scale_x = 10
+        # row.ui_units_x = 4.5
+        # row.scale_x = 1 
         row.operator("wm.header_setprecisemesh_operator", text="Angle Projection", icon = "AXIS_TOP")
 
 
