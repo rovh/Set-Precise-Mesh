@@ -249,78 +249,59 @@ class Header_SetPreciseMesh(bpy.types.Operator):
         # col_left.scale_y = 0.8
         # col_right.scale_x = 5.0
 
-
-        # Matrix
+        # For Matrix
         sub_col = col_left.column(align = 0)
-        # sub_col = sub_col.label(text = "")
         sub_col.scale_y = 1.9
         sub_col.label(icon='WORLD_DATA')
-        # sub_col = sub_col.label(text = "")
 
-        # Object
+        # For Object
         sub_col = col_left.column(align = 0)
         sub_col.scale_y = 2.7
         sub_col.label(icon='OBJECT_DATA')
 
+        # Make space if
         prog = context.window_manager.setprecisemesh.projection_type
         if prog == "custom_object_location" or  prog == "custom_object_matrix":
             sub_col = col_left.column(align = 0)
             sub_col.scale_y = 0.9
             sub_col.label(icon='BLANK1')
 
-            # sub_col.scale_y = 3.7
 
-        # Cursor
+        # For Cursor
         sub_col = col_left.column(align = 0)
         sub_col.scale_y = 1.65
         sub_col.label(icon='PIVOT_CURSOR')           
         
-        # Menu
 
-        # col_right.prop(w_m, "projection_type" , expand=True)
-
+        # Matrix
         sub_col = col_right.column(align = 1)
         sub_col.prop_enum( w_m, "projection_type", "local_matrix")
         sub_col.prop_enum( w_m, "projection_type", "global_matrix")
 
+        # space
         sub_col = col_right.column(align = 0)
         sub_col.scale_y = 0.15
         sub_col = sub_col.label(text = "")
-        
 
+        # Object
         sub_col = col_right.column(align = 1)
         sub_col.prop_enum( w_m, "projection_type", "custom_object_location")
         sub_col.prop_enum( w_m, "projection_type", "custom_object_matrix")
 
+        # Make space if
         prog = context.window_manager.setprecisemesh.projection_type
         if prog == "custom_object_location" or  prog == "custom_object_matrix":
             sub_col.prop(context.scene, "my_property", text = "")
 
+        # space
         sub_col = col_right.column(align = 0)
         sub_col.scale_y = 0.15
         sub_col = sub_col.label(text = "")
 
+        # Cursor
         sub_col = col_right.column(align = 1)
         sub_col.prop_enum( w_m, "projection_type", "cursor_location")
         sub_col.prop_enum( w_m, "projection_type", "cursor_matrix")
-
-        # col_right.operator(bpy.ops.paint.sample_color.idname())
-        # col_right.operator(bpy.ops.ui.eyedropper_id())
-        # col_right.operator(bpy.ops.ui.eyedropper_id.idname_py())
-        col_right.operator(bpy.ops.ui.eyedropper_id.idname())
-
-        # w = bpy.ops.ui.eyedropper_id()
-
-        # print(w, 1111111111111)
-        # bpy.ops.ui.eyedropper_id.idname_py(
-
-
-        
-
-            # col_right.operator(ui, "eyedropper_id")
-
-            # bpy.ops.ui.eyedropper_id()
-            # bpy.ops.ui.button_string_clear()
 
 def header_draw(self, context):
     layout = self.layout

@@ -96,15 +96,8 @@ class SetAngle(bpy.types.Operator):
             v3=vec[1] #  3 selected
             oldv3=vec[1] # 3 selected
 
-            progection_global_matrix = 0
-            progection_local_matrix = 0
-            progection_cursor = 0
-            progection_cursor_matrix = 0
-            progection_custom = 1
-
-            # progection_type = "globalmatrix"
+            # Differrent cases for progection
             prog = context.window_manager.setprecisemesh.projection_type
-
 
             if prog == "global_matrix":
 
