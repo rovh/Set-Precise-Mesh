@@ -90,7 +90,7 @@ class SetAngle(bpy.types.Operator):
             oldv3=vec[3] # 4 selected
 
         elif len(vec)==2:
-            merge =0
+            merge = 0
 
             v2=vec[0] # 2 selected
             v3=vec[1] #  3 selected
@@ -99,18 +99,30 @@ class SetAngle(bpy.types.Operator):
             # Differrent cases for progection
             prog = context.window_manager.setprecisemesh.projection_type
 
-            # Global v3
-            v3_prg = bpy.context.active_object.matrix_world  @ v3 
 
             if prog == "global_matrix":
 
                 v2_prg = bpy.context.active_object.matrix_world  @ v2
                 v1 = bpy.context.active_object.matrix_world  @ v3
+
+                wm = bpy.context.active_object.matrix_world.copy()
+                wm = wm.inverted()
                               
                 v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
                 
-                wm = bpy.context.active_object.matrix_world.copy()
-                wm = wm.inverted()
+                v3_prg = bpy.context.active_object.matrix_world  @ v3
+                if v3_prg == v1 :
+                    print(v3)
+                    # fl = v3_prg[2]
+                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 0.1)  ))
+                    print(v3, "111111111111")
+                    # v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2]))
+                    # v3 = 
+                    v3 = wm @ v3
+
+                    oldv3 = wm @ mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 0.001)  ))
+                    
+                    print("Done")
                 
                 v1 = wm @ v1  
                 
@@ -193,8 +205,6 @@ class SetAngle(bpy.types.Operator):
                 v1 = obj_marx @ v1
                 v1 = wm @ v1
 
-
-
                 ind.append(ind[1])
         else:
             merge = 0
@@ -203,9 +213,14 @@ class SetAngle(bpy.types.Operator):
             v3=vec[2] #  3 selected
             oldv3=vec[2] # 3 selected
 
-        if v3_prg == v1 :
-            v3 = mathutils.Vector((  v3_prg[0], v3_prg[1] , (v2_prg[2] + 1)  ))
-            v3 = wm @ v3 
+        
+        # If projection of angle = angle
+        # wm = bpy.context.active_object.matrix_world.copy()
+        # wm = wm.inverted()
+        # v1_prg = bpy.context.active_object.matrix_world  @ v1
+
+        
+            # v1 = wm @ v1_prg
     
         # Angle between verteses
         v1ch=v1-v2
