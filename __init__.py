@@ -249,13 +249,23 @@ class Header_Set_Precise_Mesh(bpy.types.Operator):
 
         # Matrix
         sub_col = col_left.column(align = 0)
+        # sub_col = sub_col.label(text = "")
         sub_col.scale_y = 1.9
         sub_col.label(icon='WORLD_DATA')
+        # sub_col = sub_col.label(text = "")
 
         # Object
         sub_col = col_left.column(align = 0)
         sub_col.scale_y = 2.7
         sub_col.label(icon='OBJECT_DATA')
+
+        prog = context.window_manager.setprecisemesh.projection_type
+        if prog == "custom_object_location" or  prog == "custom_object_matrix":
+            sub_col = col_left.column(align = 0)
+            sub_col.scale_y = 0.9
+            sub_col.label(icon='BLANK1')
+
+            # sub_col.scale_y = 3.7
 
         # Cursor
         sub_col = col_left.column(align = 0)
