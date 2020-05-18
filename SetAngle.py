@@ -104,22 +104,27 @@ class SetAngle(bpy.types.Operator):
             v3=vec[1] #  3 selected
             oldv3=vec[1] # 3 selected
 
+            
+
             # Differrent cases for progection
             prog = context.window_manager.setprecisemesh.projection_type
 
 
             if prog == "global_matrix":
-
+                boolcheck = 0
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
 
                 v2_prg = bpy.context.active_object.matrix_world  @ v2
                 v1 = bpy.context.active_object.matrix_world  @ v3
+                print(v1, "Before vertex trnsform")
 
                 wm = bpy.context.active_object.matrix_world.copy()
                 wm = wm.inverted()
                               
                 v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
+
+                print(v1, "Intermediate vertex trnsform")
                 
                 v3_prg = bpy.context.active_object.matrix_world  @ v3
                 if v3_prg == v1 :
@@ -128,14 +133,21 @@ class SetAngle(bpy.types.Operator):
                     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
                     v3 = wm @ v3
                     oldv3 = v3
+                # v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
+                # v3 = wm @ v3
+                # oldv3 = v3
                 # oldv3 = v3
                 v1 = wm @ v1  
+                print(v1, "After vertex trnsform")
+                # oldv3 = v1
                 
                 # ind.append(ind[1])
                 print("global matrix")
 
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
+
+                
 
             elif prog == "local_matrix":
 
@@ -283,15 +295,10 @@ class SetAngle(bpy.types.Operator):
 
         bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True, True)
-        # If projection of angle = angle
-        # wm = bpy.context.active_object.matrix_world.copy()
-        # wm = wm.inverted()
-        # v1_prg = bpy.context.active_object.matrix_world  @ v1
 
         
-            # v1 = wm @ v1_prg
-    
-        # Angle between verteses
+
+
         v1ch=v1-v2
         v3ch=v3-v2
 
@@ -300,18 +307,10 @@ class SetAngle(bpy.types.Operator):
         else:
             angle = v3ch.angle(v1ch, 0.0)
 
-        # v3_prg = bpy.context.active_object.matrix_world  @ v3
-        # if v3 == v1 :
-            # v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 0.1)  ))
-        
-        # print(angle, 111111111111)
-        # else:
-            # angle = v3ch.angle(v1ch, 0.0)
-            # print(angle)
-
 
         bmesh.update_edit_mesh(me, True, True)
         # Select cases for number of selected vertices
+
         if length_selected_vert == "Four":
             # Select vertices
             bm.verts[ind[0]].select = 0
@@ -320,16 +319,17 @@ class SetAngle(bpy.types.Operator):
             bm.verts[ind[3]].select = 1
         
         elif length_selected_vert == "Two":
+            # Select vertices
             bm.verts[ind[0]].select = 0
             bm.verts[ind[1]].select = 1
-            # bm.verts[ind[2]].select = 1
+            print ("selection works")
 
         elif length_selected_vert == "Three":
-
             # Select vertices
             bm.verts[ind[0]].select = 0
             bm.verts[ind[1]].select = 0
             bm.verts[ind[2]].select = 1
+            # print ("Warning ")
 
 
 
@@ -402,10 +402,8 @@ class SetAngle(bpy.types.Operator):
 
             bpy.context.object.update_from_editmode()
             bmesh.update_edit_mesh(me, True, True)
-            
-            
         else:
-            
+            print(oldv3 , "Before old location of v3")
             
             R = Matrix.Rotation(angle-height, 4, (normal))
             
@@ -414,13 +412,18 @@ class SetAngle(bpy.types.Operator):
                     verts=[v for v in bm.verts if v.select],
                     space=S,
             )    
-            bpy.context.object.update_from_editmode()
-            bmesh.update_edit_mesh(me, True, True)
+
+            print(oldv3 , "After old location of v3")
+
+            # bpy.context.object.update_from_editmode()
+            # bmesh.update_edit_mesh(me, True, True)
         
         
         if bool == 1:
             
+
             obj = context.active_object
+            
             bpy.context.object.update_from_editmode()
             bmesh.update_edit_mesh(me, True, True)
 
@@ -498,7 +501,7 @@ class SetAngle(bpy.types.Operator):
                 iv3=v2
                 iv4=newv3
 
-                print(iv1, iv2, iv3, iv4, "qqqqqqqqqqqqqqq")
+                print(iv1, iv2, iv3, iv4, "Vertecises used for intersection")
                 
                 iv = geometry.intersect_line_line(iv1, iv2, iv3, iv4)
                 if iv:
@@ -506,7 +509,7 @@ class SetAngle(bpy.types.Operator):
 
                     bm.verts[ind[1]].co = iv
 
-                    print(newv3, oldv3, iv)
+                    # print(newv3, oldv3, iv)
                     
                     
                     bpy.context.object.update_from_editmode()
