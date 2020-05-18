@@ -294,7 +294,7 @@ class Header_SetPreciseMesh(bpy.types.Operator):
 
 def header_draw(self, context):
     layout = self.layout
-    object_mode = context.active_object.mode
+    object_mode = bpy.context.active_object.mode
 
     if object_mode in {'EDIT'}:
         

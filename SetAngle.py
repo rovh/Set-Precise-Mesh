@@ -183,11 +183,11 @@ class SetAngle(bpy.types.Operator):
 
                 if v3_prg == v1 :
                     boolcheck = 1
-                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 10.0)  ))
+                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
                     v3 = bpy.context.scene.cursor.matrix @ v3
                     v3 = wm @ v3
                     oldv3 = v3
-                    # print(999999999999999999)
+                    print(999999999999999999)
 
                 v1 = bpy.context.scene.cursor.matrix @ v1
                 v1 = wm @ v1
@@ -240,7 +240,7 @@ class SetAngle(bpy.types.Operator):
             v3=vec[2] #  3 selected
             oldv3=vec[2] # 3 selected
 
-        # bpy.context.object.update_from_editmode()
+        bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True, True)
         # If projection of angle = angle
         # wm = bpy.context.active_object.matrix_world.copy()
@@ -290,7 +290,7 @@ class SetAngle(bpy.types.Operator):
         ob = context.edit_object
 
         #pp = Cursor location
-        if prog !=  "cursor_location" and prog != "cursor_matrix":
+        if prog != "cursor_location" and prog != "cursor_matrix":
             bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world  @ v2
         
 
