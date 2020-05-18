@@ -138,17 +138,21 @@ class SetAngle(bpy.types.Operator):
                 ind.append(ind[1])
 
             elif prog == "cursor_location":
-                v1 = bpy.context.scene.cursor.location
                 wm = bpy.context.active_object.matrix_world.copy()
                 wm = wm.inverted()
+                v1 = bpy.context.scene.cursor.location
 
                 v3_prg = bpy.context.active_object.matrix_world  @ v3
-                if v3_prg == v1 :
+
+                v2_prg =  v1
+                v2_prg = mathutils.Vector((  v1[0] , v1[1] , (v2_prg[2])  ))
+
+                if v3_prg == v2_prg :
                     boolcheck = 1
-                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 10.0)  ))
+                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
                     v3 = wm @ v3
                     oldv3 = v3
-
+                    print("Done", 00000000000000)
                 v1 = wm @ v1  
                 ind.append(ind[1])
 
@@ -160,20 +164,27 @@ class SetAngle(bpy.types.Operator):
                 wm = wm.inverted()
                 wm_c = wm_c.inverted()
 
-
-
                 v2_prg = bpy.context.active_object.matrix_world  @ v2
                 v2_prg = wm_c  @ v2_prg
-
 
                 v1 = bpy.context.active_object.matrix_world  @ v3
                 v1 = wm_c @ v1
                 
                 v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
                 
+                v3_prg = bpy.context.active_object.matrix_world  @ v3
+                v3_prg = wm_c @ v3_prg
+
+                if v3_prg == v1 :
+                    boolcheck = 1
+                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 10.0)  ))
+                    v3 = bpy.context.scene.cursor.matrix @ v3
+                    v3 = wm @ v3
+                    oldv3 = v3
+                    # print(999999999999999999)
+
                 v1 = bpy.context.scene.cursor.matrix @ v1
                 v1 = wm @ v1
-
                 ind.append(ind[1])
 
             elif prog == "custom_object_location": 
