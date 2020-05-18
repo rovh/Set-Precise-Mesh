@@ -77,7 +77,7 @@ class SetAngle(bpy.types.Operator):
             # return{"FINISHED"}
 
 
-            
+        prog = context.window_manager.setprecisemesh.projection_type
         bmesh.update_edit_mesh(me, True, True)
 
         # Check list of selected vertices
@@ -114,13 +114,14 @@ class SetAngle(bpy.types.Operator):
                 if v3_prg == v1 :
                     print(v3)
                     # fl = v3_prg[2]
-                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 0.1)  ))
+                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 10.0)  ))
                     print(v3, "111111111111")
                     # v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2]))
                     # v3 = 
                     v3 = wm @ v3
 
-                    oldv3 = wm @ mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 0.001)  ))
+                    oldv3 = v3
+                    # oldv3 = wm @ oldv3
                     
                     print("Done")
                 
@@ -213,7 +214,7 @@ class SetAngle(bpy.types.Operator):
             v3=vec[2] #  3 selected
             oldv3=vec[2] # 3 selected
 
-        
+        bmesh.update_edit_mesh(me, True, True)
         # If projection of angle = angle
         # wm = bpy.context.active_object.matrix_world.copy()
         # wm = wm.inverted()
@@ -225,9 +226,18 @@ class SetAngle(bpy.types.Operator):
         # Angle between verteses
         v1ch=v1-v2
         v3ch=v3-v2
-        angle = v3ch.angle(v1ch, 0.0)
+
+        # v3_prg = bpy.context.active_object.matrix_world  @ v3
+        # if v3 == v1 :
+            # v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 0.1)  ))
+        angle = 0.0
+        print(angle, 111111111111)
+        # else:
+            # angle = v3ch.angle(v1ch, 0.0)
+            # print(angle)
 
 
+        bmesh.update_edit_mesh(me, True, True)
         # Select cases for number of selected vertices
         if merge == 1:
             # Select vertices
@@ -332,6 +342,8 @@ class SetAngle(bpy.types.Operator):
 
             if merge == 1:
 
+                bmesh.update_edit_mesh(me, True, True)
+
                 newv3 = obj.data.vertices[ind[3]].co
 
                 #New position
@@ -343,6 +355,8 @@ class SetAngle(bpy.types.Operator):
                 iv3=v0
                 # iv4=oldv3
                 iv4=newv3
+
+                
                 
 
                 iv = geometry.intersect_line_line(iv1, iv2, iv3, iv4)
@@ -355,13 +369,22 @@ class SetAngle(bpy.types.Operator):
                     bmesh.update_edit_mesh(me, True, True)
 
             else:     
-        
+                bpy.context.object.update_from_editmode()
+                # bmesh.update_edit_mesh(me, True, True)
+
                 newv3 = obj.data.vertices[ind[2]].co
                 
+                # iv1=v1
+                # iv2=newv3
+                # iv3=v2
+                # iv4=oldv3
+
                 iv1=v1
-                iv2=newv3
+                iv2=oldv3
                 iv3=v2
-                iv4=oldv3
+                iv4=newv3
+
+                print(iv1, iv2, iv3, iv4, "qqqqqqqqqqqqqqq")
                 
                 iv = geometry.intersect_line_line(iv1, iv2, iv3, iv4)
                 if iv:
