@@ -117,8 +117,6 @@ class SetAngle(bpy.types.Operator):
                     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 10.0)  ))
                     v3 = wm @ v3
                     oldv3 = v3
-                    
-
                 
                 v1 = wm @ v1  
                 
@@ -129,12 +127,28 @@ class SetAngle(bpy.types.Operator):
                 v2_prg = v2
                 v1 = v3
                 v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
+
+                v3_prg = v3
+                if v3_prg == v1 :
+                    boolcheck = 1
+                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 10.0)  ))
+                    # v3 = wm @ v3
+                    oldv3 = v3
+
                 ind.append(ind[1])
 
             elif prog == "cursor_location":
                 v1 = bpy.context.scene.cursor.location
                 wm = bpy.context.active_object.matrix_world.copy()
                 wm = wm.inverted()
+
+                v3_prg = bpy.context.active_object.matrix_world  @ v3
+                if v3_prg == v1 :
+                    boolcheck = 1
+                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 10.0)  ))
+                    v3 = wm @ v3
+                    oldv3 = v3
+
                 v1 = wm @ v1  
                 ind.append(ind[1])
 

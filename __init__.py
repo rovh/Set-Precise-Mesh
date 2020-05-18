@@ -396,7 +396,7 @@ class SetPreciseMesh_Props(bpy.types.PropertyGroup):
     angle: bpy.props.FloatProperty(
         name="Angle",
         description="Angle",
-        min=0.0, max=360.0,
+        min=-360.0, max=360.0,
         default=0.0,
         step = 100.0,
         unit="ROTATION",
