@@ -58,6 +58,7 @@ class SetAngle(bpy.types.Operator):
         me = obj.data
         bm = bmesh.from_edit_mesh(me)
 
+        bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True, True)
         
         #Create lists
@@ -78,6 +79,7 @@ class SetAngle(bpy.types.Operator):
 
 
         prog = context.window_manager.setprecisemesh.projection_type
+        bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True, True)
         boolcheck = 0
 
@@ -140,28 +142,25 @@ class SetAngle(bpy.types.Operator):
             elif prog == "cursor_location":
                 wm = bpy.context.active_object.matrix_world.copy()
                 wm = wm.inverted()
+
+                
+                v3_prg = bpy.context.active_object.matrix_world  @ v3
+                v2_prg =  bpy.context.active_object.matrix_world @ v2
+
                 v1 = bpy.context.scene.cursor.location
 
-                v3_prg = bpy.context.active_object.matrix_world  @ v3
+                v1 = wm @ v1
 
-                v2_prg =  bpy.context.active_object.matrix_world @ v2
-                pt = v3_prg
-                line_p1 = v2_prg
-                line_p2 = v1
-                intersect = mathutils.geometry.intersect_point_line(pt, line_p1, line_p2)
-                intersect_distance = intersect[1]
-                print(intersect_distance, "intersect_distance")
-                print(v1)
-                # v2_prg = mathutils.Vector((  v1[0] , v1[1] , (v2_prg[2])  ))
+                v1ch=v1-v2
+                v3ch=v3-v2
+                angle = v3ch.angle(v1ch, 0.0)
+                print(angle, "angle1111111111111")
+                # if length_intersect != 0:
 
-                if intersect_distance == 0 :
-                    boolcheck = 1
-                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
-                    v3 = wm @ v3
-                    oldv3 = v3
-                    print("Done", 00000000000000)
-                v1 = wm @ v1  
-                ind.append(ind[1])
+                if angle == 0.0 :
+                    print("Warning you need tp make it")
+                
+                ind.append(ind[1])                  
 
             elif prog == "cursor_matrix":
 
@@ -241,6 +240,7 @@ class SetAngle(bpy.types.Operator):
             v3=vec[2] #  3 selected
             oldv3=vec[2] # 3 selected
 
+        # bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True, True)
         # If projection of angle = angle
         # wm = bpy.context.active_object.matrix_world.copy()
@@ -263,7 +263,7 @@ class SetAngle(bpy.types.Operator):
         # if v3 == v1 :
             # v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 0.1)  ))
         
-        print(angle, 111111111111)
+        # print(angle, 111111111111)
         # else:
             # angle = v3ch.angle(v1ch, 0.0)
             # print(angle)
@@ -416,7 +416,7 @@ class SetAngle(bpy.types.Operator):
                 iv3=v2
                 iv4=newv3
 
-                print(iv1, iv2, iv3, iv4, "qqqqqqqqqqqqqqq")
+                # print(iv1, iv2, iv3, iv4, "qqqqqqqqqqqqqqq")
                 
                 iv = geometry.intersect_line_line(iv1, iv2, iv3, iv4)
                 if iv:
