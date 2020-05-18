@@ -143,7 +143,6 @@ class SetAngle(bpy.types.Operator):
                 wm = bpy.context.active_object.matrix_world.copy()
                 wm = wm.inverted()
 
-                
                 v3_prg = bpy.context.active_object.matrix_world  @ v3
                 v2_prg =  bpy.context.active_object.matrix_world @ v2
 
@@ -212,37 +211,53 @@ class SetAngle(bpy.types.Operator):
                 obj_marx = bpy.data.objects[obj_name].matrix_world
                 obj_loc = bpy.data.objects[obj_name].location
 
-                v1 = obj_loc
                 wm = bpy.context.active_object.matrix_world.copy()
                 wm = wm.inverted()
+
+                v1 = obj_loc
                 v1 = wm @ v1  
+
                 ind.append(ind[1])
 
             elif prog == "custom_object_matrix":
 
                 obj_name = bpy.data.scenes[bpy.context.scene.name_full].my_property.name_full
 
-                obj_marx = bpy.data.objects[obj_name].matrix_world
-
                 wm = bpy.context.active_object.matrix_world.copy()
+                obj_marx = bpy.data.objects[obj_name].matrix_world
                 wm_c = obj_marx.copy()
 
-                wm = wm.inverted()
-                wm_c = wm_c.inverted()
+                # mat = wm @ wm_c
+                mat = wm_c
 
 
+                # v2_prg = bpy.context.active_object.matrix_world  @ v2
+                v2_prg =  v2
+                v2_prg =  mat @ v2_prg
 
-                v2_prg = bpy.context.active_object.matrix_world  @ v2
-                v2_prg = wm_c  @ v2_prg
-
-
-                v1 = bpy.context.active_object.matrix_world  @ v3
-                v1 = wm_c @ v1
+                v1 = v3
+                v1 = mat @ v1
                 
                 v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
                 
-                v1 = obj_marx @ v1
-                v1 = wm @ v1
+                v3_prg =  v3
+                v3_prg = mat @ v3_prg
+
+                wm = wm.inverted()
+                wm_c = wm_c.inverted()
+                mat = mat.inverted()
+
+                # v3_prg = bpy.context.active_object.matrix_world  @ v3
+                if v3_prg == v1 :
+                    boolcheck = 1
+                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 10.0)  ))
+                    v3 = mat @ v3
+                    oldv3 = v3
+                    print("WWWWWWWWOOOOOOOOOORRRRRRRKKKKKKKSSSSSSS")
+
+
+                v1 = mat @ v1
+                # v1 = wm @ v1
 
                 ind.append(ind[1])
         else:
