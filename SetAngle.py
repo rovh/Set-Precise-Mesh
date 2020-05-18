@@ -79,6 +79,7 @@ class SetAngle(bpy.types.Operator):
 
         prog = context.window_manager.setprecisemesh.projection_type
         bmesh.update_edit_mesh(me, True, True)
+        boolcheck = 0
 
         # Check list of selected vertices
         if len(vec) == 4:
@@ -112,18 +113,12 @@ class SetAngle(bpy.types.Operator):
                 
                 v3_prg = bpy.context.active_object.matrix_world  @ v3
                 if v3_prg == v1 :
-                    print(v3)
-                    # fl = v3_prg[2]
+                    boolcheck = 1
                     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 10.0)  ))
-                    print(v3, "111111111111")
-                    # v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2]))
-                    # v3 = 
                     v3 = wm @ v3
-
                     oldv3 = v3
-                    # oldv3 = wm @ oldv3
                     
-                    print("Done")
+
                 
                 v1 = wm @ v1  
                 
@@ -227,10 +222,15 @@ class SetAngle(bpy.types.Operator):
         v1ch=v1-v2
         v3ch=v3-v2
 
+        if boolcheck == 1:
+            angle = 0.0
+        else:
+            angle = v3ch.angle(v1ch, 0.0)
+
         # v3_prg = bpy.context.active_object.matrix_world  @ v3
         # if v3 == v1 :
             # v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 0.1)  ))
-        angle = 0.0
+        
         print(angle, 111111111111)
         # else:
             # angle = v3ch.angle(v1ch, 0.0)
