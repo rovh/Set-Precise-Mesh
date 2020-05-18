@@ -166,38 +166,43 @@ class SetAngle(bpy.types.Operator):
 
                 wm = bpy.context.active_object.matrix_world.copy()
                 wm_c = bpy.context.scene.cursor.matrix.copy()
+                mat_cur = wm @ wm_c
 
                 # wm = wm.inverted()
                 # wm_c = wm_c.inverted()
 
-                v2_prg = bpy.context.active_object.matrix_world  @ v2
-                v2_prg = wm_c  @ v2_prg
+                # v2_prg = bpy.context.active_object.matrix_world  @ v2
+                v2_prg =  v2
+                v2_prg = mat_cur  @ v2_prg
 
-                v1 = bpy.context.active_object.matrix_world  @ v3
-                v1 = wm_c @ v1
+                # v1 = bpy.context.active_object.matrix_world  @ v3
+                v1 =  v3
+                v1 = mat_cur @ v1
                 
                 v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
                 
-                v3_prg = bpy.context.active_object.matrix_world  @ v3
-                v3_prg = wm_c @ v3_prg
+                # v3_prg = bpy.context.active_object.matrix_world  @ v3
+                v3_prg =  v3
+                v3_prg = mat_cur @ v3_prg
 
                 print(v3_prg)
                 print(v1)
 
                 wm = wm.inverted()
                 wm_c = wm_c.inverted()
+                mat_cur = mat_cur.inverted()
 
                 if v3_prg == v1:
                     print("Enter")
                     boolcheck = 1
                     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 10.0)  ))
-                    v3 = bpy.context.scene.cursor.matrix @ v3
-                    v3 = wm @ v3
+                    # v3 = bpy.context.scene.cursor.matrix @ v3
+                    v3 = mat_cur @ v3
                     oldv3 = v3
                     print("Out ")
 
-                v1 = bpy.context.scene.cursor.matrix @ v1
-                v1 = wm @ v1
+                # v1 = bpy.context.scene.cursor.matrix @ v1
+                v1 = mat_cur @ v1
                 ind.append(ind[1])
 
             elif prog == "custom_object_location": 
