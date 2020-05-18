@@ -46,7 +46,7 @@ class SetAngle(bpy.types.Operator):
                 
         check(self)
 
-        bpy.context.object.update_from_editmode()
+        # bpy.context.object.update_from_editmode()
 
         # Get values
         height = bpy.context.window_manager.setprecisemesh.angle
@@ -81,11 +81,14 @@ class SetAngle(bpy.types.Operator):
         prog = context.window_manager.setprecisemesh.projection_type
         bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True, True)
+
         boolcheck = 0
+        lenvec = 0
+
 
         # Check list of selected vertices
         if len(vec) == 4:
-            merge = 1
+            length_selcted_vert = 1
             v0=vec[0] # 1 selected
             v1=vec[1] # 2 selected
             v2=vec[2] # 3 selected
@@ -93,7 +96,9 @@ class SetAngle(bpy.types.Operator):
             oldv3=vec[3] # 4 selected
 
         elif len(vec)==2:
-            merge = 0
+            length_selcted_vert = 0
+            boolcheck = 0
+            lenvec = 1
 
             v2=vec[0] # 2 selected
             v3=vec[1] #  3 selected
@@ -105,6 +110,9 @@ class SetAngle(bpy.types.Operator):
 
             if prog == "global_matrix":
 
+                bpy.context.object.update_from_editmode()
+                bmesh.update_edit_mesh(me, True, True)
+
                 v2_prg = bpy.context.active_object.matrix_world  @ v2
                 v1 = bpy.context.active_object.matrix_world  @ v3
 
@@ -115,14 +123,19 @@ class SetAngle(bpy.types.Operator):
                 
                 v3_prg = bpy.context.active_object.matrix_world  @ v3
                 if v3_prg == v1 :
+                    print("global matrix 1")
                     boolcheck = 1
-                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 10.0)  ))
+                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
                     v3 = wm @ v3
                     oldv3 = v3
-                
+                # oldv3 = v3
                 v1 = wm @ v1  
                 
                 ind.append(ind[1])
+                print("global matrix")
+
+                bpy.context.object.update_from_editmode()
+                bmesh.update_edit_mesh(me, True, True)
 
             elif prog == "local_matrix":
 
@@ -261,7 +274,7 @@ class SetAngle(bpy.types.Operator):
 
                 ind.append(ind[1])
         else:
-            merge = 0
+            length_selcted_vert = 0
             v1=vec[0] # 1 selected
             v2=vec[1] # 2 selected
             v3=vec[2] #  3 selected
@@ -298,12 +311,13 @@ class SetAngle(bpy.types.Operator):
 
         bmesh.update_edit_mesh(me, True, True)
         # Select cases for number of selected vertices
-        if merge == 1:
+        if length_selcted_vert == 1:
             # Select vertices
             bm.verts[ind[0]].select = 0
             bm.verts[ind[1]].select = 0
             bm.verts[ind[2]].select = 0
             bm.verts[ind[3]].select = 1
+
         else:
             # Select vertices
             bm.verts[ind[0]].select = 0
@@ -398,8 +412,10 @@ class SetAngle(bpy.types.Operator):
         if bool == 1:
             
             obj = context.active_object
+            bpy.context.object.update_from_editmode()
+            bmesh.update_edit_mesh(me, True, True)
 
-            if merge == 1:
+            if length_selcted_vert == 1:
 
                 bmesh.update_edit_mesh(me, True, True)
 
@@ -429,9 +445,12 @@ class SetAngle(bpy.types.Operator):
 
             else:     
                 bpy.context.object.update_from_editmode()
-                # bmesh.update_edit_mesh(me, True, True)
+                bmesh.update_edit_mesh(me, True, True)
 
-                newv3 = obj.data.vertices[ind[2]].co
+                if  lenvec == 1:
+                    newv3 = obj.data.vertices[ind[1]].co
+                else:
+                    newv3 = obj.data.vertices[ind[2]].co
                 
                 # iv1=v1
                 # iv2=newv3
@@ -443,7 +462,7 @@ class SetAngle(bpy.types.Operator):
                 iv3=v2
                 iv4=newv3
 
-                # print(iv1, iv2, iv3, iv4, "qqqqqqqqqqqqqqq")
+                print(iv1, iv2, iv3, iv4, "qqqqqqqqqqqqqqq")
                 
                 iv = geometry.intersect_line_line(iv1, iv2, iv3, iv4)
                 if iv:
