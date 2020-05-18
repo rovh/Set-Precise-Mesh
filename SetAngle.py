@@ -144,10 +144,17 @@ class SetAngle(bpy.types.Operator):
 
                 v3_prg = bpy.context.active_object.matrix_world  @ v3
 
-                v2_prg =  v1
-                v2_prg = mathutils.Vector((  v1[0] , v1[1] , (v2_prg[2])  ))
+                v2_prg =  bpy.context.active_object.matrix_world @ v2
+                pt = v3_prg
+                line_p1 = v2_prg
+                line_p2 = v1
+                intersect = mathutils.geometry.intersect_point_line(pt, line_p1, line_p2)
+                intersect_distance = intersect[1]
+                print(intersect_distance, "intersect_distance")
+                print(v1)
+                # v2_prg = mathutils.Vector((  v1[0] , v1[1] , (v2_prg[2])  ))
 
-                if v3_prg == v2_prg :
+                if intersect_distance == 0 :
                     boolcheck = 1
                     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
                     v3 = wm @ v3
