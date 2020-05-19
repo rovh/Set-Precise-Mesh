@@ -77,38 +77,31 @@ class SetAngle(bpy.types.Operator):
             # check3(self)
             # return{"FINISHED"}
 
-
+        # Differrent cases for progection
         prog = context.window_manager.setprecisemesh.projection_type
+
         bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True, True)
 
+        """Check list of selected vertices"""
         Clear_angle = 0
         lenvec = 0
 
-        # length_selected_vert = "None"
-        # Check list of selected vertices
         if len(vec) == 4:
             length_selected_vert = "Four"
             v0=vec[0] # 1 selected
             v1=vec[1] # 2 selected
             v2=vec[2] # 3 selected
             v3=vec[3] # 4 selected
-            oldv3=vec[3] # 4 selected
+            oldv3 = mathutils.Vector( vec[3] ) # 4 selected
 
-        elif len(vec)==2:
+        if len(vec)==2:
             length_selected_vert = "Two"
             Clear_angle = 0
-            # lenvec = 1
 
             v2=vec[0] # 2 selected
             v3=vec[1] #  3 selected
             oldv3= mathutils.Vector( vec[1] ) # 3 selected
-
-            
-
-            # Differrent cases for progection
-            prog = context.window_manager.setprecisemesh.projection_type
-
 
             if prog == "global_matrix":
 
@@ -294,7 +287,7 @@ class SetAngle(bpy.types.Operator):
             v1=vec[0] # 1 selected
             v2=vec[1] # 2 selected
             v3=vec[2] #  3 selected
-            oldv3=vec[2] # 3 selected
+            oldv3 = mathutils.Vector( vec[2] ) # 3 selected
 
         bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True, True)
