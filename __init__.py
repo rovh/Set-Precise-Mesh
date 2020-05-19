@@ -179,30 +179,29 @@ class Header_SetPreciseMesh (bpy.types.Operator):
         sub_col.scale_y = 1.9
         sub_col.label(icon='WORLD_DATA')
 
-        # For Object
+        # For Cursor
         sub_col = col_left.column(align = 0)
         sub_col.scale_y = 2.7
         sub_col.label(icon='PIVOT_CURSOR')
+        
 
-
-        # For Cursor
+        # For Object
         sub_col = col_left.column(align = 0)
         sub_col.scale_y = 1.65
         sub_col.label(icon='OBJECT_DATA')  
 
         # Make space if
-        prog = context.window_manager.setprecisemesh.projection_type
+        # prog = context.window_manager.setprecisemesh.projection_type
 
-        if prog == "custom_object_location" or  prog == "custom_object_matrix":
-            sub_col = col_left.column(align = 0)
-            sub_col.scale_y = 0.9
-            sub_col.label(icon='BLANK1')         
+        # if prog == "custom_object_location" or  prog == "custom_object_matrix":
+        #     sub_col = col_left.column(align = 0)
+        #     sub_col.scale_y = 0.9
+        #     sub_col.label(icon='BLANK1')         
         
         # col_left.prop(w_m, "projection_type", expand = 1)
 
         # Matrix menu
         sub_col = col_right.column(align = 1)
-        # sub_col = sub_col.row()
         sub_col.prop_enum( w_m, "projection_type", "local_matrix")
         sub_col.prop_enum( w_m, "projection_type", "global_matrix")
 
@@ -216,7 +215,6 @@ class Header_SetPreciseMesh (bpy.types.Operator):
         sub_col.prop_enum( w_m, "projection_type", "cursor_location")
         sub_col.prop_enum( w_m, "projection_type", "cursor_matrix")
 
-
         # space
         sub_col = col_right.column(align = 0)
         sub_col.scale_y = 0.15
@@ -226,13 +224,10 @@ class Header_SetPreciseMesh (bpy.types.Operator):
         sub_col = col_right.column(align = 1)
         sub_col.prop_enum( w_m, "projection_type", "custom_object_location")
         sub_col.prop_enum( w_m, "projection_type", "custom_object_matrix")
-
-        # Make space if
+        # Make space object selection box
         prog = context.window_manager.setprecisemesh.projection_type
         if prog == "custom_object_location" or  prog == "custom_object_matrix":
             sub_col.prop(context.scene, "my_property", text = "")
-
-
 
 def   header_draw(self, context):
     layout = self.layout
@@ -517,7 +512,6 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         'Cursor Matrix. It uses the matrix of the 3d cursor\
         \n To make it more convinient to use 3d cursor in the cursor settings You can enable\
         \n "Surface Project" and "Orintation: Geometry" ',
-
     ]
     projection_type: bpy.props.EnumProperty(
         name="Projection type",
