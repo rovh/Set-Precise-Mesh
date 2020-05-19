@@ -103,126 +103,6 @@ class Dialog_Warning_Operator_2(bpy.types.Operator):
         lay = layout.label(text='Warning' , icon="ERROR")
         lay = layout.label(text = "Your projection is perpendicular to the plane")
 
-class Popup_Menu_SetPreciseMesh_Operator(bpy.types.Operator):
-    bl_idname = "wm.menu_setprecisemesh_operator"
-    bl_label = "Pop-up Menu"
-    bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
-         ( For exaple Ctrl + Alt Wheel Down )\n \
-        How to do it: > right-click on this button > Assign Shortcut"
-        
-    def execute(self, context):
-        return {'FINISHED'}
-
-    def invoke(self, context, event): 
-        
-        # return context.window_manager.invoke_props_dialog(self)
-        # return context.window_manager.invoke_popup(self, width=600, height=500)
-        # return context.window_manager.invoke_popup(self)
-        return context.window_manager.invoke_popup(self, width = 200)
-        # if self.return == {"CANCELLED"}:
-            # context.window_manager.invoke_popup(self, width = 200)
-
-        # return  
-
-        # return context.window_manager.invoke_props_popup(self, event)
-        # return context.window_manager.invoke_confirm(self, event)
-
-    
-    def draw(self, context):
-        layout = self.layout
-
-        scene = context.scene
-        sc = scene
-        ob = context.object
-
-        w_m = context.window_manager.setprecisemesh
-
-        # Get values
-        bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
-        bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
-
-        col = layout.column(align=True)
-        
-        split = col.split(factor=0.85, align=True)
-        split.scale_y =1.2      
-
-        split.operator("mesh.change_angle", icon="DRIVER_ROTATIONAL_DIFFERENCE")
-
-        
-    
-        if sc.bool_panel_arrow:
-            split.prop(sc, "bool_panel_arrow", text="", icon='DOWNARROW_HLT')
-        else:
-            split.prop(sc, "bool_panel_arrow", text="", icon='RIGHTARROW')
-
-        if sc.bool_panel_arrow:
-            
-            box = col.column(align=True).box().column()
-            col_top = box.column(align=True)
-            
-            col_top.prop(w_m, "angle")
-            col_top.prop(w_m, "anglebool" )
-            # col_top.prop(ob, "angleinput")         
-                    
-        col = layout.column(align=False)
-        col = layout.column(align=True)
-
-        
-        split = col.split(factor=0.85, align=True)
-        split.scale_y =1.2
-        
-        split.operator("mesh.change_length",icon="DRIVER_DISTANCE")
-        
-    
-        if sc.bool_panel_arrow2:
-            split.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
-        else:
-            split.prop(sc, "bool_panel_arrow2", text="", icon='RIGHTARROW')
-
-        if sc.bool_panel_arrow2:            
-            box = col.column(align=True).box().column()            
-            col_top = box.column(align=True)
-            col_top.prop(w_m, "length")            
-            col_top.prop(w_m, "lengthbool") 
-                       
-            # col_top.prop(ob, "lengthinput")
-
-class SetPreciseMesh_Preferences(bpy.types.AddonPreferences):
-    # this must match the addon name, use '__package__'
-    # when defining this in a submodule of a python package.
-    bl_idname = __name__
-
-
-    direction_of_length: BoolProperty(
-            name="bool",
-            description="Change direction",
-            default=False,
-            )
-
-    direction_of_angle: BoolProperty(
-            name="bool",
-            description="Change direction",
-            default=False,
-            )
-    bool_warning_global: BoolProperty(
-            name="bool",
-            description="Globally",
-            default=True,
-            )
-
-
-    def draw(self, context):
-        layout = self.layout
-        layout.label(icon="PREFERENCES")
-
-        row = layout.row()
-        col = row.column()
-        # col.label(text="Tab Category:")
-        col.prop(self, "direction_of_length", text='Invert "Set Length" direction')
-        # col.prop(self, "direction_of_angle", text='Invert "Set Angle" direction')
-        col.operator("wm.menu_setprecisemesh_operator",icon="MENU_PANEL", text="Pop-up Menu (Hover cursor on it for more information)")
-        col.prop(self, "bool_warning_global", text='Show Warning Panel in Blender (Global)')
-
 class Header_SetPreciseMesh(bpy.types.Operator):
    
     bl_idname = "wm.header_setprecisemesh_operator"
@@ -327,6 +207,90 @@ def header_draw(self, context):
         # row.scale_x = 1 
         row.operator("wm.header_setprecisemesh_operator", text="Angle Projection", icon = "AXIS_TOP")
 
+class Popup_Menu_SetPreciseMesh_Operator(bpy.types.Operator):
+    bl_idname = "wm.menu_setprecisemesh_operator"
+    bl_label = "Pop-up Menu"
+    bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
+         ( For exaple Ctrl + Alt Wheel Down )\n \
+        How to do it: > right-click on this button > Assign Shortcut"
+        
+    def execute(self, context):
+        return {'FINISHED'}
+
+    def invoke(self, context, event): 
+        
+        # return context.window_manager.invoke_props_dialog(self)
+        # return context.window_manager.invoke_popup(self, width=600, height=500)
+        # return context.window_manager.invoke_popup(self)
+        return context.window_manager.invoke_popup(self, width = 200)
+        # if self.return == {"CANCELLED"}:
+            # context.window_manager.invoke_popup(self, width = 200)
+
+        # return  
+
+        # return context.window_manager.invoke_props_popup(self, event)
+        # return context.window_manager.invoke_confirm(self, event)
+
+    
+    def draw(self, context):
+        layout = self.layout
+
+        scene = context.scene
+        sc = scene
+        ob = context.object
+
+        w_m = context.window_manager.setprecisemesh
+
+        # Get values
+        bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
+        bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
+
+        col = layout.column(align=True)
+        
+        split = col.split(factor=0.85, align=True)
+        split.scale_y =1.2      
+
+        split.operator("mesh.change_angle", icon="DRIVER_ROTATIONAL_DIFFERENCE")
+
+        
+    
+        if sc.bool_panel_arrow:
+            split.prop(sc, "bool_panel_arrow", text="", icon='DOWNARROW_HLT')
+        else:
+            split.prop(sc, "bool_panel_arrow", text="", icon='RIGHTARROW')
+
+        if sc.bool_panel_arrow:
+            
+            box = col.column(align=True).box().column()
+            col_top = box.column(align=True)
+            
+            col_top.prop(w_m, "angle")
+            col_top.prop(w_m, "anglebool" )
+            # col_top.prop(ob, "angleinput")         
+                    
+        col = layout.column(align=False)
+        col = layout.column(align=True)
+
+        
+        split = col.split(factor=0.85, align=True)
+        split.scale_y =1.2
+        
+        split.operator("mesh.change_length",icon="DRIVER_DISTANCE")
+        
+    
+        if sc.bool_panel_arrow2:
+            split.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
+        else:
+            split.prop(sc, "bool_panel_arrow2", text="", icon='RIGHTARROW')
+
+        if sc.bool_panel_arrow2:            
+            box = col.column(align=True).box().column()            
+            col_top = box.column(align=True)
+            col_top.prop(w_m, "length")            
+            col_top.prop(w_m, "lengthbool") 
+                       
+            # col_top.prop(ob, "lengthinput")
+
 class SetPresiceMesh_Panel(bpy.types.Panel):
     
     bl_label = "Set Presice Mesh"
@@ -410,6 +374,42 @@ class SetPresiceMesh_Panel(bpy.types.Panel):
             col_top.prop(w_m, "lengthbool") 
                      
             # col_top.prop(ob, "lengthinput")
+
+class SetPreciseMesh_Preferences(bpy.types.AddonPreferences):
+    # this must match the addon name, use '__package__'
+    # when defining this in a submodule of a python package.
+    bl_idname = __name__
+
+
+    direction_of_length: BoolProperty(
+            name="bool",
+            description="Change direction",
+            default=False,
+            )
+
+    direction_of_angle: BoolProperty(
+            name="bool",
+            description="Change direction",
+            default=False,
+            )
+    bool_warning_global: BoolProperty(
+            name="bool",
+            description="Globally",
+            default=True,
+            )
+
+
+    def draw(self, context):
+        layout = self.layout
+        layout.label(icon="PREFERENCES")
+
+        row = layout.row()
+        col = row.column()
+        # col.label(text="Tab Category:")
+        col.prop(self, "direction_of_length", text='Invert "Set Length" direction')
+        # col.prop(self, "direction_of_angle", text='Invert "Set Angle" direction')
+        col.operator("wm.menu_setprecisemesh_operator",icon="MENU_PANEL", text="Pop-up Menu (Hover cursor on it for more information)")
+        col.prop(self, "bool_warning_global", text='Show Warning Panel in Blender (Global)')
 
 class SetPreciseMesh_Props(bpy.types.PropertyGroup):
     """
