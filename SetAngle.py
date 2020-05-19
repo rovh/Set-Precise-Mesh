@@ -85,7 +85,7 @@ class SetAngle(bpy.types.Operator):
 
         """Check list of selected vertices"""
         Clear_angle = 0
-        lenvec = 0
+        # lenvec = 0
 
         if len(vec) == 4:
             length_selected_vert = "Four"
@@ -388,7 +388,7 @@ class SetAngle(bpy.types.Operator):
             bpy.context.object.update_from_editmode()
             bmesh.update_edit_mesh(me, True, True)
         else:
-            print(oldv3 , "Before old location of v3")
+            # print(oldv3 , "Before old location of v3")
             # oldv3_for_test = oldv3
             
             R = Matrix.Rotation(angle-height, 4, (normal))
@@ -415,13 +415,13 @@ class SetAngle(bpy.types.Operator):
 
                 #New position
                 iv1=v2
-                # iv2=newv3
-                iv2=oldv3
+                iv2=newv3
+                # iv2=oldv3
 
                 #Old position
                 iv3=v0
-                # iv4=oldv3
-                iv4=newv3
+                iv4=oldv3
+                # iv4=newv3
                 iv = geometry.intersect_line_line(iv1, iv2, iv3, iv4)
                 if iv:
                     iv = (iv[0] + iv[1]) / 2

@@ -113,23 +113,23 @@ class Dialog_Warning_Operator_3 (bpy.types.Operator):
     def invoke(self, context, event): 
 
         # return context.window_manager.invoke_props_dialog(self)
-        return context.window_manager.invoke_popup(self, width=280)
+        return context.window_manager.invoke_popup(self, width=400)
         # return context.window_manager.invoke_popup(self)
         # return context.window_manager.invoke_props_popup(self, event)
         # return context.window_manager.invoke_confirm(self, event)
 
     def draw(self, context):
         layout = self.layout
-        lay = layout.label(text='Warning' , icon="ERROR")
+        lay = layout.label(text= "Warning" , icon="ERROR")
 
         row = layout.row()
         row.label(icon = "DRIVER_ROTATIONAL_DIFFERENCE")
-        # row.scale_x = 100
         row.label(text = " = 0 ")
         row.scale_x = 0.1
-
-        lay = layout.label(text = "Angle = 0")
-        lay = layout.label(text = "Angle between your cursor or custom object is zero")    
+        
+        lay = layout.label(text = "Angle between your cursor or custom object is zero")
+        lay = layout.label(text = "Your rotation can be not correct")
+        lay = layout.label(text = "Please, change (cursor/custom object) location or change selected vertices")
 
 class Header_SetPreciseMesh     (bpy.types.Operator):
    
@@ -484,11 +484,16 @@ class SetPreciseMesh_Props       (bpy.types.PropertyGroup):
         description='User Mode',
         default=False,
     )
+    description_projection_type = [
+        "Local Matrix" ,
+        "Global Matrix"
+
+    ]
     projection_type: bpy.props.EnumProperty(
         name="Projection type",
         items=(
-            ("local_matrix"   , "Local Matrix  (Object)" , "Local Matrix"   , "GRID"              , 0),
-            ("global_matrix"  , "Global Matrix (World)"  , "Global Matrix"  , "VIEW_PERSPECTIVE"  , 1),
+            ("local_matrix"   , "Local Matrix  (Object)" , description_projection_type[0]   , "GRID"              , 0),
+            ("global_matrix"  , "Global Matrix (World)"  , description_projection_type[1]  , "VIEW_PERSPECTIVE"  , 1),
             (None),
             ("custom_object_location"  , "Custom Object Location" , "Custon Object Location", "EMPTY_ARROWS" , 2),
             ("custom_object_matrix"    , "Custom Object Matrix"   , "Custon Object Matrix"  , "GRID"         , 3),
