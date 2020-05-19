@@ -37,7 +37,7 @@ from bpy.props import (
         )
 
 """Pop up menus"""
-class Dialog_Warning_Operator(bpy.types.Operator):
+class Dialog_Warning_Operator   (bpy.types.Operator):
     bl_idname = "object.dialog_warning_operator"
     bl_label = "Warning Panel Operator"
 
@@ -83,7 +83,7 @@ class Dialog_Warning_Operator(bpy.types.Operator):
         layout.label(text='You can find more info about this warning in README.md on Github page or in files')
         # layout.label(text='https://github.com/rovh/Set-Precise-Mesh')
 
-class Dialog_Warning_Operator_2(bpy.types.Operator):
+class Dialog_Warning_Operator_2 (bpy.types.Operator):
     bl_idname = "object.dialog_warning_operator_2"
     bl_label = "Warning Panel Operator"
 
@@ -101,14 +101,14 @@ class Dialog_Warning_Operator_2(bpy.types.Operator):
     def draw(self, context):
         layout = self.layout
         lay = layout.label(text='Warning' , icon="ERROR")
-        lay = layout.label(text = "Your projection is perpendicular to the plane")
+        lay = layout.label(text = "Your projection is perpendicular to the plane ( Matrix )")
 
-class Header_SetPreciseMesh(bpy.types.Operator):
+class Header_SetPreciseMesh     (bpy.types.Operator):
    
     bl_idname = "wm.header_setprecisemesh_operator"
     bl_label = "Header Menu"
     bl_description = "To make it convenient to use the this menu You can assign shortcut \n \
-         (For exaple Alt+R )\n \
+         ( For exaple Ctrl + Alt + Wheel Up )\n \
         How to do it: > right-click on this button > Assign Shortcut"
   
     
@@ -207,11 +207,11 @@ def header_draw(self, context):
         # row.scale_x = 1 
         row.operator("wm.header_setprecisemesh_operator", text="Angle Projection", icon = "AXIS_TOP")
 
-class Popup_Menu_SetPreciseMesh_Operator(bpy.types.Operator):
+class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_operator"
     bl_label = "Pop-up Menu"
     bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
-         ( For exaple Ctrl + Alt Wheel Down )\n \
+         ( For exaple Ctrl + Alt + Wheel Down )\n \
         How to do it: > right-click on this button > Assign Shortcut"
         
     def execute(self, context):
@@ -292,7 +292,7 @@ class Popup_Menu_SetPreciseMesh_Operator(bpy.types.Operator):
             # col_top.prop(ob, "lengthinput")
 
 """Main Panel"""
-class SetPresiceMesh_Panel(bpy.types.Panel):
+class SetPresiceMesh_Panel       (bpy.types.Panel):
     
     bl_label = "Set Presice Mesh"
     bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh"
@@ -377,7 +377,7 @@ class SetPresiceMesh_Panel(bpy.types.Panel):
             # col_top.prop(ob, "lengthinput")
 
 """Preferences"""
-class SetPreciseMesh_Preferences(bpy.types.AddonPreferences):
+class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
     # this must match the addon name, use '__package__'
     # when defining this in a submodule of a python package.
     bl_idname = __name__
@@ -414,7 +414,7 @@ class SetPreciseMesh_Preferences(bpy.types.AddonPreferences):
         col.prop(self, "bool_warning_global", text='Show Warning Panel in Blender (Global)')
 
 """Props"""
-class SetPreciseMesh_Props(bpy.types.PropertyGroup):
+class SetPreciseMesh_Props       (bpy.types.PropertyGroup):
     """
     Fake module like class
     bpy.context.window_manager.setprecisemesh
@@ -473,7 +473,7 @@ class SetPreciseMesh_Props(bpy.types.PropertyGroup):
         )
         
 """Duplication of Main panel"""
-class Dupli(SetPresiceMesh_Panel):
+class Dupli (SetPresiceMesh_Panel):
     bl_label = "Set Presice Mesh1"
     bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh1"
     bl_space_type = 'VIEW_3D'
@@ -482,7 +482,7 @@ class Dupli(SetPresiceMesh_Panel):
     bl_label = "Set Precise Mesh /CAD"
     # bl_order = 1
  
-class Dupli2(SetPresiceMesh_Panel):
+class Dupli2 (SetPresiceMesh_Panel):
     bl_label = "Set Presice Mesh2"
     bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh2"
     bl_space_type = 'VIEW_3D'
@@ -514,9 +514,7 @@ def register():
     # pynput.register()
 
     bpy.types.WindowManager.setprecisemesh = PointerProperty(type=SetPreciseMesh_Props)
-  
     bpy.types.VIEW3D_HT_tool_header.append(header_draw)
-    
     bpy.types.Scene.my_property = PointerProperty(type=bpy.types.Object)
 
     bpy.types.Scene.bool_panel_arrow = bpy.props.BoolProperty(
@@ -548,7 +546,6 @@ def unregister():
     del bpy.types.Scene.bool_warning
 
     del bpy.types.Scene.my_property
-
     bpy.types.VIEW3D_HT_tool_header.remove(header_draw)
 
 
