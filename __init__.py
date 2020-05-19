@@ -36,7 +36,7 @@ from bpy.props import (
         EnumProperty,
         )
 
-
+"""Pop up menus"""
 class Dialog_Warning_Operator(bpy.types.Operator):
     bl_idname = "object.dialog_warning_operator"
     bl_label = "Warning Panel Operator"
@@ -291,6 +291,7 @@ class Popup_Menu_SetPreciseMesh_Operator(bpy.types.Operator):
                        
             # col_top.prop(ob, "lengthinput")
 
+"""Main Panel"""
 class SetPresiceMesh_Panel(bpy.types.Panel):
     
     bl_label = "Set Presice Mesh"
@@ -375,6 +376,7 @@ class SetPresiceMesh_Panel(bpy.types.Panel):
                      
             # col_top.prop(ob, "lengthinput")
 
+"""Preferences"""
 class SetPreciseMesh_Preferences(bpy.types.AddonPreferences):
     # this must match the addon name, use '__package__'
     # when defining this in a submodule of a python package.
@@ -411,6 +413,7 @@ class SetPreciseMesh_Preferences(bpy.types.AddonPreferences):
         col.operator("wm.menu_setprecisemesh_operator",icon="MENU_PANEL", text="Pop-up Menu (Hover cursor on it for more information)")
         col.prop(self, "bool_warning_global", text='Show Warning Panel in Blender (Global)')
 
+"""Props"""
 class SetPreciseMesh_Props(bpy.types.PropertyGroup):
     """
     Fake module like class
@@ -469,6 +472,7 @@ class SetPreciseMesh_Props(bpy.types.PropertyGroup):
         default='global_matrix'
         )
         
+"""Duplication of Main panel"""
 class Dupli(SetPresiceMesh_Panel):
     bl_label = "Set Presice Mesh1"
     bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh1"
