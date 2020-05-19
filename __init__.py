@@ -16,7 +16,7 @@ bl_info = {
     "author" : "Rovh",
     "description" : "This addon allows you to set exact values for the mesh",
     "blender" : (2, 82, 0),
-    "version" : (1,0,3),
+    "version" : (1,1,0),
     "location" : "View3D > Sidebar in Edit Mode > Item Tab and View Tab",
     "warning" : "",
     "wiki_url": "https://github.com/rovh/Set-Precise-Mesh",
@@ -217,7 +217,7 @@ class Header_SetPreciseMesh(bpy.types.Operator):
         # return context.window_manager.invoke_props_dialog(self)
         # return context.window_manager.invoke_popup(self, width=600, height=500)
         # return context.window_manager.invoke_popup(self)
-        return context.window_manager.invoke_popup(self, width = 200)
+        return context.window_manager.invoke_popup(self, width = 190)
         # return context.window_manager.invoke_props_popup(self, event)
         # return context.window_manager.popmenu_begin__internal()
         # return context.window_manager.invoke_confirm(self, event)
@@ -250,6 +250,7 @@ class Header_SetPreciseMesh(bpy.types.Operator):
 
         # Make space if
         prog = context.window_manager.setprecisemesh.projection_type
+
         if prog == "custom_object_location" or  prog == "custom_object_matrix":
             sub_col = col_left.column(align = 0)
             sub_col.scale_y = 0.9
@@ -261,9 +262,11 @@ class Header_SetPreciseMesh(bpy.types.Operator):
         sub_col.scale_y = 1.65
         sub_col.label(icon='PIVOT_CURSOR')           
         
+        # col_left.prop(w_m, "projection_type", expand = 1)
 
         # Matrix
         sub_col = col_right.column(align = 1)
+        # sub_col = sub_col.row()
         sub_col.prop_enum( w_m, "projection_type", "local_matrix")
         sub_col.prop_enum( w_m, "projection_type", "global_matrix")
 
