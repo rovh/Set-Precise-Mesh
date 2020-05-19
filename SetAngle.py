@@ -128,7 +128,7 @@ class SetAngle(bpy.types.Operator):
                     oldv3 = v3
                 if v2_prg == v1:
                     print("This is warning")
-                    
+
                 v1 = wm @ v1  
 
                 bpy.context.object.update_from_editmode()
@@ -145,6 +145,8 @@ class SetAngle(bpy.types.Operator):
                     Clear_angle = 1
                     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
                     oldv3 = v3
+                if v2_prg == v1:
+                    print("This is warning 2 ")
 
             elif prog == "cursor_location":
                 wm = bpy.context.active_object.matrix_world.copy()
@@ -162,7 +164,9 @@ class SetAngle(bpy.types.Operator):
                 angle = v3ch.angle(v1ch, 0.0)
 
                 if angle == 0.0 :
-                    print("Warning you need to make it")                 
+                    print("Warning you need to make it") 
+                if v2_prg == v1:
+                    print("This is warning 3 ")                
 
             elif prog == "cursor_matrix":
 
@@ -202,6 +206,8 @@ class SetAngle(bpy.types.Operator):
                     v3 = mat_cur @ v3
                     oldv3 = v3
                     print("Out ")
+                if v2_prg == v1:
+                    print("This is warning 4 ")  
 
                 # v1 = bpy.context.scene.cursor.matrix @ v1
                 v1 = mat_cur @ v1
@@ -227,7 +233,9 @@ class SetAngle(bpy.types.Operator):
                 # if length_intersect != 0:
 
                 if angle == 0.0 :
-                    print("Warning you need to make it")     
+                    print("Warning you need to make it")   
+                if v2_prg == v1:
+                    print("This is warning 5 ")    
 
             elif prog == "custom_object_matrix":
 
@@ -264,6 +272,8 @@ class SetAngle(bpy.types.Operator):
                     v3 = mat @ v3
                     oldv3 = v3
                     print("WWWWWWWWOOOOOOOOOORRRRRRRKKKKKKKSSSSSSS")
+                if v2_prg == v1:
+                    print("This is warning 6 ")    
 
 
                 v1 = mat @ v1
