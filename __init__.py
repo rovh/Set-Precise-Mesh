@@ -121,12 +121,14 @@ class Dialog_Warning_Operator_3 (bpy.types.Operator):
     def draw(self, context):
         layout = self.layout
         lay = layout.label(text='Warning' , icon="ERROR")
-        
+
         row = layout.row()
         row.label(icon = "DRIVER_ROTATIONAL_DIFFERENCE")
+        # row.scale_x = 100
         row.label(text = " = 0 ")
         row.scale_x = 0.1
 
+        lay = layout.label(text = "Angle = 0")
         lay = layout.label(text = "Angle between your cursor or custom object is zero")    
 
 class Header_SetPreciseMesh     (bpy.types.Operator):
