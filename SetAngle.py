@@ -82,7 +82,7 @@ class SetAngle(bpy.types.Operator):
         bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True, True)
 
-        boolcheck = 0
+        Clear_angle = 0
         lenvec = 0
 
         # length_selected_vert = "None"
@@ -97,7 +97,7 @@ class SetAngle(bpy.types.Operator):
 
         elif len(vec)==2:
             length_selected_vert = "Two"
-            boolcheck = 0
+            Clear_angle = 0
             # lenvec = 1
 
             v2=vec[0] # 2 selected
@@ -111,7 +111,9 @@ class SetAngle(bpy.types.Operator):
 
 
             if prog == "global_matrix":
-                boolcheck = 0
+
+                Clear_angle = 0
+
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
 
@@ -129,7 +131,7 @@ class SetAngle(bpy.types.Operator):
                 v3_prg = bpy.context.active_object.matrix_world  @ v3
                 if v3_prg == v1 :
                     print("global matrix 1")
-                    boolcheck = 1
+                    Clear_angle = 1
                     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
                     v3 = wm @ v3
                     oldv3 = v3
@@ -157,7 +159,7 @@ class SetAngle(bpy.types.Operator):
 
                 v3_prg = v3
                 if v3_prg == v1 :
-                    boolcheck = 1
+                    Clear_angle = 1
                     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 10.0)  ))
                     # v3 = wm @ v3
                     oldv3 = v3
@@ -218,7 +220,7 @@ class SetAngle(bpy.types.Operator):
 
                 if v3_prg == v1:
                     print("Enter")
-                    boolcheck = 1
+                    Clear_angle = 1
                     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 10.0)  ))
                     # v3 = bpy.context.scene.cursor.matrix @ v3
                     v3 = mat_cur @ v3
@@ -274,7 +276,7 @@ class SetAngle(bpy.types.Operator):
 
                 # v3_prg = bpy.context.active_object.matrix_world  @ v3
                 if v3_prg == v1 :
-                    boolcheck = 1
+                    Clear_angle = 1
                     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 10.0)  ))
                     v3 = mat @ v3
                     oldv3 = v3
@@ -302,7 +304,7 @@ class SetAngle(bpy.types.Operator):
         v1ch=v1-v2
         v3ch=v3-v2
 
-        if boolcheck == 1:
+        if Clear_angle == 1:
             angle = 0.0
         else:
             angle = v3ch.angle(v1ch, 0.0)
