@@ -93,7 +93,7 @@ class Dialog_Warning_Operator_2 (bpy.types.Operator):
     def invoke(self, context, event): 
 
         # return context.window_manager.invoke_props_dialog(self)
-        return context.window_manager.invoke_popup(self, width=250)
+        return context.window_manager.invoke_popup(self, width=320)
         # return context.window_manager.invoke_popup(self)
         # return context.window_manager.invoke_props_popup(self, event)
         # return context.window_manager.invoke_confirm(self, event)
@@ -101,7 +101,15 @@ class Dialog_Warning_Operator_2 (bpy.types.Operator):
     def draw(self, context):
         layout = self.layout
         lay = layout.label(text='Warning' , icon="ERROR")
-        lay = layout.label(text = "Your projection is perpendicular to the plane ( Matrix )")
+
+        row = layout.row()
+        row.label(icon = "SNAP_PERPENDICULAR")
+        row.label(text = " = True ")
+        row.scale_x = 0.1
+        
+        lay = layout.label(text = "Your angle projection is perpendicular to the matrix (plane)")
+        # lay = layout.label(text = "Your rotation can be not correct")
+        lay = layout.label(text = "Please, change selected vertices")
 
 class Dialog_Warning_Operator_3 (bpy.types.Operator):
     bl_idname = "object.dialog_warning_operator_3"
@@ -131,7 +139,7 @@ class Dialog_Warning_Operator_3 (bpy.types.Operator):
         lay = layout.label(text = "Your rotation can be not correct")
         lay = layout.label(text = "Please, change (cursor/custom object) location or change selected vertices")
 
-class Header_SetPreciseMesh     (bpy.types.Operator):
+class Header_SetPreciseMesh (bpy.types.Operator):
    
     bl_idname = "wm.header_setprecisemesh_operator"
     bl_label = "Header Menu"
@@ -320,7 +328,7 @@ class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
             # col_top.prop(ob, "lengthinput")
 
 """Main Panel"""
-class SetPresiceMesh_Panel       (bpy.types.Panel):
+class SetPresiceMesh_Panel (bpy.types.Panel):
     
     bl_label = "Set Presice Mesh"
     bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh"
@@ -442,7 +450,7 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
         col.prop(self, "bool_warning_global", text='Show Warning Panel in Blender (Global)')
 
 """Props"""
-class SetPreciseMesh_Props       (bpy.types.PropertyGroup):
+class SetPreciseMesh_Props (bpy.types.PropertyGroup):
     """
     Fake module like class
     bpy.context.window_manager.setprecisemesh
