@@ -171,60 +171,44 @@ class SetAngle(bpy.types.Operator):
                     bpy.ops.object.dialog_warning_operator_3('INVOKE_DEFAULT') 
                
             elif prog == "cursor_matrix":
+
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
 
-                wm = bpy.context.active_object.matrix_world.copy()
-                # wm_c = bpy.context.scene.cursor.matrix.copy()
-                wm_c2 = bpy.context.scene.cursor.matrix.copy()
-                # mat_cur =  wm_c @ wm 
-                wm_c2 = wm_c2.inverted()
-                mat_cur =  wm @ wm_c2
-                # mat_cur =  wm_c
+                obj_matrix = bpy.context.active_object.matrix_world.copy()
+                cursor_matrix = bpy.context.scene.cursor.matrix.copy()
+                cursor_matrix = cursor_matrix.inverted()
 
-                # wm = wm.inverted()
-                # wm_c = wm_c.inverted()
+                mat_cur =  obj_matrix @ cursor_matrix
+    
+                v1 =  v3
+                v1 = mat_cur @ v1
 
-                # v2_prg = bpy.context.active_object.matrix_world  @ v2
                 v2_prg =  v2
                 v2_prg = mat_cur  @ v2_prg
 
-                # v1 = bpy.context.active_object.matrix_world  @ v3
-                v1 =  v3
-                v1 = mat_cur @ v1
-                
-                v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
-                
-                # v3_prg = bpy.context.active_object.matrix_world  @ v3
                 v3_prg =  v3
                 v3_prg = mat_cur @ v3_prg
 
-                # print(v3_prg)
-                # print(v1)
+                v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
 
                 mat_cur = mat_cur.inverted()
 
+                v1 = mat_cur @ v1
 
                 if v3_prg == v1:
-                    print("Enter")
-                    print(v2_prg)
                     Clear_angle = 1
+
                     if v2_prg[2] < 0:
                         v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 10.0)  ))
-                        print("before cursor matrix worked")
                     else:
                         v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 10.0)  ))
-                    # v3 = bpy.context.scene.cursor.matrix @ v3
-                        print("After cursor matrix worked")
+
                     v3 = mat_cur @ v3
                     oldv3 = v3
-                    print("Out ")
+
                 if v2_prg == v1:
                     bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT')  
-
-                # v1 = bpy.context.scene.cursor.matrix @ v1
-                v1 = mat_cur @ v1
-                # ind.append(ind[1])
 
             elif prog == "custom_object_location": 
 
@@ -254,20 +238,17 @@ class SetAngle(bpy.types.Operator):
                 bmesh.update_edit_mesh(me, True, True)
 
                 obj_name = bpy.data.scenes[bpy.context.scene.name_full].my_property.name_full
-                obj_marx = bpy.data.objects[obj_name].matrix_world
-                # obj_loc = bpy.data.objects[obj_name].matrix_world.translation
+                custom_obj_matrix = bpy.data.objects[obj_name].matrix_world
+                obj_matrix = bpy.context.active_object.matrix_world.copy()
 
-                wm = bpy.context.active_object.matrix_world.copy()
-                wm_c = obj_marx.copy()
-                obj_marx_invert = wm_c.inverted()
+                custom_obj_matrix = custom_obj_matrix.copy()
+                custom_obj_matrix = custom_obj_matrix.inverted()
 
-                mat = wm @ obj_marx_invert
-                # mat = wm_c @ wm
-                # mat = obj_marx @ 
-                # mat = wm_c
+                mat = obj_matrix @ custom_obj_matrix
 
+                v3_prg =  v3
+                v3_prg = mat @ v3_prg
 
-                # v2_prg = bpy.context.active_object.matrix_world  @ v2
                 v2_prg =  v2
                 v2_prg =  mat @ v2_prg
 
@@ -276,35 +257,24 @@ class SetAngle(bpy.types.Operator):
                 
                 v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
                 
-                v3_prg =  v3
-                v3_prg = mat @ v3_prg
-
-                wm = wm.inverted()
-                wm_c = wm_c.inverted()
                 mat = mat.inverted()
 
-                # v3_prg = bpy.context.active_object.matrix_world  @ v3
+                v1 = mat @ v1
+
                 if v3_prg == v1 :
                     Clear_angle = 1
-                    # if v2_prg[2] < obj_loc[2]:
-                    print(v2_prg[2])
-                    # print(obj_loc[2])
+                    
                     if v2_prg[2] < 0:
                         v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
-                        print("not else")
                     else:
                         v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 100.0)  ))
-                        print("else")
-                    # v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 10.0)  ))
+                        
                     v3 = mat @ v3
                     oldv3 = v3
-                    # print("WWWWWWWWOOOOOOOOOORRRRRRRKKKKKKKSSSSSSS")
+
                 if v2_prg == v1:
                     bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT')   
 
-
-                v1 = mat @ v1
-                # v1 = wm @ v1
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
         
