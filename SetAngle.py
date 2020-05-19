@@ -119,18 +119,18 @@ class SetAngle(bpy.types.Operator):
 
                 v2_prg = bpy.context.active_object.matrix_world  @ v2
                 v1 = bpy.context.active_object.matrix_world  @ v3
-                print(v1, "Before vertex trnsform")
+                # print(v1, "Before vertex trnsform")
 
                 wm = bpy.context.active_object.matrix_world.copy()
                 wm = wm.inverted()
                               
                 v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
 
-                print(v1, "Intermediate vertex trnsform")
+                # print(v1, "Intermediate vertex trnsform")
                 
                 v3_prg = bpy.context.active_object.matrix_world  @ v3
                 if v3_prg == v1 :
-                    print("global matrix 1")
+                    # print("global matrix 1")
                     Clear_angle = 1
                     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
                     v3 = wm @ v3
@@ -140,16 +140,14 @@ class SetAngle(bpy.types.Operator):
                 # oldv3 = v3
                 # oldv3 = v3
                 v1 = wm @ v1  
-                print(v1, "After vertex trnsform")
+                # print(v1, "After vertex trnsform")
                 # oldv3 = v1
                 
                 # ind.append(ind[1])
-                print("global matrix")
+                # print("global matrix")
 
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
-
-                
 
             elif prog == "local_matrix":
 
@@ -160,11 +158,9 @@ class SetAngle(bpy.types.Operator):
                 v3_prg = v3
                 if v3_prg == v1 :
                     Clear_angle = 1
-                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 10.0)  ))
+                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
                     # v3 = wm @ v3
                     oldv3 = v3
-
-                ind.append(ind[1])
 
             elif prog == "cursor_location":
                 wm = bpy.context.active_object.matrix_world.copy()
@@ -180,13 +176,11 @@ class SetAngle(bpy.types.Operator):
                 v1ch=v1-v2
                 v3ch=v3-v2
                 angle = v3ch.angle(v1ch, 0.0)
-                print(angle, "angle1111111111111")
+                # print(angle, "angle1111111111111")
                 # if length_intersect != 0:
 
                 if angle == 0.0 :
-                    print("Warning you need tp make it")
-                
-                ind.append(ind[1])                  
+                    print("Warning you need to make it")                 
 
             elif prog == "cursor_matrix":
 
@@ -229,7 +223,7 @@ class SetAngle(bpy.types.Operator):
 
                 # v1 = bpy.context.scene.cursor.matrix @ v1
                 v1 = mat_cur @ v1
-                ind.append(ind[1])
+                # ind.append(ind[1])
 
             elif prog == "custom_object_location": 
 
