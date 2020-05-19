@@ -102,7 +102,7 @@ class SetAngle(bpy.types.Operator):
 
             v2=vec[0] # 2 selected
             v3=vec[1] #  3 selected
-            oldv3=vec[1] # 3 selected
+            oldv3= mathutils.Vector( vec[1] ) # 3 selected
 
             
 
@@ -404,7 +404,7 @@ class SetAngle(bpy.types.Operator):
             bmesh.update_edit_mesh(me, True, True)
         else:
             print(oldv3 , "Before old location of v3")
-            oldv3_for_test = oldv3
+            # oldv3_for_test = oldv3
             
             R = Matrix.Rotation(angle-height, 4, (normal))
             
@@ -415,7 +415,9 @@ class SetAngle(bpy.types.Operator):
             )    
 
             print(oldv3 , "After old location of v3")
-            print(oldv3_for_test, "oldv3_for_test")
+            # print(oldv3_for_test, "oldv3_for_test")
+            # oldv3 = vec[1]
+            # print(oldv3 , "Second After old location of v3")
             # bpy.context.object.update_from_editmode()
             # bmesh.update_edit_mesh(me, True, True)
         
