@@ -292,41 +292,37 @@ class SetAngle(bpy.types.Operator):
         bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True, True)
 
-        
-
-
-        v1ch=v1-v2
-        v3ch=v3-v2
 
         if Clear_angle == 1:
             angle = 0.0
         else:
+            v1ch=v1-v2
+            v3ch=v3-v2
             angle = v3ch.angle(v1ch, 0.0)
 
 
         bmesh.update_edit_mesh(me, True, True)
-        # Select cases for number of selected vertices
 
+        """Select cases for number of selected vertices"""
         if length_selected_vert == "Four":
             # Select vertices
             bm.verts[ind[0]].select = 0
             bm.verts[ind[1]].select = 0
             bm.verts[ind[2]].select = 0
             bm.verts[ind[3]].select = 1
-        
-        elif length_selected_vert == "Two":
-            # Select vertices
-            bm.verts[ind[0]].select = 0
-            bm.verts[ind[1]].select = 1
-            print ("selection works")
 
-        elif length_selected_vert == "Three":
+        if length_selected_vert == "Three":
             # Select vertices
             bm.verts[ind[0]].select = 0
             bm.verts[ind[1]].select = 0
             bm.verts[ind[2]].select = 1
             # print ("Warning ")
-
+        
+        if length_selected_vert == "Two":
+            # Select vertices
+            bm.verts[ind[0]].select = 0
+            bm.verts[ind[1]].select = 1
+            print ("selection works")
 
 
         context = bpy.context
@@ -409,17 +405,9 @@ class SetAngle(bpy.types.Operator):
                     verts=[v for v in bm.verts if v.select],
                     space=S,
             )    
-
-            print(oldv3 , "After old location of v3")
-            # print(oldv3_for_test, "oldv3_for_test")
-            # oldv3 = vec[1]
-            # print(oldv3 , "Second After old location of v3")
-            # bpy.context.object.update_from_editmode()
-            # bmesh.update_edit_mesh(me, True, True)
         
         
         if bool == 1:
-            
 
             obj = context.active_object
             
@@ -450,13 +438,10 @@ class SetAngle(bpy.types.Operator):
                     bpy.context.object.update_from_editmode()
                     bmesh.update_edit_mesh(me, True, True)
 
-            elif length_selected_vert == "Three":     
+            if length_selected_vert == "Three":     
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
 
-                # if  lenvec == 1:
-                
-                # else:
                 newv3 = obj.data.vertices[ind[2]].co
                 
                 # iv1=v1
@@ -469,7 +454,7 @@ class SetAngle(bpy.types.Operator):
                 iv3=v2
                 iv4=newv3
 
-                print(iv1, iv2, iv3, iv4, "qqqqqqqqqqqqqqq")
+                # print(iv1, iv2, iv3, iv4, "qqqqqqqqqqqqqqq")
                 
                 iv = geometry.intersect_line_line(iv1, iv2, iv3, iv4)
                 if iv:
@@ -477,11 +462,10 @@ class SetAngle(bpy.types.Operator):
 
                     bm.verts[ind[2]].co = iv
                     
-                    
                     bpy.context.object.update_from_editmode()
                     bmesh.update_edit_mesh(me, True, True)
             
-            elif length_selected_vert == "Two":
+            if length_selected_vert == "Two":
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
 
