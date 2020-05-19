@@ -229,16 +229,23 @@ class SetAngle(bpy.types.Operator):
 
                 obj_name = bpy.data.scenes[bpy.context.scene.name_full].my_property.name_full
 
-                obj_marx = bpy.data.objects[obj_name].matrix_world
+                # obj_marx = bpy.data.objects[obj_name].matrix_world
                 obj_loc = bpy.data.objects[obj_name].location
 
                 wm = bpy.context.active_object.matrix_world.copy()
                 wm = wm.inverted()
 
                 v1 = obj_loc
-                v1 = wm @ v1  
+                v1 = wm @ v1 
 
-                ind.append(ind[1])
+                v1ch=v1-v2
+                v3ch=v3-v2
+                angle = v3ch.angle(v1ch, 0.0)
+                # print(angle, "angle1111111111111")
+                # if length_intersect != 0:
+
+                if angle == 0.0 :
+                    print("Warning you need to make it")     
 
             elif prog == "custom_object_matrix":
 
