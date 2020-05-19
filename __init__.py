@@ -103,6 +103,26 @@ class Dialog_Warning_Operator_2 (bpy.types.Operator):
         lay = layout.label(text='Warning' , icon="ERROR")
         lay = layout.label(text = "Your projection is perpendicular to the plane ( Matrix )")
 
+class Dialog_Warning_Operator_3 (bpy.types.Operator):
+    bl_idname = "object.dialog_warning_operator_3"
+    bl_label = "Warning Panel Operator"
+
+    def execute(self, context):
+        return {'FINISHED'}
+
+    def invoke(self, context, event): 
+
+        # return context.window_manager.invoke_props_dialog(self)
+        return context.window_manager.invoke_popup(self, width=250)
+        # return context.window_manager.invoke_popup(self)
+        # return context.window_manager.invoke_props_popup(self, event)
+        # return context.window_manager.invoke_confirm(self, event)
+
+    def draw(self, context):
+        layout = self.layout
+        lay = layout.label(text='Warning' , icon="ERROR")
+        lay = layout.label(text = "Angle between ")    
+
 class Header_SetPreciseMesh     (bpy.types.Operator):
    
     bl_idname = "wm.header_setprecisemesh_operator"
@@ -491,7 +511,7 @@ class Dupli2 (SetPresiceMesh_Panel):
     bl_label = "Set Precise Mesh /CAD"
     # bl_order = 1
     
- 
+"""Classes registration"""
 blender_classes = [
     Dupli,
     Dupli2,
@@ -499,6 +519,7 @@ blender_classes = [
     SetLength,
     Dialog_Warning_Operator,
     Dialog_Warning_Operator_2,
+    Dialog_Warning_Operator_3,
     SetPreciseMesh_Props,
     SetPreciseMesh_Preferences,
     Popup_Menu_SetPreciseMesh_Operator,

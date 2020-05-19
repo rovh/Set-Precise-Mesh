@@ -164,10 +164,8 @@ class SetAngle(bpy.types.Operator):
                 angle = v3ch.angle(v1ch, 0.0)
 
                 if angle == 0.0 :
-                    print("Warning you need to make it") 
-                if v2_prg == v1:
-                    print("This is warning 3 ")                
-
+                    bpy.ops.object.dialog_warning_operator_3('INVOKE_DEFAULT') 
+               
             elif prog == "cursor_matrix":
 
                 wm = bpy.context.active_object.matrix_world.copy()
@@ -233,9 +231,7 @@ class SetAngle(bpy.types.Operator):
                 # if length_intersect != 0:
 
                 if angle == 0.0 :
-                    print("Warning you need to make it")   
-                if v2_prg == v1:
-                    print("This is warning 5 ")    
+                    bpy.ops.object.dialog_warning_operator_3('INVOKE_DEFAULT')     
 
             elif prog == "custom_object_matrix":
 
