@@ -104,7 +104,7 @@ class SetAngle(bpy.types.Operator):
 
             if prog == "global_matrix":
 
-                Clear_angle = 0
+                Clear_angle = False
 
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
@@ -121,7 +121,10 @@ class SetAngle(bpy.types.Operator):
                 if v3_prg == v1 :
                     # print("global matrix 1")
                     Clear_angle = 1
-                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
+                    if v2_prg[2] < 0:
+                        v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 1.0)  ))
+                    else:
+                        v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
                     v3 = wm @ v3
                     oldv3 = v3
                 if v2_prg == v1:
