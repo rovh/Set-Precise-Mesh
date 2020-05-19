@@ -95,7 +95,7 @@ class SetAngle(bpy.types.Operator):
             v3=vec[3] # 4 selected
             oldv3 = mathutils.Vector( vec[3] ) # 4 selected
 
-        if len(vec)==2:
+        elif len(vec)==2:
             length_selected_vert = "Two"
             Clear_angle = 0
 
@@ -118,8 +118,6 @@ class SetAngle(bpy.types.Operator):
                 wm = wm.inverted()
                               
                 v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
-
-                # print(v1, "Intermediate vertex trnsform")
                 
                 v3_prg = bpy.context.active_object.matrix_world  @ v3
                 if v3_prg == v1 :
@@ -128,16 +126,10 @@ class SetAngle(bpy.types.Operator):
                     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
                     v3 = wm @ v3
                     oldv3 = v3
-                # v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
-                # v3 = wm @ v3
-                # oldv3 = v3
-                # oldv3 = v3
+                if v2_prg == v1:
+                    print("This is warning")
+                    
                 v1 = wm @ v1  
-                # print(v1, "After vertex trnsform")
-                # oldv3 = v1
-                
-                # ind.append(ind[1])
-                # print("global matrix")
 
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
@@ -147,12 +139,11 @@ class SetAngle(bpy.types.Operator):
                 v2_prg = v2
                 v1 = v3
                 v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
-
                 v3_prg = v3
+
                 if v3_prg == v1 :
                     Clear_angle = 1
                     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
-                    # v3 = wm @ v3
                     oldv3 = v3
 
             elif prog == "cursor_location":
@@ -169,8 +160,6 @@ class SetAngle(bpy.types.Operator):
                 v1ch=v1-v2
                 v3ch=v3-v2
                 angle = v3ch.angle(v1ch, 0.0)
-                # print(angle, "angle1111111111111")
-                # if length_intersect != 0:
 
                 if angle == 0.0 :
                     print("Warning you need to make it")                 
@@ -322,7 +311,7 @@ class SetAngle(bpy.types.Operator):
             # Select vertices
             bm.verts[ind[0]].select = 0
             bm.verts[ind[1]].select = 1
-            print ("selection works")
+            # print ("selection works")
 
 
         context = bpy.context
