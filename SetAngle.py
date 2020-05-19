@@ -250,13 +250,13 @@ class SetAngle(bpy.types.Operator):
             elif prog == "custom_object_matrix":
 
                 obj_name = bpy.data.scenes[bpy.context.scene.name_full].my_property.name_full
+                obj_marx = bpy.data.objects[obj_name].matrix_world
 
                 wm = bpy.context.active_object.matrix_world.copy()
-                obj_marx = bpy.data.objects[obj_name].matrix_world
                 wm_c = obj_marx.copy()
 
-                # mat = wm @ wm_c
-                mat = wm_c
+                mat = wm @ wm_c
+                # mat = wm_c
 
 
                 # v2_prg = bpy.context.active_object.matrix_world  @ v2
