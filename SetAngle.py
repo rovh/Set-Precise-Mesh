@@ -85,7 +85,6 @@ class SetAngle(bpy.types.Operator):
 
         """Check list of selected vertices"""
         Clear_angle = 0
-        # lenvec = 0
 
         if len(vec) == 4:
             length_selected_vert = "Four"
@@ -112,7 +111,6 @@ class SetAngle(bpy.types.Operator):
 
                 v2_prg = bpy.context.active_object.matrix_world  @ v2
                 v1 = bpy.context.active_object.matrix_world  @ v3
-                # print(v1, "Before vertex trnsform")
 
                 wm = bpy.context.active_object.matrix_world.copy()
                 wm = wm.inverted()
