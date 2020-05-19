@@ -231,7 +231,7 @@ class Header_SetPreciseMesh (bpy.types.Operator):
         sub_col.prop_enum( w_m, "projection_type", "cursor_location")
         sub_col.prop_enum( w_m, "projection_type", "cursor_matrix")
 
-def header_draw(self, context):
+def   header_draw(self, context):
     layout = self.layout
     object_mode = bpy.context.active_object.mode
 
@@ -500,16 +500,21 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         "Global Matrix. It uses the matrix of the world",
 
         #description_2
-        "Custon Object Location. It uses the location of the specified object",
+        "Custon Object Location. It uses the location of the specified object ",
 
         #description_3
         "Custon Object Matrix. It uses the matrix of the specified object",
 
         #description_4
-        "Cursor Location. It uses the location of the 3d cursor",
+        'Cursor Location. It uses the location of the 3d cursor\n\
+To make it more convinient to use 3d cursor in the cursor settings You can enable\n\
+"Surface Project" and "Orintation: Geometry" ',
 
         #description_5
-        "Cursor Matrix. It uses the matrix of the 3d cursor",
+        'Cursor Matrix. It uses the matrix of the 3d cursor\n\
+To make it more convinient to use 3d cursor in the cursor settings You can enable\n\
+"Surface Project" and "Orintation: Geometry" ',
+
     ]
     projection_type: bpy.props.EnumProperty(
         name="Projection type",
