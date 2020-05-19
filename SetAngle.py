@@ -171,12 +171,15 @@ class SetAngle(bpy.types.Operator):
                     bpy.ops.object.dialog_warning_operator_3('INVOKE_DEFAULT') 
                
             elif prog == "cursor_matrix":
+                bpy.context.object.update_from_editmode()
+                bmesh.update_edit_mesh(me, True, True)
 
                 wm = bpy.context.active_object.matrix_world.copy()
-                wm_c = bpy.context.scene.cursor.matrix.copy()
+                # wm_c = bpy.context.scene.cursor.matrix.copy()
+                wm_c2 = bpy.context.scene.cursor.matrix.copy()
                 # mat_cur =  wm_c @ wm 
-                # wm_c = wm_c.inverted()
-                mat_cur =  wm @ wm_c
+                wm_c2 = wm_c2.inverted()
+                mat_cur =  wm @ wm_c2
                 # mat_cur =  wm_c
 
                 # wm = wm.inverted()
@@ -252,12 +255,13 @@ class SetAngle(bpy.types.Operator):
 
                 obj_name = bpy.data.scenes[bpy.context.scene.name_full].my_property.name_full
                 obj_marx = bpy.data.objects[obj_name].matrix_world
-                obj_loc = bpy.data.objects[obj_name].matrix_world.translation
+                # obj_loc = bpy.data.objects[obj_name].matrix_world.translation
 
                 wm = bpy.context.active_object.matrix_world.copy()
                 wm_c = obj_marx.copy()
+                obj_marx_invert = wm_c.inverted()
 
-                mat = wm @ wm_c
+                mat = wm @ obj_marx_invert
                 # mat = wm_c @ wm
                 # mat = obj_marx @ 
                 # mat = wm_c
@@ -285,7 +289,7 @@ class SetAngle(bpy.types.Operator):
                     # if v2_prg[2] < obj_loc[2]:
                     print(v2_prg[2])
                     print(obj_loc[2])
-                    if v2_prg[2] < obj_loc[2]:
+                    if v2_prg[2] < 0:
                         v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
                         print("not else")
                     else:
@@ -301,6 +305,8 @@ class SetAngle(bpy.types.Operator):
 
                 v1 = mat @ v1
                 # v1 = wm @ v1
+                bpy.context.object.update_from_editmode()
+                bmesh.update_edit_mesh(me, True, True)
         
         else:
             length_selected_vert = "Three"
