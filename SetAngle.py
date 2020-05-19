@@ -288,7 +288,7 @@ class SetAngle(bpy.types.Operator):
                     Clear_angle = 1
                     # if v2_prg[2] < obj_loc[2]:
                     print(v2_prg[2])
-                    print(obj_loc[2])
+                    # print(obj_loc[2])
                     if v2_prg[2] < 0:
                         v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
                         print("not else")
