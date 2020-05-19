@@ -25,7 +25,7 @@ def check(self):
         
 def check3(self):
     obj = bpy.context.object
-    text = "You need to select 3 vertices"
+    text = "You need to select more than 1 vertex"
     war = "ERROR"
     self.report({war}, text)
 
