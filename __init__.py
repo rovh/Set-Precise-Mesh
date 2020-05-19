@@ -113,7 +113,7 @@ class Dialog_Warning_Operator_3 (bpy.types.Operator):
     def invoke(self, context, event): 
 
         # return context.window_manager.invoke_props_dialog(self)
-        return context.window_manager.invoke_popup(self, width=250)
+        return context.window_manager.invoke_popup(self, width=280)
         # return context.window_manager.invoke_popup(self)
         # return context.window_manager.invoke_props_popup(self, event)
         # return context.window_manager.invoke_confirm(self, event)
@@ -121,7 +121,13 @@ class Dialog_Warning_Operator_3 (bpy.types.Operator):
     def draw(self, context):
         layout = self.layout
         lay = layout.label(text='Warning' , icon="ERROR")
-        lay = layout.label(text = "Angle between ")    
+        
+        row = layout.row()
+        row.label(icon = "DRIVER_ROTATIONAL_DIFFERENCE")
+        row.label(text = " = 0 ")
+        row.scale_x = 0.1
+
+        lay = layout.label(text = "Angle between your cursor or custom object is zero")    
 
 class Header_SetPreciseMesh     (bpy.types.Operator):
    
