@@ -186,7 +186,9 @@ class SetAngle(bpy.types.Operator):
 
                 wm = bpy.context.active_object.matrix_world.copy()
                 wm_c = bpy.context.scene.cursor.matrix.copy()
-                mat_cur = wm @ wm_c
+                mat_cur =  wm_c @ wm 
+                # mat_cur =  wm @ wm_c
+                # mat_cur =  wm_c
 
                 # wm = wm.inverted()
                 # wm_c = wm_c.inverted()
@@ -208,14 +210,12 @@ class SetAngle(bpy.types.Operator):
                 print(v3_prg)
                 print(v1)
 
-                wm = wm.inverted()
-                wm_c = wm_c.inverted()
                 mat_cur = mat_cur.inverted()
 
                 if v3_prg == v1:
                     print("Enter")
                     Clear_angle = 1
-                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 10.0)  ))
+                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 100.0)  ))
                     # v3 = bpy.context.scene.cursor.matrix @ v3
                     v3 = mat_cur @ v3
                     oldv3 = v3
