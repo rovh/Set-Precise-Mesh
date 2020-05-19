@@ -73,9 +73,9 @@ class SetAngle(bpy.types.Operator):
 
 
         # Check number
-        # if len(vec)<3:
-            # check3(self)
-            # return{"FINISHED"}
+        if len(vec)<2:
+            check3(self)
+            return{"FINISHED"}
 
         # Differrent cases for progection
         prog = context.window_manager.setprecisemesh.projection_type

@@ -485,21 +485,35 @@ class SetPreciseMesh_Props       (bpy.types.PropertyGroup):
         default=False,
     )
     description_projection_type = [
-        "Local Matrix" ,
-        "Global Matrix"
+        #description_0
+        "Local Matrix. It uses the matrix of the editing object" ,
 
+        #description_1
+        "Global Matrix. It uses the matrix of the world",
+
+        #description_2
+        "Custon Object Location. It uses the location of the specified object",
+
+        #description_3
+        "Custon Object Matrix. It uses the matrix of the specified object",
+
+        #description_4
+        "Cursor Location. It uses the location of the 3d cursor",
+
+        #description_5
+        "Cursor Matrix. It uses the matrix of the 3d cursor",
     ]
     projection_type: bpy.props.EnumProperty(
         name="Projection type",
         items=(
-            ("local_matrix"   , "Local Matrix  (Object)" , description_projection_type[0]   , "GRID"              , 0),
+            ("local_matrix"   , "Local Matrix  (Object)" , description_projection_type[0]  , "GRID"              , 0),
             ("global_matrix"  , "Global Matrix (World)"  , description_projection_type[1]  , "VIEW_PERSPECTIVE"  , 1),
             (None),
-            ("custom_object_location"  , "Custom Object Location" , "Custon Object Location", "EMPTY_ARROWS" , 2),
-            ("custom_object_matrix"    , "Custom Object Matrix"   , "Custon Object Matrix"  , "GRID"         , 3),
+            ("custom_object_location"  , "Custom Object Location" , description_projection_type[2] , "EMPTY_ARROWS", 2),
+            ("custom_object_matrix"    , "Custom Object Matrix"   , description_projection_type[3] , "GRID"        , 3),
             (None),
-            ("cursor_location", "Cursor Location", "Cursor Location", "EMPTY_ARROWS", 4),
-            ("cursor_matrix"  , "Cursor Matrix"  , "Cursor Matrix"  , "GRID"        , 5),
+            ("cursor_location", "Cursor Location", description_projection_type[4] , "EMPTY_ARROWS", 4),
+            ("cursor_matrix"  , "Cursor Matrix"  , description_projection_type[5] , "GRID"        , 5),
         ),
         description="Algorithm used for interpolation",
         default='global_matrix'
