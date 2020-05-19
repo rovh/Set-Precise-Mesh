@@ -182,7 +182,13 @@ class Header_SetPreciseMesh (bpy.types.Operator):
         # For Object
         sub_col = col_left.column(align = 0)
         sub_col.scale_y = 2.7
-        sub_col.label(icon='OBJECT_DATA')
+        sub_col.label(icon='PIVOT_CURSOR')
+
+
+        # For Cursor
+        sub_col = col_left.column(align = 0)
+        sub_col.scale_y = 1.65
+        sub_col.label(icon='OBJECT_DATA')  
 
         # Make space if
         prog = context.window_manager.setprecisemesh.projection_type
@@ -190,17 +196,11 @@ class Header_SetPreciseMesh (bpy.types.Operator):
         if prog == "custom_object_location" or  prog == "custom_object_matrix":
             sub_col = col_left.column(align = 0)
             sub_col.scale_y = 0.9
-            sub_col.label(icon='BLANK1')
-
-
-        # For Cursor
-        sub_col = col_left.column(align = 0)
-        sub_col.scale_y = 1.65
-        sub_col.label(icon='PIVOT_CURSOR')           
+            sub_col.label(icon='BLANK1')         
         
         # col_left.prop(w_m, "projection_type", expand = 1)
 
-        # Matrix
+        # Matrix menu
         sub_col = col_right.column(align = 1)
         # sub_col = sub_col.row()
         sub_col.prop_enum( w_m, "projection_type", "local_matrix")
@@ -211,7 +211,18 @@ class Header_SetPreciseMesh (bpy.types.Operator):
         sub_col.scale_y = 0.15
         sub_col = sub_col.label(text = "")
 
-        # Object
+        # Cursor menu
+        sub_col = col_right.column(align = 1)
+        sub_col.prop_enum( w_m, "projection_type", "cursor_location")
+        sub_col.prop_enum( w_m, "projection_type", "cursor_matrix")
+
+
+        # space
+        sub_col = col_right.column(align = 0)
+        sub_col.scale_y = 0.15
+        sub_col = sub_col.label(text = "")
+
+        # Object menu
         sub_col = col_right.column(align = 1)
         sub_col.prop_enum( w_m, "projection_type", "custom_object_location")
         sub_col.prop_enum( w_m, "projection_type", "custom_object_matrix")
@@ -221,15 +232,7 @@ class Header_SetPreciseMesh (bpy.types.Operator):
         if prog == "custom_object_location" or  prog == "custom_object_matrix":
             sub_col.prop(context.scene, "my_property", text = "")
 
-        # space
-        sub_col = col_right.column(align = 0)
-        sub_col.scale_y = 0.15
-        sub_col = sub_col.label(text = "")
 
-        # Cursor
-        sub_col = col_right.column(align = 1)
-        sub_col.prop_enum( w_m, "projection_type", "cursor_location")
-        sub_col.prop_enum( w_m, "projection_type", "cursor_matrix")
 
 def   header_draw(self, context):
     layout = self.layout
@@ -506,14 +509,14 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         "Custon Object Matrix. It uses the matrix of the specified object",
 
         #description_4
-        'Cursor Location. It uses the location of the 3d cursor\n\
-To make it more convinient to use 3d cursor in the cursor settings You can enable\n\
-"Surface Project" and "Orintation: Geometry" ',
+        'Cursor Location. It uses the location of the 3d cursor\
+        \n To make it more convinient to use 3d cursor in the cursor settings You can enable\
+        \n "Surface Project" and "Orintation: Geometry" ',
 
         #description_5
-        'Cursor Matrix. It uses the matrix of the 3d cursor\n\
-To make it more convinient to use 3d cursor in the cursor settings You can enable\n\
-"Surface Project" and "Orintation: Geometry" ',
+        'Cursor Matrix. It uses the matrix of the 3d cursor\
+        \n To make it more convinient to use 3d cursor in the cursor settings You can enable\
+        \n "Surface Project" and "Orintation: Geometry" ',
 
     ]
     projection_type: bpy.props.EnumProperty(
@@ -528,7 +531,7 @@ To make it more convinient to use 3d cursor in the cursor settings You can enabl
             ("cursor_location", "Cursor Location", description_projection_type[4] , "EMPTY_ARROWS", 4),
             ("cursor_matrix"  , "Cursor Matrix"  , description_projection_type[5] , "GRID"        , 5),
         ),
-        description="Algorithm used for interpolation",
+        description="Projection type",
         default='global_matrix'
         )
         
