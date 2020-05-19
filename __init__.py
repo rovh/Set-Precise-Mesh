@@ -83,11 +83,31 @@ class Dialog_Warning_Operator(bpy.types.Operator):
         layout.label(text='You can find more info about this warning in README.md on Github page or in files')
         # layout.label(text='https://github.com/rovh/Set-Precise-Mesh')
 
+class Dialog_Warning_Operator_2(bpy.types.Operator):
+    bl_idname = "object.dialog_warning_operator_2"
+    bl_label = "Warning Panel Operator"
+
+    def execute(self, context):
+        return {'FINISHED'}
+
+    def invoke(self, context, event): 
+
+        # return context.window_manager.invoke_props_dialog(self)
+        return context.window_manager.invoke_popup(self, width=250)
+        # return context.window_manager.invoke_popup(self)
+        # return context.window_manager.invoke_props_popup(self, event)
+        # return context.window_manager.invoke_confirm(self, event)
+
+    def draw(self, context):
+        layout = self.layout
+        lay = layout.label(text='Warning' , icon="ERROR")
+        lay = layout.label(text = "Your projection is perpendicular to the plane")
+
 class Popup_Menu_SetPreciseMesh_Operator(bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_operator"
     bl_label = "Pop-up Menu"
     bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
-         (For exaple Alt+R )\n \
+         ( For exaple Ctrl + Alt Wheel Down )\n \
         How to do it: > right-click on this button > Assign Shortcut"
         
     def execute(self, context):
@@ -474,6 +494,7 @@ blender_classes = [
     SetAngle,
     SetLength,
     Dialog_Warning_Operator,
+    Dialog_Warning_Operator_2,
     SetPreciseMesh_Props,
     SetPreciseMesh_Preferences,
     Popup_Menu_SetPreciseMesh_Operator,

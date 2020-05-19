@@ -127,7 +127,7 @@ class SetAngle(bpy.types.Operator):
                     v3 = wm @ v3
                     oldv3 = v3
                 if v2_prg == v1:
-                    print("This is warning")
+                    bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT') 
 
                 v1 = wm @ v1  
 
@@ -146,7 +146,7 @@ class SetAngle(bpy.types.Operator):
                     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
                     oldv3 = v3
                 if v2_prg == v1:
-                    print("This is warning 2 ")
+                    bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT')
 
             elif prog == "cursor_location":
                 wm = bpy.context.active_object.matrix_world.copy()
@@ -207,7 +207,7 @@ class SetAngle(bpy.types.Operator):
                     oldv3 = v3
                     print("Out ")
                 if v2_prg == v1:
-                    print("This is warning 4 ")  
+                    bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT')  
 
                 # v1 = bpy.context.scene.cursor.matrix @ v1
                 v1 = mat_cur @ v1
@@ -273,13 +273,11 @@ class SetAngle(bpy.types.Operator):
                     oldv3 = v3
                     print("WWWWWWWWOOOOOOOOOORRRRRRRKKKKKKKSSSSSSS")
                 if v2_prg == v1:
-                    print("This is warning 6 ")    
+                    bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT')   
 
 
                 v1 = mat @ v1
                 # v1 = wm @ v1
-
-                ind.append(ind[1])
         
         else:
             length_selected_vert = "Three"
@@ -483,7 +481,7 @@ class SetAngle(bpy.types.Operator):
                 iv3=v2
                 iv4=newv3
 
-                print(iv1, iv2, iv3, iv4, "Vertecises used for intersection")
+                # print(iv1, iv2, iv3, iv4, "Vertecises used for intersection")
                 
                 iv = geometry.intersect_line_line(iv1, iv2, iv3, iv4)
                 if iv:
@@ -496,13 +494,9 @@ class SetAngle(bpy.types.Operator):
                     
                     bpy.context.object.update_from_editmode()
                     bmesh.update_edit_mesh(me, True, True)
-            
-
         
         bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True, True)
-
-        
          
         return {'FINISHED'}
 if __name__ == "__main__":
