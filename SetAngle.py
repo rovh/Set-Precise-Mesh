@@ -187,8 +187,8 @@ class SetAngle(bpy.types.Operator):
                 cursor_matrix = cursor_matrix.inverted()
                 # obj_matrix = obj_matrix.inverted()
 
-                # mat_cur = obj_matrix @ cursor_matrix
-                mat_cur =  cursor_matrix @ obj_matrix
+                mat_cur = obj_matrix @ cursor_matrix
+                # mat_cur =  cursor_matrix @ obj_matrix
                 # mat_cur = cursor_matrix
     
                 v1 =  v3
@@ -209,7 +209,8 @@ class SetAngle(bpy.types.Operator):
                 if v3_prg == v1:
                     Clear_angle = True
 
-                    if v2_prg[2] < cursor_matrix_loc[0]:
+                    # if v2_prg[2] < cursor_matrix_loc[0]:
+                    if v2_prg[2] < 0:
                         v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
                         print("Location grater than")
                     else:
@@ -218,12 +219,13 @@ class SetAngle(bpy.types.Operator):
                     v3 = mat_cur @ v3
                     oldv3 = v3
 
-                v1 = mat_cur @ v1
-
-
                 # if v2_prg == v1:
                 if v2_prg == v1:
                     bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT')
+
+                v1 = mat_cur @ v1
+
+
 
                 
 
@@ -281,8 +283,6 @@ class SetAngle(bpy.types.Operator):
                 
                 mat = mat.inverted()
 
-                
-
                 if v3_prg == v1 :
                     Clear_angle = 1
                     
@@ -293,10 +293,11 @@ class SetAngle(bpy.types.Operator):
                     v3 = mat @ v3
                     oldv3 = v3
 
+                if v2_prg == v1:
+                    bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT')
+                       
                 v1 = mat @ v1
 
-                if v2_prg == v1:
-                    bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT')   
 
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
