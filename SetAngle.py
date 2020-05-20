@@ -25,7 +25,7 @@ def check(self):
         
 def check3(self):
     obj = bpy.context.object
-    text = "You need to select more than 1 vertex"
+    text = "You need to select from 1 to 4 vertices"
     war = "ERROR"
     self.report({war}, text)
 
@@ -73,7 +73,7 @@ class SetAngle(bpy.types.Operator):
 
 
         # Check number
-        if len(vec)<2:
+        if len(vec)<2 or len(vec) > 4:
             check3(self)
             return{"FINISHED"}
 
@@ -295,7 +295,7 @@ class SetAngle(bpy.types.Operator):
 
                 if v2_prg == v1:
                     bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT')
-                       
+
                 v1 = mat @ v1
 
 
@@ -386,6 +386,7 @@ class SetAngle(bpy.types.Operator):
         mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
 
         mat_out =  mat_loc @  mat_rot @  mat_sca
+
 
 
         S = mat_out
