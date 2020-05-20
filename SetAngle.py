@@ -175,17 +175,20 @@ class SetAngle(bpy.types.Operator):
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
                 bpy.context.scene.update_tag()
+                bpy.context.view_layer.update()
+                # bpy.context.depsgraph.update()
 
-                obj_matrix = bpy.context.active_object.matrix_world.copy()
-                cursor_matrix = bpy.context.scene.cursor.matrix.copy()
-                # cursor_loc =  bpy.context.scene.cursor.location
                 cursor_matrix_loc = bpy.context.scene.cursor.matrix.translation
+                        
+                obj_matrix = bpy.context.active_object.matrix_world.copy()
+                # cursor_loc =  bpy.context.scene.cursor.location
 
-                # cursor_matrix = cursor_matrix.inverted()
-                obj_matrix = obj_matrix.inverted()
+                cursor_matrix = bpy.context.scene.cursor.matrix.copy()
+                cursor_matrix = cursor_matrix.inverted()
+                # obj_matrix = obj_matrix.inverted()
 
-                mat_cur = obj_matrix @ cursor_matrix
-                # mat_cur =  cursor_matrix @ obj_matrix
+                # mat_cur = obj_matrix @ cursor_matrix
+                mat_cur =  cursor_matrix @ obj_matrix
                 # mat_cur = cursor_matrix
     
                 v1 =  v3
@@ -227,6 +230,7 @@ class SetAngle(bpy.types.Operator):
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
                 bpy.context.scene.update_tag()
+                bpy.context.view_layer.update()
 
             elif prog == "custom_object_location": 
 
@@ -257,10 +261,10 @@ class SetAngle(bpy.types.Operator):
 
                 obj_name = bpy.data.scenes[bpy.context.scene.name_full].my_property.name_full
                 custom_obj_matrix = bpy.data.objects[obj_name].matrix_world
-                obj_matrix = bpy.context.active_object.matrix_world.copy()
-
                 custom_obj_matrix = custom_obj_matrix.copy()
                 custom_obj_matrix = custom_obj_matrix.inverted()
+
+                obj_matrix = bpy.context.active_object.matrix_world.copy()
 
                 mat = obj_matrix @ custom_obj_matrix
 
