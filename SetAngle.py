@@ -499,6 +499,7 @@ class SetAngle(bpy.types.Operator):
                 # iv2=newv3
                 # iv3=v2
                 # iv4=oldv3
+                
 
                 iv1=v1
                 iv2=oldv3
@@ -508,6 +509,7 @@ class SetAngle(bpy.types.Operator):
                 # print(iv1, iv2, iv3, iv4, "qqqqqqqqqqqqqqq")
                 
                 iv = geometry.intersect_line_line(iv1, iv2, iv3, iv4)
+                # print(iv)
                 if iv:
                     iv = (iv[0] + iv[1]) / 2
 
