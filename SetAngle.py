@@ -174,6 +174,7 @@ class SetAngle(bpy.types.Operator):
 
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
+                bpy.context.scene.update_tag()
 
                 obj_matrix = bpy.context.active_object.matrix_world.copy()
                 cursor_matrix = bpy.context.scene.cursor.matrix.copy()
@@ -225,7 +226,7 @@ class SetAngle(bpy.types.Operator):
 
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
-
+                bpy.context.scene.update_tag()
 
             elif prog == "custom_object_location": 
 
