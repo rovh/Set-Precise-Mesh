@@ -174,8 +174,8 @@ class SetAngle(bpy.types.Operator):
 
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
-                # bpy.context.scene.update_tag()
-                # bpy.context.view_layer.update()
+                bpy.context.scene.update_tag()
+                bpy.context.view_layer.update()
                 # bpy.context.depsgraph.update()
 
                         
@@ -186,14 +186,14 @@ class SetAngle(bpy.types.Operator):
                 cursor_matrix = cursor_matrix.inverted()
                 # obj_matrix = obj_matrix.inverted()
 
-                mat_cur = obj_matrix @ cursor_matrix
-                # mat_cur =  cursor_matrix @ obj_matrix
+                # mat_cur = obj_matrix @ cursor_matrix
+                mat_cur =  cursor_matrix @ obj_matrix
                 # mat_cur = cursor_matrix
 
-                cursor_matrix_loc = bpy.context.scene.cursor.matrix.translation
-                cursor_matrix_loc = cursor_matrix @ cursor_matrix_loc
+                # cursor_matrix_loc = bpy.context.scene.cursor.matrix.translation
+                # cursor_matrix_loc = mat_cur @ cursor_matrix_loc
+                # cursor_matrix_loc = mat_cur @ cursor_matrix_loc
 
-    
                 v1 =  v3
                 v1 = mat_cur @ v1
 
@@ -212,13 +212,18 @@ class SetAngle(bpy.types.Operator):
                 if v3_prg == v1:
                     Clear_angle = True
 
+                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 1000000000.0)  ))
+
+
+                    # if v2_prg[2] < 0:
                     # if v2_prg[2] < cursor_matrix_loc[2]:
-                    if v2_prg[2] < 0:
-                        v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
-                        print("Location grater than")
-                    else:
-                        v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 100.0)  ))
-                        print("Location lower than")
+                    #     print(v2_prg[2])
+                    #     print(cursor_matrix_loc[2])
+                    #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
+                    #     print("Location grater than")
+                    # else:
+                    #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 100.0)  ))
+                    #     print("Location lower than")
                     v3 = mat_cur @ v3
                     oldv3 = v3
 
@@ -227,10 +232,6 @@ class SetAngle(bpy.types.Operator):
                     bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT')
 
                 v1 = mat_cur @ v1
-
-
-
-                
 
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
@@ -263,6 +264,8 @@ class SetAngle(bpy.types.Operator):
 
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
+                bpy.context.scene.update_tag()
+                bpy.context.view_layer.update()
 
                 obj_name = bpy.data.scenes[bpy.context.scene.name_full].my_property.name_full
                 custom_obj_matrix = bpy.data.objects[obj_name].matrix_world
@@ -271,7 +274,15 @@ class SetAngle(bpy.types.Operator):
 
                 obj_matrix = bpy.context.active_object.matrix_world.copy()
 
+                # obj_matrix_invert = obj_matrix.inverted()
+
+                # custom_obj_matrix = bpy.data.objects[obj_name].matrix_world
                 mat = obj_matrix @ custom_obj_matrix
+                # mat = custom_obj_matrix @ obj_matrix
+
+                # custom_obj_loc = bpy.data.objects[obj_name].matrix_world.translation
+                # custom_obj_loc = custom_obj_loc.copy()
+                # custom_obj_loc =  custom_obj_loc @ obj_matrix_invert
 
                 v3_prg =  v3
                 v3_prg = mat @ v3_prg
@@ -287,12 +298,15 @@ class SetAngle(bpy.types.Operator):
                 mat = mat.inverted()
 
                 if v3_prg == v1 :
-                    Clear_angle = 1
+                    Clear_angle = True
+
+                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
                     
-                    if v2_prg[2] < 0:
-                        v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
-                    else:
-                        v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 100.0)  ))
+                    # if v2_prg[2] < 0:
+                    # if v2_prg[2] < custom_obj_loc[2]:
+                    #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
+                    # else:
+                    #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 100.0)  ))
                     v3 = mat @ v3
                     oldv3 = v3
 
@@ -304,6 +318,8 @@ class SetAngle(bpy.types.Operator):
 
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
+                bpy.context.scene.update_tag()
+                bpy.context.view_layer.update()
         
         else:
             length_selected_vert = "Three"
