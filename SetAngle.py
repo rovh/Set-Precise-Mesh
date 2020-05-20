@@ -276,7 +276,7 @@ class SetAngle(bpy.types.Operator):
                 
                 mat = mat.inverted()
 
-                v1 = mat @ v1
+                
 
                 if v3_prg == v1 :
                     Clear_angle = 1
@@ -287,6 +287,8 @@ class SetAngle(bpy.types.Operator):
                         v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 100.0)  ))
                     v3 = mat @ v3
                     oldv3 = v3
+
+                v1 = mat @ v1
 
                 if v2_prg == v1:
                     bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT')   
