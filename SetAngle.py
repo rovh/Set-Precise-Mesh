@@ -169,8 +169,8 @@ class SetAngle(bpy.types.Operator):
 
                 v1 = bpy.context.scene.cursor.location
 
-                length_of_v1 = (v2_prg - v1).length
-                print(length_of_v1)
+                # length_of_v1 = (v2_prg - v1).length
+                # print(length_of_v1)
 
 
                 v1 = wm @ v1
@@ -224,8 +224,7 @@ class SetAngle(bpy.types.Operator):
                 if v3_prg == v1:
                     Clear_angle = True
 
-                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 1000000000.0)  ))
-
+                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
 
                     # if v2_prg[2] < 0:
                     # if v2_prg[2] < cursor_matrix_loc[2]:
@@ -236,14 +235,18 @@ class SetAngle(bpy.types.Operator):
                     # else:
                     #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 100.0)  ))
                     #     print("Location lower than")
+
                     v3 = mat_cur @ v3
                     oldv3 = v3
 
+                
                 # if v2_prg == v1:
                 if v2_prg == v1:
                     bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT')
 
                 v1 = mat_cur @ v1
+
+                
 
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
