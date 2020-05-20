@@ -122,8 +122,8 @@ class SetAngle(bpy.types.Operator):
                     # print("global matrix 1")
                     Clear_angle = 1
 
-                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 1.0)  ))
-                    
+                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
+
                     # if v2_prg[2] < 0:
                     #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 1.0)  ))
                     # else:
@@ -148,10 +148,14 @@ class SetAngle(bpy.types.Operator):
 
                 if v3_prg == v1 :
                     Clear_angle = 1
-                    if v2_prg[2] < 0:
-                        v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 1.0)  ))
-                    else:
-                        v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
+
+                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
+
+                    # if v2_prg[2] < 0:
+                    #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 1.0)  ))
+                    # else:
+                    #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
+
                     oldv3 = v3
                 if v2_prg == v1:
                     bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT')
