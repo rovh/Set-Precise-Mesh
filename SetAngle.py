@@ -174,11 +174,10 @@ class SetAngle(bpy.types.Operator):
 
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
-                bpy.context.scene.update_tag()
-                bpy.context.view_layer.update()
+                # bpy.context.scene.update_tag()
+                # bpy.context.view_layer.update()
                 # bpy.context.depsgraph.update()
 
-                cursor_matrix_loc = bpy.context.scene.cursor.matrix.translation
                         
                 obj_matrix = bpy.context.active_object.matrix_world.copy()
                 # cursor_loc =  bpy.context.scene.cursor.location
@@ -190,6 +189,10 @@ class SetAngle(bpy.types.Operator):
                 mat_cur = obj_matrix @ cursor_matrix
                 # mat_cur =  cursor_matrix @ obj_matrix
                 # mat_cur = cursor_matrix
+
+                cursor_matrix_loc = bpy.context.scene.cursor.matrix.translation
+                cursor_matrix_loc = cursor_matrix @ cursor_matrix_loc
+
     
                 v1 =  v3
                 v1 = mat_cur @ v1
@@ -209,7 +212,7 @@ class SetAngle(bpy.types.Operator):
                 if v3_prg == v1:
                     Clear_angle = True
 
-                    # if v2_prg[2] < cursor_matrix_loc[0]:
+                    # if v2_prg[2] < cursor_matrix_loc[2]:
                     if v2_prg[2] < 0:
                         v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
                         print("Location grater than")
@@ -386,7 +389,6 @@ class SetAngle(bpy.types.Operator):
         mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
 
         mat_out =  mat_loc @  mat_rot @  mat_sca
-
 
 
         S = mat_out
