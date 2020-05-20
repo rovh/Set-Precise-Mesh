@@ -178,8 +178,8 @@ class SetAngle(bpy.types.Operator):
                 obj_matrix = bpy.context.active_object.matrix_world.copy()
                 cursor_matrix = bpy.context.scene.cursor.matrix.copy()
 
-                cursor_matrix = cursor_matrix.inverted()
-                # obj_matrix = obj_matrix.inverted()
+                # cursor_matrix = cursor_matrix.inverted()
+                obj_matrix = obj_matrix.inverted()
 
                 mat_cur =   obj_matrix @ cursor_matrix
     
