@@ -109,7 +109,7 @@ class Dialog_Warning_Operator_2 (bpy.types.Operator):
         
         lay = layout.label(text = "Your angle projection is perpendicular to the matrix (plane)")
         # lay = layout.label(text = "Your rotation can be not correct")
-        lay = layout.label(text = "Please, change move one of the selected vertices")
+        lay = layout.label(text = "Please, move one of the selected vertices")
 
 class Dialog_Warning_Operator_3 (bpy.types.Operator):
     bl_idname = "object.dialog_warning_operator_3"

@@ -164,10 +164,14 @@ class SetAngle(bpy.types.Operator):
                 wm = bpy.context.active_object.matrix_world.copy()
                 wm = wm.inverted()
 
-                v3_prg = bpy.context.active_object.matrix_world  @ v3
+                # v3_prg = bpy.context.active_object.matrix_world  @ v3
                 v2_prg =  bpy.context.active_object.matrix_world @ v2
 
                 v1 = bpy.context.scene.cursor.location
+
+                length_of_v1 = (v2_prg - v1).length
+                print(length_of_v1)
+
 
                 v1 = wm @ v1
 
