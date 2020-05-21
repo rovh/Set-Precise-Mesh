@@ -48,14 +48,14 @@ If you enable "Change two directions" the length will change based on the two se
 
 ---
 * # <a name="some_explanation">Some Explanation</a>
-    ## Warning Panel
+   *## Warning Panel
 
  https://www.canva.com/design/DAD7-RCbGng/view
 
  https://www.canva.com/design/DAD7-f0Kyt0/view
 
 ---
-* ## <a name="issues">Issues</a>
+* # <a name="issues">Issues</a>
 
 <a href="https://drive.google.com/file/d/1oczmblzCjmVg-TWA_adjX7Eyg8xwRS90/preview" target="_self">
 <img src="https://i.imgur.com/HrPixOg.png" width=50% height=50% alt"Angle" style="border-radius: 30px">
