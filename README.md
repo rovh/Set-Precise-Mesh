@@ -56,3 +56,7 @@ If you enable "Change two directions" the length will change based on the two se
 >
 ---
 ### <a name="issues">Issues</a>
+
+<a href="https://drive.google.com/file/d/1oczmblzCjmVg-TWA_adjX7Eyg8xwRS90/preview" target="_self">
+<img src="https://i.imgur.com/HrPixOg.png" width=50% height=50% alt"Angle" style="border-radius: 30px">
+</a>
