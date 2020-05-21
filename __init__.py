@@ -20,8 +20,11 @@ bl_info = {
     "location" : "View3D > Sidebar in Edit Mode > Item Tab and View Tab",
     "warning" : "",
     "wiki_url": "https://github.com/rovh/Set-Precise-Mesh",
-    "category" : "Mesh"
+    "category" : "Mesh",
+    # "tracker_url": "https://github.com/rovh/Set-Precise-Mesh",
+    # "new_info": "https://github.com/rovh/Set-Precise-Mesh",
 }
+
 
 import bpy
 
@@ -493,6 +496,8 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             col_top.prop(w_m, "lengthbool") 
                      
             # col_top.prop(ob, "lengthinput")
+            # col_top.operator(bpy.ops.ui.eyedropper_id.idname())
+            col_top.operator(bpy.ops.wm.url_open(url = "https://github.com/rovh/Set-Precise-Mesh"))
 
 """Preferences"""
 class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
@@ -522,7 +527,10 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
     def draw(self, context):
         layout = self.layout
         layout.label(icon="PREFERENCES")
-
+        layout.label(icon="IMPORT", text = "If you don't like this version you can download the previous one or download the next one if there is one")
+        # layout.label(text = "https://github.com/rovh/Set-Precise-Mesh")
+        layout.operator(bpy.ops.wm.url_open())
+        
         row = layout.row()
         col = row.column()
         # col.label(text="Tab Category:")
