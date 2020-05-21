@@ -240,13 +240,12 @@ def   header_draw(self, context):
         sub = row.row()
 
         # row.ui_units_x = 4.5
-        # sub.scale_x = 0.9
-        sub.operator("wm.header_setprecisemesh_operator", text="Angle Simulation", icon = "MOD_SIMPLIFY")
-
-        sub = row.row()
-        # sub.scale_x = 0.5
-        sub = sub.operator("mesh.set_cursor", text="Set Cursor", icon = "ORIENTATION_CURSOR")
+        sub.scale_x = 1.2
+        sub = sub.operator("mesh.set_cursor", text="", icon = "ORIENTATION_CURSOR")
         
+        sub = row.row()
+        sub.operator("wm.header_setprecisemesh_operator", text="Angle Simulation", icon = "MOD_SIMPLIFY")
+        # sub.scale_x = 0.5
         # row.ui_units_x = 100
 
 class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
@@ -396,42 +395,13 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
         normallistgl = vec
         normalgl = mathutils.geometry.normal(normallistgl)
 
-
         # Set cursor direction
-        # if prog != "cursor_location" and prog != "cursor_matrix":
-        obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor
-        # loc_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor.matrix.to_translation()         
+        obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
         direction = normalgl
         # point the cameras '-Z' and use its 'Y' as up
-        # rot_quat = direction.to_track_quat('-Z', 'Y')
         rot_quat = direction.to_track_quat('-Z', 'Y')
-        # print(rot_quat)
-
-        
-
         obj_camera.rotation_euler = rot_quat.to_euler()
         rot_quat =  rot_quat.to_euler()
-
-        # print(rot_quat)
-
-        # Create Matrix
-        # mat_loc =  mathutils.Matrix.Translation( matrix_location  )        
-        # mat_sca =  mathutils.Matrix.Scale( 1.0 ,  4 ,  normalgl )
-        # mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
-        # mat_rot =  mathutils.Matrix.Rotation( 0  ,  4 , normalgl )
-
-        # mat_out =  mat_loc @  mat_rot @  mat_sca
-
-        # bpy.context.scene.cursor.matrix = mat_out
-
-        # mat_out = mat_out.to_3x3()
-
-        # mat_out = mat_out.rotate(rot_quat)
-        # mat_out = mat_out.to_quaternion()
-
-        # mat_out.rotate(rot_quat)
-
-        # mat_out = mat_out.to_4x4()
 
         
 

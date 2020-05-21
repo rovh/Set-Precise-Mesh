@@ -16,15 +16,14 @@ from mathutils import Vector, Matrix, Quaternion, Euler
 
 
 def check(self):
-    obj = bpy.context.object
-
+    # obj = bpy.context.object
     # Check scale
     if obj.scale != Vector((1.0, 1.0, 1.0)) or obj.delta_scale != Vector((1.0, 1.0, 1.0)):
         bpy.ops.object.dialog_warning_operator('INVOKE_DEFAULT') 
     
         
 def check3(self):
-    obj = bpy.context.object
+    # obj = bpy.context.object
     text = "You need to select from 1 to 4 vertices"
     war = "ERROR"
     self.report({war}, text)
@@ -407,7 +406,7 @@ class SetAngle(bpy.types.Operator):
         # Set cursor direction
         if prog != "cursor_location" and prog != "cursor_matrix":
             obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor
-            loc_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor.matrix.to_translation()         
+            # loc_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor.matrix.to_translation()         
             direction = normalgl
             # point the cameras '-Z' and use its 'Y' as up
             rot_quat = direction.to_track_quat('-Z', 'Y')
