@@ -336,8 +336,8 @@ class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
 class Set_Cursor_To_Normal (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.set_cursor"
-    bl_label = "Set Cursor"
-    bl_description = "Set Angle \n You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
+    bl_label = "Set Cursor to normal face"
+    bl_description = "You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod
@@ -576,29 +576,32 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
     )
     description_projection_type = [
         #description_0
-        "Local Matrix. It uses the matrix of the editing object" ,
+        "Local Matrix. It uses the matrix of the editing object and projects the selected vertices onto it" ,
 
         #description_1
-        "Global Matrix. It uses the matrix of the world",
+        "Global Matrix. It uses the matrix of the world and projects the selected vertices onto it",
 
         #description_2
-        "Custon Object Location. It uses the location of the specified object ",
+        "Custon Object Location. It uses the location of the specified object to simulate an angle",
 
         #description_3
-        "Custon Object Matrix. It uses the matrix of the specified object",
+        "Custon Object Matrix. It uses the matrix of the specified object\
+        \nand projects the selected vertices onto it",
 
         #description_4
-        'Cursor Location. It uses the location of the 3d cursor\
+        'Cursor Location. It uses the location of the 3d cursor to simulate an angle\
         \n To make it more convinient to use 3d cursor in the cursor settings You can enable\
         \n "Surface Project" and "Orintation: Geometry" ',
 
         #description_5
         'Cursor Matrix. It uses the matrix of the 3d cursor\
-        \n To make it more convinient to use 3d cursor in the cursor settings You can enable\
-        \n "Surface Project" and "Orintation: Geometry" ',
+        \n To make it more convinient to use 3d cursor You can use\
+        \n "Set Cursor to normal face" which you can find next to "Angle Simulation"\
+        \n Also in the cursor settings You can enable\
+        \n "Surface Project" and "Orintation: Geometry" (Warning: Use it very carefully for "Cursor Matrix")',
     ]
     projection_type: bpy.props.EnumProperty(
-        name="Projection type",
+        name="Angle Simulation",
         items=(
             ("local_matrix"   , "Local Matrix  (Object)" , description_projection_type[0]  , "GRID"              , 0),
             ("global_matrix"  , "Global Matrix (World)"  , description_projection_type[1]  , "VIEW_PERSPECTIVE"  , 1),
@@ -609,7 +612,7 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
             ("cursor_location", "Cursor Location", description_projection_type[4] , "EMPTY_ARROWS", 4),
             ("cursor_matrix"  , "Cursor Matrix"  , description_projection_type[5] , "GRID"        , 5),
         ),
-        description="Projection type",
+        description="Angle Simulation",
         default='global_matrix'
         )
         
