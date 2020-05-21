@@ -347,6 +347,9 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
         bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True, True)
+        bpy.context.scene.update_tag()
+        bpy.context.view_layer.update()
+
         
         #Create lists
         vec = []
@@ -378,7 +381,8 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
         loc_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor.matrix.to_translation()         
         direction = normalgl
         # point the cameras '-Z' and use its 'Y' as up
-        rot_quat = direction.to_track_quat('-Z', 'Y')
+        # rot_quat = direction.to_track_quat('-Z', 'Y')
+        rot_quat = direction.to_track_quat('-Z', 'X')
         obj_camera.rotation_euler = rot_quat.to_euler()
 
         print(normalgl," Normal was calculated")

@@ -240,8 +240,8 @@ class SetAngle(bpy.types.Operator):
                     oldv3 = v3
 
                 
-                # if v2_prg == v1:
                 if v2_prg == v1:
+                # if v2 == v1:
                     bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT')
 
                 v1 = mat_cur @ v1
@@ -558,6 +558,6 @@ class SetAngle(bpy.types.Operator):
         bmesh.update_edit_mesh(me, True, True)
          
         return {'FINISHED'}
-        
+
 if __name__ == "__main__":
     register()
