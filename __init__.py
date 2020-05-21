@@ -241,7 +241,7 @@ def   header_draw(self, context):
         sub = row.row()
         # row.ui_units_x = 4.5
         # row.scale_x = 1 
-        row.operator("wm.header_setprecisemesh_operator", text="Angle Projection", icon = "AXIS_TOP")
+        row.operator("wm.header_setprecisemesh_operator", text="Angle Simulation", icon = "AXIS_TOP")
 
 class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_operator"
@@ -388,10 +388,6 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
         print(normalgl," Normal was calculated")
 
         return {'FINISHED'}
-
-
-
-
 
 """Main Panel"""
 class SetPresiceMesh_Panel (bpy.types.Panel):
