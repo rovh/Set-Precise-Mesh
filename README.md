@@ -43,7 +43,7 @@ If you enable "Change two directions" the length will change based on the two se
 ### Angle Simulation
 
 ---
-### Explanation for Warning Panel
+### Warning Panel
 
 https://www.canva.com/design/DAD7-RCbGng/view
 
