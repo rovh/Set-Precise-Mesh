@@ -412,6 +412,21 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
         return {'FINISHED'}
 
+class Browser_Link (bpy.types.Operator):
+    """Tooltip"""
+    bl_idname = "wm.setprecisemesh_link"
+    bl_label = "Change version"
+    bl_description = ""
+    bl_options = {'REGISTER', 'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        bpy.ops.wm.url_open(url = "https://github.com/rovh/Set-Precise-Mesh/releases")
+        return {"FINISHED"}
+
 """Main Panel"""
 class SetPresiceMesh_Panel (bpy.types.Panel):
     
@@ -497,7 +512,8 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
                      
             # col_top.prop(ob, "lengthinput")
             # col_top.operator(bpy.ops.ui.eyedropper_id.idname())
-            col_top.operator(bpy.ops.wm.url_open(url = "https://github.com/rovh/Set-Precise-Mesh"))
+            # col_top.operator(bpy.ops.wm.url_open(url = "https://github.com/rovh/Set-Precise-Mesh"))
+            
 
 """Preferences"""
 class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
@@ -527,9 +543,11 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
     def draw(self, context):
         layout = self.layout
         layout.label(icon="PREFERENCES")
-        layout.label(icon="IMPORT", text = "If you don't like this version you can download the previous one or download the next one if there is one")
-        # layout.label(text = "https://github.com/rovh/Set-Precise-Mesh")
-        layout.operator(bpy.ops.wm.url_open())
+        row = layout.row()
+        row.scale_x = 0.5
+        row.label(icon="INFO", text = "If you don't like this version you can download the previous one or download the next one if there is one")
+        layout.operator("wm.setprecisemesh_link",icon="RECOVER_LAST", text="Change version")
+
         
         row = layout.row()
         col = row.column()
@@ -657,10 +675,10 @@ blender_classes = [
     Popup_Menu_SetPreciseMesh_Operator,
     Header_SetPreciseMesh,
     Set_Cursor_To_Normal,
+    Browser_Link,
 
 
 ]
-
 
 def register():
     for blender_class in blender_classes:
