@@ -514,7 +514,6 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             # col_top.operator(bpy.ops.ui.eyedropper_id.idname())
             # col_top.operator(bpy.ops.wm.url_open(url = "https://github.com/rovh/Set-Precise-Mesh"))
             
-
 """Preferences"""
 class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
     # this must match the addon name, use '__package__'
@@ -543,9 +542,10 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
     def draw(self, context):
         layout = self.layout
         layout.label(icon="PREFERENCES")
+
         row = layout.row()
         row.scale_x = 0.5
-        row.label(icon="INFO", text = "If you don't like this version you can download the previous one or download the next one if there is one")
+        row.label(icon="INFO", text = "If you don't like this version you can download the previous version or download the next version if it exists")
         layout.operator("wm.setprecisemesh_link",icon="RECOVER_LAST", text="Change version")
 
         
