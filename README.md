@@ -4,8 +4,8 @@ Right now “Set Precise Mesh” allows users to set exact values of the angle b
 
 > ## Contents
 
-> * Set Angle
-> * Set Length
+* Set Angle
+* Set Length
 * Angle Simulation
 * Add-on Preferences
 * Explanation
