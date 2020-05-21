@@ -541,21 +541,25 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
 
     def draw(self, context):
         layout = self.layout
-        layout.label(icon="PREFERENCES")
-
-        row = layout.row()
-        row.scale_x = 0.5
-        row.label(icon="INFO", text = "If you don't like this version you can download the previous version or download the next version if it exists")
-        layout.operator("wm.setprecisemesh_link",icon="RECOVER_LAST", text="Change version")
+        
+        # col = layout.column()
 
         
-        row = layout.row()
+        box = layout.box()
+        box.label(icon="PREFERENCES", text = "Preferences")
+        row = box.row()
         col = row.column()
         # col.label(text="Tab Category:")
         col.prop(self, "direction_of_length", text='Invert "Set Length" direction')
         # col.prop(self, "direction_of_angle", text='Invert "Set Angle" direction')
         col.operator("wm.menu_setprecisemesh_operator",icon="MENU_PANEL", text="Pop-up Menu (Hover cursor on it for more information)")
         col.prop(self, "bool_warning_global", text='Show Warning Panel in Blender (Global)')
+        # row = layout.row()
+        # row.scale_x = 0.1
+        col.label(icon="INFO", text = "If you don't like this version you can download the previous version or download the next version if it exists:")
+        col.operator("wm.setprecisemesh_link",icon="RECOVER_LAST", text="Change version")
+
+
 
 """Props"""
 class SetPreciseMesh_Props (bpy.types.PropertyGroup):
