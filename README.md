@@ -48,7 +48,7 @@ If you enable "Change two directions" the length will change based on the two se
 
 ---
 * # <a name="some_explanation">Some Explanation</a>
-   *## Warning Panel
+   * ## Warning Panel
 
  https://www.canva.com/design/DAD7-RCbGng/view
 
