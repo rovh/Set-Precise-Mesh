@@ -21,7 +21,7 @@ bl_info = {
     "warning" : "",
     "wiki_url": "https://github.com/rovh/Set-Precise-Mesh",
     "category" : "Mesh",
-    # "tracker_url": "https://github.com/rovh/Set-Precise-Mesh",
+    "tracker_url": "https://github.com/rovh/Set-Precise-Mesh/issues",
     # "new_info": "https://github.com/rovh/Set-Precise-Mesh",
 }
 
