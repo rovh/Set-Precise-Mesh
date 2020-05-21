@@ -327,6 +327,68 @@ class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
                        
             # col_top.prop(ob, "lengthinput")
 
+"""Operators"""
+class Set_Cursor_To_Normal (bpy.types.Operator):
+    """Tooltip"""
+    bl_idname = "mesh.set_cursor"
+    bl_label = "Set Cursor"
+    bl_description = "Set Angle \n You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        return context.active_object is not None
+
+    def execute(self, context):
+
+        obj = bpy.context.edit_object
+        me = obj.data
+        bm = bmesh.from_edit_mesh(me)
+
+        bpy.context.object.update_from_editmode()
+        bmesh.update_edit_mesh(me, True, True)
+        
+        #Create lists
+        vec = []
+        ind = []
+
+        #Append to lists                                                            
+        for g in bm.select_history:
+            # if len(vec)<3:
+                vec.append(bm.verts[g.index].co)
+                # ind.append(g.index)
+
+        selected_faces = [face for face in bm.faces if face.select]
+        my_location = selected_faces[0].calc_center_median()
+
+        g = len(vec)
+        # print(g)
+        for k in range (0, g):
+            vec[k] = bpy.context.active_object.matrix_world  @ vec[k] # 1 selected
+
+        normallistgl = vec
+        # normallistgl = [vec1,vec2,vec3]
+        normalgl = mathutils.geometry.normal(normallistgl)
+
+        bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world @ my_location
+
+        # Set cursor direction
+        # if prog != "cursor_location" and prog != "cursor_matrix":
+        obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor
+        loc_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor.matrix.to_translation()         
+        direction = normalgl
+        # point the cameras '-Z' and use its 'Y' as up
+        rot_quat = direction.to_track_quat('-Z', 'Y')
+        obj_camera.rotation_euler = rot_quat.to_euler()
+
+        print(normalgl," Normal was calculated")
+
+        return {'FINISHED'}
+
+
+
+
+
 """Main Panel"""
 class SetPresiceMesh_Panel (bpy.types.Panel):
     
@@ -563,6 +625,7 @@ blender_classes = [
     SetPreciseMesh_Preferences,
     Popup_Menu_SetPreciseMesh_Operator,
     Header_SetPreciseMesh,
+    Set_Cursor_To_Normal,
 
 
 ]

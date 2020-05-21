@@ -558,5 +558,6 @@ class SetAngle(bpy.types.Operator):
         bmesh.update_edit_mesh(me, True, True)
          
         return {'FINISHED'}
+        
 if __name__ == "__main__":
     register()
