@@ -230,7 +230,6 @@ class Header_SetPreciseMesh (bpy.types.Operator):
         #     sub_col.prop(context.scene, "my_property", text = "")
         sub_col.prop(context.scene, "my_property", text = "")
 
-
 def   header_draw(self, context):
     layout = self.layout
     object_mode = bpy.context.active_object.mode
@@ -241,7 +240,7 @@ def   header_draw(self, context):
         sub = row.row()
         # row.ui_units_x = 4.5
         # row.scale_x = 1 
-        row.operator("wm.header_setprecisemesh_operator", text="Angle Simulation", icon = "AXIS_TOP")
+        row.operator("wm.header_setprecisemesh_operator", text="Angle Simulation", icon = "MOD_SIMPLIFY")
 
 class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_operator"
@@ -363,6 +362,8 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
         selected_faces = [face for face in bm.faces if face.select]
         my_location = selected_faces[0].calc_center_median()
+        # bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world @ my_location
+        matrix_location = bpy.context.active_object.matrix_world @ my_location
 
         g = len(vec)
         # print(g)
@@ -370,10 +371,8 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
             vec[k] = bpy.context.active_object.matrix_world  @ vec[k] # 1 selected
 
         normallistgl = vec
-        # normallistgl = [vec1,vec2,vec3]
         normalgl = mathutils.geometry.normal(normallistgl)
 
-        bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world @ my_location
 
         # Set cursor direction
         # if prog != "cursor_location" and prog != "cursor_matrix":
@@ -384,6 +383,20 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
         # rot_quat = direction.to_track_quat('-Z', 'Y')
         rot_quat = direction.to_track_quat('-Z', 'X')
         obj_camera.rotation_euler = rot_quat.to_euler()
+        print(rot_quat)
+
+        # Create Matrix
+        mat_loc =  mathutils.Matrix.Translation( matrix_location )        
+        mat_sca =  mathutils.Matrix.Scale( 1.0 ,  4 ,  ( 0.0 ,  0.0 ,  1.0 ))
+        mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
+
+        mat_out =  mat_loc @  mat_rot @  mat_sca
+
+        # mat_out = mat_out.resize_4x4()
+
+        mat_out = mat_out.rotate(rot_quat.to_euler())
+
+        bpy.context.scene.cursor.matrix = mat_out
 
         print(normalgl," Normal was calculated")
 
