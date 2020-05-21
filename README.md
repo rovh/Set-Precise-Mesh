@@ -4,8 +4,7 @@ Right now “Set Precise Mesh” allows users to set exact values of the angle b
 
 ## Contents
 
-* Set Angle
-<a href="#top">ТЕКСТ ССЫЛКИ</a>
+* <a href="#set_angle">Set Angle</a>
 * Set Length
 * Angle Simulation
 * Add-on Preferences
@@ -14,8 +13,7 @@ Right now “Set Precise Mesh” allows users to set exact values of the angle b
 * Issues
 
 ---
-### Set Angle
-<a name="top">Text</a>
+### <a name="set_angle">Set Angle</a>
 <a href="https://drive.google.com/file/d/138wmaauvSyV0Aqim1AJA02god0OnEpcg/preview" target="_self">
 <img src="https://i.imgur.com/XBiNgOg.png" width=50% height=50% alt"Angle" style="border-radius: 30px">
 </a>
