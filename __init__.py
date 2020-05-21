@@ -475,7 +475,16 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             col_top = box.column(align=True)
             
             col_top.prop(w_m, "angle")
-            col_top.template_ID(context.view_layer.objects, "active", filter='AVAILABLE')
+
+            # st = bpy.context.space_data
+            # text = st.text
+
+            # col_top.template_ID( st, "text", new="text.new", unlink="text.unlink", open="text.open")
+            # col_top.template_ID(context.view_layer.objects, "active", filter='AVAILABLE')
+            col_top.template_ID( w_m, "data_block", filter='ALL')
+            
+            
+            
             col_top.prop(w_m, "anglebool" )
             # col_top.prop(self, "projection_type")
             # col_top.prop(ob, "angleinput")
@@ -603,6 +612,8 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         description='User Mode',
         default=False,
     )
+    data_block: bpy.props.FloatProperty()
+
     description_projection_type = [
         #description_0
         "Local Matrix. It uses the matrix of the editing object and projects the selected vertices onto it" ,
