@@ -236,11 +236,18 @@ def   header_draw(self, context):
 
     if object_mode in {'EDIT'}:
         
-        row = layout.row(align=1)
+        row = layout.row(align=0)
         sub = row.row()
+
         # row.ui_units_x = 4.5
-        # row.scale_x = 1 
-        row.operator("wm.header_setprecisemesh_operator", text="Angle Simulation", icon = "MOD_SIMPLIFY")
+        # sub.scale_x = 0.9
+        sub.operator("wm.header_setprecisemesh_operator", text="Angle Simulation", icon = "MOD_SIMPLIFY")
+
+        sub = row.row()
+        # sub.scale_x = 0.5
+        sub = sub.operator("mesh.set_cursor", text="Set Cursor", icon = "ORIENTATION_CURSOR")
+        
+        # row.ui_units_x = 100
 
 class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_operator"
@@ -349,6 +356,13 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
         bpy.context.scene.update_tag()
         bpy.context.view_layer.update()
 
+    
+        # obj = bpy.context.object
+        # text = "You need to select from 1 to 4 vertices"
+        # war = "ERROR"
+        # self.report({war}, text)
+
+
         
         #Create lists
         vec = []
@@ -361,9 +375,18 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
                 # ind.append(g.index)
 
         selected_faces = [face for face in bm.faces if face.select]
-        my_location = selected_faces[0].calc_center_median()
-        # bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world @ my_location
+        try:
+            my_location = selected_faces[0].calc_center_median()
+        except IndexError:
+            text = "You need to select all vertices of the face"
+            war = "ERROR"
+            self.report({war}, text)
+
+            return {"FINISHED"}
+
+        
         matrix_location = bpy.context.active_object.matrix_world @ my_location
+        bpy.context.scene.cursor.location = matrix_location
 
         g = len(vec)
         # print(g)
@@ -377,28 +400,42 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
         # Set cursor direction
         # if prog != "cursor_location" and prog != "cursor_matrix":
         obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor
-        loc_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor.matrix.to_translation()         
+        # loc_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor.matrix.to_translation()         
         direction = normalgl
         # point the cameras '-Z' and use its 'Y' as up
         # rot_quat = direction.to_track_quat('-Z', 'Y')
-        rot_quat = direction.to_track_quat('-Z', 'X')
+        rot_quat = direction.to_track_quat('-Z', 'Y')
+        # print(rot_quat)
+
+        
+
         obj_camera.rotation_euler = rot_quat.to_euler()
-        print(rot_quat)
+        rot_quat =  rot_quat.to_euler()
+
+        # print(rot_quat)
 
         # Create Matrix
-        mat_loc =  mathutils.Matrix.Translation( matrix_location )        
-        mat_sca =  mathutils.Matrix.Scale( 1.0 ,  4 ,  ( 0.0 ,  0.0 ,  1.0 ))
-        mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
+        # mat_loc =  mathutils.Matrix.Translation( matrix_location  )        
+        # mat_sca =  mathutils.Matrix.Scale( 1.0 ,  4 ,  normalgl )
+        # mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
+        # mat_rot =  mathutils.Matrix.Rotation( 0  ,  4 , normalgl )
 
-        mat_out =  mat_loc @  mat_rot @  mat_sca
+        # mat_out =  mat_loc @  mat_rot @  mat_sca
 
-        # mat_out = mat_out.resize_4x4()
+        # bpy.context.scene.cursor.matrix = mat_out
 
-        mat_out = mat_out.rotate(rot_quat.to_euler())
+        # mat_out = mat_out.to_3x3()
 
-        bpy.context.scene.cursor.matrix = mat_out
+        # mat_out = mat_out.rotate(rot_quat)
+        # mat_out = mat_out.to_quaternion()
 
-        print(normalgl," Normal was calculated")
+        # mat_out.rotate(rot_quat)
+
+        # mat_out = mat_out.to_4x4()
+
+        
+
+        # print(normalgl," Normal was calculated")
 
         return {'FINISHED'}
 

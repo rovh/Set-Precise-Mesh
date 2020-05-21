@@ -186,8 +186,8 @@ class SetAngle(bpy.types.Operator):
 
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
-                bpy.context.scene.update_tag()
-                bpy.context.view_layer.update()
+                # bpy.context.scene.update_tag()
+                # bpy.context.view_layer.update()
                 # bpy.context.depsgraph.update()
 
                         
@@ -250,8 +250,8 @@ class SetAngle(bpy.types.Operator):
 
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
-                bpy.context.scene.update_tag()
-                bpy.context.view_layer.update()
+                # bpy.context.scene.update_tag()
+                # bpy.context.view_layer.update()
 
             elif prog == "custom_object_location": 
 
