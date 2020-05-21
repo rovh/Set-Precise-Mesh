@@ -475,6 +475,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             col_top = box.column(align=True)
             
             col_top.prop(w_m, "angle")
+            col_top.template_ID(context.view_layer.objects, "active", filter='AVAILABLE')
             col_top.prop(w_m, "anglebool" )
             # col_top.prop(self, "projection_type")
             # col_top.prop(ob, "angleinput")
@@ -558,8 +559,6 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
         # row.scale_x = 0.1
         col.label(icon="INFO", text = "If you don't like this version you can download the previous version or download the next version if it exists:")
         col.operator("wm.setprecisemesh_link",icon="RECOVER_LAST", text="Change version")
-
-
 
 """Props"""
 class SetPreciseMesh_Props (bpy.types.PropertyGroup):
