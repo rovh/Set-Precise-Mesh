@@ -8,6 +8,7 @@ Right now “Set Precise Mesh” allows users to set exact values of the angle b
 * Angle Simulation
 * Add-on Preferences
 * Explanation
+    * Explanation for Warning Panel
 * Issues
 
 ---
@@ -37,6 +38,9 @@ To change the angle script uses a normal based on the three selected vertexes:
 To change the length of the edge it is necessary to select two verteces. The last selected vertex (active vertex) will change its length, i.e. last selected vertex will be moved.
 
 If you enable "Change two directions" the length will change based on the two selected vertexes i.e. two selceted vertexes will be moved.
+
+---
+### Angle Simulation
 
 ---
 ### Explanation for Warning Panel
