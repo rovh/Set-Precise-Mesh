@@ -13,7 +13,7 @@ Right now “Set Precise Mesh” allows users to set exact values of the angle b
 * <a href="#issues">Issues</a>
 
 ---
-* ## <a name="set_angle">Set Angle</a>
+* # <a name="set_angle">Set Angle</a>
 <a href="https://drive.google.com/file/d/138wmaauvSyV0Aqim1AJA02god0OnEpcg/preview" target="_self">
 <img src="https://i.imgur.com/XBiNgOg.png" width=50% height=50% alt"Angle" style="border-radius: 30px">
 </a>
@@ -31,7 +31,7 @@ To change the angle script uses a normal based on the three selected vertexes:
 </a>
 
 ---
-* ## <a name="set_length">Set Length</a>
+* # <a name="set_length">Set Length</a>
 <a href="https://drive.google.com/file/d/1NndKw_OcC51AqroSHMey70PDRMuPhotp/preview" target="_self">
 <img src="https://i.imgur.com/Wovj1ub.png" width=50% height=50% alt"Angle" style="border-radius: 30px">
 </a>
@@ -41,21 +41,21 @@ To change the length of the edge it is necessary to select two verteces. The las
 If you enable "Change two directions" the length will change based on the two selected vertexes i.e. two selceted vertexes will be moved.
 
 ---
-* ## <a name ="angle_simulation">Angle Simulation</a>
+* # <a name ="angle_simulation">Angle Simulation</a>
 
 ---
-* ## <a name ="add-on_preferences">Add-on Preferences</a>
+* # <a name ="add-on_preferences">Add-on Preferences</a>
 
 ---
-* ## <a name="some_explanation">Some Explanation</a>
-    #### Warning Panel
+* # <a name="some_explanation">Some Explanation</a>
+    ## Warning Panel
 
  https://www.canva.com/design/DAD7-RCbGng/view
 
  https://www.canva.com/design/DAD7-f0Kyt0/view
 
 ---
-* ### <a name="issues">Issues</a>
+* ## <a name="issues">Issues</a>
 
 <a href="https://drive.google.com/file/d/1oczmblzCjmVg-TWA_adjX7Eyg8xwRS90/preview" target="_self">
 <img src="https://i.imgur.com/HrPixOg.png" width=50% height=50% alt"Angle" style="border-radius: 30px">
