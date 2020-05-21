@@ -16,7 +16,7 @@ from mathutils import Vector, Matrix, Quaternion, Euler
 
 
 def check(self):
-    # obj = bpy.context.object
+    obj = bpy.context.object
     # Check scale
     if obj.scale != Vector((1.0, 1.0, 1.0)) or obj.delta_scale != Vector((1.0, 1.0, 1.0)):
         bpy.ops.object.dialog_warning_operator('INVOKE_DEFAULT') 
