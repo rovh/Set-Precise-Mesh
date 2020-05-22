@@ -37,6 +37,7 @@ from bpy.props import (
         BoolProperty,
         PointerProperty,
         EnumProperty,
+        StringProperty,
         )
 
 """Pop up menus"""
@@ -427,6 +428,65 @@ class Browser_Link (bpy.types.Operator):
         bpy.ops.wm.url_open(url = "https://github.com/rovh/Set-Precise-Mesh/releases")
         return {"FINISHED"}
 
+items = [('one', 'Any', "", 'PRESET', 1), ('two', 'PropertyGroup', "", 'PRESET', 2), ('three', 'type', "", 'PRESET', 3)]
+
+class ChooseItemOperator(bpy.types.Operator):
+    bl_idname = "example.choose_item"
+    bl_label = "Choose item"
+    bl_options = {'INTERNAL'}
+    bl_property = "enum"
+
+    def get_enum_options(self, context):
+        global items
+        return items
+
+    enum: EnumProperty(items=get_enum_options, name="Items")
+    node_tree: StringProperty()
+    node: StringProperty()
+
+    def execute(self, context):
+        tree = bpy.data.node_groups[self.node_tree]
+        node = tree.nodes[self.node]
+        node.item_set = true
+        node.set_item(self.enum)
+        return {"FINISHED"}
+
+    def invoke(self, context, event):
+        context.window_manager.invoke_search_popup(self)
+        return {"FINISHED"}
+
+class NewItemOperator(bpy.types.Operator):
+    bl_idname = "example.new_item"
+    bl_label = "New Item"
+    bl_options = {'INTERNAL'}
+
+    node_tree: StringProperty()
+    node: StringProperty()
+
+    def execute(self, context):
+        global items
+        tree = bpy.data.node_groups[self.node_tree]
+        node = tree.nodes[self.node]
+        node.item_set = True
+        newitem = ('four', 'type', "", 'PRESET', 4)
+        items.append(newitem)
+        node.set_item(newitem)
+        return {'FINISHED'}
+
+class ClearItemOperator(bpy.types.Operator):
+    bl_idname = "example.clear_item"
+    bl_label = "Clear Item"
+    bl_options = {'INTERNAL'}
+
+    node_tree: StringProperty()
+    node: StringProperty()
+
+    def execute(self, context):
+        tree = bpy.data.node_groups[self.node_tree]
+        node = tree.nodes[self.node]
+        node.item_set = False
+        return {'FINISHED'}
+
 """Main Panel"""
 class SetPresiceMesh_Panel (bpy.types.Panel):
     
@@ -481,8 +541,20 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
 
             # col_top.template_ID( st, "text", new="text.new", unlink="text.unlink", open="text.open")
             # col_top.template_ID(context.view_layer.objects, "active", filter='AVAILABLE')
-            col_top.template_ID( w_m, "data_block", filter='ALL')
-            
+            # col_top.template_ID( w_m, "data_block", filter='ALL')
+            group = layout.row(align=True)
+            choose_props = group.operator('example.choose_item', text="", icon='PRESET')
+            if self.item_set:
+                group.prop(self.get_item(), "name", text="", expand=True)
+                clear_props = group.operator('example.clear_item', icon='X', text="")
+                clear_props.node_tree = self.id_data.name
+                clear_props.node = self.name
+            else:
+                new_props = group.operator('example.new_item', icon='ADD', text='New')
+                new_props.node_tree = self.id_data.name
+                new_props.node = self.name
+            choose_props.node_tree = self.id_data.name
+            choose_props.name = self.name
             
             
             col_top.prop(w_m, "anglebool" )
@@ -690,8 +762,9 @@ blender_classes = [
     Header_SetPreciseMesh,
     Set_Cursor_To_Normal,
     Browser_Link,
-
-
+    ChooseItemOperator,
+    NewItemOperator,
+    ClearItemOperator,
 ]
 
 def register():
