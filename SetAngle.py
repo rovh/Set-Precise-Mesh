@@ -52,14 +52,20 @@ class SetAngle(bpy.types.Operator):
         script_input = bpy.context.scene.script_input
 
         if script_input == 1:
+
             try:
                 eval(data_block)
             except SyntaxError:
                 height = bpy.context.window_manager.setprecisemesh.angle
             else:
                 height = eval(data_block)
-                bpy.context.window_manager.setprecisemesh.angle = radians(height)
-                height = bpy.context.window_manager.setprecisemesh.angle
+
+                if bpy.context.scene.unit_settings.system_rotation == 'DEGREES':
+                    bpy.context.window_manager.setprecisemesh.angle = radians(height)
+                    height = bpy.context.window_manager.setprecisemesh.angle
+                else:
+                    bpy.context.window_manager.setprecisemesh.angle = height
+                    height = bpy.context.window_manager.setprecisemesh.angle
         else:
             height = bpy.context.window_manager.setprecisemesh.angle
             
