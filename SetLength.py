@@ -16,9 +16,6 @@ from mathutils import Vector, Matrix, Quaternion, Euler
 from . import __name__
 
 
-
-
-
 def check(self):
     obj = bpy.context.object    
 
@@ -54,7 +51,31 @@ class SetLength(bpy.types.Operator):
         check(self)
 
         # Set values
-        length = bpy.context.window_manager.setprecisemesh.length
+        data_block_2 = bpy.context.window_manager.setprecisemesh.data_block_2
+        script_input_2 = bpy.context.scene.script_input_2
+        
+        if script_input_2 == 1:
+
+            try:
+                eval(data_block_2)
+            except SyntaxError:
+                length = bpy.context.window_manager.setprecisemesh.length
+            else:
+                length = eval(data_block_2)
+                bpy.context.window_manager.setprecisemesh.length = length
+
+                # if bpy.context.scene.unit_settings.system_rotation == 'DEGREES':
+                #     bpy.context.window_manager.setprecisemesh.angle = radians(height)
+                #     height = bpy.context.window_manager.setprecisemesh.angle
+                # else:
+                #     bpy.context.window_manager.setprecisemesh.angle = height
+                #     height = bpy.context.window_manager.setprecisemesh.angle
+        else:
+            length = bpy.context.window_manager.setprecisemesh.length
+
+
+
+
         bool = bpy.context.window_manager.setprecisemesh.lengthbool
         bool2 = bpy.context.window_manager.setprecisemesh.lengthinput
         
