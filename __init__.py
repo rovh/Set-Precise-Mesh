@@ -487,20 +487,6 @@ class ClearItemOperator(bpy.types.Operator):
         node.item_set = False
         return {'FINISHED'}
 
-def draw_buttons(self, context, layout):
-    group = layout.row(align=True)
-    choose_props = group.operator('example.choose_item', text="", icon='PRESET')
-    if self.item_set:
-        group.prop(self.get_item(), "name", text="", expand=True)
-        clear_props = group.operator('example.clear_item', icon='X', text="")
-        clear_props.node_tree = self.id_data.name
-        clear_props.node = self.name
-    else:
-        new_props = group.operator('example.new_item', icon='ADD', text='New')
-        new_props.node_tree = self.id_data.name
-        new_props.node = self.name
-    choose_props.node_tree = self.id_data.name
-    choose_props.name = self.name
 
 """Main Panel"""
 class SetPresiceMesh_Panel (bpy.types.Panel):
@@ -514,7 +500,6 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
     bl_options = {'DEFAULT_CLOSED'}
     bl_label = "Set Precise Mesh / CAD"
 
-    
     
     def draw(self, context):
         layout = self.layout
@@ -559,8 +544,29 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             # col_top.template_ID( st, "text", new="text.new", unlink="text.unlink", open="text.open")
             # col_top.template_ID(context.view_layer.objects, "active", filter='AVAILABLE')
             # col_top.template_ID( w_m, "data_block", filter='ALL')
-        draw_buttons(self, context, layout)
+        # draw_buttons()
+
+        def draw_buttons(self, context, layout):
+            group = layout.row(align=True)
+            choose_props = group.operator('example.choose_item', text="", icon='PRESET')
+            if self.item_set:
+                group.prop(self.get_item(), "name", text="", expand=True)
+                clear_props = group.operator('example.clear_item', icon='X', text="")
+                clear_props.node_tree = self.id_data.name
+                clear_props.node = self.name
+            else:
+                new_props = group.operator('example.new_item', icon='ADD', text='New')
+                new_props.node_tree = self.id_data.name
+                new_props.node = self.name
+
+            choose_props.node_tree = self.id_data.name
+            choose_props.name = self.name
             
+        draw_buttons(self, context, layout)
+
+    
+
+        
         col_top.prop(w_m, "anglebool" )
             # col_top.prop(self, "projection_type")
             # col_top.prop(ob, "angleinput")
