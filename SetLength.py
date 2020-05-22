@@ -70,7 +70,7 @@ class SetLength(bpy.types.Operator):
                     unit = length / 1000000
                     bpy.context.window_manager.setprecisemesh.length =  unit
                     length = unit
-                elif length_unit == "MILIMETERS":
+                elif length_unit == "MILLIMETERS":
                     unit = length / 1000
                     bpy.context.window_manager.setprecisemesh.length =  unit
                     length = unit
