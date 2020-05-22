@@ -52,6 +52,10 @@ class SetLength(bpy.types.Operator):
 
         # Set values
         data_block_2 = bpy.context.window_manager.setprecisemesh.data_block_2
+
+        data_block_2 = data_block_2.replace(',', '.')
+        data_block_2 = data_block_2.replace('^', '**')
+
         script_input_2 = bpy.context.scene.script_input_2
         length_unit = bpy.context.scene.unit_settings.length_unit
 
@@ -64,6 +68,7 @@ class SetLength(bpy.types.Operator):
                 length = bpy.context.window_manager.setprecisemesh.length
             else:
                 length = eval(data_block_2)
+                
 
 
                 if length_unit == "MICROMETERS":
