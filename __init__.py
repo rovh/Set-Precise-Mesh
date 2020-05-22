@@ -717,8 +717,12 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         description='User Mode',
         default=False,
     )
-    data_block: bpy.props.StringProperty()
-    data_block_2: bpy.props.StringProperty()
+    data_block: bpy.props.StringProperty(
+        name = "Number input", 
+    )
+    data_block_2: bpy.props.StringProperty(
+        name = "Number input",
+    )
 
     description_projection_type = [
         #description_0
