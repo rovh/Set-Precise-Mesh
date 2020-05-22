@@ -65,6 +65,29 @@ class SetLength(bpy.types.Operator):
             else:
                 length = eval(data_block_2)
 
+
+                if length_unit == "MICROMETERS":
+                    unit = length / 1000000
+                    bpy.context.window_manager.setprecisemesh.length =  unit
+                    length = unit
+                elif length_unit == "MILIMETERS":
+                    unit = length / 1000
+                    bpy.context.window_manager.setprecisemesh.length =  unit
+                    length = unit
+                elif length_unit == "CENTIMETERS":
+                    unit = length / 100
+                    bpy.context.window_manager.setprecisemesh.length =  unit
+                    length = unit
+                elif length_unit == "METERS":
+                    unit = length
+                    bpy.context.window_manager.setprecisemesh.length =  unit
+                    length = unit
+                elif length_unit == "KILOMETERS":
+                    unit = length * 1000
+                    bpy.context.window_manager.setprecisemesh.length =  unit
+                    length = unit
+
+
                 if length_unit == 'MILES':
                     unit = length  / 0.00062137119223733
                     bpy.context.window_manager.setprecisemesh.length =  unit
