@@ -68,6 +68,8 @@ class SetLength(bpy.types.Operator):
                 length = bpy.context.window_manager.setprecisemesh.length
             else:
                 length = eval(data_block_2)
+                length = length / bpy.context.scene.unit_settings.scale_length
+
                 
 
 
