@@ -50,6 +50,7 @@ class SetAngle(bpy.types.Operator):
         # Get values
         data_block = bpy.context.window_manager.setprecisemesh.data_block
         script_input = bpy.context.scene.script_input
+        system_rotation = bpy.context.scene.unit_settings.system_rotation
 
         if script_input == 1:
 
@@ -60,12 +61,12 @@ class SetAngle(bpy.types.Operator):
             else:
                 height = eval(data_block)
 
-                if bpy.context.scene.unit_settings.system_rotation == 'DEGREES':
+                if  system_rotation == 'DEGREES':
                     bpy.context.window_manager.setprecisemesh.angle = radians(height)
-                    height = bpy.context.window_manager.setprecisemesh.angle
+                    height = radians(height)
                 else:
                     bpy.context.window_manager.setprecisemesh.angle = height
-                    height = bpy.context.window_manager.setprecisemesh.angle
+                    # height = bpy.context.window_manager.setprecisemesh.angle
         else:
             height = bpy.context.window_manager.setprecisemesh.angle
             

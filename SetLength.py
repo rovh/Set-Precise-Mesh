@@ -3,8 +3,8 @@ import bpy
 import bmesh
 
 import math
-from math import radians
-from math import pi
+# from math import radians
+# from math import pi
 
 from bmesh.types import BMVert
 
@@ -53,6 +53,8 @@ class SetLength(bpy.types.Operator):
         # Set values
         data_block_2 = bpy.context.window_manager.setprecisemesh.data_block_2
         script_input_2 = bpy.context.scene.script_input_2
+        length_unit = bpy.context.scene.unit_settings.length_unit
+
         
         if script_input_2 == 1:
 
@@ -62,14 +64,26 @@ class SetLength(bpy.types.Operator):
                 length = bpy.context.window_manager.setprecisemesh.length
             else:
                 length = eval(data_block_2)
-                bpy.context.window_manager.setprecisemesh.length = length
 
-                # if bpy.context.scene.unit_settings.system_rotation == 'DEGREES':
-                #     bpy.context.window_manager.setprecisemesh.angle = radians(height)
-                #     height = bpy.context.window_manager.setprecisemesh.angle
+                if length_unit == 'MILES':
+                    unit = length  / 0.00062137119223733
+                    bpy.context.window_manager.setprecisemesh.length =  unit
+                    length = unit
+                elif length_unit == 'FEET':
+                    unit = length / 3.2808398950131
+                    bpy.context.window_manager.setprecisemesh.length =  unit
+                    length = unit
+                elif length_unit == 'INCHES':
+                    unit = length / 39.370078740157
+                    bpy.context.window_manager.setprecisemesh.length =  unit
+                    length = unit
+                elif length_unit == 'THOU':
+                    unit = length / 3.2808398950131
+                    bpy.context.window_manager.setprecisemesh.length =  unit
+                    length = unit
                 # else:
-                #     bpy.context.window_manager.setprecisemesh.angle = height
-                #     height = bpy.context.window_manager.setprecisemesh.angle
+                #     bpy.context.window_manager.setprecisemesh.length = length
+                #     length = bpy.context.window_manager.setprecisemesh.angle
         else:
             length = bpy.context.window_manager.setprecisemesh.length
 
