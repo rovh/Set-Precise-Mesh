@@ -275,64 +275,64 @@ class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
 
         # return context.window_manager.invoke_props_popup(self, event)
         # return context.window_manager.invoke_confirm(self, event)
-
-    
     def draw(self, context):
-        layout = self.layout
+        bpy.types.VIEW3D_PT_edit_mesh_set_precise_mesh1.draw(self, context)
+    # def draw(self, context):
+    #     layout = self.layout
 
-        scene = context.scene
-        sc = scene
-        ob = context.object
+    #     scene = context.scene
+    #     sc = scene
+    #     ob = context.object
 
-        w_m = context.window_manager.setprecisemesh
+    #     w_m = context.window_manager.setprecisemesh
 
-        # Get values
-        bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
-        bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
+    #     # Get values
+    #     bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
+    #     bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
 
-        col = layout.column(align=True)
+    #     col = layout.column(align=True)
         
-        split = col.split(factor=0.85, align=True)
-        split.scale_y =1.2      
+    #     split = col.split(factor=0.85, align=True)
+    #     split.scale_y =1.2      
 
-        split.operator("mesh.change_angle", icon="DRIVER_ROTATIONAL_DIFFERENCE")
+    #     split.operator("mesh.change_angle", icon="DRIVER_ROTATIONAL_DIFFERENCE")
 
         
     
-        if sc.bool_panel_arrow:
-            split.prop(sc, "bool_panel_arrow", text="", icon='DOWNARROW_HLT')
-        else:
-            split.prop(sc, "bool_panel_arrow", text="", icon='RIGHTARROW')
+    #     if sc.bool_panel_arrow:
+    #         split.prop(sc, "bool_panel_arrow", text="", icon='DOWNARROW_HLT')
+    #     else:
+    #         split.prop(sc, "bool_panel_arrow", text="", icon='RIGHTARROW')
 
-        if sc.bool_panel_arrow:
+    #     if sc.bool_panel_arrow:
             
-            box = col.column(align=True).box().column()
-            col_top = box.column(align=True)
+    #         box = col.column(align=True).box().column()
+    #         col_top = box.column(align=True)
             
-            col_top.prop(w_m, "angle")
-            col_top.prop(w_m, "anglebool" )
-            # col_top.prop(ob, "angleinput")         
+    #         col_top.prop(w_m, "angle")
+    #         col_top.prop(w_m, "anglebool" )
+    #         # col_top.prop(ob, "angleinput")         
                     
-        col = layout.column(align=False)
-        col = layout.column(align=True)
+    #     col = layout.column(align=False)
+    #     col = layout.column(align=True)
 
         
-        split = col.split(factor=0.85, align=True)
-        split.scale_y =1.2
+    #     split = col.split(factor=0.85, align=True)
+    #     split.scale_y =1.2
         
-        split.operator("mesh.change_length",icon="DRIVER_DISTANCE")
+    #     split.operator("mesh.change_length",icon="DRIVER_DISTANCE")
         
     
-        if sc.bool_panel_arrow2:
-            split.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
-        else:
-            split.prop(sc, "bool_panel_arrow2", text="", icon='RIGHTARROW')
+    #     if sc.bool_panel_arrow2:
+    #         split.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
+    #     else:
+    #         split.prop(sc, "bool_panel_arrow2", text="", icon='RIGHTARROW')
 
-        if sc.bool_panel_arrow2:            
-            box = col.column(align=True).box().column()            
-            col_top = box.column(align=True)
-            col_top.prop(w_m, "length")            
-            col_top.prop(w_m, "lengthbool") 
+    #     if sc.bool_panel_arrow2:            
+    #         box = col.column(align=True).box().column()            
+    #         col_top = box.column(align=True)
+    #         col_top.prop(w_m, "length")            
+    #         col_top.prop(w_m, "lengthbool") 
                        
             # col_top.prop(ob, "lengthinput")
 
@@ -767,30 +767,30 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         )
         
 """Duplication of Main panel"""
-# class Dupli (SetPresiceMesh_Panel):
-    # bl_label = "Set Presice Mesh1"
-    # bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh1"
-    # bl_space_type = 'VIEW_3D'
-    # bl_region_type = 'UI'
-    # bl_category = "View"
-    # bl_label = "Set Precise Mesh /CAD"
+class Dupli (SetPresiceMesh_Panel):
+    bl_label = "Set Presice Mesh1"
+    bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh1"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = "View"
+    bl_label = "Set Precise Mesh /CAD"
 
     # bl_order = 1
  
-# class Dupli2 (SetPresiceMesh_Panel):
-    # bl_label = "Set Presice Mesh2"
-    # bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh2"
-    # bl_space_type = 'VIEW_3D'
-    # bl_region_type = 'UI'
-    # bl_category = "Item"
-    # bl_label = "Set Precise Mesh /CAD"
+class Dupli2 (SetPresiceMesh_Panel):
+    bl_label = "Set Presice Mesh2"
+    bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh2"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = "Item"
+    bl_label = "Set Precise Mesh /CAD"
     # bl_order = 1
     
 """Classes registration"""
 blender_classes = [
-    # Dupli,
-    # Dupli2,
-    SetPresiceMesh_Panel,
+    Dupli,
+    Dupli2,
+    # SetPresiceMesh_Panel,
     SetAngle,
     SetLength,
     Dialog_Warning_Operator,
