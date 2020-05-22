@@ -78,12 +78,9 @@ class SetLength(bpy.types.Operator):
                     bpy.context.window_manager.setprecisemesh.length =  unit
                     length = unit
                 elif length_unit == 'THOU':
-                    unit = length / 3.2808398950131
+                    unit = length / 39.370078740157 / 1000
                     bpy.context.window_manager.setprecisemesh.length =  unit
                     length = unit
-                # else:
-                #     bpy.context.window_manager.setprecisemesh.length = length
-                #     length = bpy.context.window_manager.setprecisemesh.angle
         else:
             length = bpy.context.window_manager.setprecisemesh.length
 
