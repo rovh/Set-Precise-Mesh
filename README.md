@@ -8,7 +8,7 @@ Right now “Set Precise Mesh” allows users to set exact values of the angle b
 * <a href="#set_length">Set Length</a>
 * <a href="#angle_simulation">Angle Simulation</a>
 * <a href="#add-on_preferences">Add-on Preferences</a>
-* <a href="#some_explanation">Some Explanation</a>
+* <a href="#some_explanation">Some Explanation and Notes</a>
     * Warning Panel
 * <a href="#issues">Issues</a>
 
@@ -47,7 +47,7 @@ If you enable "Change two directions" the length will change based on the two se
 * # <a name ="add-on_preferences">Add-on Preferences</a>
 
 ---
-* # <a name="some_explanation">Some Explanation</a>
+* # <a name="some_explanation">Some Explanation and Notes</a>
    >* ## Warning Panel
    >
    > https://www.canva.com/design/DAD7-RCbGng/view
