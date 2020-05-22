@@ -535,8 +535,17 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             
             box = col.column(align=True).box().column()
             col_top = box.column(align=True)
-            
-            col_top.prop(w_m, "angle")
+
+            row = col_top.row(align = True)
+            row.prop(w_m, "angle")
+
+            row.prop(sc, "script_input", text = "", icon = "FILE_SCRIPT")
+
+            if sc.script_input:
+                col_top.prop(w_m, "data_block", text ="")
+            # col_top.template_ID(w_m, "data_block", text ="")
+
+
 
             # st = bpy.context.space_data
             # text = st.text
@@ -562,7 +571,9 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             choose_props.node_tree = self.id_data.name
             choose_props.name = self.name
             
-        draw_buttons(self, context, layout)
+        # draw_buttons(self, context, layout)
+
+        
 
     
 
@@ -694,7 +705,10 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         description='User Mode',
         default=False,
     )
-    data_block: bpy.props.FloatProperty()
+    data_block: bpy.props.StringProperty(
+
+
+    )
 
     description_projection_type = [
         #description_0
@@ -798,6 +812,12 @@ def register():
         description="",
         default=True,
     )
+    bpy.types.Scene.script_input = bpy.props.BoolProperty(
+            name="data_block",
+            description="",
+            default=False,
+        )
+
     bpy.types.Scene.bool_warning = bpy.props.BoolProperty(
         name="Show this warning panel next time",
         description="Warning Panel will appear if object scale or delta scale is not correct \n You can also enable it or disable in \n Property Editor > Scene Properties > Custom Properties",
@@ -814,6 +834,7 @@ def unregister():
 
     del bpy.types.Scene.bool_panel_arrow
     del bpy.types.Scene.bool_panel_arrow2
+    del bpy.types.Scene.script_input
     del bpy.types.Scene.bool_warning
 
     del bpy.types.Scene.my_property
