@@ -447,7 +447,7 @@ class ChooseItemOperator(bpy.types.Operator):
     def execute(self, context):
         tree = bpy.data.node_groups[self.node_tree]
         node = tree.nodes[self.node]
-        node.item_set = true
+        node.item_set = True
         node.set_item(self.enum)
         return {"FINISHED"}
 
@@ -487,6 +487,21 @@ class ClearItemOperator(bpy.types.Operator):
         node.item_set = False
         return {'FINISHED'}
 
+def draw_buttons(self, context, layout):
+    group = layout.row(align=True)
+    choose_props = group.operator('example.choose_item', text="", icon='PRESET')
+    if self.item_set:
+        group.prop(self.get_item(), "name", text="", expand=True)
+        clear_props = group.operator('example.clear_item', icon='X', text="")
+        clear_props.node_tree = self.id_data.name
+        clear_props.node = self.name
+    else:
+        new_props = group.operator('example.new_item', icon='ADD', text='New')
+        new_props.node_tree = self.id_data.name
+        new_props.node = self.name
+    choose_props.node_tree = self.id_data.name
+    choose_props.name = self.name
+
 """Main Panel"""
 class SetPresiceMesh_Panel (bpy.types.Panel):
     
@@ -498,6 +513,8 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
     bl_context = "mesh_edit"
     bl_options = {'DEFAULT_CLOSED'}
     bl_label = "Set Precise Mesh / CAD"
+
+    
     
     def draw(self, context):
         layout = self.layout
@@ -542,22 +559,9 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             # col_top.template_ID( st, "text", new="text.new", unlink="text.unlink", open="text.open")
             # col_top.template_ID(context.view_layer.objects, "active", filter='AVAILABLE')
             # col_top.template_ID( w_m, "data_block", filter='ALL')
-            group = layout.row(align=True)
-            choose_props = group.operator('example.choose_item', text="", icon='PRESET')
-            if self.item_set:
-                group.prop(self.get_item(), "name", text="", expand=True)
-                clear_props = group.operator('example.clear_item', icon='X', text="")
-                clear_props.node_tree = self.id_data.name
-                clear_props.node = self.name
-            else:
-                new_props = group.operator('example.new_item', icon='ADD', text='New')
-                new_props.node_tree = self.id_data.name
-                new_props.node = self.name
-            choose_props.node_tree = self.id_data.name
-            choose_props.name = self.name
+        draw_buttons(self, context, layout)
             
-            
-            col_top.prop(w_m, "anglebool" )
+        col_top.prop(w_m, "anglebool" )
             # col_top.prop(self, "projection_type")
             # col_top.prop(ob, "angleinput")
             # row = layout.row(align=True)
@@ -729,28 +733,30 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         )
         
 """Duplication of Main panel"""
-class Dupli (SetPresiceMesh_Panel):
-    bl_label = "Set Presice Mesh1"
-    bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh1"
-    bl_space_type = 'VIEW_3D'
-    bl_region_type = 'UI'
-    bl_category = "View"
-    bl_label = "Set Precise Mesh /CAD"
+# class Dupli (SetPresiceMesh_Panel):
+    # bl_label = "Set Presice Mesh1"
+    # bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh1"
+    # bl_space_type = 'VIEW_3D'
+    # bl_region_type = 'UI'
+    # bl_category = "View"
+    # bl_label = "Set Precise Mesh /CAD"
+
     # bl_order = 1
  
-class Dupli2 (SetPresiceMesh_Panel):
-    bl_label = "Set Presice Mesh2"
-    bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh2"
-    bl_space_type = 'VIEW_3D'
-    bl_region_type = 'UI'
-    bl_category = "Item"
-    bl_label = "Set Precise Mesh /CAD"
+# class Dupli2 (SetPresiceMesh_Panel):
+    # bl_label = "Set Presice Mesh2"
+    # bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh2"
+    # bl_space_type = 'VIEW_3D'
+    # bl_region_type = 'UI'
+    # bl_category = "Item"
+    # bl_label = "Set Precise Mesh /CAD"
     # bl_order = 1
     
 """Classes registration"""
 blender_classes = [
-    Dupli,
-    Dupli2,
+    # Dupli,
+    # Dupli2,
+    SetPresiceMesh_Panel,
     SetAngle,
     SetLength,
     Dialog_Warning_Operator,
