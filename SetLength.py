@@ -18,17 +18,10 @@ from . import __name__
 
 def check(self):
     obj = bpy.context.object    
-
     # Check scale
     if obj.scale != Vector((1.0, 1.0, 1.0)) or obj.delta_scale != Vector((1.0, 1.0, 1.0)):
         bpy.ops.object.dialog_warning_operator('INVOKE_DEFAULT') 
 
-
-def check3(self):
-    obj = bpy.context.object
-    text = "You need to select 2 vertices"
-    war = "ERROR"
-    self.report({war}, text)
 
 
 
@@ -69,8 +62,6 @@ class SetLength(bpy.types.Operator):
             else:
                 length = eval(data_block_2)
                 length = length / bpy.context.scene.unit_settings.scale_length
-
-                
 
 
                 if length_unit == "MICROMETERS":
@@ -136,7 +127,9 @@ class SetLength(bpy.types.Operator):
                 
         # Check number
         if len(vec)<2:
-            check3(self)
+            text = "You need to select 2 vertices"
+            war = "ERROR"
+            self.report({war}, text)
             return{"FINISHED"}
 
         # Get values
