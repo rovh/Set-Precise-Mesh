@@ -532,12 +532,26 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
 
         split.operator("mesh.change_angle", icon="DRIVER_ROTATIONAL_DIFFERENCE")
 
-        
-    
+        split.operator("mesh.change_angle", icon="DRIVER_ROTATIONAL_DIFFERENCE")
+
+        # column = layout.column(align = 0)
+
+        # col = column.column(align = 1)
+        # row = col.row(align = 1 )
+        # row.scale_y = 1.2
+
+
+        # row = row.row(align = 1)
+        # row.scale_x = 0.87
+        # row.operator("mesh.change_angle", icon="DRIVER_ROTATIONAL_DIFFERENCE")
+
+
+        # row = row.row(align = 1)
         if sc.bool_panel_arrow:
-            split.prop(sc, "bool_panel_arrow", text="", icon='DOWNARROW_HLT')
+            row.prop(sc, "bool_panel_arrow", text="", icon='DOWNARROW_HLT')
         else:
-            split.prop(sc, "bool_panel_arrow", text="", icon='RIGHTARROW')
+            row.prop(sc, "bool_panel_arrow", text="", icon='RIGHTARROW')
+
 
         if sc.bool_panel_arrow:
             
@@ -594,21 +608,35 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             #     panel="VIEW3D_PT_Set_Precise_Mesh",
             # )         
                     
-        col = layout.column(align=False)
+        col = column.column(align=1)
+
+        row = col.row(align = 1 )
+
+        row = row.row(align = 1 )
+        row.scale_y =1.2
+        row.operator("mesh.change_length",icon="DRIVER_DISTANCE")
+
+
         # col = layout.column(align=True)
 
+        row = row.row(align = 1 )
+        row.scale_x = 0.3
+        # row.ui_units_x = 8
+
+       
+        row.operator("mesh.change_length",icon="DRIVER_DISTANCE")
+
         
-        split = col.split(factor=0.94, align=True)
-        split.scale_y =1.2
-        split.operator("mesh.change_length",icon="DRIVER_DISTANCE")
-        split.scale_x = 2
-        split.operator("mesh.change_length",icon="DRIVER_DISTANCE")
-        
-    
+        # split = col.split(factor=0.94, align=True)
+        # row.scale_x = 2
+        # row.operator("mesh.change_length",icon="DRIVER_DISTANCE")
+        row = row.row(align = 1 )
+        # row.ui_units_x = 8
+        row.scale_x = 0.95
         if sc.bool_panel_arrow2:
-            split.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
+            row.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
         else:
-            split.prop(sc, "bool_panel_arrow2", text="", icon='RIGHTARROW')
+            row.prop(sc, "bool_panel_arrow2", text="", icon='RIGHTARROW')
 
         if sc.bool_panel_arrow2:            
             box = col.column(align=True).box().column()            
