@@ -524,15 +524,22 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
         bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
         bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
 
+        script_input = bpy.data.scenes[bpy.context.scene.name_full].script_input
+        script_input_2 = bpy.data.scenes[bpy.context.scene.name_full].script_input_2
 
         col = layout.column(align=True)
 
         
         
-        split = col.split(factor=0.85, align=True)
+        split = col.split(factor=0.75, align=True)
         split.scale_y =1.2      
 
         split.operator("mesh.change_angle", icon="DRIVER_ROTATIONAL_DIFFERENCE")
+
+        split = split.split(factor=0.7, align=True)
+
+        split.operator("mesh.change_angle", icon="PLUS", text = "")
+        # split.label(icon="PLUS")
 
         
     
@@ -544,9 +551,22 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
         if sc.bool_panel_arrow:
             
             box = col.column(align=True).box().column()
-            col_top = box.column(align=True)
-            
-            col_top.prop(w_m, "angle")
+
+            col_top = box.column(align= True)
+
+            row = col_top.row(align = True)
+            row.prop(w_m, "angle")
+
+            row = row.row(align = False)
+            row.scale_x = 1.1
+            row.prop(sc, "script_input", text = "", icon = "FILE_SCRIPT")
+
+
+            if script_input:
+                col_top.prop(w_m, "data_block", text = "")
+
+
+
             col_top.prop(w_m, "anglebool" )
             # col_top.prop(self, "projection_type")
             # col_top.prop(ob, "angleinput")
@@ -562,13 +582,15 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             # )         
                     
         col = layout.column(align=False)
-        col = layout.column(align=True)
+        # col = layout.column(align=True)
 
         
         split = col.split(factor=0.85, align=True)
         split.scale_y =1.2
         
         split.operator("mesh.change_length",icon="DRIVER_DISTANCE")
+
+        
         
     
         if sc.bool_panel_arrow2:
@@ -579,8 +601,30 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
         if sc.bool_panel_arrow2:            
             box = col.column(align=True).box().column()            
             col_top = box.column(align=True)
-            col_top.prop(w_m, "length")            
-            col_top.prop(w_m, "lengthbool") 
+
+
+            # col_top.prop(w_m, "length") 
+
+            row = col_top.row(align = True)
+            row.prop(w_m, "length")
+
+            row = row.row(align = False)
+            row.scale_x = 1.1
+            row.prop(sc, "script_input_2", text = "", icon = "FILE_SCRIPT")
+
+
+
+            # col_top.prop(sc, "script_input_2")
+
+            if script_input_2:   
+                col_top.prop(w_m, "data_block_2", text = "") 
+
+            col_top.prop(w_m, "lengthbool")
+
+        
+
+            
+
                      
             # col_top.prop(ob, "lengthinput")
             # col_top.operator(bpy.ops.ui.eyedropper_id.idname())
