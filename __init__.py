@@ -527,8 +527,6 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
 
         col = layout.column(align=True)
 
-        
-        
         split = col.split(factor=0.94, align=True)
         split.scale_y =1.2      
 
@@ -582,13 +580,6 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             choose_props.node_tree = self.id_data.name
             choose_props.name = self.name
             
-        # draw_buttons(self, context, layout)
-
-        
-
-    
-
-        
         col_top.prop(w_m, "anglebool" )
             # col_top.prop(self, "projection_type")
             # col_top.prop(ob, "angleinput")
@@ -604,12 +595,13 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             # )         
                     
         col = layout.column(align=False)
-        col = layout.column(align=True)
+        # col = layout.column(align=True)
 
         
         split = col.split(factor=0.94, align=True)
         split.scale_y =1.2
-        
+        split.operator("mesh.change_length",icon="DRIVER_DISTANCE")
+        split.scale_x = 2
         split.operator("mesh.change_length",icon="DRIVER_DISTANCE")
         
     
