@@ -558,7 +558,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             row.prop(w_m, "angle")
 
             row = row.row(align = False)
-            row.scale_x = 1.1
+            row.scale_x = 1.2
             row.prop(sc, "script_input", text = "", icon = "FILE_SCRIPT")
 
 
@@ -613,7 +613,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             row.prop(w_m, "length")
 
             row = row.row(align = False)
-            row.scale_x = 1.1
+            row.scale_x = 1.2
             row.prop(sc, "script_input_2", text = "", icon = "FILE_SCRIPT")
 
 
