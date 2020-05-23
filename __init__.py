@@ -527,74 +527,27 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
 
         col = layout.column(align=True)
 
-        split = col.split(factor=0.94, align=True)
+        
+        
+        split = col.split(factor=0.85, align=True)
         split.scale_y =1.2      
 
         split.operator("mesh.change_angle", icon="DRIVER_ROTATIONAL_DIFFERENCE")
 
-        split.operator("mesh.change_angle", icon="DRIVER_ROTATIONAL_DIFFERENCE")
-
-        # column = layout.column(align = 0)
-
-        # col = column.column(align = 1)
-        # row = col.row(align = 1 )
-        # row.scale_y = 1.2
-
-
-        # row = row.row(align = 1)
-        # row.scale_x = 0.87
-        # row.operator("mesh.change_angle", icon="DRIVER_ROTATIONAL_DIFFERENCE")
-
-
-        # row = row.row(align = 1)
+        
+    
         if sc.bool_panel_arrow:
-            row.prop(sc, "bool_panel_arrow", text="", icon='DOWNARROW_HLT')
+            split.prop(sc, "bool_panel_arrow", text="", icon='DOWNARROW_HLT')
         else:
-            row.prop(sc, "bool_panel_arrow", text="", icon='RIGHTARROW')
-
+            split.prop(sc, "bool_panel_arrow", text="", icon='RIGHTARROW')
 
         if sc.bool_panel_arrow:
             
             box = col.column(align=True).box().column()
             col_top = box.column(align=True)
-
-            row = col_top.row(align = True)
-            row.prop(w_m, "angle")
-            row = row.row(align = False)
-            row.scale_x = 1.1
-            row.prop(sc, "script_input", text = "", icon = "FILE_SCRIPT")
-
-            if sc.script_input:
-                col_top.prop(w_m, "data_block", text ="")
-            # col_top.template_ID(w_m, "data_block", text ="")
-
-
-
-            # st = bpy.context.space_data
-            # text = st.text
-
-            # col_top.template_ID( st, "text", new="text.new", unlink="text.unlink", open="text.open")
-            # col_top.template_ID(context.view_layer.objects, "active", filter='AVAILABLE')
-            # col_top.template_ID( w_m, "data_block", filter='ALL')
-        # draw_buttons()
-
-        def draw_buttons(self, context, layout):
-            group = layout.row(align=True)
-            choose_props = group.operator('example.choose_item', text="", icon='PRESET')
-            if self.item_set:
-                group.prop(self.get_item(), "name", text="", expand=True)
-                clear_props = group.operator('example.clear_item', icon='X', text="")
-                clear_props.node_tree = self.id_data.name
-                clear_props.node = self.name
-            else:
-                new_props = group.operator('example.new_item', icon='ADD', text='New')
-                new_props.node_tree = self.id_data.name
-                new_props.node = self.name
-
-            choose_props.node_tree = self.id_data.name
-            choose_props.name = self.name
             
-        col_top.prop(w_m, "anglebool" )
+            col_top.prop(w_m, "angle")
+            col_top.prop(w_m, "anglebool" )
             # col_top.prop(self, "projection_type")
             # col_top.prop(ob, "angleinput")
             # row = layout.row(align=True)
@@ -608,52 +561,26 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             #     panel="VIEW3D_PT_Set_Precise_Mesh",
             # )         
                     
-        col = column.column(align=1)
-
-        row = col.row(align = 1 )
-
-        row = row.row(align = 1 )
-        row.scale_y =1.2
-        row.operator("mesh.change_length",icon="DRIVER_DISTANCE")
-
-
-        # col = layout.column(align=True)
-
-        row = row.row(align = 1 )
-        row.scale_x = 0.3
-        # row.ui_units_x = 8
-
-       
-        row.operator("mesh.change_length",icon="DRIVER_DISTANCE")
+        col = layout.column(align=False)
+        col = layout.column(align=True)
 
         
-        # split = col.split(factor=0.94, align=True)
-        # row.scale_x = 2
-        # row.operator("mesh.change_length",icon="DRIVER_DISTANCE")
-        row = row.row(align = 1 )
-        # row.ui_units_x = 8
-        row.scale_x = 0.95
+        split = col.split(factor=0.85, align=True)
+        split.scale_y =1.2
+        
+        split.operator("mesh.change_length",icon="DRIVER_DISTANCE")
+        
+    
         if sc.bool_panel_arrow2:
-            row.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
+            split.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
         else:
-            row.prop(sc, "bool_panel_arrow2", text="", icon='RIGHTARROW')
+            split.prop(sc, "bool_panel_arrow2", text="", icon='RIGHTARROW')
 
         if sc.bool_panel_arrow2:            
             box = col.column(align=True).box().column()            
             col_top = box.column(align=True)
-                        
-            
-
-            row = col_top.row(align = True)
-            row.prop(w_m, "length")
-            row = row.row(align = False)
-            row.scale_x = 1.1
-            row.prop(sc, "script_input_2", text = "", icon = "FILE_SCRIPT")
-
-            if sc.script_input_2:
-                col_top.prop(w_m, "data_block_2", text ="")
-
-            col_top.prop(w_m, "lengthbool")
+            col_top.prop(w_m, "length")            
+            col_top.prop(w_m, "lengthbool") 
                      
             # col_top.prop(ob, "lengthinput")
             # col_top.operator(bpy.ops.ui.eyedropper_id.idname())
