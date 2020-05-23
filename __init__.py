@@ -224,6 +224,16 @@ class Header_SetPreciseMesh (bpy.types.Operator):
         sub_col.scale_y = 0.15
         sub_col = sub_col.label(text = "")
 
+        # Cursor menu
+        sub_col = col_right.column(align = 1)
+        sub_col.prop_enum( w_m, "projection_type", "normal_matrix")
+        # sub_col.prop_enum( w_m, "projection_type", "cursor_matrix")
+
+        # space
+        sub_col = col_right.column(align = 0)
+        sub_col.scale_y = 0.15
+        sub_col = sub_col.label(text = "")
+
         # Object menu
         sub_col = col_right.column(align = 1)
         sub_col.prop_enum( w_m, "projection_type", "custom_object_location")
