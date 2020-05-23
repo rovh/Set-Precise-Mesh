@@ -140,11 +140,11 @@ class SetLength(bpy.types.Operator):
         # Get values
         settings = bpy.context.preferences.addons[__name__].preferences
         invert_direction = settings.direction_of_length
-        remember_length = bpy.types.Scene.remember_length
+        # remember_length = bpy.types.Scene.remember_length
 
         # invert_direction_local = invert_direction_local
-        remember_invert_direction = False
-        result = 1
+        # remember_invert_direction = False
+        # result = 1
         # try:
         #     result = list(set(remember_length) ^ set(ind))
         #     pass
@@ -161,8 +161,8 @@ class SetLength(bpy.types.Operator):
         #         print("it works")
                 
 
-        bpy.types.Scene.remember_length = ind
-        print(bpy.types.Scene.remember_length)
+        # bpy.types.Scene.remember_length = ind
+        # print(bpy.types.Scene.remember_length)
         
         # print(result)
         # if remember_invert_direction == 1:
@@ -216,7 +216,6 @@ class SetLength(bpy.types.Operator):
 
         #Set Cursor location and mode      
         if bool== 1:
-            
             bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world  @ mv
             pp = mv
         else:

@@ -538,7 +538,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
 
         split = split.split(factor=0.7, align=True)
 
-        split.operator("mesh.change_angle", icon="PLUS", text = "")
+        split.operator("mesh.change_angle_plus", icon="ADD", text = "")
         # split.label(icon="PLUS")
 
         
@@ -585,10 +585,14 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
         # col = layout.column(align=True)
 
         
-        split = col.split(factor=0.85, align=True)
+        split = col.split(factor=0.75, align=True)
         split.scale_y =1.2
         
         split.operator("mesh.change_length",icon="DRIVER_DISTANCE")
+
+        split = split.split(factor=0.7, align=True)
+
+        split.operator("mesh.change_length",icon="ADD", text = "")
 
         
         
@@ -796,6 +800,7 @@ blender_classes = [
     Dupli2,
     # SetPresiceMesh_Panel,
     SetAngle,
+    SetAngle_Plus,
     SetLength,
     Dialog_Warning_Operator,
     Dialog_Warning_Operator_2,

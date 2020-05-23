@@ -29,6 +29,22 @@ def check3(self):
     war = "ERROR"
     self.report({war}, text)
 
+class SetAngle_Plus(bpy.types.Operator):
+    """Tooltip"""
+    bl_idname = "mesh.change_angle_plus"
+    bl_label = "Angle Plus"
+    bl_description = 'Set Length / Distance \n You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut'
+    bl_options = {'REGISTER', 'UNDO'}
+
+ 
+    @classmethod
+    def poll(cls, context):
+        return context.active_object is not None
+
+    def execute(self, context):
+        bpy.ops.mesh.change_angle(Clear_angle_globally = 1)
+        return {"FINISHED"}
+
 
 class SetAngle(bpy.types.Operator):
     """Tooltip"""
@@ -40,7 +56,12 @@ class SetAngle(bpy.types.Operator):
     
     @classmethod
     def poll(cls, context):
-        return context.active_object is not None    
+        return context.active_object is not None
+
+    Clear_angle_globally: bpy.props.BoolProperty(
+        default = False,
+
+    )  
 
     def execute(self, context):
                 
@@ -111,7 +132,7 @@ class SetAngle(bpy.types.Operator):
         bmesh.update_edit_mesh(me, True, True)
 
         """Check list of selected vertices"""
-        Clear_angle = 0
+        Clear_angle = False
 
         if len(vec) == 4:
             length_selected_vert = "Four"
@@ -443,6 +464,8 @@ class SetAngle(bpy.types.Operator):
 
 
         if Clear_angle == 1:
+            angle = 0.0
+        elif self.Clear_angle_globally == 1:
             angle = 0.0
         else:
             v1ch=v1-v2
