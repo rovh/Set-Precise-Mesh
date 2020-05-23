@@ -52,6 +52,7 @@ class SetAngle(bpy.types.Operator):
         data_block = bpy.context.window_manager.setprecisemesh.data_block
         data_block = data_block.replace(',', '.')
         data_block = data_block.replace('^', '**')
+        data_block = data_block.replace(':', '/')
 
         script_input = bpy.context.scene.script_input
         system_rotation = bpy.context.scene.unit_settings.system_rotation
