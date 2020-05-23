@@ -842,6 +842,11 @@ def register():
         default=1,
         options = {"SKIP_SAVE"}
     )
+    bpy.types.Scene.remember_length = bpy.props.FloatProperty(
+        name="remember_length",
+        description="",
+        # default=,
+    )
 
 
 def unregister():
@@ -855,6 +860,7 @@ def unregister():
     del bpy.types.Scene.script_input
     del bpy.types.Scene.script_input_2
     del bpy.types.Scene.bool_warning
+    del bpy.types.Scene.remember_length
 
     del bpy.types.Scene.my_property
     bpy.types.VIEW3D_HT_tool_header.remove(header_draw)
