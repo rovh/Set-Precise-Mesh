@@ -761,6 +761,9 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
             (None),
             ("cursor_location", "Cursor Location", description_projection_type[4] , "EMPTY_ARROWS", 4),
             ("cursor_matrix"  , "Cursor Matrix"  , description_projection_type[5] , "GRID"        , 5),
+            (None),
+            ("normal_matrix"  , "Normal Matrix"  , description_projection_type[5] , "GRID"        , 6),
+
         ),
         description="Angle Simulation",
         default='global_matrix'

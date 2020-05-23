@@ -3,6 +3,7 @@ import bpy
 import bmesh
 
 import math
+from math import *
 # from math import radians
 # from math import pi
 
@@ -142,32 +143,43 @@ class SetLength(bpy.types.Operator):
         # invert_direction_local = invert_direction_local
         remember_invert_direction = False
         result = 1
-        try:
-            result = list(set(remember_length) ^ set(ind))
-            pass
-        except TypeError:
-            print("TypeError")
-            pass
-        else:
-            result = list(set(remember_length) ^ set(ind))
-            result = len(result)
-            if result == 0:
-                # def remember_invert_direction_for_length():
-                # bpy.ops.ed.undo()
-                remember_invert_direction = True
-                print("it works")
+        # try:
+        #     result = list(set(remember_length) ^ set(ind))
+        #     pass
+        # except TypeError:
+        #     print("TypeError")
+        #     pass
+        # else:
+        #     result = list(set(remember_length) ^ set(ind))
+        #     result = len(result)
+        #     if result == 0:
+        #         # def remember_invert_direction_for_length():
+        #         bpy.ops.ed.undo()
+        #         remember_invert_direction = True
+        #         print("it works")
                 
 
         bpy.types.Scene.remember_length = ind
         print(bpy.types.Scene.remember_length)
         
         # print(result)
+        # if remember_invert_direction == 1:
+            # vec.reverse()
+            # vec = remember_length.reverse()
+            # ind = remember_length.reverse()
+            # ind.reverse()
+            # vec.reverse()
+            # ind.reverse()
+
 
         # Invert direction for edge
-        if invert_direction == 1 or remember_invert_direction == 1:
+        if invert_direction == 1:
+
             vec.reverse()
             ind.reverse()
             print("invert_direction is done")
+
+        
 
         # Set values
         v1=vec[0]
@@ -261,9 +273,9 @@ class SetLength(bpy.types.Operator):
             
             bmesh.update_edit_mesh(me, True)
                   
-        if result == 0:
+        # if result == 0:
                 # def remember_invert_direction_for_length():
-            bpy.ops.ed.undo()
+            # bpy.ops.ed.undo()
                 # remember_invert_direction = True
         # remember_invert_direction_for_length()
 

@@ -2,6 +2,7 @@ import bpy
 import bmesh
 from bmesh.types import BMVert
 import math
+from math import *
 from math import radians
 from math import degrees
 from math import pi
@@ -360,6 +361,63 @@ class SetAngle(bpy.types.Operator):
                 bmesh.update_edit_mesh(me, True, True)
                 bpy.context.scene.update_tag()
                 bpy.context.view_layer.update()
+
+            elif prog == "normal_matrix":
+
+                bpy.context.object.update_from_editmode()
+                bmesh.update_edit_mesh(me, True, True)
+                # bpy.context.scene.update_tag()
+                # bpy.context.view_layer.update()
+                # bpy.context.depsgraph.update()
+
+                        
+                obj_matrix = bpy.context.active_object.matrix_world.copy()
+                # cursor_loc =  bpy.context.scene.cursor.location
+
+                cursor_matrix = bpy.context.scene.cursor.matrix.copy()
+                cursor_matrix = cursor_matrix.inverted()
+                # obj_matrix = obj_matrix.inverted()
+
+                # mat_cur = obj_matrix @ cursor_matrix
+                mat_cur =  cursor_matrix @ obj_matrix
+                # mat_cur = cursor_matrix
+
+                # cursor_matrix_loc = bpy.context.scene.cursor.matrix.translation
+                # cursor_matrix_loc = mat_cur @ cursor_matrix_loc
+                # cursor_matrix_loc = mat_cur @ cursor_matrix_loc
+
+                v1 =  v3
+                v1 = mat_cur @ v1
+
+                v2_prg =  v2
+                v2_prg = mat_cur  @ v2_prg
+
+                v3_prg =  v3
+                v3_prg = mat_cur @ v3_prg
+
+                v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
+
+                mat_cur = mat_cur.inverted()
+
+                # v3_prg = mat_cur @ v3_prg
+
+                if v3_prg == v1:
+                    Clear_angle = True
+
+                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
+
+                    # if v2_prg[2] < 0:
+                    # if v2_prg[2] < cursor_matrix_loc[2]:
+                    #     print(v2_prg[2])
+                    #     print(cursor_matrix_loc[2])
+                    #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
+                    #     print("Location grater than")
+                    # else:
+                    #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 100.0)  ))
+                    #     print("Location lower than")
+
+                    v3 = mat_cur @ v3
+                    oldv3 = v3
         
         else:
             length_selected_vert = "Three"
