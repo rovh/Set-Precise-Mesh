@@ -531,12 +531,12 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
 
         
         
-        split = col.split(factor=0.7, align=True)
+        split = col.split(factor=0.65, align=True)
         split.scale_y =1.2      
 
-        split.operator("mesh.change_angle", icon="DRIVER_ROTATIONAL_DIFFERENCE")
+        split.operator("mesh.change_angle_copy", icon="DRIVER_ROTATIONAL_DIFFERENCE")
 
-        split = split.split(factor=0.7, align=True)
+        split = split.split(factor=0.8, align=True)
 
         split.operator("mesh.change_angle_plus", icon="ADD", text = "")
         # split.label(icon="PLUS")
@@ -585,14 +585,14 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
         # col = layout.column(align=True)
 
         
-        split = col.split(factor=0.7, align=True)
+        split = col.split(factor=0.65, align=True)
         split.scale_y =1.2
         
         split.operator("mesh.change_length",icon="DRIVER_DISTANCE")
 
-        split = split.split(factor=0.7, align=True)
+        split = split.split(factor=0.8, align=True)
 
-        split.operator("mesh.change_length",icon="ADD", text = "")
+        split.operator("mesh.change_length_plus",icon="ADD", text = "")
 
         
         
@@ -800,8 +800,10 @@ blender_classes = [
     Dupli2,
     # SetPresiceMesh_Panel,
     SetAngle,
+    SetAngle_Copy,
     SetAngle_Plus,
     SetLength,
+    SetLength_Plus,
     Dialog_Warning_Operator,
     Dialog_Warning_Operator_2,
     Dialog_Warning_Operator_3,

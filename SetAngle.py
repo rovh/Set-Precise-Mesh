@@ -22,7 +22,6 @@ def check(self):
     if obj.scale != Vector((1.0, 1.0, 1.0)) or obj.delta_scale != Vector((1.0, 1.0, 1.0)):
         bpy.ops.object.dialog_warning_operator('INVOKE_DEFAULT') 
     
-        
 def check3(self):
     # obj = bpy.context.object
     text = "You need to select from 1 to 4 vertices"
@@ -36,7 +35,6 @@ class SetAngle_Plus(bpy.types.Operator):
     bl_description = 'Set Length / Distance \n You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut'
     bl_options = {'REGISTER', 'UNDO'}
 
- 
     @classmethod
     def poll(cls, context):
         return context.active_object is not None
@@ -45,6 +43,21 @@ class SetAngle_Plus(bpy.types.Operator):
         bpy.ops.mesh.change_angle(Clear_angle_globally = 1)
         return {"FINISHED"}
 
+class SetAngle_Copy(bpy.types.Operator):
+    """Tooltip"""
+    bl_idname = "mesh.change_angle_copy"
+    bl_label = "Set Angle"
+    bl_description = "Set Angle \n You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        return context.active_object is not None
+
+    def execute(self, context):
+        bpy.ops.mesh.change_angle()
+        return {"FINISHED"}
+                
 
 class SetAngle(bpy.types.Operator):
     """Tooltip"""
@@ -53,15 +66,15 @@ class SetAngle(bpy.types.Operator):
     bl_description = "Set Angle \n You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     bl_options = {'REGISTER', 'UNDO'}
 
-    
+    Clear_angle_globally: bpy.props.BoolProperty()
+
     @classmethod
     def poll(cls, context):
         return context.active_object is not None
-
-    Clear_angle_globally: bpy.props.BoolProperty(
-        default = False,
-
-    )  
+    # def draw(self, context):
+    #     return 
+    # def draw(self, context):
+    #     pass  
 
     def execute(self, context):
                 
@@ -676,6 +689,5 @@ class SetAngle(bpy.types.Operator):
         bmesh.update_edit_mesh(me, True, True)
          
         return {'FINISHED'}
-
 if __name__ == "__main__":
     register()

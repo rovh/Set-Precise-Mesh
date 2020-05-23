@@ -23,7 +23,24 @@ def check(self):
     obj = bpy.context.object    
     # Check scale
     if obj.scale != Vector((1.0, 1.0, 1.0)) or obj.delta_scale != Vector((1.0, 1.0, 1.0)):
-        bpy.ops.object.dialog_warning_operator('INVOKE_DEFAULT') 
+        bpy.ops.object.dialog_warning_operator('INVOKE_DEFAULT')
+
+class SetLength_Plus(bpy.types.Operator):
+    """Tooltip"""
+    bl_idname = "mesh.change_length_plus"
+    bl_label = "Set Length / Distance"
+    bl_description = 'Set Length / Distance \n You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut'
+    bl_options = {'REGISTER', 'UNDO'}
+
+
+    @classmethod
+    def poll(cls, context):
+        return context.active_object is not None
+
+    def execute(self, context):
+        bpy.ops.mesh.change_length(plus_length = 1)
+        return {"FINISHED"}
+
 
 
 
@@ -36,11 +53,16 @@ class SetLength(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
  
-
+    
 
     @classmethod
     def poll(cls, context):
         return context.active_object is not None
+
+
+    plus_length: bpy.props.BoolProperty(
+        default = False,
+    )  
 
     def execute(self, context):
         
@@ -204,7 +226,10 @@ class SetLength(bpy.types.Operator):
         mv = (v1+v2)/2
         
         # Scale factor
-        length = lengthtrue/length
+        if self.plus_length == 1:
+            length = lengthtrue + length  / length
+        else:
+            length = lengthtrue/length
         
 
 
@@ -262,7 +287,8 @@ class SetLength(bpy.types.Operator):
 
                    
         else:
-        
+            
+
         
             R = Matrix.Scale(1/length, 4, (lv))
   
