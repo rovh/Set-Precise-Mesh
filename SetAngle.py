@@ -71,10 +71,6 @@ class SetAngle(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         return context.active_object is not None
-    # def draw(self, context):
-    #     return 
-    # def draw(self, context):
-    #     pass  
 
     def execute(self, context):
                 

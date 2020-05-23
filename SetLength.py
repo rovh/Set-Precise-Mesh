@@ -41,8 +41,21 @@ class SetLength_Plus(bpy.types.Operator):
         bpy.ops.mesh.change_length(plus_length = 1)
         return {"FINISHED"}
 
+class SetLength_Copy(bpy.types.Operator):
+    """Tooltip"""
+    bl_idname = "mesh.change_length_copy"
+    bl_label = "Set Length / Distance"
+    bl_description = 'Set Length / Distance \n You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut'
+    bl_options = {'REGISTER', 'UNDO'}
 
 
+    @classmethod
+    def poll(cls, context):
+        return context.active_object is not None
+
+    def execute(self, context):
+        bpy.ops.mesh.change_length()
+        return {"FINISHED"}
 
 
 class SetLength(bpy.types.Operator):
@@ -52,17 +65,11 @@ class SetLength(bpy.types.Operator):
     bl_description = 'Set Length / Distance \n You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut'
     bl_options = {'REGISTER', 'UNDO'}
 
- 
+    plus_length: bpy.props.BoolProperty()  
     
-
     @classmethod
     def poll(cls, context):
         return context.active_object is not None
-
-
-    plus_length: bpy.props.BoolProperty(
-        default = False,
-    )  
 
     def execute(self, context):
         
@@ -227,9 +234,11 @@ class SetLength(bpy.types.Operator):
         
         # Scale factor
         if self.plus_length == 1:
-            length = lengthtrue + length  / length
+            length = lengthtrue  / (length + lengthtrue)
+            print("plus_length")
         else:
             length = lengthtrue/length
+            # length = length / lengthtrue/
         
 
 

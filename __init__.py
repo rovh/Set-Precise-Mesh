@@ -588,7 +588,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
         split = col.split(factor=0.65, align=True)
         split.scale_y =1.2
         
-        split.operator("mesh.change_length",icon="DRIVER_DISTANCE")
+        split.operator("mesh.change_length_copy",icon="DRIVER_DISTANCE")
 
         split = split.split(factor=0.8, align=True)
 
@@ -803,6 +803,7 @@ blender_classes = [
     SetAngle_Copy,
     SetAngle_Plus,
     SetLength,
+    SetLength_Copy,
     SetLength_Plus,
     Dialog_Warning_Operator,
     Dialog_Warning_Operator_2,
