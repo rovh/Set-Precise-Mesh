@@ -51,7 +51,7 @@ class SetLength(bpy.types.Operator):
 
         data_block_2 = data_block_2.replace(',', '.')
         data_block_2 = data_block_2.replace('^', '**')
-        data_block = data_block.replace(':', '/')
+        data_block_2 = data_block_2.replace(':', '/')
 
 
         script_input_2 = bpy.context.scene.script_input_2
