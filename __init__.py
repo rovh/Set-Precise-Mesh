@@ -531,7 +531,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
 
         
         
-        split = col.split(factor=0.75, align=True)
+        split = col.split(factor=0.7, align=True)
         split.scale_y =1.2      
 
         split.operator("mesh.change_angle", icon="DRIVER_ROTATIONAL_DIFFERENCE")
@@ -585,7 +585,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
         # col = layout.column(align=True)
 
         
-        split = col.split(factor=0.75, align=True)
+        split = col.split(factor=0.7, align=True)
         split.scale_y =1.2
         
         split.operator("mesh.change_length",icon="DRIVER_DISTANCE")
