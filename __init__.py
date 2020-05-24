@@ -382,17 +382,27 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
         
         #Create lists
+        face_ind = []
         vec = []
         ind = []
 
         bpy.context.object.update_from_editmode()
         #Append to lists                                                            
         for g in bm.select_history:
-            # if len(vec)<3:
+            if g.select:
                 vec.append(bm.verts[g.index].co)
                 ind.append(g.index)
 
-        if len(vec) == 1 :
+        for f in bm.faces:
+            if f.select:
+                face_ind.append(f.index)
+                print(f.index)
+
+        selected_faces = [face for face in bm.faces if face.select]
+        # print(f.select)
+
+        if len(vec) == 1 and len(face_ind) == 0:
+            # print("selected_faces")
             bpy.context.scene.cursor.location = vec[0]
             normal = obj.data.vertices[ind[0]].normal
 
@@ -405,8 +415,7 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
 
         else:
-            selected_faces = [face for face in bm.faces if face.select]
-
+            
             try:
                 my_location = selected_faces[0].calc_center_median()
                 normalgl = selected_faces[0].normal
@@ -420,7 +429,8 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
             matrix_location = bpy.context.active_object.matrix_world @ my_location
                         
-            bpy.context.scene.cursor.location = matrix_location
+            # bpy.context.scene.cursor.location = matrix_location
+            bpy.context.scene.cursor.location = my_location
 
             g = len(vec)
             # print(g)
