@@ -383,15 +383,21 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
         
         #Create lists
         face_ind = []
+        edge_ind = []
         vec = []
-        ind = []
+        vec_ind = []
 
         bpy.context.object.update_from_editmode()
         #Append to lists                                                            
-        for g in bm.select_history:
-            if g.select:
-                vec.append(bm.verts[g.index].co)
-                ind.append(g.index)
+        for v in bm.select_history:
+            if v.select:
+                vec.append(bm.verts[v.index].co)
+                vec_ind.append(v.index)
+
+        for e in bm.edges:
+            if e.select:
+                edge_ind.append(e.index)
+                print(e.index)
 
         for f in bm.faces:
             if f.select:
@@ -404,7 +410,7 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
         if len(vec) == 1 and len(face_ind) == 0:
             # print("selected_faces")
             bpy.context.scene.cursor.location = vec[0]
-            normal = obj.data.vertices[ind[0]].normal
+            normal = obj.data.vertices[vec_ind[0]].normal
 
             obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
             direction = normal
