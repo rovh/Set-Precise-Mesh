@@ -360,14 +360,18 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
     def execute(self, context):
 
+        bpy.context.object.update_from_editmode()
+        # bmesh.update_edit_mesh(me, True, True)
+
+
         obj = bpy.context.edit_object
         me = obj.data
         bm = bmesh.from_edit_mesh(me)
 
         bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True, True)
-        bpy.context.scene.update_tag()
-        bpy.context.view_layer.update()
+        # bpy.context.scene.update_tag()
+        # bpy.context.view_layer.update()
 
     
         # obj = bpy.context.object
@@ -381,45 +385,63 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
         vec = []
         ind = []
 
+        bpy.context.object.update_from_editmode()
         #Append to lists                                                            
         for g in bm.select_history:
             # if len(vec)<3:
                 vec.append(bm.verts[g.index].co)
-                # ind.append(g.index)
+                ind.append(g.index)
 
-        selected_faces = [face for face in bm.faces if face.select]
-        try:
-            my_location = selected_faces[0].calc_center_median()
-        except IndexError:
-            text = "You need to select all vertices of the face"
-            war = "ERROR"
-            self.report({war}, text)
+        if len(vec) == 1 :
+            bpy.context.scene.cursor.location = vec[0]
+            normal = obj.data.vertices[ind[0]].normal
 
-            return {"FINISHED"}
+            obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
+            direction = normal
+            # point the cameras '-Z' and use its 'Y' as up
+            rot_quat = direction.to_track_quat('-Z', 'Y')
+            obj_camera.rotation_euler = rot_quat.to_euler()
+            rot_quat =  rot_quat.to_euler()
 
-        
-        matrix_location = bpy.context.active_object.matrix_world @ my_location
-        bpy.context.scene.cursor.location = matrix_location
 
-        g = len(vec)
-        # print(g)
-        for k in range (0, g):
-            vec[k] = bpy.context.active_object.matrix_world  @ vec[k] # 1 selected
+        else:
+            selected_faces = [face for face in bm.faces if face.select]
 
-        normallistgl = vec
-        normalgl = mathutils.geometry.normal(normallistgl)
+            try:
+                my_location = selected_faces[0].calc_center_median()
+                normalgl = selected_faces[0].normal
+            except IndexError:
+                text = "You need to select all vertices of the face"
+                war = "ERROR"
+                self.report({war}, text)
+                # return {"FINISHED"}
+            # else:
+            # my_location = selected_faces[0].calc_center_median()
 
-        # Set cursor direction
-        obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
-        direction = normalgl
-        # point the cameras '-Z' and use its 'Y' as up
-        rot_quat = direction.to_track_quat('-Z', 'Y')
-        obj_camera.rotation_euler = rot_quat.to_euler()
-        rot_quat =  rot_quat.to_euler()
+            matrix_location = bpy.context.active_object.matrix_world @ my_location
+                        
+            bpy.context.scene.cursor.location = matrix_location
 
-        
+            g = len(vec)
+            # print(g)
+            for k in range (0, g):
+                vec[k] = bpy.context.active_object.matrix_world  @ vec[k] # 1 selected
 
-        # print(normalgl," Normal was calculated")
+            # normallistgl = vec
+            # normalgl = mathutils.geometry.normal(normallistgl)
+            # normalgl = 
+
+            # Set cursor direction
+            obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
+            direction = normalgl
+            # point the cameras '-Z' and use its 'Y' as up
+            rot_quat = direction.to_track_quat('-Z', 'Y')
+            obj_camera.rotation_euler = rot_quat.to_euler()
+            rot_quat =  rot_quat.to_euler()
+
+            
+
+            # print(normalgl," Normal was calculated")
 
         return {'FINISHED'}
 

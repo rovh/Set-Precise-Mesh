@@ -404,6 +404,11 @@ class SetAngle(bpy.types.Operator):
                         
                 obj_matrix = bpy.context.active_object.matrix_world.copy()
                 # cursor_loc =  bpy.context.scene.cursor.location
+                mat_loc =  mathutils.Matrix.Translation(( 0.0 ,  0.0 ,  0.0 ))        
+                mat_sca =  mathutils.Matrix.Scale( 1.0 ,  4 ,  ( 0.0 ,  0.0 ,  1.0 ))
+                mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
+
+                mat_out =  mat_loc @  mat_rot @  mat_sca
 
                 # cursor_matrix = bpy.context.scene.cursor.matrix.copy()
                 # cursor_matrix = cursor_matrix.inverted()
