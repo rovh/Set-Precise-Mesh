@@ -384,30 +384,62 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
         #Create lists
         face_ind = []
         edge_ind = []
-        vec = []
         vec_ind = []
 
+        face_list = []
+        edge_list = []
+        vec = []
+
+
         bpy.context.object.update_from_editmode()
-        #Append to lists                                                            
+        #Append to lists      
+        #        
+        bm.select_history.validate()                                               
         for v in bm.select_history:
             if v.select:
                 vec.append(bm.verts[v.index].co)
                 vec_ind.append(v.index)
 
-        for e in bm.edges:
+        for e in bm.select_history:
             if e.select:
+                edge_list.append(bm.edges[e.index])
                 edge_ind.append(e.index)
-                print(e.index)
 
-        for f in bm.faces:
+        for f in bm.select_history:
             if f.select:
+                face_list.append(bm.faces[f.index])
                 face_ind.append(f.index)
-                print(f.index)
 
         selected_faces = [face for face in bm.faces if face.select]
-        # print(f.select)
 
-        if len(vec) == 1 and len(face_ind) == 0:
+        
+
+        # print(selected_faces)
+
+
+        # print(face_list)
+        # print(face_ind)
+
+        
+        # print(f.select)
+        # print(len(vec_ind))
+        # print(len(edge_ind))
+        # print(len(face_ind))
+
+        # print(len(vec))
+        # print(len(edge_list))
+        # print(len(face_list))
+        print("\n")
+
+        print(selected_faces)
+
+        print(vec)
+        print(edge_list)
+        print(face_list)
+
+
+
+        if len(vec) == 1 and len(face_ind) == 0 and len(edge_ind) == 0:
             # print("selected_faces")
             bpy.context.scene.cursor.location = vec[0]
             normal = obj.data.vertices[vec_ind[0]].normal
@@ -419,12 +451,32 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
             obj_camera.rotation_euler = rot_quat.to_euler()
             rot_quat =  rot_quat.to_euler()
 
-
-        else:
+        if len(vec) != 1 and len(edge_ind) != 0 and len(face_ind) == 0 :
             
+            edge_verts = obj.data.edges[0].verts
+
+            print(edge_verts, 111111111111111111111)
+
+            
+            
+
+            bpy.context.scene.cursor.location = edge_loc[0]
+            # normal = obj.data.edges[edge_ind[0]].normal
+
+            obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
+            direction = normal
+            # point the cameras '-Z' and use its 'Y' as up
+            rot_quat = direction.to_track_quat('-Z', 'Y')
+            obj_camera.rotation_euler = rot_quat.to_euler()
+            rot_quat =  rot_quat.to_euler()
+
+        if len(vec) != 1 and len(edge_ind) > 1 and len(face_ind) != 0:
+            # print("face_ind")
+            # selected_faces = [face for face in bm.faces if face.select]
             try:
-                my_location = selected_faces[0].calc_center_median()
-                normalgl = selected_faces[0].normal
+                my_location = face_list[-1].calc_center_median()
+                # my_location = selected_faces[0].calc_center_median()
+                normalgl = face_list[-1].normal
             except IndexError:
                 text = "You need to select all vertices of the face"
                 war = "ERROR"
