@@ -409,7 +409,7 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
         # print(bm.select_history, "select_history")
         
         if len(selected_verts) != 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
-            
+
             for v in bm.select_history:
                 if v.select:
                     vec_list.append(bm.verts[v.index].co)
@@ -503,6 +503,10 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
                 # return {"FINISHED"}
             # else:
             # my_location = selected_faces[0].calc_center_median()
+            # my_location = face_list[-1].calc_center_median()
+            # my_location = selected_faces[0].calc_center_median()
+            # normalgl = face_list[-1].normal
+
 
             matrix_location = bpy.context.active_object.matrix_world @ my_location
                         
@@ -511,8 +515,8 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
             g = len(vec_list)
             # print(g)
-            for k in range (0, g):
-                vec_list[k] = bpy.context.active_object.matrix_world  @ vec_list[k] # 1 selected
+            # for k in range (0, g):
+            #     vec_list[k] = bpy.context.active_object.matrix_world  @ vec_list[k] # 1 selected
 
             # normallistgl = vec_list
             # normalgl = mathutils.geometry.normal(normallistgl)
