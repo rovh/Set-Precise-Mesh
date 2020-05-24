@@ -388,31 +388,48 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
         face_list = []
         edge_list = []
-        vec = []
+        vec_list = []
 
 
         bpy.context.object.update_from_editmode()
         #Append to lists      
         #        
-        bm.select_history.validate()                                               
-        for v in bm.select_history:
-            if v.select:
-                vec.append(bm.verts[v.index].co)
-                vec_ind.append(v.index)
+        # bm.select_history.validate() 
+        # selectedVerts = [v for v in bpy.context.active_object.data.vertices if v.select]
+        #     
+        # 3
 
-        for e in bm.select_history:
-            if e.select:
-                edge_list.append(bm.edges[e.index])
-                edge_ind.append(e.index)
-
-        for f in bm.select_history:
-            if f.select:
-                face_list.append(bm.faces[f.index])
-                face_ind.append(f.index)
-
+        selected_verts = [verts for verts in bm.verts if verts.select]
+        selected_edges = [edge for edge in bm.edges if edge.select]
         selected_faces = [face for face in bm.faces if face.select]
 
+
+        # print(selected_verts)
+
+        # print(bm.select_history, "select_history")
         
+        if len(selected_verts) != 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
+            
+            for v in bm.select_history:
+                if v.select:
+                    vec_list.append(bm.verts[v.index].co)
+                    vec_ind.append(v.index)
+
+
+        if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) == 0:
+
+            for e in bm.select_history:
+                if e.select:
+                    edge_list.append(bm.edges[e.index])
+                    edge_ind.append(e.index)
+
+
+        if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) != 0:
+
+            for f in bm.select_history:
+                if f.select:
+                    face_list.append(bm.faces[f.index])
+                    face_ind.append(f.index)
 
         # print(selected_faces)
 
@@ -426,22 +443,24 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
         # print(len(edge_ind))
         # print(len(face_ind))
 
-        # print(len(vec))
+        # print(len(vec_list))
         # print(len(edge_list))
         # print(len(face_list))
         print("\n")
 
-        print(selected_faces)
+        print(selected_faces, "selected_faces")
+        print(selected_edges, "selected_edges")
+        print(selected_verts, "selected_verts")
 
-        print(vec)
+        print(vec_list)
         print(edge_list)
         print(face_list)
 
 
 
-        if len(vec) == 1 and len(face_ind) == 0 and len(edge_ind) == 0:
+        if len(selected_verts) != 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
             # print("selected_faces")
-            bpy.context.scene.cursor.location = vec[0]
+            bpy.context.scene.cursor.location = vec_list[0]
             normal = obj.data.vertices[vec_ind[0]].normal
 
             obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
@@ -451,7 +470,7 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
             obj_camera.rotation_euler = rot_quat.to_euler()
             rot_quat =  rot_quat.to_euler()
 
-        if len(vec) != 1 and len(edge_ind) != 0 and len(face_ind) == 0 :
+        if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) == 0:
             
             edge_verts = obj.data.edges[0].verts
 
@@ -470,7 +489,7 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
             obj_camera.rotation_euler = rot_quat.to_euler()
             rot_quat =  rot_quat.to_euler()
 
-        if len(vec) != 1 and len(edge_ind) > 1 and len(face_ind) != 0:
+        if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) != 0:
             # print("face_ind")
             # selected_faces = [face for face in bm.faces if face.select]
             try:
@@ -490,12 +509,12 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
             # bpy.context.scene.cursor.location = matrix_location
             bpy.context.scene.cursor.location = my_location
 
-            g = len(vec)
+            g = len(vec_list)
             # print(g)
             for k in range (0, g):
-                vec[k] = bpy.context.active_object.matrix_world  @ vec[k] # 1 selected
+                vec_list[k] = bpy.context.active_object.matrix_world  @ vec_list[k] # 1 selected
 
-            # normallistgl = vec
+            # normallistgl = vec_list
             # normalgl = mathutils.geometry.normal(normallistgl)
             # normalgl = 
 
