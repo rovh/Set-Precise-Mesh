@@ -194,13 +194,18 @@ class Header_SetPreciseMesh (bpy.types.Operator):
     
     def invoke(self, context, event): 
         
+
+        
         # return context.window_manager.invoke_props_dialog(self)
         # return context.window_manager.invoke_popup(self, width=600, height=500)
         # return context.window_manager.invoke_popup(self)
-        return context.window_manager.invoke_popup(self, width = 190)
+        inv = context.window_manager.invoke_popup(self, width = 190)
         # return context.window_manager.invoke_props_popup(self, event)
         # return context.window_manager.popmenu_begin__internal()
         # return context.window_manager.invoke_confirm(self, event)
+
+        return inv
+
 
     def execute(self, context):
         return {'FINISHED'}
@@ -312,23 +317,29 @@ class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
         How to do it: > right-click on this button > Assign Shortcut"
         
     def execute(self, context):
+
+        # context.window_manager.invoke_popup(self, width = 200)
         return {'FINISHED'}
 
     def invoke(self, context, event):
         x = event.mouse_x
         y = event.mouse_y 
 
-        
-        
+        move_x = 0
+        move_y = 60
+
+        bpy.context.window.cursor_warp(x + move_x, y + move_y)
+        # context.window_manager.invoke_popup(self, width = 200)
         # return context.window_manager.invoke_props_dialog(self)
         # return context.window_manager.invoke_popup(self, width=600, height=500)
         # return context.window_manager.invoke_popup(self)
-        context.window_manager.invoke_popup(self, width = 200)
-        x = event.mouse_x
-        y = event.mouse_y 
-        # bpy.context.window.cursor_warp(50 + x, 50 + y)
+        inv = context.window_manager.invoke_popup(self, width = 200)
+        
+        bpy.context.window.cursor_warp(x, y)
 
-        # return {"FINISHED"}
+        return inv
+
+        # return {"INTERFACE"}
 
         # if self.return == {"CANCELLED"}:
             # context.window_manager.invoke_popup(self, width = 200)
