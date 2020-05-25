@@ -384,11 +384,11 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
         #Create lists
         face_ind = []
         edge_ind = []
-        vec_ind = []
+        vec_ind  = []
 
         face_list = []
         edge_list = []
-        vec_list = []
+        vec_list  = []
 
 
         bpy.context.object.update_from_editmode()
@@ -408,25 +408,31 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
         print("\n")
         # print(bm.select_history, "select_history")
         
+
+
+
         if len(selected_verts) != 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
             print(bm.select_history)
             for v in bm.select_history:
                 if v.select:
-                    vec_list.append(bm.verts[v.index].co)
+                    # vec_list.append(bm.verts[v.index].co)
+                    vec_list.append(v)
                     vec_ind.append(v.index)
 
         if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) == 0:
 
             for e in bm.select_history:
                 if e.select:
-                    edge_list.append(bm.edges[e.index])
+                    # edge_list.append(bm.edges[e.index])
+                    edge_list.append(e)
                     edge_ind.append(e.index)
 
         if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) != 0:
 
             for f in bm.select_history:
                 if f.select:
-                    face_list.append(bm.faces[f.index])
+                    # face_list.append(bm.faces[f.index])
+                    face_list.append(f)
                     # try:
                     #     # list_2 = list(set(selected_faces) & set(lst2))
                     #     # if bm.faces[f.index] == selected_faces[:]:
@@ -436,8 +442,18 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
                     # else:
                     #     face_list.append(selected_faces[f.index])
                     face_ind.append(f.index)
-            # for f in range(0, len(face_list)):
+        #     # for f in range(0, len(face_list)):
 
+
+
+
+
+
+
+
+        # for geom in bm.select_history:
+        #     if isinstance(geom, bmesh.types.BMFace):
+        #         print(geom.index, "geom.index")
 
         # print(selected_faces)
 
@@ -473,8 +489,12 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
         if len(selected_verts) != 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
             # print("selected_faces")
-            bpy.context.scene.cursor.location = vec_list[0]
-            normal = obj.data.vertices[vec_ind[0]].normal
+            # bpy.context.scene.cursor.location = vec_list[0]
+            # normal = obj.data.vertices[vec_ind[0]].normal
+
+            bpy.context.scene.cursor.location = selected_verts[0].co
+            normal = selected_verts[0].normal
+
 
             obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
             direction = normal
@@ -485,14 +505,14 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
         if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) == 0:
             
-            edge_verts = obj.data.edges[0].verts
+            # edge_verts = obj.data.edges[0].verts
+            edge_verts = selected_edges[0].verts
+
+            location_of_edge = (edge_verts[0].co + edge_verts[1].co) / 2
 
             print(edge_verts, 111111111111111111111)
 
-            
-            
-
-            bpy.context.scene.cursor.location = edge_loc[0]
+            bpy.context.scene.cursor.location = location_of_edge
             # normal = obj.data.edges[edge_ind[0]].normal
 
             obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
@@ -506,10 +526,11 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
             # print("face_ind")
             # selected_faces = [face for face in bm.faces if face.select]
             try:
-                my_location = face_list[-1].calc_center_median()
+                # my_location = face_list[-1].calc_center_median()
                 # my_location = selected_faces[selected_faces[0].index].calc_center_median()
-                # my_location = selected_faces[0].calc_center_median()
-                normalgl = face_list[-1].normal
+                my_location = selected_faces[0].calc_center_median()
+                normalgl = selected_faces[0].normal
+                # normalgl = face_list[-1].normal
             except IndexError:
                 text = "You need to select all vertices of the face"
                 war = "ERROR"
@@ -623,7 +644,6 @@ class ClearItemOperator(bpy.types.Operator):
         node = tree.nodes[self.node]
         node.item_set = False
         return {'FINISHED'}
-
 
 """Main Panel"""
 class SetPresiceMesh_Panel (bpy.types.Panel):
@@ -901,7 +921,7 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         default='global_matrix'
         )
         
-"""Duplication of Main panel"""
+"""Duplication of the Main panel"""
 class Dupli (SetPresiceMesh_Panel):
     bl_label = "Set Presice Mesh1"
     bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh1"
