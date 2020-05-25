@@ -220,13 +220,13 @@ class Header_SetPreciseMesh (bpy.types.Operator):
         sub_col.prop_enum( w_m, "projection_type", "cursor_matrix")
 
         # space
-        sub_col = col_right.column(align = 0)
-        sub_col.scale_y = 0.15
-        sub_col = sub_col.label(text = "")
+        # sub_col = col_right.column(align = 0)
+        # sub_col.scale_y = 0.15
+        # sub_col = sub_col.label(text = "")
 
-        # Cursor menu
-        sub_col = col_right.column(align = 1)
-        sub_col.prop_enum( w_m, "projection_type", "normal_matrix")
+        # # Cursor menu
+        # sub_col = col_right.column(align = 1)
+        # sub_col.prop_enum( w_m, "projection_type", "normal_matrix")
         # sub_col.prop_enum( w_m, "projection_type", "cursor_matrix")
 
         # space
@@ -237,11 +237,13 @@ class Header_SetPreciseMesh (bpy.types.Operator):
         # Object menu
         sub_col = col_right.column(align = 1)
         sub_col.prop_enum( w_m, "projection_type", "custom_object_location")
+        
         # sub_col.prop_enum( w_m, "projection_type", "custom_object_matrix")
         # Make space object selection box
         # prog = context.window_manager.setprecisemesh.projection_type
         # if prog == "custom_object_location" or  prog == "custom_object_matrix":
         #     sub_col.prop(context.scene, "my_property", text = "")
+
         sub_col.prop(context.scene, "my_property", text = "")
 
 def   header_draw(self, context):
@@ -250,11 +252,11 @@ def   header_draw(self, context):
 
     if object_mode in {'EDIT'}:
         
-        row = layout.row(align=0)
+        row = layout.row(align=1)
         sub = row.row()
 
         # row.ui_units_x = 4.5
-        sub.scale_x = 1.2
+        sub.scale_x = 1.5
         sub = sub.operator("mesh.set_cursor", text="", icon = "ORIENTATION_CURSOR")
         
         sub = row.row()

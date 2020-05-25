@@ -98,7 +98,11 @@ class SetLength(bpy.types.Operator):
                 length = length / bpy.context.scene.unit_settings.scale_length
 
 
-                if length_unit == "MICROMETERS":
+                if  bpy.context.scene.unit_settings.system == 'METRIC' and length_unit == 'ADAPTIVE':
+                    unit = length
+                    bpy.context.window_manager.setprecisemesh.length =  unit
+                    length = unit
+                elif length_unit == "MICROMETERS":
                     unit = length / 1000000
                     bpy.context.window_manager.setprecisemesh.length =  unit
                     length = unit
@@ -118,8 +122,12 @@ class SetLength(bpy.types.Operator):
                     unit = length * 1000
                     bpy.context.window_manager.setprecisemesh.length =  unit
                     length = unit
+                
 
-
+                if bpy.context.scene.unit_settings.system == 'IMPERIAL'and length_unit == 'ADAPTIVE':
+                    unit = length / 3.2808398950131
+                    bpy.context.window_manager.setprecisemesh.length =  unit
+                    length = unit
                 if length_unit == 'MILES':
                     unit = length  / 0.00062137119223733
                     bpy.context.window_manager.setprecisemesh.length =  unit
@@ -306,7 +314,6 @@ class SetLength(bpy.types.Operator):
                     verts=[v for v in bm.verts if v.select],
                     space=S)
                     
-            
             bmesh.update_edit_mesh(me, True)
                   
         # if result == 0:
@@ -314,6 +321,11 @@ class SetLength(bpy.types.Operator):
             # bpy.ops.ed.undo()
                 # remember_invert_direction = True
         # remember_invert_direction_for_length()
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+        bpy.context.object.update_from_editmode()
+        bmesh.update_edit_mesh(me, True, True)
+
+
 
         return {'FINISHED'}
 

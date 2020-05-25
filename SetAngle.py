@@ -16,11 +16,8 @@ from mathutils import Vector, Matrix, Quaternion, Euler
 # keyboard = Controller()
 
 
-def check(self):
-    obj = bpy.context.object
-    # Check scale
-    if obj.scale != Vector((1.0, 1.0, 1.0)) or obj.delta_scale != Vector((1.0, 1.0, 1.0)):
-        bpy.ops.object.dialog_warning_operator('INVOKE_DEFAULT') 
+# def check(self):
+    
     
 def check3(self):
     # obj = bpy.context.object
@@ -74,7 +71,12 @@ class SetAngle(bpy.types.Operator):
 
     def execute(self, context):
                 
-        check(self)
+        # check(self)
+        
+        # Check scale
+        obj = bpy.context.object
+        if obj.scale != Vector((1.0, 1.0, 1.0)) or obj.delta_scale != Vector((1.0, 1.0, 1.0)):
+            bpy.ops.object.dialog_warning_operator('INVOKE_DEFAULT') 
 
         # bpy.context.object.update_from_editmode()
 
@@ -686,8 +688,10 @@ class SetAngle(bpy.types.Operator):
                     bpy.context.object.update_from_editmode()
                     bmesh.update_edit_mesh(me, True, True)
         
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
         bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True, True)
+
          
         return {'FINISHED'}
 if __name__ == "__main__":
