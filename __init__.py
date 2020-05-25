@@ -676,13 +676,14 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
 
             # col_top.prop(w_m, "anglebool" )
 
-            row = col_top.row(align=0)
+
+            row = col_top.row(align=1)
             row.scale_y = 0.25
             row.label(text = "")
 
-            row_main = col_top.row(align=0)
+            row_main = col_top.row(align=1)
 
-            row = row_main.row(align=0)
+            row = row_main.row(align=1)
 
             # row.alignment = "CENTER"
 
@@ -698,7 +699,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
                 row.prop(w_m, "anglebool", icon = "BLANK1" , icon_only = 1)
 
             row = row_main.row(align=1)
-            row.scale_x = 0.8
+            row.scale_x = 0.9
             row.alignment = "LEFT"
             row.prop(w_m, "anglebool", emboss=0)
 
@@ -759,18 +760,18 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             # split = split.split(factor=0.95, align=1)
             # split.prop(w_m, "lengthbool", emboss=0, expand=1)
 
-            row = col_top.row(align=0)
+            row = col_top.row(align=1)
             row.scale_y = 0.25
             row.label(text = "")
 
-            row_main = col_top.row(align=0)
+            row_main = col_top.row(align=1)
 
-            row = row_main.row(align=0)
+            row = row_main.row(align=1)
 
             # row.alignment = "CENTER"
 
             row.scale_x = 0.93
-            row.scale_y = 0.84
+            row.scale_y = 0.9
             # row.ui_units_x = 0.7
             # row.ui_units_y = 0.3
 
@@ -781,7 +782,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
                 row.prop(w_m, "lengthbool", icon = "BLANK1" , icon_only = 1)
 
             row = row_main.row(align=1)
-            row.scale_x = 0.8
+            row.scale_x = 0.9
             row.alignment = "LEFT"
             row.prop(w_m, "lengthbool", emboss=0)
 
