@@ -360,44 +360,23 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
     def execute(self, context):
 
-        bpy.context.object.update_from_editmode()
-        # bmesh.update_edit_mesh(me, True, True)
-
-
         obj = bpy.context.edit_object
         me = obj.data
         bm = bmesh.from_edit_mesh(me)
 
         bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True, True)
-        # bpy.context.scene.update_tag()
-        # bpy.context.view_layer.update()
-
-    
-        # obj = bpy.context.object
-        # text = "You need to select from 1 to 4 vertices"
-        # war = "ERROR"
-        # self.report({war}, text)
-
 
         
         #Create lists
-        face_ind = []
-        edge_ind = []
-        vec_ind  = []
+        # face_ind = []
+        # edge_ind = []
+        # vec_ind  = []
 
-        face_list = []
-        edge_list = []
-        vec_list  = []
+        # face_list = []
+        # edge_list = []
+        # vec_list  = []
 
-
-        bpy.context.object.update_from_editmode()
-        #Append to lists      
-        #        
-        # bm.select_history.validate() 
-        # selectedVerts = [v for v in bpy.context.active_object.data.vertices if v.select]
-        #     
-        # 3
 
         selected_verts = [verts for verts in bm.verts if verts.select]
         selected_edges = [edge for edge in bm.edges if edge.select]
@@ -406,7 +385,7 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
         print("\n")        
 
 
-
+        """Maybe it will be need"""
         # if len(selected_verts) != 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
         #     print(bm.select_history)
         #     for v in bm.select_history:
@@ -442,30 +421,14 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
 
 
-
-
-
-
         # for geom in bm.select_history:
         #     if isinstance(geom, bmesh.types.BMFace):
         #         print(geom.index, "geom.index")
-
-        # print(selected_faces)
-
-
-        # print(face_list)
-        # print(face_ind)
-
         
         # print(f.select)
         # print(len(vec_ind))
         # print(len(edge_ind))
         # print(len(face_ind))
-
-        # print(len(vec_list))
-        # print(len(edge_list))
-        # print(len(face_list))
-        
 
         # print(selected_faces, "selected_faces")
         # print(selected_edges, "selected_edges")
@@ -483,12 +446,11 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
         if len(selected_verts) != 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
 
             if len(selected_verts) > 1:
-                text = "You need to select only one item"
+                text = "You need to select only one vertex"
                 war = "ERROR"
                 self.report({war}, text)
+                return{"FINISHED"}
 
-            # print("selected_faces")
-            # bpy.context.scene.cursor.location = vec_list[0]
             # normal = obj.data.vertices[vec_ind[0]].normal
 
             bpy.context.scene.cursor.location = selected_verts[0].co
@@ -502,14 +464,18 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
             obj_camera.rotation_euler = rot_quat.to_euler()
             rot_quat =  rot_quat.to_euler()
 
+
         if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) == 0:
 
             if len(selected_edges) > 1:
-                text = "You need to select only one item"
+                text = "You need to select only one edge"
                 war = "ERROR"
                 self.report({war}, text)
+                return{"FINISHED"}
+
             
             edge_verts = selected_edges[0].verts
+
 
             location_of_edge = (edge_verts[0].co + edge_verts[1].co) / 2
             bpy.context.scene.cursor.location = location_of_edge
@@ -528,29 +494,14 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
         if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) != 0:
 
             if len(selected_faces) > 1:
-                text = "You need to select only one item"
+                text = "You need to select only one face"
                 war = "ERROR"
                 self.report({war}, text)
+                return{"FINISHED"}
 
-            # print("face_ind")
-            # selected_faces = [face for face in bm.faces if face.select]
+
             my_location = selected_faces[0].calc_center_median()
             normalgl = selected_faces[0].normal
-
-            # try:
-            #     # my_location = face_list[-1].calc_center_median()
-            #     # my_location = selected_faces[selected_faces[0].index].calc_center_median()
-            #     # normalgl = face_list[-1].normal
-            # except IndexError:
-            #     text = "You need to select all vertices of the face"
-            #     war = "ERROR"
-            #     self.report({war}, text)
-                # return {"FINISHED"}
-            # else:
-            # my_location = selected_faces[0].calc_center_median()
-            # my_location = face_list[-1].calc_center_median()
-            # my_location = selected_faces[0].calc_center_median()
-            # normalgl = face_list[-1].normal
 
 
             matrix_location = bpy.context.active_object.matrix_world @ my_location
@@ -558,14 +509,14 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
             # bpy.context.scene.cursor.location = matrix_location
             bpy.context.scene.cursor.location = my_location
 
-            g = len(vec_list)
+            # g = len(vec_list)
             # print(g)
             # for k in range (0, g):
             #     vec_list[k] = bpy.context.active_object.matrix_world  @ vec_list[k] # 1 selected
 
             # normallistgl = vec_list
             # normalgl = mathutils.geometry.normal(normallistgl)
-            # normalgl = 
+
 
             # Set cursor direction
             obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
@@ -575,9 +526,6 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
             obj_camera.rotation_euler = rot_quat.to_euler()
             rot_quat =  rot_quat.to_euler()
 
-            
-
-            # print(normalgl," Normal was calculated")
 
         return {'FINISHED'}
 
