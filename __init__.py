@@ -688,9 +688,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             #     panel="VIEW3D_PT_Set_Precise_Mesh",
             # )         
                     
-        col = layout.column(align=False)
-        # col = layout.column(align=True)
-
+        col = layout.column(align= True )
         
         split = col.split(factor=0.65, align=True)
         split.scale_y =1.2
@@ -701,9 +699,6 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
 
         split.operator("mesh.change_length_plus",icon="ADD", text = "")
 
-        
-        
-    
         if sc.bool_panel_arrow2:
             split.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
         else:
@@ -730,13 +725,46 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             if script_input_2:   
                 col_top.prop(w_m, "data_block_2", text = "") 
 
-            col_top.prop(w_m, "lengthbool")
+            # col_top.prop(w_m, "lengthbool")
+
+            # split = col_top.split(factor=0.15, align=1)
+            # split.prop(w_m, "lengthbool", icon = "ARROW_LEFTRIGHT" , icon_only = 1)
+            # split = split.split(factor=0.95, align=1)
+            # split.prop(w_m, "lengthbool", emboss=0, expand=1)
+
+            row = col_top.row(align=0)
+            row.scale_y = 0.25
+            row.label(text = "")
+
+            row_main = col_top.row(align=0)
+
+            row = row_main.row(align=0)
+
+            # row.alignment = "CENTER"
+
+            row.scale_x = 0.93
+            row.scale_y = 0.84
+            # row.ui_units_x = 0.7
+            # row.ui_units_y = 0.3
+
+            if w_m.lengthbool == True:
+                row.prop(w_m, "lengthbool", icon = "ARROW_LEFTRIGHT" , icon_only = 1)
+            else:
+                # row.label(icon = "CHECKBOX_DEHLT")
+                row.prop(w_m, "lengthbool", icon = "BLANK1" , icon_only = 1)
+
+            row = row_main.row(align=1)
+            row.scale_x = 0.8
+            # ui_units_x = 10
+            row.alignment = "LEFT"
+            row.prop(w_m, "lengthbool", emboss=0)
+
+            # row = row_main.row(align=1)
+            # row.scale_x = 0.1
+            # row.label(text = "")
+
 
         
-
-            
-
-                     
             # col_top.prop(ob, "lengthinput")
             # col_top.operator(bpy.ops.ui.eyedropper_id.idname())
             # col_top.operator(bpy.ops.wm.url_open(url = "https://github.com/rovh/Set-Precise-Mesh"))
