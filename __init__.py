@@ -671,7 +671,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
 
             if script_input:
                 col_top.prop(w_m, "data_block", text = "")
-
+# 
 
 
             # col_top.prop(w_m, "anglebool" )
@@ -681,22 +681,31 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             row.scale_y = 0.25
             row.label(text = "")
 
+
             row_main = col_top.row(align=1)
+
+            row_main.scale_y = 0.76
 
             row = row_main.row(align=1)
 
             # row.alignment = "CENTER"
 
-            row.scale_x = 0.93
-            row.scale_y = 0.84
-            # row.ui_units_x = 0.7
-            # row.ui_units_y = 0.3
+            
+            
+            # 
+            # 
 
             if w_m.anglebool:
                 row.prop(w_m, "anglebool", icon = "MOD_SIMPLIFY" , icon_only = 1)
             else:
                 # row.label(icon = "CHECKBOX_DEHLT")
                 row.prop(w_m, "anglebool", icon = "BLANK1" , icon_only = 1)
+                row.scale_x = 0.78
+                row.scale_y = 1
+
+                # row.ui_units_x = 2
+                # row.ui_units_y = 0.7
+
 
             row = row_main.row(align=1)
             row.scale_x = 0.9
@@ -765,21 +774,23 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             row.label(text = "")
 
             row_main = col_top.row(align=1)
+            row_main.scale_y = 0.76
 
             row = row_main.row(align=1)
 
             # row.alignment = "CENTER"
 
-            row.scale_x = 0.93
-            row.scale_y = 0.9
             # row.ui_units_x = 0.7
             # row.ui_units_y = 0.3
 
             if w_m.lengthbool:
                 row.prop(w_m, "lengthbool", icon = "ARROW_LEFTRIGHT" , icon_only = 1)
             else:
-                # row.label(icon = "CHECKBOX_DEHLT")
                 row.prop(w_m, "lengthbool", icon = "BLANK1" , icon_only = 1)
+                row.scale_x = 0.76
+                row.scale_y = 1
+
+
 
             row = row_main.row(align=1)
             row.scale_x = 0.9
