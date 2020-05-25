@@ -761,7 +761,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
 
             if script_input:
                 col_top.prop(w_m, "data_block", text = "")
-# 
+
 
 
             col_top.prop(w_m, "anglebool" )
@@ -895,7 +895,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             # col_top.operator(bpy.ops.ui.eyedropper_id.idname())
             # col_top.operator(bpy.ops.wm.url_open(url = "https://github.com/rovh/Set-Precise-Mesh"))
             
-"""Preferences"""
+"""Preferences Panel and Props"""
 class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
     # this must match the addon name, use '__package__'
     # when defining this in a submodule of a python package.
@@ -918,6 +918,21 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
             description="Globally",
             default=True,
             )
+    location_in_UI_1: BoolProperty(
+            name="location_in_UI",
+            description="location_in_UI",
+            default=True,
+            )
+    location_in_UI_2: BoolProperty(
+            name="location_in_UI",
+            description="location_in_UI",
+            default=True,
+            )
+    location_in_UI_3: BoolProperty(
+            name="location_in_UI",
+            description="location_in_UI",
+            default=True,
+            )
 
 
     def draw(self, context):
@@ -934,6 +949,13 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
         col.prop(self, "direction_of_length", text='Invert "Set Length" direction')
         # col.prop(self, "direction_of_angle", text='Invert "Set Angle" direction')
         col.operator("wm.menu_setprecisemesh_operator",icon="MENU_PANEL", text="Pop-up Menu (Hover cursor on it for more information)")
+        
+        # split = col.split(align = 1 , factor = 0.5)
+        row = col.row(align = 1)
+        row.prop(self, "location_in_UI_1", text = "1", icon = "BLANK1")
+        row.prop(self, "location_in_UI_2", text = "2", icon = "BLANK1")
+        row.prop(self, "location_in_UI_3", text = "3", icon = "BLANK1")
+
         col.prop(self, "bool_warning_global", text='Show Warning Panel in Blender (Global)')
         # row = layout.row()
         # row.scale_x = 0.1
