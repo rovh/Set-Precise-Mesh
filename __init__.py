@@ -405,16 +405,15 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
 
         # print(selected_verts)
-
+        print("\n")
         # print(bm.select_history, "select_history")
         
         if len(selected_verts) != 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
-
+            print(bm.select_history)
             for v in bm.select_history:
                 if v.select:
                     vec_list.append(bm.verts[v.index].co)
                     vec_ind.append(v.index)
-
 
         if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) == 0:
 
@@ -423,13 +422,22 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
                     edge_list.append(bm.edges[e.index])
                     edge_ind.append(e.index)
 
-
         if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) != 0:
 
             for f in bm.select_history:
                 if f.select:
                     face_list.append(bm.faces[f.index])
+                    # try:
+                    #     # list_2 = list(set(selected_faces) & set(lst2))
+                    #     # if bm.faces[f.index] == selected_faces[:]:
+                    #     face_list.append(selected_faces[f.index])
+                    # except IndexError:
+                    #     pass
+                    # else:
+                    #     face_list.append(selected_faces[f.index])
                     face_ind.append(f.index)
+            # for f in range(0, len(face_list)):
+
 
         # print(selected_faces)
 
@@ -446,15 +454,20 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
         # print(len(vec_list))
         # print(len(edge_list))
         # print(len(face_list))
-        print("\n")
+        
 
         print(selected_faces, "selected_faces")
         print(selected_edges, "selected_edges")
         print(selected_verts, "selected_verts")
 
-        print(vec_list)
-        print(edge_list)
-        print(face_list)
+        print(vec_list,  "vec_list")
+        print(edge_list, "edge_list")
+        print(face_list, "face_list")
+
+        print(vec_ind,  "vec_ind")
+        print(edge_ind, "edge_ind")
+        print(face_ind, "face_ind")
+
 
 
 
@@ -494,6 +507,7 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
             # selected_faces = [face for face in bm.faces if face.select]
             try:
                 my_location = face_list[-1].calc_center_median()
+                # my_location = selected_faces[selected_faces[0].index].calc_center_median()
                 # my_location = selected_faces[0].calc_center_median()
                 normalgl = face_list[-1].normal
             except IndexError:
