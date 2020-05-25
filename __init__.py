@@ -674,7 +674,34 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
 
 
 
-            col_top.prop(w_m, "anglebool" )
+            # col_top.prop(w_m, "anglebool" )
+
+            row = col_top.row(align=0)
+            row.scale_y = 0.25
+            row.label(text = "")
+
+            row_main = col_top.row(align=0)
+
+            row = row_main.row(align=0)
+
+            # row.alignment = "CENTER"
+
+            row.scale_x = 0.93
+            row.scale_y = 0.84
+            # row.ui_units_x = 0.7
+            # row.ui_units_y = 0.3
+
+            if w_m.anglebool:
+                row.prop(w_m, "anglebool", icon = "MOD_SIMPLIFY" , icon_only = 1)
+            else:
+                # row.label(icon = "CHECKBOX_DEHLT")
+                row.prop(w_m, "anglebool", icon = "BLANK1" , icon_only = 1)
+
+            row = row_main.row(align=1)
+            row.scale_x = 0.8
+            row.alignment = "LEFT"
+            row.prop(w_m, "anglebool", emboss=0)
+
             # col_top.prop(self, "projection_type")
             # col_top.prop(ob, "angleinput")
             # row = layout.row(align=True)
@@ -747,7 +774,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             # row.ui_units_x = 0.7
             # row.ui_units_y = 0.3
 
-            if w_m.lengthbool == True:
+            if w_m.lengthbool:
                 row.prop(w_m, "lengthbool", icon = "ARROW_LEFTRIGHT" , icon_only = 1)
             else:
                 # row.label(icon = "CHECKBOX_DEHLT")
@@ -755,7 +782,6 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
 
             row = row_main.row(align=1)
             row.scale_x = 0.8
-            # ui_units_x = 10
             row.alignment = "LEFT"
             row.prop(w_m, "lengthbool", emboss=0)
 
