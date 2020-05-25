@@ -696,7 +696,9 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             # 
 
             if w_m.anglebool:
-                row.prop(w_m, "anglebool", icon = "MOD_SIMPLIFY" , icon_only = 1)
+                row.prop(w_m, "anglebool", icon = "CHECKMARK" , icon_only = 1)
+                row.scale_x = 1
+                row.scale_y = 1.2
             else:
                 # row.label(icon = "CHECKBOX_DEHLT")
                 row.prop(w_m, "anglebool", icon = "BLANK1" , icon_only = 1)
@@ -728,7 +730,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
         col = layout.column(align= True )
         
         split = col.split(factor=0.65, align=True)
-        split.scale_y =1.2
+        split.scale_y = 1.2
         
         split.operator("mesh.change_length_copy",icon="DRIVER_DISTANCE")
 
@@ -784,7 +786,10 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             # row.ui_units_y = 0.3
 
             if w_m.lengthbool:
-                row.prop(w_m, "lengthbool", icon = "ARROW_LEFTRIGHT" , icon_only = 1)
+                row.prop(w_m, "lengthbool", icon = "CHECKMARK" , icon_only = 1)
+                row.scale_x = 1
+                row.scale_y = 1.2
+
             else:
                 row.prop(w_m, "lengthbool", icon = "BLANK1" , icon_only = 1)
                 row.scale_x = 0.76
