@@ -19,11 +19,7 @@ from mathutils import Vector, Matrix, Quaternion, Euler
 # def check(self):
     
     
-def check3(self):
-    # obj = bpy.context.object
-    text = "You need to select from 1 to 4 vertices"
-    war = "ERROR"
-    self.report({war}, text)
+
 
 class SetAngle_Plus(bpy.types.Operator):
     """Tooltip"""
@@ -51,15 +47,28 @@ class SetAngle_Copy(bpy.types.Operator):
     def poll(cls, context):
         return context.active_object is not None
 
+    # def invoke(self, context):
+    #     bpy.ops.mesh.change_angle(Clear_angle_globally = 0)
+
     def execute(self, context):
-        bpy.ops.mesh.change_angle()
+
+        # try:
+        #     bpy.ops.mesh.change_angle(Clear_angle_globally = 0)
+        # except RuntimeError:
+        #     text = "You need to select from 1 to 4 vertices"
+        #     war = "ERROR"
+        #     self.report({war}, text)
+            # pass
+
+        bpy.ops.mesh.change_angle(Clear_angle_globally = 0)
+
         return {"FINISHED"}
                 
 
 class SetAngle(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_angle"
-    bl_label = "Set Angle"
+    bl_label = "Set Angle Original"
     bl_description = "Set Angle \n You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -69,6 +78,7 @@ class SetAngle(bpy.types.Operator):
     def poll(cls, context):
         return context.active_object is not None
 
+        
     def execute(self, context):
                 
         # check(self)
@@ -127,14 +137,24 @@ class SetAngle(bpy.types.Operator):
         #Append to lists
         for g in bm.select_history:
             # if len(vec)<3:
-                vec.append(bm.verts[g.index].co)
-                ind.append(g.index)
+            vec.append(bm.verts[g.index].co)
+            ind.append(g.index)
 
 
         # Check number
         if len(vec)<2 or len(vec) > 4:
-            check3(self)
-            return{"FINISHED"}
+            # check3(self)
+
+            # text = "You need to select from 1 to 4 vertices"
+            # war = "ERROR"
+            # self.report({war}, text)
+
+            bpy.ops.object.dialog_warning_operator_4('INVOKE_DEFAULT') 
+
+            return {"FINISHED"}
+
+            # print
+
 
         # Differrent cases for progection
         prog = context.window_manager.setprecisemesh.projection_type

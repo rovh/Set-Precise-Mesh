@@ -119,6 +119,12 @@ class Dialog_Warning_Operator_3 (bpy.types.Operator):
     bl_idname = "object.dialog_warning_operator_3"
     bl_label = "Warning Panel Operator"
 
+    warnin: StringProperty()
+
+    @classmethod
+    def poll(cls, context):
+        return context.active_object is not None
+
     def execute(self, context):
         return {'FINISHED'}
 
@@ -142,6 +148,41 @@ class Dialog_Warning_Operator_3 (bpy.types.Operator):
         lay = layout.label(text = "Angle between your cursor or custom object is zero")
         lay = layout.label(text = "Your rotation can be not correct")
         lay = layout.label(text = "Please, change (cursor/custom object) location or change selected vertices")
+
+class Dialog_Warning_Operator_4 (bpy.types.Operator):
+    bl_idname = "object.dialog_warning_operator_4"
+    bl_label = "Warning Panel Operator"
+
+
+    @classmethod
+    def poll(cls, context):
+        return context.active_object is not None
+
+    def execute(self, context):
+        return {'FINISHED'}
+
+    def invoke(self, context, event): 
+
+        # return context.window_manager.invoke_props_dialog(self)
+        return context.window_manager.invoke_popup(self, width=400)
+        # return context.window_manager.invoke_popup(self)
+        # return context.window_manager.invoke_props_popup(self, event)
+        # return context.window_manager.invoke_confirm(self, event)
+
+    def draw(self, context):
+        layout = self.layout
+        lay = layout.label(text= "Warning" , icon="ERROR")
+
+        # row = layout.row()
+        # row.label(icon = "DRIVER_ROTATIONAL_DIFFERENCE")
+        # row.label(text = " = 0 ")
+        # row.scale_x = 0.1
+        
+        lay = layout.label(text = "You need to select from 1 to 4 vertices")
+        # lay = layout.label(text = "Your rotation can be not correct")
+        # lay = layout.label(text = "Please, change (cursor/custom object) location or change selected vertices")
+
+
 
 class Header_SetPreciseMesh (bpy.types.Operator):
    
@@ -674,45 +715,39 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
 # 
 
 
-            # col_top.prop(w_m, "anglebool" )
+            col_top.prop(w_m, "anglebool" )
 
 
-            row = col_top.row(align=1)
-            row.scale_y = 0.25
-            row.label(text = "")
+            # row = col_top.row(align=1)
+            # row.scale_y = 0.25
+            # row.label(text = "")
 
 
-            row_main = col_top.row(align=1)
+            # row_main = col_top.row(align=1)
 
-            row_main.scale_y = 0.76
+            # row_main.scale_y = 0.76
 
-            row = row_main.row(align=1)
+            # row = row_main.row(align=1)
 
             # row.alignment = "CENTER"
 
-            
-            
-            # 
-            # 
+            # if w_m.anglebool:
+            #     row.prop(w_m, "anglebool", icon = "CHECKMARK" , icon_only = 1)
+            #     row.scale_x = 1
+            #     row.scale_y = 1.2
+            # else:
+            #     # row.label(icon = "CHECKBOX_DEHLT")
+            #     row.prop(w_m, "anglebool", icon = "BLANK1" , icon_only = 1)
+            #     row.scale_x = 0.78
+            #     row.scale_y = 1
 
-            if w_m.anglebool:
-                row.prop(w_m, "anglebool", icon = "CHECKMARK" , icon_only = 1)
-                row.scale_x = 1
-                row.scale_y = 1.2
-            else:
-                # row.label(icon = "CHECKBOX_DEHLT")
-                row.prop(w_m, "anglebool", icon = "BLANK1" , icon_only = 1)
-                row.scale_x = 0.78
-                row.scale_y = 1
-
-                # row.ui_units_x = 2
-                # row.ui_units_y = 0.7
+            # row = row_main.row(align=1)
+            # row.scale_x = 0.9
+            # row.alignment = "LEFT"
+            # row.prop(w_m, "anglebool", emboss=0)
 
 
-            row = row_main.row(align=1)
-            row.scale_x = 0.9
-            row.alignment = "LEFT"
-            row.prop(w_m, "anglebool", emboss=0)
+
 
             # col_top.prop(self, "projection_type")
             # col_top.prop(ob, "angleinput")
@@ -764,43 +799,42 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             if script_input_2:   
                 col_top.prop(w_m, "data_block_2", text = "") 
 
-            # col_top.prop(w_m, "lengthbool")
+            col_top.prop(w_m, "lengthbool")
 
-            # split = col_top.split(factor=0.15, align=1)
-            # split.prop(w_m, "lengthbool", icon = "ARROW_LEFTRIGHT" , icon_only = 1)
-            # split = split.split(factor=0.95, align=1)
-            # split.prop(w_m, "lengthbool", emboss=0, expand=1)
+            # row = col_top.row(align=1)
+            # row.scale_y = 0.25
+            # row.label(text = "")
 
-            row = col_top.row(align=1)
-            row.scale_y = 0.25
-            row.label(text = "")
+            # row_main = col_top.row(align=1)
+            # row_main.scale_y = 0.76
 
-            row_main = col_top.row(align=1)
-            row_main.scale_y = 0.76
-
-            row = row_main.row(align=1)
-
-            # row.alignment = "CENTER"
-
-            # row.ui_units_x = 0.7
-            # row.ui_units_y = 0.3
-
-            if w_m.lengthbool:
-                row.prop(w_m, "lengthbool", icon = "CHECKMARK" , icon_only = 1)
-                row.scale_x = 1
-                row.scale_y = 1.2
-
-            else:
-                row.prop(w_m, "lengthbool", icon = "BLANK1" , icon_only = 1)
-                row.scale_x = 0.76
-                row.scale_y = 1
+            # row = row_main.row(align=1)
 
 
+            # if w_m.lengthbool:
 
-            row = row_main.row(align=1)
-            row.scale_x = 0.9
-            row.alignment = "LEFT"
-            row.prop(w_m, "lengthbool", emboss=0)
+            #     row.prop(w_m, "lengthbool", icon = "CHECKMARK" , icon_only = 1)
+            #     row.scale_x = 0.76
+            #     row.scale_y = 1
+
+            #     row = row_main.row(align=1)
+            #     row.scale_x = 1
+            #     row.alignment = "LEFT"
+            #     row.prop(w_m, "lengthbool", emboss=0)
+
+            # else:
+            #     row.prop(w_m, "lengthbool", icon = "BLANK1" , icon_only = 1)
+            #     row.scale_x = 0.76
+            #     row.scale_y = 1
+
+            #     row = row_main.row(align=1)
+            #     row.scale_x = 0.9
+            #     row.alignment = "LEFT"
+            #     row.prop(w_m, "lengthbool", emboss=0)
+
+
+
+            
 
             # row = row_main.row(align=1)
             # row.scale_x = 0.1
@@ -986,6 +1020,7 @@ blender_classes = [
     Dialog_Warning_Operator,
     Dialog_Warning_Operator_2,
     Dialog_Warning_Operator_3,
+    Dialog_Warning_Operator_4,
     SetPreciseMesh_Props,
     SetPreciseMesh_Preferences,
     Popup_Menu_SetPreciseMesh_Operator,
