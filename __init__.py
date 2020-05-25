@@ -149,8 +149,39 @@ class Dialog_Warning_Operator_3 (bpy.types.Operator):
         lay = layout.label(text = "Your rotation can be not correct")
         lay = layout.label(text = "Please, change (cursor/custom object) location or change selected vertices")
 
+class Dialog_Warning_Operator_4 (bpy.types.Operator):
+    bl_idname = "object.dialog_warning_operator_4"
+    bl_label = "Warning Panel Operator"
 
+    warnin: StringProperty()
 
+    @classmethod
+    def poll(cls, context):
+        return context.active_object is not None
+
+    def execute(self, context):
+        return {'FINISHED'}
+
+    def invoke(self, context, event): 
+
+        # return context.window_manager.invoke_props_dialog(self)
+        return context.window_manager.invoke_popup(self, width=400)
+        # return context.window_manager.invoke_popup(self)
+        # return context.window_manager.invoke_props_popup(self, event)
+        # return context.window_manager.invoke_confirm(self, event)
+
+    def draw(self, context):
+        layout = self.layout
+        lay = layout.label(text= "Warning" , icon="ERROR")
+
+        row = layout.row()
+        row.label(icon = "DRIVER_ROTATIONAL_DIFFERENCE")
+        row.label(text = " = 0 ")
+        row.scale_x = 0.1
+        
+        lay = layout.label(text = "Angle between your cursor or custom object is zero")
+        lay = layout.label(text = "Your rotation can be not correct")
+        lay = layout.label(text = "Please, change (cursor/custom object) location or change selected vertices")
 
 class Header_SetPreciseMesh (bpy.types.Operator):
    
@@ -283,16 +314,25 @@ class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
     def execute(self, context):
         return {'FINISHED'}
 
-    def invoke(self, context, event): 
+    def invoke(self, context, event):
+        x = event.mouse_x
+        y = event.mouse_y 
+
+        
         
         # return context.window_manager.invoke_props_dialog(self)
         # return context.window_manager.invoke_popup(self, width=600, height=500)
         # return context.window_manager.invoke_popup(self)
-        return context.window_manager.invoke_popup(self, width = 200)
+        context.window_manager.invoke_popup(self, width = 200)
+        x = event.mouse_x
+        y = event.mouse_y 
+        # bpy.context.window.cursor_warp(50 + x, 50 + y)
+
+        # return {"FINISHED"}
+
         # if self.return == {"CANCELLED"}:
             # context.window_manager.invoke_popup(self, width = 200)
-
-        # return  
+        # return
 
         # return context.window_manager.invoke_props_popup(self, event)
         # return context.window_manager.invoke_confirm(self, event)
@@ -554,6 +594,36 @@ class Browser_Link (bpy.types.Operator):
     def execute(self, context):
         bpy.ops.wm.url_open(url = "https://github.com/rovh/Set-Precise-Mesh/releases")
         return {"FINISHED"}
+
+class SimpleMouseOperator(bpy.types.Operator):
+    """ This operator shows the mouse location,
+        this string is used for the tooltip and API docs
+    """
+    bl_idname = "wm.mouse_position"
+    bl_label = "Mouse location"
+    # bl_label = "Change version"
+
+    x = bpy.props.IntProperty()
+    y = bpy.props.IntProperty()
+
+    def execute(self, context):
+        # rather then printing, use the report function,
+        # this way the message appears in the header,
+        self.report({'INFO'}, "Mouse coords are %d %d" % (self.x, self.y))
+        return {'FINISHED'}
+
+    def invoke(self, context, event):
+        # self.x = event.mouse_x
+        # self.y = event.mouse_y
+
+        event.mouse_x = 100
+        event.mouse_y = 100
+
+
+
+
+        return self.execute(context)
+
 
 items = [('one', 'Any', "", 'PRESET', 1), ('two', 'PropertyGroup', "", 'PRESET', 2), ('three', 'type', "", 'PRESET', 3)]
 
@@ -979,6 +1049,7 @@ blender_classes = [
     Dupli,
     Dupli2,
     # SetPresiceMesh_Panel,
+    SimpleMouseOperator,
     SetAngle,
     SetAngle_Copy,
     SetAngle_Plus,
@@ -988,6 +1059,7 @@ blender_classes = [
     Dialog_Warning_Operator,
     Dialog_Warning_Operator_2,
     Dialog_Warning_Operator_3,
+    Dialog_Warning_Operator_4,
     SetPreciseMesh_Props,
     SetPreciseMesh_Preferences,
     Popup_Menu_SetPreciseMesh_Operator,
