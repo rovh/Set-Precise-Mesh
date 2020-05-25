@@ -149,38 +149,6 @@ class Dialog_Warning_Operator_3 (bpy.types.Operator):
         lay = layout.label(text = "Your rotation can be not correct")
         lay = layout.label(text = "Please, change (cursor/custom object) location or change selected vertices")
 
-class Dialog_Warning_Operator_4 (bpy.types.Operator):
-    bl_idname = "object.dialog_warning_operator_4"
-    bl_label = "Warning Panel Operator"
-
-
-    @classmethod
-    def poll(cls, context):
-        return context.active_object is not None
-
-    def execute(self, context):
-        return {'FINISHED'}
-
-    def invoke(self, context, event): 
-
-        # return context.window_manager.invoke_props_dialog(self)
-        return context.window_manager.invoke_popup(self, width=400)
-        # return context.window_manager.invoke_popup(self)
-        # return context.window_manager.invoke_props_popup(self, event)
-        # return context.window_manager.invoke_confirm(self, event)
-
-    def draw(self, context):
-        layout = self.layout
-        lay = layout.label(text= "Warning" , icon="ERROR")
-
-        # row = layout.row()
-        # row.label(icon = "DRIVER_ROTATIONAL_DIFFERENCE")
-        # row.label(text = " = 0 ")
-        # row.scale_x = 0.1
-        
-        lay = layout.label(text = "You need to select from 1 to 4 vertices")
-        # lay = layout.label(text = "Your rotation can be not correct")
-        # lay = layout.label(text = "Please, change (cursor/custom object) location or change selected vertices")
 
 
 
@@ -1020,7 +988,6 @@ blender_classes = [
     Dialog_Warning_Operator,
     Dialog_Warning_Operator_2,
     Dialog_Warning_Operator_3,
-    Dialog_Warning_Operator_4,
     SetPreciseMesh_Props,
     SetPreciseMesh_Preferences,
     Popup_Menu_SetPreciseMesh_Operator,

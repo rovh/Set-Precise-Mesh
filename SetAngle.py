@@ -33,7 +33,16 @@ class SetAngle_Plus(bpy.types.Operator):
         return context.active_object is not None
 
     def execute(self, context):
-        bpy.ops.mesh.change_angle(Clear_angle_globally = 1)
+
+        try:
+            bpy.ops.mesh.change_angle(Clear_angle_globally = 0)
+        except RuntimeError:
+            text = "You need to select from 1 to 4 vertices"
+            war = "ERROR"
+            self.report({war}, text)
+
+        # bpy.ops.mesh.change_angle(Clear_angle_globally = 1)
+
         return {"FINISHED"}
 
 class SetAngle_Copy(bpy.types.Operator):
@@ -52,15 +61,14 @@ class SetAngle_Copy(bpy.types.Operator):
 
     def execute(self, context):
 
-        # try:
-        #     bpy.ops.mesh.change_angle(Clear_angle_globally = 0)
-        # except RuntimeError:
-        #     text = "You need to select from 1 to 4 vertices"
-        #     war = "ERROR"
-        #     self.report({war}, text)
-            # pass
+        try:
+            bpy.ops.mesh.change_angle(Clear_angle_globally = 0)
+        except RuntimeError:
+            text = "You need to select from 1 to 4 vertices"
+            war = "ERROR"
+            self.report({war}, text)
 
-        bpy.ops.mesh.change_angle(Clear_angle_globally = 0)
+        # bpy.ops.mesh.change_angle(Clear_angle_globally = 0)
 
         return {"FINISHED"}
                 
@@ -143,13 +151,12 @@ class SetAngle(bpy.types.Operator):
 
         # Check number
         if len(vec)<2 or len(vec) > 4:
-            # check3(self)
 
-            # text = "You need to select from 1 to 4 vertices"
-            # war = "ERROR"
-            # self.report({war}, text)
+            text = "You need to select from 1 to 4 vertices"
+            war = 'ERROR'
+            self.report({war}, text)
 
-            bpy.ops.object.dialog_warning_operator_4('INVOKE_DEFAULT') 
+            # bpy.ops.object.dialog_warning_operator_4('INVOKE_DEFAULT') 
 
             return {"FINISHED"}
 

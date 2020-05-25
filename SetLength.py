@@ -38,7 +38,16 @@ class SetLength_Plus(bpy.types.Operator):
         return context.active_object is not None
 
     def execute(self, context):
-        bpy.ops.mesh.change_length(plus_length = 1)
+
+        try:
+            bpy.ops.mesh.change_length(plus_length = 1)
+        except RuntimeError:
+            text = "You need to select 2 vertices"
+            war = "ERROR"
+            self.report({war}, text)
+
+        # bpy.ops.mesh.change_length(plus_length = 1)
+
         return {"FINISHED"}
 
 class SetLength_Copy(bpy.types.Operator):
@@ -54,7 +63,16 @@ class SetLength_Copy(bpy.types.Operator):
         return context.active_object is not None
 
     def execute(self, context):
-        bpy.ops.mesh.change_length()
+
+        try:
+            bpy.ops.mesh.change_length()
+        except RuntimeError:
+            text = "You need to select 2 vertices"
+            war = "ERROR"
+            self.report({war}, text)
+
+        # bpy.ops.mesh.change_length()
+
         return {"FINISHED"}
 
 
@@ -216,7 +234,7 @@ class SetLength(bpy.types.Operator):
 
             vec.reverse()
             ind.reverse()
-            print("invert_direction is done")
+            # print("invert_direction is done")
 
         
 
@@ -243,7 +261,7 @@ class SetLength(bpy.types.Operator):
         # Scale factor
         if self.plus_length == 1:
             length = lengthtrue  / (length + lengthtrue)
-            print("plus_length")
+            # print("plus_length")
         else:
             length = lengthtrue/length
             # length = length / lengthtrue/
