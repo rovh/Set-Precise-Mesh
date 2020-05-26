@@ -1081,10 +1081,6 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             # col_top.operator(bpy.ops.ui.eyedropper_id.idname())
             # col_top.operator(bpy.ops.wm.url_open(url = "https://github.com/rovh/Set-Precise-Mesh"))
 
-
-        
-
-
 """Preferences Panel and Props"""
 class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
     # this must match the addon name, use '__package__'
@@ -1133,16 +1129,20 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
         box = layout.box()
         box.label(icon="PREFERENCES", text = "Preferences")
         row = box.row()
-        col = row.column()
+        col = row.column(align = False)
         # col.label(text="Tab Category:")
         col.prop(self, "direction_of_length", text='Invert "Set Length" direction')
         # col.prop(self, "direction_of_angle", text='Invert "Set Angle" direction')
         
-        row = col.row(align = True)
-        row.operator("wm.menu_setprecisemesh_setangle",icon="MENU_PANEL", text="Pop-up Menu (Hover cursor on it for more information)")
-        row.operator("wm.menu_setprecisemesh_setlength",icon="MENU_PANEL", text="Pop-up Menu (Hover cursor on it for more information)")
+        row = col.row(align = False)
+        row.operator("wm.menu_setprecisemesh_setangle",icon="WINDOW", text="Pop-up Menu (Hover cursor on it for more information)")
+        row.operator("wm.menu_setprecisemesh_setlength",icon="WINDOW", text="Pop-up Menu (Hover cursor on it for more information)")
 
-        col.operator("wm.menu_setprecisemesh_operator",icon="MENU_PANEL", text="Pop-up Menu (Hover cursor on it for more information)")
+        row = col.row()
+        row.label(text = "")
+        row.scale_y = 0.1
+
+        col.operator("wm.menu_setprecisemesh_operator",icon="WINDOW", text="Pop-up Menu (Hover cursor on it for more information)")
 
 
         # split = col.split(align = 1 , factor = 0.5)
