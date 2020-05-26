@@ -149,39 +149,39 @@ class Dialog_Warning_Operator_3 (bpy.types.Operator):
         lay = layout.label(text = "Your rotation can be not correct")
         lay = layout.label(text = "Please, change (cursor/custom object) location or change selected vertices")
 
-class Dialog_Warning_Operator_4 (bpy.types.Operator):
-    bl_idname = "object.dialog_warning_operator_4"
-    bl_label = "Warning Panel Operator"
+# class Dialog_Warning_Operator_4 (bpy.types.Operator):
+#     bl_idname = "object.dialog_warning_operator_4"
+#     bl_label = "Warning Panel Operator"
 
-    warnin: StringProperty()
+#     warnin: StringProperty()
 
-    @classmethod
-    def poll(cls, context):
-        return context.active_object is not None
+#     @classmethod
+#     def poll(cls, context):
+#         return context.active_object is not None
 
-    def execute(self, context):
-        return {'FINISHED'}
+#     def execute(self, context):
+#         return {'FINISHED'}
 
-    def invoke(self, context, event): 
+#     def invoke(self, context, event): 
 
-        # return context.window_manager.invoke_props_dialog(self)
-        return context.window_manager.invoke_popup(self, width=400)
-        # return context.window_manager.invoke_popup(self)
-        # return context.window_manager.invoke_props_popup(self, event)
-        # return context.window_manager.invoke_confirm(self, event)
+#         # return context.window_manager.invoke_props_dialog(self)
+#         return context.window_manager.invoke_popup(self, width=400)
+#         # return context.window_manager.invoke_popup(self)
+#         # return context.window_manager.invoke_props_popup(self, event)
+#         # return context.window_manager.invoke_confirm(self, event)
 
-    def draw(self, context):
-        layout = self.layout
-        lay = layout.label(text= "Warning" , icon="ERROR")
+#     def draw(self, context):
+#         layout = self.layout
+#         lay = layout.label(text= "Warning" , icon="ERROR")
 
-        row = layout.row()
-        row.label(icon = "DRIVER_ROTATIONAL_DIFFERENCE")
-        row.label(text = " = 0 ")
-        row.scale_x = 0.1
+#         row = layout.row()
+#         row.label(icon = "DRIVER_ROTATIONAL_DIFFERENCE")
+#         row.label(text = " = 0 ")
+#         row.scale_x = 0.1
         
-        lay = layout.label(text = "Angle between your cursor or custom object is zero")
-        lay = layout.label(text = "Your rotation can be not correct")
-        lay = layout.label(text = "Please, change (cursor/custom object) location or change selected vertices")
+#         lay = layout.label(text = "Angle between your cursor or custom object is zero")
+#         lay = layout.label(text = "Your rotation can be not correct")
+#         lay = layout.label(text = "Please, change (cursor/custom object) location or change selected vertices")
 
 class Header_SetPreciseMesh (bpy.types.Operator):
    
@@ -510,8 +510,9 @@ class Popup_Menu_SetPreciseMesh_SetLength (bpy.types.Operator):
 class Set_Cursor_To_Normal (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.set_cursor"
-    bl_label = "Set Cursor to normal face"
-    bl_description = "You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
+    bl_label = "Set Cursor to normal"
+    bl_description = "Set cursor location to selected vertex/edge/face and rotate it by normal\
+        \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod
@@ -542,7 +543,7 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
         selected_edges = [edge for edge in bm.edges if edge.select]
         selected_faces = [face for face in bm.faces if face.select]
 
-        print("\n")        
+        # print("\n")        
 
 
         """Maybe it will be need"""
@@ -683,7 +684,7 @@ class Browser_Link (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "wm.setprecisemesh_link"
     bl_label = "Change version"
-    bl_description = ""
+    bl_description = "Link"
     bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod
@@ -1148,7 +1149,7 @@ blender_classes = [
     Dialog_Warning_Operator,
     Dialog_Warning_Operator_2,
     Dialog_Warning_Operator_3,
-    Dialog_Warning_Operator_4,
+    # Dialog_Warning_Operator_4,
     SetPreciseMesh_Props,
     SetPreciseMesh_Preferences,
     Popup_Menu_SetPreciseMesh_Operator,
