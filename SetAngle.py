@@ -105,13 +105,15 @@ class SetAngle(bpy.types.Operator):
 
         if script_input == 1:
 
-            """Units Synchronization"""
             try:
                 eval(data_block)
             except SyntaxError:
                 height = bpy.context.window_manager.setprecisemesh.angle
             else:
                 height = eval(data_block)
+                
+
+                """Units Synchronization"""
 
                 if  system_rotation == 'DEGREES':
                     bpy.context.window_manager.setprecisemesh.angle = radians(height)

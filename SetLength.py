@@ -39,14 +39,15 @@ class SetLength_Plus(bpy.types.Operator):
 
     def execute(self, context):
 
+        # The script crashes due to the fact that "self.report"
+        # as I understand does not work  it in the case of embedding one operator in another
+
         try:
             bpy.ops.mesh.change_length(plus_length = 1)
         except RuntimeError:
             text = "You need to select 2 vertices"
             war = "ERROR"
             self.report({war}, text)
-
-        # bpy.ops.mesh.change_length(plus_length = 1)
 
         return {"FINISHED"}
 
@@ -64,14 +65,15 @@ class SetLength_Copy(bpy.types.Operator):
 
     def execute(self, context):
 
+        # The script crashes due to the fact that "self.report"
+        # as I understand does not work  it in the case of embedding one operator in another
+
         try:
             bpy.ops.mesh.change_length()
         except RuntimeError:
             text = "You need to select 2 vertices"
             war = "ERROR"
             self.report({war}, text)
-
-        # bpy.ops.mesh.change_length()
 
         return {"FINISHED"}
 
@@ -95,7 +97,8 @@ class SetLength(bpy.types.Operator):
 
         # Set values
         data_block_2 = bpy.context.window_manager.setprecisemesh.data_block_2
-
+        
+        """Replace syntax"""
         data_block_2 = data_block_2.replace(',', '.')
         data_block_2 = data_block_2.replace('^', '**')
         data_block_2 = data_block_2.replace(':', '/')
@@ -115,6 +118,8 @@ class SetLength(bpy.types.Operator):
                 length = eval(data_block_2)
                 length = length / bpy.context.scene.unit_settings.scale_length
 
+
+                """Units Synchronization"""
 
                 if  bpy.context.scene.unit_settings.system == 'METRIC' and length_unit == 'ADAPTIVE':
                     unit = length
@@ -166,8 +171,6 @@ class SetLength(bpy.types.Operator):
             length = bpy.context.window_manager.setprecisemesh.length
 
 
-
-
         bool = bpy.context.window_manager.setprecisemesh.lengthbool
         bool2 = bpy.context.window_manager.setprecisemesh.lengthinput
         
@@ -182,8 +185,8 @@ class SetLength(bpy.types.Operator):
         #Append to lists
         for g in bm.select_history:
             # if len(vec)<3:
-                vec.append(bm.verts[g.index].co)
-                ind.append(g.index)
+            vec.append(bm.verts[g.index].co)
+            ind.append(g.index)
                 
         # Check number
         if len(vec)<2:
