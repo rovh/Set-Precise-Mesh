@@ -26,8 +26,11 @@ def check(self):
 class SetAngle_Plus(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_angle_plus"
-    bl_label = "Angle Plus"
-    bl_description = 'Set Length / Distance \n You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut'
+    bl_label = "Plus Angle"
+    bl_description = 'Add/Plus angle to selected angle\
+    \n\
+    \nYou can also assign shortcut\
+    \nHow to do it: > right-click on this button > Assign Shortcut'
     bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod
