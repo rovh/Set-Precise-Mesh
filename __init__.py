@@ -410,6 +410,37 @@ class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
                        
             # col_top.prop(ob, "lengthinput")
 
+class Popup_Menu_SetPreciseMesh_SetAngle (bpy.types.Operator):
+    bl_idname = "wm.menu_setprecisemesh_setangle"
+    bl_label = "Pop-up Menu Set Angle"
+    bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
+         ( For exaple Ctrl + Alt + Wheel Down )\n \
+        How to do it: > right-click on this button > Assign Shortcut"
+        
+    def execute(self, context):
+        return {'FINISHED'}
+
+    def invoke(self, context, event):
+        x = event.mouse_x
+        y = event.mouse_y 
+
+        move_x = 0
+        move_y = 60
+
+        bpy.context.window.cursor_warp(x + move_x, y + move_y)
+        # context.window_manager.invoke_popup(self, width = 200)
+        # return context.window_manager.invoke_props_dialog(self)
+        # return context.window_manager.invoke_popup(self, width=600, height=500)
+        # return context.window_manager.invoke_popup(self)
+        inv = context.window_manager.invoke_popup(self, width = 200)
+        
+        bpy.context.window.cursor_warp(x, y)
+
+        return inv
+
+        def draw(self, context):
+            bpy.types.VIEW3D_PT_edit_mesh_set_precise_mesh1.draw(self, context)
+
 """Operators"""
 class Set_Cursor_To_Normal (bpy.types.Operator):
     """Tooltip"""
@@ -698,6 +729,8 @@ class ClearItemOperator(bpy.types.Operator):
         return {'FINISHED'}
 
 """Main Panel"""
+
+
 class SetPresiceMesh_Panel (bpy.types.Panel):
     
     bl_label = "Set Presice Mesh"
@@ -710,7 +743,12 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
     bl_label = "Set Precise Mesh / CAD"
 
     
+    
+    
+
+    
     def draw(self, context):
+
         layout = self.layout
 
         scene = context.scene
@@ -726,47 +764,54 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
         script_input = bpy.data.scenes[bpy.context.scene.name_full].script_input
         script_input_2 = bpy.data.scenes[bpy.context.scene.name_full].script_input_2
 
-        col = layout.column(align=True)
+        def draw_set_angle():
 
-        
-        
-        split = col.split(factor=0.65, align=True)
-        split.scale_y =1.2      
+            col = layout.column(align=True)
 
-        split.operator("mesh.change_angle_copy", icon="DRIVER_ROTATIONAL_DIFFERENCE")
+            split = col.split(factor=0.65, align=True)
+            split.scale_y =1.2      
 
-        split = split.split(factor=0.8, align=True)
+            split.operator("mesh.change_angle_copy", icon="DRIVER_ROTATIONAL_DIFFERENCE")
 
-        split.operator("mesh.change_angle_plus", icon="ADD", text = "")
-        # split.label(icon="PLUS")
+            split = split.split(factor=0.8, align=True)
 
-        
-    
-        if sc.bool_panel_arrow:
-            split.prop(sc, "bool_panel_arrow", text="", icon='DOWNARROW_HLT')
-        else:
-            split.prop(sc, "bool_panel_arrow", text="", icon='RIGHTARROW')
+            split.operator("mesh.change_angle_plus", icon="ADD", text = "")
+            # split.label(icon="PLUS")
 
-        if sc.bool_panel_arrow:
             
-            box = col.column(align=True).box().column()
 
-            col_top = box.column(align = True)
+            if sc.bool_panel_arrow:
+                split.prop(sc, "bool_panel_arrow", text="", icon='DOWNARROW_HLT')
+            else:
+                split.prop(sc, "bool_panel_arrow", text="", icon='RIGHTARROW')
 
-            row = col_top.row(align = True)
-            row.prop(w_m, "angle")
+            if sc.bool_panel_arrow:
+                
+                box = col.column(align=True).box().column()
 
-            row = row.row(align = False)
-            row.scale_x = 1.2
-            row.prop(sc, "script_input", text = "", icon = "FILE_SCRIPT")
+                col_top = box.column(align = True)
+
+                row = col_top.row(align = True)
+                row.prop(w_m, "angle")
+
+                row = row.row(align = False)
+                row.scale_x = 1.2
+                row.prop(sc, "script_input", text = "", icon = "FILE_SCRIPT")
 
 
-            if script_input:
-                col_top.prop(w_m, "data_block", text = "")
+                if script_input:
+                    col_top.prop(w_m, "data_block", text = "")
 
 
 
-            col_top.prop(w_m, "anglebool" )
+                col_top.prop(w_m, "anglebool" )
+
+        
+        draw_set_angle()
+
+        
+
+        
 
 
             # row = col_top.row(align=1)
@@ -813,44 +858,49 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             #     panel="VIEW3D_PT_Set_Precise_Mesh",
             # )         
                     
-        col = layout.column(align= True )
-        
-        split = col.split(factor=0.65, align=True)
-        split.scale_y = 1.2
-        
-        split.operator("mesh.change_length_copy",icon="DRIVER_DISTANCE")
+        def draw_set_length():
 
-        split = split.split(factor=0.8, align=True)
+            col = layout.column(align= True )
+            
+            split = col.split(factor=0.65, align=True)
+            split.scale_y = 1.2
+            
+            split.operator("mesh.change_length_copy",icon="DRIVER_DISTANCE")
 
-        split.operator("mesh.change_length_plus",icon="ADD", text = "")
+            split = split.split(factor=0.8, align=True)
 
-        if sc.bool_panel_arrow2:
-            split.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
-        else:
-            split.prop(sc, "bool_panel_arrow2", text="", icon='RIGHTARROW')
+            split.operator("mesh.change_length_plus",icon="ADD", text = "")
 
-        if sc.bool_panel_arrow2:            
-            box = col.column(align=True).box().column()            
-            col_top = box.column(align=True)
+            if sc.bool_panel_arrow2:
+                split.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
+            else:
+                split.prop(sc, "bool_panel_arrow2", text="", icon='RIGHTARROW')
 
-
-            # col_top.prop(w_m, "length") 
-
-            row = col_top.row(align = True)
-            row.prop(w_m, "length")
-
-            row = row.row(align = False)
-            row.scale_x = 1.2
-            row.prop(sc, "script_input_2", text = "", icon = "FILE_SCRIPT")
+            if sc.bool_panel_arrow2:            
+                box = col.column(align=True).box().column()            
+                col_top = box.column(align=True)
 
 
+                # col_top.prop(w_m, "length") 
 
-            # col_top.prop(sc, "script_input_2")
+                row = col_top.row(align = True)
+                row.prop(w_m, "length")
 
-            if script_input_2:   
-                col_top.prop(w_m, "data_block_2", text = "") 
+                row = row.row(align = False)
+                row.scale_x = 1.2
+                row.prop(sc, "script_input_2", text = "", icon = "FILE_SCRIPT")
 
-            col_top.prop(w_m, "lengthbool")
+
+
+                # col_top.prop(sc, "script_input_2")
+
+                if script_input_2:   
+                    col_top.prop(w_m, "data_block_2", text = "") 
+
+                col_top.prop(w_m, "lengthbool")
+
+
+        draw_set_length()
 
             # row = col_top.row(align=1)
             # row.scale_y = 0.25
@@ -919,21 +969,21 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
             description="Globally",
             default=True,
             )
-    location_in_UI_1: BoolProperty(
-            name="location_in_UI",
-            description="location_in_UI",
-            default=True,
-            )
-    location_in_UI_2: BoolProperty(
-            name="location_in_UI",
-            description="location_in_UI",
-            default=True,
-            )
-    location_in_UI_3: BoolProperty(
-            name="location_in_UI",
-            description="location_in_UI",
-            default=True,
-            )
+    # location_in_UI_1: BoolProperty(
+    #         name="location_in_UI",
+    #         description="location_in_UI",
+    #         default=True,
+    #         )
+    # location_in_UI_2: BoolProperty(
+    #         name="location_in_UI",
+    #         description="location_in_UI",
+    #         default=True,
+    #         )
+    # location_in_UI_3: BoolProperty(
+    #         name="location_in_UI",
+    #         description="location_in_UI",
+    #         default=True,
+    #         )
 
 
     def draw(self, context):
@@ -951,11 +1001,17 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
         # col.prop(self, "direction_of_angle", text='Invert "Set Angle" direction')
         col.operator("wm.menu_setprecisemesh_operator",icon="MENU_PANEL", text="Pop-up Menu (Hover cursor on it for more information)")
         
+        row = col.row()
+        row.operator("wm.menu_setprecisemesh_setangle",icon="MENU_PANEL", text="Pop-up Menu (Hover cursor on it for more information)")
+        row.operator("wm.menu_setprecisemesh_setangle",icon="MENU_PANEL", text="Pop-up Menu (Hover cursor on it for more information)")
+
+
+
         # split = col.split(align = 1 , factor = 0.5)
-        row = col.row(align = 1)
-        row.prop(self, "location_in_UI_1", text = "1", icon = "BLANK1")
-        row.prop(self, "location_in_UI_2", text = "2", icon = "BLANK1")
-        row.prop(self, "location_in_UI_3", text = "3", icon = "BLANK1")
+        # row = col.row(align = 1)
+        # row.prop(self, "location_in_UI_1", text = "1", icon = "BLANK1")
+        # row.prop(self, "location_in_UI_2", text = "2", icon = "BLANK1")
+        # row.prop(self, "location_in_UI_3", text = "3", icon = "BLANK1")
 
         col.prop(self, "bool_warning_global", text='Show Warning Panel in Blender (Global)')
         # row = layout.row()
@@ -1100,6 +1156,7 @@ blender_classes = [
     SetPreciseMesh_Props,
     SetPreciseMesh_Preferences,
     Popup_Menu_SetPreciseMesh_Operator,
+    Popup_Menu_SetPreciseMesh_SetAngle,
     Header_SetPreciseMesh,
     Set_Cursor_To_Normal,
     Browser_Link,
@@ -1115,6 +1172,8 @@ def register():
 
     bpy.types.WindowManager.setprecisemesh = PointerProperty(type=SetPreciseMesh_Props)
     bpy.types.VIEW3D_HT_tool_header.append(header_draw)
+    # bpy.types.VIEW3D_PT_edit_mesh_set_precise_mesh.draw.append(draw_set_angle)
+
     bpy.types.Scene.my_property = PointerProperty(type=bpy.types.Object)
 
     bpy.types.Scene.bool_panel_arrow = bpy.props.BoolProperty(
@@ -1165,6 +1224,7 @@ def unregister():
 
     del bpy.types.Scene.my_property
     bpy.types.VIEW3D_HT_tool_header.remove(header_draw)
+    # bpy.types.VIEW3D_PT_edit_mesh_set_precise_mesh.remove(draw_set_angle)
 
 
 if __name__ == "__main__":
