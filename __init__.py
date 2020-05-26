@@ -603,6 +603,13 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
         # print(edge_ind, "edge_ind")
         # print(face_ind, "face_ind")
 
+        if len(selected_verts) == 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
+
+            text = "You need to select one vertex/edge/face"
+            war = "ERROR"
+            self.report({war}, text)
+            return{"FINISHED"}
+
 
         if len(selected_verts) != 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
 
@@ -756,7 +763,6 @@ class Browser_Link (bpy.types.Operator):
 
 """Main Panel"""
 class SetPresiceMesh_Panel (bpy.types.Panel):
-    
     bl_label = "Set Presice Mesh"
     bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh"
     bl_space_type = 'VIEW_3D'
@@ -1114,8 +1120,7 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         default='global_matrix'
         )
         
-"""Duplication of the Main panel"""
-
+"""Duplications of the Main panel"""
 class Dupli (SetPresiceMesh_Panel):
     bl_label = "Set Presice Mesh1"
     bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh1"
@@ -1222,7 +1227,6 @@ def unregister():
 
     del bpy.types.Scene.my_property
     bpy.types.VIEW3D_HT_tool_header.remove(header_draw)
-    # bpy.types.VIEW3D_PT_edit_mesh_set_precise_mesh.remove(draw_set_angle)
 
 
 if __name__ == "__main__":
