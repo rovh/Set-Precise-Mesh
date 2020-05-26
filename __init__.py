@@ -987,18 +987,14 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
 
 
     def draw(self, context):
-        layout = self.layout
-        
-        # col = layout.column()
 
-        
+        layout = self.layout
+
         box = layout.box()
         box.label(icon="PREFERENCES", text = "Preferences")
         row = box.row()
         col = row.column(align = False)
-        # col.label(text="Tab Category:")
         col.prop(self, "direction_of_length", text='Invert "Set Length" direction')
-        # col.prop(self, "direction_of_angle", text='Invert "Set Angle" direction')
         
         row = col.row(align = False)
         row.operator("wm.menu_setprecisemesh_setangle",icon="WINDOW", text="Pop-up Menu (Hover cursor on it for more information)")
@@ -1018,9 +1014,9 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
         # row.prop(self, "location_in_UI_3", text = "3", icon = "BLANK1")
 
         col.prop(self, "bool_warning_global", text='Show Warning Panel in Blender (Global)')
-        # row = layout.row()
-        # row.scale_x = 0.1
+
         col.label(icon="INFO", text = "If you don't like this version you can download the previous version or download the next version if it exists:")
+        
         col.operator("wm.setprecisemesh_link",icon="RECOVER_LAST", text="Change version")
 
 """Props"""
@@ -1072,7 +1068,6 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
     data_block_2: bpy.props.StringProperty(
         name = "Number input",
     )
-
     description_projection_type = [
         #description_0
         "Local Matrix. It uses the matrix of the editing object and projects the selected vertices onto it" ,
@@ -1119,9 +1114,7 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         )
         
 """Duplication of the Main panel"""
-# print(__name__)
-# settings = bpy.context.preferences.addons[__name__].preferences
-# if settings.location_in_UI_1 == 1:
+
 class Dupli (SetPresiceMesh_Panel):
     bl_label = "Set Presice Mesh1"
     bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh1"
@@ -1167,6 +1160,7 @@ blender_classes = [
     # ChooseItemOperator,
     # NewItemOperator,
     # ClearItemOperator,
+
 ]
 
 def register():
@@ -1176,7 +1170,6 @@ def register():
 
     bpy.types.WindowManager.setprecisemesh = PointerProperty(type=SetPreciseMesh_Props)
     bpy.types.VIEW3D_HT_tool_header.append(header_draw)
-    # bpy.types.VIEW3D_PT_edit_mesh_set_precise_mesh.append(draw_set_angle)
 
     bpy.types.Scene.my_property = PointerProperty(type=bpy.types.Object)
 
@@ -1228,7 +1221,6 @@ def unregister():
 
     del bpy.types.Scene.my_property
     bpy.types.VIEW3D_HT_tool_header.remove(header_draw)
-    # bpy.types.VIEW3D_PT_edit_mesh_set_precise_mesh.remove(draw_set_angle)
 
 
 if __name__ == "__main__":
