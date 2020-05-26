@@ -198,6 +198,8 @@ class SetLength(bpy.types.Operator):
         # Get values
         settings = bpy.context.preferences.addons[__name__].preferences
         invert_direction = settings.direction_of_length
+
+
         # remember_length = bpy.types.Scene.remember_length
 
         # invert_direction_local = invert_direction_local
@@ -319,8 +321,6 @@ class SetLength(bpy.types.Operator):
                    
         else:
             
-
-        
             R = Matrix.Scale(1/length, 4, (lv))
   
             bmesh.ops.rotate(bm, 
