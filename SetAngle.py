@@ -15,10 +15,12 @@ from mathutils import Vector, Matrix, Quaternion, Euler
 
 # keyboard = Controller()
 
+def check(self):
+    # Check scale
+    obj = bpy.context.object
+    if obj.scale != Vector((1.0, 1.0, 1.0)) or obj.delta_scale != Vector((1.0, 1.0, 1.0)):
+        bpy.ops.object.dialog_warning_operator('INVOKE_DEFAULT') 
 
-# def check(self):
-    
-    
 
 
 class SetAngle_Plus(bpy.types.Operator):
@@ -34,14 +36,15 @@ class SetAngle_Plus(bpy.types.Operator):
 
     def execute(self, context):
 
+        # The script crashes due to the fact that "self.report"
+        # as I understand does not work  it in the case of embedding one operator in another
+
         try:
             bpy.ops.mesh.change_angle(Clear_angle_globally = 1)
         except RuntimeError:
             text = "You need to select from 1 to 4 vertices"
             war = "ERROR"
             self.report({war}, text)
-
-        # bpy.ops.mesh.change_angle(Clear_angle_globally = 1)
 
         return {"FINISHED"}
 
@@ -56,10 +59,10 @@ class SetAngle_Copy(bpy.types.Operator):
     def poll(cls, context):
         return context.active_object is not None
 
-    # def invoke(self, context):
-    #     bpy.ops.mesh.change_angle(Clear_angle_globally = 0)
-
     def execute(self, context):
+
+        # The script crashes due to the fact that "self.report"
+        # as I understand does not work  it in the case of embedding one operator in another
 
         try:
             bpy.ops.mesh.change_angle(Clear_angle_globally = 0)
@@ -67,8 +70,6 @@ class SetAngle_Copy(bpy.types.Operator):
             text = "You need to select from 1 to 4 vertices"
             war = "ERROR"
             self.report({war}, text)
-
-        # bpy.ops.mesh.change_angle(Clear_angle_globally = 0)
 
         return {"FINISHED"}
                 
@@ -88,27 +89,23 @@ class SetAngle(bpy.types.Operator):
 
         
     def execute(self, context):
-                
-        # check(self)
         
-        # Check scale
-        obj = bpy.context.object
-        if obj.scale != Vector((1.0, 1.0, 1.0)) or obj.delta_scale != Vector((1.0, 1.0, 1.0)):
-            bpy.ops.object.dialog_warning_operator('INVOKE_DEFAULT') 
-
-        # bpy.context.object.update_from_editmode()
+        check(self)
+        
 
         # Get values
         data_block = bpy.context.window_manager.setprecisemesh.data_block
+        script_input = bpy.context.scene.script_input
+        system_rotation = bpy.context.scene.unit_settings.system_rotation
+
+        """Replace syntax"""
         data_block = data_block.replace(',', '.')
         data_block = data_block.replace('^', '**')
         data_block = data_block.replace(':', '/')
 
-        script_input = bpy.context.scene.script_input
-        system_rotation = bpy.context.scene.unit_settings.system_rotation
-
         if script_input == 1:
 
+            """Units Synchronization"""
             try:
                 eval(data_block)
             except SyntaxError:
@@ -119,14 +116,13 @@ class SetAngle(bpy.types.Operator):
                 if  system_rotation == 'DEGREES':
                     bpy.context.window_manager.setprecisemesh.angle = radians(height)
                     height = radians(height)
+
                 else:
                     bpy.context.window_manager.setprecisemesh.angle = height
-                    # height = bpy.context.window_manager.setprecisemesh.angle
         else:
             height = bpy.context.window_manager.setprecisemesh.angle
             
 
-        # height = -1 * height
         bool = bpy.context.window_manager.setprecisemesh.anglebool
         bool2 = bpy.context.window_manager.setprecisemesh.angleinput
 
@@ -152,15 +148,12 @@ class SetAngle(bpy.types.Operator):
         # Check number
         if len(vec)<2 or len(vec) > 4:
 
+            # This check causes an RuntimeError
+
             text = "You need to select from 1 to 4 vertices"
             war = 'ERROR'
             self.report({war}, text)
-
-            # bpy.ops.object.dialog_warning_operator_4('INVOKE_DEFAULT') 
-
             return {"FINISHED"}
-
-            # print
 
 
         # Differrent cases for progection
@@ -422,58 +415,58 @@ class SetAngle(bpy.types.Operator):
                 bpy.context.scene.update_tag()
                 bpy.context.view_layer.update()
 
-            elif prog == "normal_matrix":
+            # elif prog == "normal_matrix":
 
-                bpy.context.object.update_from_editmode()
-                bmesh.update_edit_mesh(me, True, True)
-                # bpy.context.scene.update_tag()
-                # bpy.context.view_layer.update()
-                # bpy.context.depsgraph.update()
+            #     bpy.context.object.update_from_editmode()
+            #     bmesh.update_edit_mesh(me, True, True)
+            #     # bpy.context.scene.update_tag()
+            #     # bpy.context.view_layer.update()
+            #     # bpy.context.depsgraph.update()
 
                         
-                obj_matrix = bpy.context.active_object.matrix_world.copy()
-                # cursor_loc =  bpy.context.scene.cursor.location
-                mat_loc =  mathutils.Matrix.Translation(( 0.0 ,  0.0 ,  0.0 ))        
-                mat_sca =  mathutils.Matrix.Scale( 1.0 ,  4 ,  ( 0.0 ,  0.0 ,  1.0 ))
-                mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
+            #     obj_matrix = bpy.context.active_object.matrix_world.copy()
+            #     # cursor_loc =  bpy.context.scene.cursor.location
+            #     mat_loc =  mathutils.Matrix.Translation(( 0.0 ,  0.0 ,  0.0 ))        
+            #     mat_sca =  mathutils.Matrix.Scale( 1.0 ,  4 ,  ( 0.0 ,  0.0 ,  1.0 ))
+            #     mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
 
-                mat_out =  mat_loc @  mat_rot @  mat_sca
+            #     mat_out =  mat_loc @  mat_rot @  mat_sca
 
-                # cursor_matrix = bpy.context.scene.cursor.matrix.copy()
-                # cursor_matrix = cursor_matrix.inverted()
-                # obj_matrix = obj_matrix.inverted()
+            #     # cursor_matrix = bpy.context.scene.cursor.matrix.copy()
+            #     # cursor_matrix = cursor_matrix.inverted()
+            #     # obj_matrix = obj_matrix.inverted()
 
-                # mat_cur = obj_matrix @ cursor_matrix
-                mat_cur = obj_matrix
-                # mat_cur = cursor_matrix
+            #     # mat_cur = obj_matrix @ cursor_matrix
+            #     mat_cur = obj_matrix
+            #     # mat_cur = cursor_matrix
 
-                # cursor_matrix_loc = bpy.context.scene.cursor.matrix.translation
-                # cursor_matrix_loc = mat_cur @ cursor_matrix_loc
-                # cursor_matrix_loc = mat_cur @ cursor_matrix_loc
+            #     # cursor_matrix_loc = bpy.context.scene.cursor.matrix.translation
+            #     # cursor_matrix_loc = mat_cur @ cursor_matrix_loc
+            #     # cursor_matrix_loc = mat_cur @ cursor_matrix_loc
 
-                v_normal = obj.data.vertices[ind[1]].normal
-                v_normal = mat_cur @ v_normal
-                print(v_normal, "v_normal")
-
-
-                v2_prg =  v2
-                v2_prg = mat_cur  @ v2_prg
-
-                v_normal = mathutils.Vector( ( v_normal[0], v_normal[1], v2_prg[2]  ) )
-
-                v1 =  v_normal
-                # v1 = mat_cur @ v1
+            #     v_normal = obj.data.vertices[ind[1]].normal
+            #     v_normal = mat_cur @ v_normal
+            #     print(v_normal, "v_normal")
 
 
+            #     v2_prg =  v2
+            #     v2_prg = mat_cur  @ v2_prg
 
-                # v3_prg =  v3
-                # v3_prg = mat_cur @ v3_prg
+            #     v_normal = mathutils.Vector( ( v_normal[0], v_normal[1], v2_prg[2]  ) )
 
-                # v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
+            #     v1 =  v_normal
+            #     # v1 = mat_cur @ v1
 
-                mat_cur = mat_cur.inverted()
 
-                v1 = mat_cur @ v1
+
+            #     # v3_prg =  v3
+            #     # v3_prg = mat_cur @ v3_prg
+
+            #     # v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
+
+            #     mat_cur = mat_cur.inverted()
+
+            #     v1 = mat_cur @ v1
 
                 # v3_prg = mat_cur @ v3_prg
 
@@ -686,9 +679,7 @@ class SetAngle(bpy.types.Operator):
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
 
-                # if  lenvec == 1:
                 
-                # else:
                 newv3 = obj.data.vertices[ind[1]].co
                 
                 # iv1=v1
