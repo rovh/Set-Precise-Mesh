@@ -799,8 +799,6 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
         split = split.split(factor=0.8, align=True)
 
         split.operator("mesh.change_angle_plus", icon="ADD", text = "")
-        # split.label(icon="PLUS")
-
 
 
         if sc.bool_panel_arrow:
@@ -1190,12 +1188,12 @@ def register():
         default=True,
     )
     bpy.types.Scene.script_input = bpy.props.BoolProperty(
-            name="data_block",
+            name="Advanced input",
             description="",
             default=False,
     )
     bpy.types.Scene.script_input_2 = bpy.props.BoolProperty(
-            name="data_block",
+            name="Advanced input",
             description="",
             default=False,
     )
