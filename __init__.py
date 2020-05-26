@@ -350,7 +350,10 @@ class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
         # return context.window_manager.invoke_props_popup(self, event)
         # return context.window_manager.invoke_confirm(self, event)
     def draw(self, context):
+
         bpy.types.VIEW3D_PT_edit_mesh_set_precise_mesh1.draw(self, context)
+
+
     # def draw(self, context):
     #     layout = self.layout
 
@@ -668,7 +671,6 @@ class SimpleMouseOperator(bpy.types.Operator):
 
         return self.execute(context)
 
-
 items = [('one', 'Any', "", 'PRESET', 1), ('two', 'PropertyGroup', "", 'PRESET', 2), ('three', 'type', "", 'PRESET', 3)]
 
 class ChooseItemOperator(bpy.types.Operator):
@@ -729,8 +731,6 @@ class ClearItemOperator(bpy.types.Operator):
         return {'FINISHED'}
 
 """Main Panel"""
-
-
 class SetPresiceMesh_Panel (bpy.types.Panel):
     
     bl_label = "Set Presice Mesh"
@@ -742,29 +742,24 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
     bl_options = {'DEFAULT_CLOSED'}
     bl_label = "Set Precise Mesh / CAD"
 
-    
-    
-    
-
-    
     def draw(self, context):
 
-        layout = self.layout
+        def draw_set_angle(self, context):
 
-        scene = context.scene
-        sc = scene
-        ob = context.object
+            layout = self.layout
 
-        w_m = context.window_manager.setprecisemesh
+            scene = context.scene
+            sc = scene
+            ob = context.object
 
-        # Get values
-        bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
-        bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
+            w_m = context.window_manager.setprecisemesh
 
-        script_input = bpy.data.scenes[bpy.context.scene.name_full].script_input
-        script_input_2 = bpy.data.scenes[bpy.context.scene.name_full].script_input_2
+            # Get values
+            bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
+            bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
 
-        def draw_set_angle():
+            script_input = bpy.data.scenes[bpy.context.scene.name_full].script_input
+            script_input_2 = bpy.data.scenes[bpy.context.scene.name_full].script_input_2
 
             col = layout.column(align=True)
 
@@ -778,7 +773,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             split.operator("mesh.change_angle_plus", icon="ADD", text = "")
             # split.label(icon="PLUS")
 
-            
+
 
             if sc.bool_panel_arrow:
                 split.prop(sc, "bool_panel_arrow", text="", icon='DOWNARROW_HLT')
@@ -802,13 +797,21 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
                 if script_input:
                     col_top.prop(w_m, "data_block", text = "")
 
-
-
                 col_top.prop(w_m, "anglebool" )
+            
+            self.draw_set_angle(context)
 
+            self.draw_set_length(context)
+
+        # draw_set_angle()
+
+        # .draw_set_angle()
+        # self.
+        # self.draw_set_angle()
         
-        draw_set_angle()
+        # self.draw_set_angle()
 
+        # draw_1()
         
 
         
@@ -858,49 +861,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             #     panel="VIEW3D_PT_Set_Precise_Mesh",
             # )         
                     
-        def draw_set_length():
-
-            col = layout.column(align= True )
-            
-            split = col.split(factor=0.65, align=True)
-            split.scale_y = 1.2
-            
-            split.operator("mesh.change_length_copy",icon="DRIVER_DISTANCE")
-
-            split = split.split(factor=0.8, align=True)
-
-            split.operator("mesh.change_length_plus",icon="ADD", text = "")
-
-            if sc.bool_panel_arrow2:
-                split.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
-            else:
-                split.prop(sc, "bool_panel_arrow2", text="", icon='RIGHTARROW')
-
-            if sc.bool_panel_arrow2:            
-                box = col.column(align=True).box().column()            
-                col_top = box.column(align=True)
-
-
-                # col_top.prop(w_m, "length") 
-
-                row = col_top.row(align = True)
-                row.prop(w_m, "length")
-
-                row = row.row(align = False)
-                row.scale_x = 1.2
-                row.prop(sc, "script_input_2", text = "", icon = "FILE_SCRIPT")
-
-
-
-                # col_top.prop(sc, "script_input_2")
-
-                if script_input_2:   
-                    col_top.prop(w_m, "data_block_2", text = "") 
-
-                col_top.prop(w_m, "lengthbool")
-
-
-        draw_set_length()
+    
 
             # row = col_top.row(align=1)
             # row.scale_y = 0.25
@@ -946,7 +907,64 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             # col_top.prop(ob, "lengthinput")
             # col_top.operator(bpy.ops.ui.eyedropper_id.idname())
             # col_top.operator(bpy.ops.wm.url_open(url = "https://github.com/rovh/Set-Precise-Mesh"))
-            
+
+    def draw_set_length(self, context):
+
+        layout = self.layout
+
+        scene = context.scene
+        sc = scene
+        ob = context.object
+
+        w_m = context.window_manager.setprecisemesh
+
+        # Get values
+        bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
+        bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
+
+        script_input = bpy.data.scenes[bpy.context.scene.name_full].script_input
+        script_input_2 = bpy.data.scenes[bpy.context.scene.name_full].script_input_2
+
+        col = layout.column(align= True )
+        
+        split = col.split(factor=0.65, align=True)
+        split.scale_y = 1.2
+        
+        split.operator("mesh.change_length_copy",icon="DRIVER_DISTANCE")
+
+        split = split.split(factor=0.8, align=True)
+
+        split.operator("mesh.change_length_plus",icon="ADD", text = "")
+
+        if sc.bool_panel_arrow2:
+            split.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
+        else:
+            split.prop(sc, "bool_panel_arrow2", text="", icon='RIGHTARROW')
+
+        if sc.bool_panel_arrow2:            
+            box = col.column(align=True).box().column()            
+            col_top = box.column(align=True)
+
+
+            # col_top.prop(w_m, "length") 
+
+            row = col_top.row(align = True)
+            row.prop(w_m, "length")
+
+            row = row.row(align = False)
+            row.scale_x = 1.2
+            row.prop(sc, "script_input_2", text = "", icon = "FILE_SCRIPT")
+
+
+
+            # col_top.prop(sc, "script_input_2")
+
+            if script_input_2:   
+                col_top.prop(w_m, "data_block_2", text = "") 
+
+            col_top.prop(w_m, "lengthbool")
+
+
 """Preferences Panel and Props"""
 class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
     # this must match the addon name, use '__package__'
@@ -1172,7 +1190,7 @@ def register():
 
     bpy.types.WindowManager.setprecisemesh = PointerProperty(type=SetPreciseMesh_Props)
     bpy.types.VIEW3D_HT_tool_header.append(header_draw)
-    # bpy.types.VIEW3D_PT_edit_mesh_set_precise_mesh.draw.append(draw_set_angle)
+    # bpy.types.VIEW3D_PT_edit_mesh_set_precise_mesh.append(draw_set_angle)
 
     bpy.types.Scene.my_property = PointerProperty(type=bpy.types.Object)
 
