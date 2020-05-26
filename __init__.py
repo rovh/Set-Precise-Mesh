@@ -40,6 +40,8 @@ from bpy.props import (
         StringProperty,
         )
 
+from . import __name__
+
 """Pop up menus"""
 class Dialog_Warning_Operator   (bpy.types.Operator):
     bl_idname = "object.dialog_warning_operator"
@@ -749,7 +751,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             
             box = col.column(align=True).box().column()
 
-            col_top = box.column(align= True)
+            col_top = box.column(align = True)
 
             row = col_top.row(align = True)
             row.prop(w_m, "angle")
@@ -900,7 +902,6 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
     # this must match the addon name, use '__package__'
     # when defining this in a submodule of a python package.
     bl_idname = __name__
-
 
     direction_of_length: BoolProperty(
             name="bool",
@@ -1058,6 +1059,9 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         )
         
 """Duplication of the Main panel"""
+# print(__name__)
+# settings = bpy.context.preferences.addons[__name__].preferences
+# if settings.location_in_UI_1 == 1:
 class Dupli (SetPresiceMesh_Panel):
     bl_label = "Set Presice Mesh1"
     bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh1"

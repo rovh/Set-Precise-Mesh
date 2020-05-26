@@ -35,7 +35,7 @@ class SetAngle_Plus(bpy.types.Operator):
     def execute(self, context):
 
         try:
-            bpy.ops.mesh.change_angle(Clear_angle_globally = 0)
+            bpy.ops.mesh.change_angle(Clear_angle_globally = 1)
         except RuntimeError:
             text = "You need to select from 1 to 4 vertices"
             war = "ERROR"
