@@ -269,13 +269,19 @@ class SetLength(bpy.types.Operator):
         mv = (v1+v2)/2
         
         # Scale factor
-        try:
-            if self.plus_length == 1:
+        if self.plus_length == 1:
+            try:
                 length = lengthtrue  / (length + lengthtrue)
-            else:
+            except ZeroDivisionError:
+                pass
+        else:
+            try:
                 length = lengthtrue/length
-        except ZeroDivisionError:
-            pass
+            except ZeroDivisionError:
+                pass
+            
+    
+    
         
 
         context = bpy.context
