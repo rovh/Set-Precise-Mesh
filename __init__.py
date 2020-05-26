@@ -40,7 +40,7 @@ from bpy.props import (
         StringProperty,
         )
 
-from . import __name__
+# from . import __name__
 
 """Pop up menus"""
 class Dialog_Warning_Operator   (bpy.types.Operator):
@@ -1001,7 +1001,7 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
         # col.prop(self, "direction_of_angle", text='Invert "Set Angle" direction')
         col.operator("wm.menu_setprecisemesh_operator",icon="MENU_PANEL", text="Pop-up Menu (Hover cursor on it for more information)")
         
-        row = col.row()
+        row = col.row(align = True)
         row.operator("wm.menu_setprecisemesh_setangle",icon="MENU_PANEL", text="Pop-up Menu (Hover cursor on it for more information)")
         row.operator("wm.menu_setprecisemesh_setangle",icon="MENU_PANEL", text="Pop-up Menu (Hover cursor on it for more information)")
 
