@@ -231,13 +231,10 @@ class SetLength(bpy.types.Operator):
 
         # Invert direction for edge
         if invert_direction == 1:
-
             vec.reverse()
             ind.reverse()
-            # print("invert_direction is done")
 
         
-
         # Set values
         v1=vec[0]
         v2=vec[1]
@@ -249,24 +246,20 @@ class SetLength(bpy.types.Operator):
         norv2 = bpy.context.active_object.matrix_world  @ v2
         normalgl = norv2 - norv1
 
-        
 
         # Length of the edge
         lengthtrue =lv.length
         
-        
+
         # Center of the edge
         mv = (v1+v2)/2
         
         # Scale factor
         if self.plus_length == 1:
             length = lengthtrue  / (length + lengthtrue)
-            # print("plus_length")
         else:
             length = lengthtrue/length
-            # length = length / lengthtrue/
         
-
 
         context = bpy.context
         scene = context.scene
@@ -334,19 +327,11 @@ class SetLength(bpy.types.Operator):
                     
             bmesh.update_edit_mesh(me, True)
                   
-        # if result == 0:
-                # def remember_invert_direction_for_length():
-            # bpy.ops.ed.undo()
-                # remember_invert_direction = True
-        # remember_invert_direction_for_length()
         bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
         bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True, True)
 
-
-
         return {'FINISHED'}
-
 
 
 if __name__ == "__main__":
