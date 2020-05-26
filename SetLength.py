@@ -29,7 +29,7 @@ class SetLength_Plus(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_length_plus"
     bl_label = "Plus Length / Distance"
-    bl_description = 'Add/Plus length/distance to selected item \
+    bl_description = 'Add/plus length/distance to selected item \
     \n\
     \nYou can also assign shortcut\
     \nHow to do it: > right-click on this button > Assign Shortcut'
@@ -58,7 +58,8 @@ class SetLength_Copy(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_length_copy"
     bl_label = "Set Length / Distance"
-    bl_description = 'Set Length / Distance \n You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut'
+    bl_description = '  You can also assign shortcut \
+    \n  How to do it: > right-click on this button > Assign Shortcut'
     bl_options = {'REGISTER', 'UNDO'}
 
 
