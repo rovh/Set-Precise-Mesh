@@ -273,12 +273,12 @@ class SetLength(bpy.types.Operator):
             try:
                 length = lengthtrue  / (length + lengthtrue)
             except ZeroDivisionError:
-                pass
+                return {"FINISHED"}
         else:
             try:
                 length = lengthtrue/length
             except ZeroDivisionError:
-                pass
+                return {"FINISHED"}
             
     
     
