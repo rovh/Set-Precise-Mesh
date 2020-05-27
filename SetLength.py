@@ -266,11 +266,11 @@ class SetLength(bpy.types.Operator):
                 wm = bpy.context.active_object.matrix_world.copy()
                 wm = wm.inverted()
 
-                v1_prg = bpy.context.active_object.matrix_world  @ v2
+                v2_prg = bpy.context.active_object.matrix_world  @ v2
                               
-                v1 = mathutils.Vector((v1_prg[0], v1_prg[1] , 0)) # 1 selected simulate
+                v1 = mathutils.Vector((v2_prg[0], v2_prg[1] , 0)) # 1 selected simulate
 
-                print(v2)
+                # print(v2)
 
                 v1 = wm @ v1                 
 
@@ -280,23 +280,24 @@ class SetLength(bpy.types.Operator):
             elif prog == "local_matrix":
 
                 v2_prg = v2
-                v1 = v3
-                v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
-                v3_prg = v3
 
-                if v3_prg == v1 :
-                    Clear_angle = 1
+                # v1 = v3
+                v1 = mathutils.Vector((v2_prg[0], v2_prg[1] , 0)) # 1 selected simulate
+                # v3_prg = v3
 
-                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
+                # if v3_prg == v1 :
+                #     Clear_angle = 1
 
-                    # if v2_prg[2] < 0:
-                    #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 1.0)  ))
-                    # else:
-                    #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
+                #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
 
-                    oldv3 = v3
-                if v2_prg == v1:
-                    bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT')
+                #     # if v2_prg[2] < 0:
+                #     #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 1.0)  ))
+                #     # else:
+                #     #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
+
+                #     oldv3 = v3
+                # if v2_prg == v1:
+                #     bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT')
 
             elif prog == "cursor_location":
                 wm = bpy.context.active_object.matrix_world.copy()
