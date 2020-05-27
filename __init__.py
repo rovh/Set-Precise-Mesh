@@ -185,7 +185,7 @@ class Header_SetPreciseMesh (bpy.types.Operator):
     bl_idname = "wm.header_setprecisemesh_operator"
     bl_label = "Header Menu"
     bl_description = "To make it convenient to use the this menu You can assign shortcut \n \
-         ( For exaple Ctrl + Alt + Wheel Up )\n \
+         ( For exaple Ctrl + Alt + Middle Mouse )\n \
         How to do it: > right-click on this button > Assign Shortcut"
   
     
@@ -429,7 +429,7 @@ class Popup_Menu_SetPreciseMesh_SetLength (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_setlength"
     bl_label = "Pop-up Menu Set Length"
     bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
-         ( For exaple Ctrl + Alt + Wheel Down )\n \
+         ( For exaple Ctrl + Alt + Wheel Up )\n \
         How to do it: > right-click on this button > Assign Shortcut"
         
     def execute(self, context):
@@ -507,8 +507,8 @@ class Popup_Menu_SetPreciseMesh_SetLength (bpy.types.Operator):
 class Set_Cursor_To_Normal (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.set_cursor"
-    bl_label = "Set the Cursor to normal"
-    bl_description = "Set the cursor location to selected vertex/edge/face and rotate it by normal\
+    bl_label = "Set the Cursor to the normal"
+    bl_description = "Set the cursor location to the selected vertex/edge/face and rotate it by normal\
         \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     bl_options = {'REGISTER', 'UNDO'}
 
