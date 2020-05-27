@@ -362,11 +362,12 @@ class SetAngle(bpy.types.Operator):
 
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
-                bpy.context.scene.update_tag()
-                bpy.context.view_layer.update()
+                # bpy.context.scene.update_tag()
+                # bpy.context.view_layer.update()
 
                 obj_name = bpy.data.scenes[bpy.context.scene.name_full].my_property.name_full
                 custom_obj_matrix = bpy.data.objects[obj_name].matrix_world
+
                 custom_obj_matrix = custom_obj_matrix.copy()
                 custom_obj_matrix = custom_obj_matrix.inverted()
 
@@ -375,8 +376,8 @@ class SetAngle(bpy.types.Operator):
                 # obj_matrix_invert = obj_matrix.inverted()
 
                 # custom_obj_matrix = bpy.data.objects[obj_name].matrix_world
-                mat = obj_matrix @ custom_obj_matrix
-                # mat = custom_obj_matrix @ obj_matrix
+                # mat = obj_matrix @ custom_obj_matrix
+                mat = custom_obj_matrix @ obj_matrix
 
                 # custom_obj_loc = bpy.data.objects[obj_name].matrix_world.translation
                 # custom_obj_loc = custom_obj_loc.copy()
@@ -398,7 +399,7 @@ class SetAngle(bpy.types.Operator):
                 if v3_prg == v1 :
                     Clear_angle = True
 
-                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
+                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 100.0)  ))
                     
                     # if v2_prg[2] < 0:
                     # if v2_prg[2] < custom_obj_loc[2]:
@@ -416,8 +417,8 @@ class SetAngle(bpy.types.Operator):
 
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
-                bpy.context.scene.update_tag()
-                bpy.context.view_layer.update()
+                # bpy.context.scene.update_tag()
+                # bpy.context.view_layer.update()
 
             # elif prog == "normal_matrix":
 
