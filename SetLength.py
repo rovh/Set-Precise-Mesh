@@ -331,15 +331,15 @@ class SetLength(bpy.types.Operator):
 
                         
                 obj_matrix = bpy.context.active_object.matrix_world.copy()
-                obj_matrix = obj_matrix.inverted()
+                # obj_matrix = obj_matrix.inverted()
 
                 cursor_loc =  bpy.context.scene.cursor.location
 
                 cursor_matrix = bpy.context.scene.cursor.matrix.copy()
-                # cursor_matrix = cursor_matrix.inverted()
+                cursor_matrix = cursor_matrix.inverted()
 
                 # mat_cur = obj_matrix @ cursor_matrix
-                # mat_cur =  cursor_matrix @ obj_matrix
+                mat_cur =  cursor_matrix @ obj_matrix
                 # mat_cur = cursor_matrix
 
                 # cursor_matrix_loc = bpy.context.scene.cursor.matrix.translation
@@ -348,27 +348,28 @@ class SetLength(bpy.types.Operator):
 
                 # v2 =  obj_matrix @ v2
                 # v2 =  cursor_matrix @ v2
-                v2 = v2 @ obj_matrix
-                v2 =  v2 @ cursor_matrix
+                # v2 = v2 @ obj_matrix
+                # v2 =  v2 @ cursor_matrix
                 # v2 =  v2 @ mat_cur
-                # v2 =  mat_cur @ v2
+                v2_prg =  mat_cur @ v2
                 
 
-                v2_prg =  v2
+                # v2_prg =  v2
                 # v1 = mathutils.Vector((v2_prg[0], v2_prg[1] , cursor_loc[2])) # 1 selected simulate
                 v1 = mathutils.Vector((v2_prg[0], v2_prg[1] , 0)) # 1 selected simulate
 
                 # cursor_matrix = cursor_matrix.inverted()
-                # mat_cur = mat_cur.inverted()
-                obj_matrix = obj_matrix.inverted()
-                cursor_matrix = cursor_matrix.inverted()
+                mat_cur = mat_cur.inverted()
+                # obj_matrix = obj_matrix.inverted()
+                # cursor_matrix = cursor_matrix.inverted()
 
                 # v1 = obj_matrix @ v1
                 # v1 = cursor_matrix @ v1
-                v1 = v1 @ obj_matrix
-                v1 = v1 @ cursor_matrix
+                # v1 = v1 @ obj_matrix
+                # v1 = v1 @ cursor_matrix
 
                 # v1 = v1 @ mat_cur
+                v1 = mat_cur @ v1
                 # v1 = obj_matrix @ v1
                 # v1 = cursor_matrix @ v1
                 
