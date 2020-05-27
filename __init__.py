@@ -651,6 +651,9 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
         selected_edges = [edge for edge in bm.edges if edge.select]
         selected_faces = [face for face in bm.faces if face.select]
 
+        wm = bpy.context.active_object.matrix_world.copy()
+        wm_inverted = wm.inverted()
+
         # print("\n")        
 
 
@@ -727,9 +730,10 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
                 self.report({war}, text)
                 return{"FINISHED"}
 
-            bpy.context.scene.cursor.location = selected_verts[0].co
+            
+            bpy.context.scene.cursor.location = wm @ selected_verts[0].co
 
-            normal = selected_verts[0].normal
+            normal = selected_verts[0].normal @ wm_inverted
 
             obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
             direction = normal
@@ -751,11 +755,11 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
             edge_verts = selected_edges[0].verts
 
 
-            location_of_edge = (edge_verts[0].co + edge_verts[1].co) / 2
+            location_of_edge = ((wm @ edge_verts[0].co) + (wm @ edge_verts[1].co)) / 2
             bpy.context.scene.cursor.location = location_of_edge
 
 
-            normal = (edge_verts[0].normal + edge_verts[1].normal) / 2
+            normal = ((edge_verts[0].normal @ wm_inverted) + (edge_verts[1].normal @ wm_inverted)) / 2
 
 
             obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
@@ -775,13 +779,10 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
                 return{"FINISHED"}
 
 
-            my_location = selected_faces[0].calc_center_median()
-            normalgl = selected_faces[0].normal
+            my_location = wm @ selected_faces[0].calc_center_median()
+            normalgl = selected_faces[0].normal @ wm_inverted
 
-
-            matrix_location = bpy.context.active_object.matrix_world @ my_location
                         
-            # bpy.context.scene.cursor.location = matrix_location
             bpy.context.scene.cursor.location = my_location
 
             # Set cursor direction
