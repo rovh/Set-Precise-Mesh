@@ -242,10 +242,7 @@ class SetLength(bpy.types.Operator):
             ind.reverse()
 
         
-        # Set values
-        v1=vec[0]
-        v2=vec[1]
-        lv=v2-v1
+        
 
         # Check number
         if len(vec) < 1:
@@ -254,37 +251,40 @@ class SetLength(bpy.types.Operator):
             self.report({war}, text)
             return{"FINISHED"}
 
-        if len(vec) == 1:
+
+        elif len(vec) == 1:
 
             if prog == "global_matrix":
 
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
 
-                v1_prg = bpy.context.active_object.matrix_world  @ v1
-
                 wm = bpy.context.active_object.matrix_world.copy()
+
+                v2_prg = bpy.context.active_object.matrix_world  @ v1
                 # wm = wm.inverted()
                               
-                v1 = mathutils.Vector((v1_prg[0], v1_prg[1] , 0)) # 1 selected simulate
-                
-                v3_prg = bpy.context.active_object.matrix_world  @ v3
-                if v3_prg == v1 :
-                    # print("global matrix 1")
+                v2 = mathutils.Vector((v2_prg[0], v2_prg[1] , 0)) # 1 selected simulate
 
-                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
+                v2 = wm @ v2
+                
+                # v3_prg = bpy.context.active_object.matrix_world  @ v3
+                # if v3_prg == v1 :
+                #     # print("global matrix 1")
+
+                #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
 
                     # if v2_prg[2] < 0:
                     #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 1.0)  ))
                     # else:
                     #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
 
-                    v3 = wm @ v3
-                    oldv3 = v3
-                if v2_prg == v1:
-                    bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT') 
+                #     v3 = wm @ v3
+                #     oldv3 = v3
+                # if v2_prg == v1:
+                #     bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT') 
 
-                v1 = wm @ v1  
+                 
 
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
@@ -486,6 +486,11 @@ class SetLength(bpy.types.Operator):
                 bpy.context.scene.update_tag()
                 bpy.context.view_layer.update()
 
+        else:
+            # Set values
+            v1=vec[0]
+            v2=vec[1]
+            lv=v2-v1
 
 
 
