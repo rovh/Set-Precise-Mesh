@@ -356,8 +356,8 @@ class Header_Length_Simulation_SetPreciseMesh (bpy.types.Operator):
 
         # Matrix menu
         sub_col = col_right.column(align = 1)
-        sub_col.prop_enum( w_m, "projection_type", "local_matrix")
-        sub_col.prop_enum( w_m, "projection_type", "global_matrix")
+        sub_col.prop_enum( w_m, "projection_type_2", "local_matrix")
+        sub_col.prop_enum( w_m, "projection_type_2", "global_matrix")
 
         # space
         sub_col = col_right.column(align = 0)
@@ -366,8 +366,8 @@ class Header_Length_Simulation_SetPreciseMesh (bpy.types.Operator):
 
         # Cursor menu
         sub_col = col_right.column(align = 1)
-        sub_col.prop_enum( w_m, "projection_type", "cursor_location")
-        sub_col.prop_enum( w_m, "projection_type", "cursor_matrix")
+        sub_col.prop_enum( w_m, "projection_type_2", "cursor_location")
+        sub_col.prop_enum( w_m, "projection_type_2", "cursor_matrix")
 
         # space
         # sub_col = col_right.column(align = 0)
@@ -386,7 +386,7 @@ class Header_Length_Simulation_SetPreciseMesh (bpy.types.Operator):
 
         # Object menu
         sub_col = col_right.column(align = 1)
-        sub_col.prop_enum( w_m, "projection_type", "custom_object_location")
+        sub_col.prop_enum( w_m, "projection_type_2", "custom_object_location")
         
         # sub_col.prop_enum( w_m, "projection_type", "custom_object_matrix")
         # Make space object selection box
