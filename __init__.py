@@ -281,7 +281,7 @@ class Header_Angle_Simulation_SetPreciseMesh (bpy.types.Operator):
         sub_col.prop_enum( w_m, "projection_type", "custom_object_location")
         
         sub_col.prop_enum( w_m, "projection_type", "custom_object_matrix")
-        
+
         # Make space object selection box
         prog = context.window_manager.setprecisemesh.projection_type
         if prog == "custom_object_location" or  prog == "custom_object_matrix":
@@ -389,13 +389,14 @@ class Header_Length_Simulation_SetPreciseMesh (bpy.types.Operator):
         sub_col = col_right.column(align = 1)
         sub_col.prop_enum( w_m, "projection_type_2", "custom_object_location")
         
-        # sub_col.prop_enum( w_m, "projection_type", "custom_object_matrix")
-        # Make space object selection box
-        # prog = context.window_manager.setprecisemesh.projection_type
-        # if prog == "custom_object_location" or  prog == "custom_object_matrix":
-        #     sub_col.prop(context.scene, "my_property", text = "")
+        sub_col.prop_enum( w_m, "projection_type_2", "custom_object_matrix")
 
-        sub_col.prop(context.scene, "my_property_2", text = "")
+        # Make space object selection box
+        prog = context.window_manager.setprecisemesh.projection_type_2
+        if prog == "custom_object_location" or  prog == "custom_object_matrix":
+            sub_col.prop(context.scene, "my_property_2", text = "")
+
+        # sub_col.prop(context.scene, "my_property_2", text = "")
 
 def   header_draw(self, context):
     layout = self.layout

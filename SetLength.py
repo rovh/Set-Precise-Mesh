@@ -404,11 +404,12 @@ class SetLength(bpy.types.Operator):
 
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
-                bpy.context.scene.update_tag()
-                bpy.context.view_layer.update()
+                # bpy.context.scene.update_tag()
+                # bpy.context.view_layer.update()
 
-                obj_name = bpy.data.scenes[bpy.context.scene.name_full].my_property.name_full
+                obj_name = bpy.data.scenes[bpy.context.scene.name_full].my_property_2.name_full
                 custom_obj_matrix = bpy.data.objects[obj_name].matrix_world
+
                 custom_obj_matrix = custom_obj_matrix.copy()
                 custom_obj_matrix = custom_obj_matrix.inverted()
 
@@ -417,49 +418,50 @@ class SetLength(bpy.types.Operator):
                 # obj_matrix_invert = obj_matrix.inverted()
 
                 # custom_obj_matrix = bpy.data.objects[obj_name].matrix_world
-                mat = obj_matrix @ custom_obj_matrix
-                # mat = custom_obj_matrix @ obj_matrix
+                # mat = obj_matrix @ custom_obj_matrix
+                mat = custom_obj_matrix @ obj_matrix
 
                 # custom_obj_loc = bpy.data.objects[obj_name].matrix_world.translation
                 # custom_obj_loc = custom_obj_loc.copy()
                 # custom_obj_loc =  custom_obj_loc @ obj_matrix_invert
 
-                v3_prg =  v3
-                v3_prg = mat @ v3_prg
+                # v3_prg =  v3
+                # v3_prg = mat @ v3_prg
 
-                v2_prg =  v2
-                v2_prg =  mat @ v2_prg
+                # v2_prg =  v2
+                # v2_prg =  mat @ v2_prg
 
-                v1 = v3
-                v1 = mat @ v1
+                v2_prg = mat @ v2
                 
-                v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
+                v1 = mathutils.Vector((v2_prg[0], v2_prg[1] , 0)) # 1 selected simulate
                 
                 mat = mat.inverted()
 
-                if v3_prg == v1 :
-                    Clear_angle = True
+                v1 = mat @ v1
 
-                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
+                # if v3_prg == v1 :
+                #     Clear_angle = True
+
+                #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
                     
                     # if v2_prg[2] < 0:
                     # if v2_prg[2] < custom_obj_loc[2]:
                     #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
                     # else:
                     #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 100.0)  ))
-                    v3 = mat @ v3
-                    oldv3 = v3
+                    # v3 = mat @ v3
+                    # oldv3 = v3
 
-                if v2_prg == v1:
-                    bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT')
+                # if v2_prg == v1:
+                #     bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT')
 
-                v1 = mat @ v1
+                
 
 
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
-                bpy.context.scene.update_tag()
-                bpy.context.view_layer.update()
+                # bpy.context.scene.update_tag()
+                # bpy.context.view_layer.update()
 
         else:
             # Set values
