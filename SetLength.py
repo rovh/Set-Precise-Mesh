@@ -196,19 +196,7 @@ class SetLength(bpy.types.Operator):
             vec.append(bm.verts[g.index].co)
             ind.append(g.index)
                 
-        # Check number
-        if len(vec)<1:
-            text = "You need to select from 1 vertices"
-            war = "ERROR"
-            self.report({war}, text)
-            return{"FINISHED"}
-
         
-
-
-
-        
-
         # Get values
         settings = bpy.context.preferences.addons[__name__].preferences
         invert_direction = settings.direction_of_length
@@ -259,6 +247,13 @@ class SetLength(bpy.types.Operator):
         v2=vec[1]
         lv=v2-v1
 
+        # Check number
+        if len(vec) < 1:
+            text = "You need to select from 1 vertices"
+            war = "ERROR"
+            self.report({war}, text)
+            return{"FINISHED"}
+
         if len(vec) == 1:
 
             if prog == "global_matrix":
@@ -266,18 +261,16 @@ class SetLength(bpy.types.Operator):
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
 
-                v2_prg = bpy.context.active_object.matrix_world  @ vec
-                v1 = bpy.context.active_object.matrix_world  @ v3
+                v1_prg = bpy.context.active_object.matrix_world  @ v1
 
                 wm = bpy.context.active_object.matrix_world.copy()
-                wm = wm.inverted()
+                # wm = wm.inverted()
                               
-                v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
+                v1 = mathutils.Vector((v1_prg[0], v1_prg[1] , 0)) # 1 selected simulate
                 
                 v3_prg = bpy.context.active_object.matrix_world  @ v3
                 if v3_prg == v1 :
                     # print("global matrix 1")
-                    Clear_angle = 1
 
                     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
 
