@@ -353,7 +353,6 @@ class SetLength(bpy.types.Operator):
                 # v2 =  v2 @ mat_cur
                 v2_prg =  mat_cur @ v2
                 
-
                 # v2_prg =  v2
                 # v1 = mathutils.Vector((v2_prg[0], v2_prg[1] , cursor_loc[2])) # 1 selected simulate
                 v1 = mathutils.Vector((v2_prg[0], v2_prg[1] , 0)) # 1 selected simulate
@@ -381,7 +380,7 @@ class SetLength(bpy.types.Operator):
 
             elif prog == "custom_object_location": 
 
-                obj_name = bpy.data.scenes[bpy.context.scene.name_full].my_property.name_full
+                obj_name = bpy.data.scenes[bpy.context.scene.name_full].my_property_2.name_full
 
                 # obj_marx = bpy.data.objects[obj_name].matrix_world
                 obj_loc = bpy.data.objects[obj_name].location
@@ -392,14 +391,14 @@ class SetLength(bpy.types.Operator):
                 v1 = obj_loc
                 v1 = wm @ v1 
 
-                v1ch=v1-v2
-                v3ch=v3-v2
-                angle = v3ch.angle(v1ch, 0.0)
+                # v1ch=v1-v2
+                # v3ch=v3-v2
+                # angle = v3ch.angle(v1ch, 0.0)
                 # print(angle, "angle1111111111111")
                 # if length_intersect != 0:
 
-                if angle == 0.0 :
-                    bpy.ops.object.dialog_warning_operator_3('INVOKE_DEFAULT')     
+                # if angle == 0.0 :
+                #     bpy.ops.object.dialog_warning_operator_3('INVOKE_DEFAULT')     
 
             elif prog == "custom_object_matrix":
 
