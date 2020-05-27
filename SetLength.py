@@ -304,9 +304,11 @@ class SetLength(bpy.types.Operator):
                 wm = wm.inverted()
 
                 # v3_prg = bpy.context.active_object.matrix_world  @ v3
-                v2_prg =  bpy.context.active_object.matrix_world @ v2
+                # v2_prg =  bpy.context.active_object.matrix_world @ v2
 
                 v1 = bpy.context.scene.cursor.location
+
+                # v1 = wm @ v1
 
                 # length_of_v1 = (v2_prg - v1).length
                 # print(length_of_v1)
@@ -314,12 +316,12 @@ class SetLength(bpy.types.Operator):
 
                 v1 = wm @ v1
 
-                v1ch=v1-v2
-                v3ch=v3-v2
-                angle = v3ch.angle(v1ch, 0.0)
+                # v1ch=v1-v2
+                # v3ch=v3-v2
+                # angle = v3ch.angle(v1ch, 0.0)
 
-                if angle == 0.0 :
-                    bpy.ops.object.dialog_warning_operator_3('INVOKE_DEFAULT') 
+                # if angle == 0.0 :
+                #     bpy.ops.object.dialog_warning_operator_3('INVOKE_DEFAULT') 
                
             elif prog == "cursor_matrix":
 
