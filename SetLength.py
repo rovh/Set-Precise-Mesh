@@ -197,11 +197,250 @@ class SetLength(bpy.types.Operator):
             ind.append(g.index)
                 
         # Check number
-        if len(vec)<2:
-            text = "You need to select 2 vertices"
+        if len(vec)<1:
+            text = "You need to select from 1 vertices"
             war = "ERROR"
             self.report({war}, text)
             return{"FINISHED"}
+        if len(vec) == 1:
+            
+            if prog == "global_matrix":
+
+                Clear_angle = False
+
+                bpy.context.object.update_from_editmode()
+                bmesh.update_edit_mesh(me, True, True)
+
+                v2_prg = bpy.context.active_object.matrix_world  @ v2
+                v1 = bpy.context.active_object.matrix_world  @ v3
+
+                wm = bpy.context.active_object.matrix_world.copy()
+                wm = wm.inverted()
+                              
+                v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
+                
+                v3_prg = bpy.context.active_object.matrix_world  @ v3
+                if v3_prg == v1 :
+                    # print("global matrix 1")
+                    Clear_angle = 1
+
+                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
+
+                    # if v2_prg[2] < 0:
+                    #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 1.0)  ))
+                    # else:
+                    #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
+
+                    v3 = wm @ v3
+                    oldv3 = v3
+                if v2_prg == v1:
+                    bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT') 
+
+                v1 = wm @ v1  
+
+                bpy.context.object.update_from_editmode()
+                bmesh.update_edit_mesh(me, True, True)
+
+            elif prog == "local_matrix":
+
+                v2_prg = v2
+                v1 = v3
+                v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
+                v3_prg = v3
+
+                if v3_prg == v1 :
+                    Clear_angle = 1
+
+                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
+
+                    # if v2_prg[2] < 0:
+                    #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 1.0)  ))
+                    # else:
+                    #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
+
+                    oldv3 = v3
+                if v2_prg == v1:
+                    bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT')
+
+            elif prog == "cursor_location":
+                wm = bpy.context.active_object.matrix_world.copy()
+                wm = wm.inverted()
+
+                # v3_prg = bpy.context.active_object.matrix_world  @ v3
+                v2_prg =  bpy.context.active_object.matrix_world @ v2
+
+                v1 = bpy.context.scene.cursor.location
+
+                # length_of_v1 = (v2_prg - v1).length
+                # print(length_of_v1)
+
+
+                v1 = wm @ v1
+
+                v1ch=v1-v2
+                v3ch=v3-v2
+                angle = v3ch.angle(v1ch, 0.0)
+
+                if angle == 0.0 :
+                    bpy.ops.object.dialog_warning_operator_3('INVOKE_DEFAULT') 
+               
+            elif prog == "cursor_matrix":
+
+                bpy.context.object.update_from_editmode()
+                bmesh.update_edit_mesh(me, True, True)
+                # bpy.context.scene.update_tag()
+                # bpy.context.view_layer.update()
+                # bpy.context.depsgraph.update()
+
+                        
+                obj_matrix = bpy.context.active_object.matrix_world.copy()
+                # cursor_loc =  bpy.context.scene.cursor.location
+
+                cursor_matrix = bpy.context.scene.cursor.matrix.copy()
+                cursor_matrix = cursor_matrix.inverted()
+                # obj_matrix = obj_matrix.inverted()
+
+                # mat_cur = obj_matrix @ cursor_matrix
+                mat_cur =  cursor_matrix @ obj_matrix
+                # mat_cur = cursor_matrix
+
+                # cursor_matrix_loc = bpy.context.scene.cursor.matrix.translation
+                # cursor_matrix_loc = mat_cur @ cursor_matrix_loc
+                # cursor_matrix_loc = mat_cur @ cursor_matrix_loc
+
+                v1 =  v3
+                v1 = mat_cur @ v1
+
+                v2_prg =  v2
+                v2_prg = mat_cur  @ v2_prg
+
+                v3_prg =  v3
+                v3_prg = mat_cur @ v3_prg
+
+                v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
+
+                mat_cur = mat_cur.inverted()
+
+                # v3_prg = mat_cur @ v3_prg
+
+                if v3_prg == v1:
+                    Clear_angle = True
+
+                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
+
+                    # if v2_prg[2] < 0:
+                    # if v2_prg[2] < cursor_matrix_loc[2]:
+                    #     print(v2_prg[2])
+                    #     print(cursor_matrix_loc[2])
+                    #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
+                    #     print("Location grater than")
+                    # else:
+                    #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 100.0)  ))
+                    #     print("Location lower than")
+
+                    v3 = mat_cur @ v3
+                    oldv3 = v3
+
+                
+                if v2_prg == v1:
+                # if v2 == v1:
+                    bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT')
+
+                v1 = mat_cur @ v1
+
+                
+
+                bpy.context.object.update_from_editmode()
+                bmesh.update_edit_mesh(me, True, True)
+                # bpy.context.scene.update_tag()
+                # bpy.context.view_layer.update()
+
+            elif prog == "custom_object_location": 
+
+                obj_name = bpy.data.scenes[bpy.context.scene.name_full].my_property.name_full
+
+                # obj_marx = bpy.data.objects[obj_name].matrix_world
+                obj_loc = bpy.data.objects[obj_name].location
+
+                wm = bpy.context.active_object.matrix_world.copy()
+                wm = wm.inverted()
+
+                v1 = obj_loc
+                v1 = wm @ v1 
+
+                v1ch=v1-v2
+                v3ch=v3-v2
+                angle = v3ch.angle(v1ch, 0.0)
+                # print(angle, "angle1111111111111")
+                # if length_intersect != 0:
+
+                if angle == 0.0 :
+                    bpy.ops.object.dialog_warning_operator_3('INVOKE_DEFAULT')     
+
+            elif prog == "custom_object_matrix":
+
+                bpy.context.object.update_from_editmode()
+                bmesh.update_edit_mesh(me, True, True)
+                bpy.context.scene.update_tag()
+                bpy.context.view_layer.update()
+
+                obj_name = bpy.data.scenes[bpy.context.scene.name_full].my_property.name_full
+                custom_obj_matrix = bpy.data.objects[obj_name].matrix_world
+                custom_obj_matrix = custom_obj_matrix.copy()
+                custom_obj_matrix = custom_obj_matrix.inverted()
+
+                obj_matrix = bpy.context.active_object.matrix_world.copy()
+
+                # obj_matrix_invert = obj_matrix.inverted()
+
+                # custom_obj_matrix = bpy.data.objects[obj_name].matrix_world
+                mat = obj_matrix @ custom_obj_matrix
+                # mat = custom_obj_matrix @ obj_matrix
+
+                # custom_obj_loc = bpy.data.objects[obj_name].matrix_world.translation
+                # custom_obj_loc = custom_obj_loc.copy()
+                # custom_obj_loc =  custom_obj_loc @ obj_matrix_invert
+
+                v3_prg =  v3
+                v3_prg = mat @ v3_prg
+
+                v2_prg =  v2
+                v2_prg =  mat @ v2_prg
+
+                v1 = v3
+                v1 = mat @ v1
+                
+                v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
+                
+                mat = mat.inverted()
+
+                if v3_prg == v1 :
+                    Clear_angle = True
+
+                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
+                    
+                    # if v2_prg[2] < 0:
+                    # if v2_prg[2] < custom_obj_loc[2]:
+                    #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
+                    # else:
+                    #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 100.0)  ))
+                    v3 = mat @ v3
+                    oldv3 = v3
+
+                if v2_prg == v1:
+                    bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT')
+
+                v1 = mat @ v1
+
+
+                bpy.context.object.update_from_editmode()
+                bmesh.update_edit_mesh(me, True, True)
+                bpy.context.scene.update_tag()
+                bpy.context.view_layer.update()
+
+
+
+        
 
         # Get values
         settings = bpy.context.preferences.addons[__name__].preferences

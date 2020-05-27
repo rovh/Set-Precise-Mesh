@@ -414,7 +414,6 @@ def   header_draw(self, context):
         split.operator("wm.header_angle_simulation_setprecisemesh", text="Angle Simulation", icon = "MOD_SIMPLIFY")
         split.operator("wm.header_length_simulation_setprecisemesh", text="Distance Simulation", icon = "CON_DISTLIMIT")
  
-
 class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_operator"
     bl_label = "Pop-up Menu"
