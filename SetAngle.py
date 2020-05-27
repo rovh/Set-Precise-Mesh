@@ -21,8 +21,6 @@ def check(self):
     if obj.scale != Vector((1.0, 1.0, 1.0)) or obj.delta_scale != Vector((1.0, 1.0, 1.0)):
         bpy.ops.object.dialog_warning_operator('INVOKE_DEFAULT') 
 
-
-
 class SetAngle_Plus(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_angle_plus"
@@ -78,7 +76,6 @@ class SetAngle_Copy(bpy.types.Operator):
 
         return {"FINISHED"}
                 
-
 class SetAngle(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_angle"
@@ -719,5 +716,6 @@ class SetAngle(bpy.types.Operator):
 
          
         return {'FINISHED'}
+
 if __name__ == "__main__":
     register()

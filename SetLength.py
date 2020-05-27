@@ -76,12 +76,15 @@ class SetLength_Copy(bpy.types.Operator):
         # The script crashes due to the fact that "self.report"
         # as I understand does not work  it in the case of embedding one operator in another
 
-        try:
-            bpy.ops.mesh.change_length()
-        except RuntimeError:
-            text = "You need to select 2 vertices"
-            war = "ERROR"
-            self.report({war}, text)
+        # try:
+        #     bpy.ops.mesh.change_length()
+        # except RuntimeError:
+        #     text = "You need to select 2 vertices"
+        #     war = "ERROR"
+        #     self.report({war}, text)
+
+        bpy.ops.mesh.change_length()
+
 
         return {"FINISHED"}
 
@@ -198,6 +201,7 @@ class SetLength(bpy.types.Operator):
                 
         
         # Get values
+        prog = context.window_manager.setprecisemesh.projection_type_2
         settings = bpy.context.preferences.addons[__name__].preferences
         invert_direction = settings.direction_of_length
 
@@ -240,9 +244,7 @@ class SetLength(bpy.types.Operator):
         if invert_direction == 1:
             vec.reverse()
             ind.reverse()
-
-        
-        
+       
 
         # Check number
         if len(vec) < 1:
@@ -254,37 +256,23 @@ class SetLength(bpy.types.Operator):
 
         elif len(vec) == 1:
 
+            v2 = vec[0]            
+
             if prog == "global_matrix":
 
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
 
                 wm = bpy.context.active_object.matrix_world.copy()
+                wm = wm.inverted()
 
-                v2_prg = bpy.context.active_object.matrix_world  @ v1
-                # wm = wm.inverted()
+                v1_prg = bpy.context.active_object.matrix_world  @ v2
                               
-                v2 = mathutils.Vector((v2_prg[0], v2_prg[1] , 0)) # 1 selected simulate
+                v1 = mathutils.Vector((v1_prg[0], v1_prg[1] , 0)) # 1 selected simulate
 
-                v2 = wm @ v2
-                
-                # v3_prg = bpy.context.active_object.matrix_world  @ v3
-                # if v3_prg == v1 :
-                #     # print("global matrix 1")
+                print(v2)
 
-                #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
-
-                    # if v2_prg[2] < 0:
-                    #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 1.0)  ))
-                    # else:
-                    #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
-
-                #     v3 = wm @ v3
-                #     oldv3 = v3
-                # if v2_prg == v1:
-                #     bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT') 
-
-                 
+                v1 = wm @ v1                 
 
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
@@ -490,7 +478,9 @@ class SetLength(bpy.types.Operator):
             # Set values
             v1=vec[0]
             v2=vec[1]
-            lv=v2-v1
+            # lv=v2-v1
+
+        lv=v2-v1
 
 
 
