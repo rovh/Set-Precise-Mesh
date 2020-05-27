@@ -270,8 +270,6 @@ class SetLength(bpy.types.Operator):
                               
                 v1 = mathutils.Vector((v2_prg[0], v2_prg[1] , 0)) # 1 selected simulate
 
-                # print(v2)
-
                 v1 = wm @ v1                 
 
                 bpy.context.object.update_from_editmode()
@@ -347,25 +345,27 @@ class SetLength(bpy.types.Operator):
                 # cursor_matrix_loc = mat_cur @ cursor_matrix_loc
                 # cursor_matrix_loc = mat_cur @ cursor_matrix_loc
 
-                v1 =  v3
-                v1 = mat_cur @ v1
+                # v2 =  v2
+                v2 = mat_cur @ v2
 
                 v2_prg =  v2
-                v2_prg = mat_cur  @ v2_prg
+                # v2_prg = mat_cur  @ v2_prg
 
-                v3_prg =  v3
-                v3_prg = mat_cur @ v3_prg
+                # v3_prg =  v3
+                # v3_prg = mat_cur @ v3_prg
 
-                v1 = mathutils.Vector((v1[0], v1[1] , v2_prg[2])) # 1 selected simulate
+                v1 = mathutils.Vector((v2_prg[0], v2_prg[1] , 0)) # 1 selected simulate
 
                 mat_cur = mat_cur.inverted()
 
+                v1 = mat_cur @ v1
+
                 # v3_prg = mat_cur @ v3_prg
 
-                if v3_prg == v1:
-                    Clear_angle = True
+                # if v3_prg == v1:
+                #     Clear_angle = True
 
-                    v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
+                #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
 
                     # if v2_prg[2] < 0:
                     # if v2_prg[2] < cursor_matrix_loc[2]:
@@ -377,15 +377,15 @@ class SetLength(bpy.types.Operator):
                     #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 100.0)  ))
                     #     print("Location lower than")
 
-                    v3 = mat_cur @ v3
-                    oldv3 = v3
+                    # v3 = mat_cur @ v3
+                    # oldv3 = v3
 
                 
-                if v2_prg == v1:
-                # if v2 == v1:
-                    bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT')
+                # if v2_prg == v1:
+                # # if v2 == v1:
+                #     bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT')
 
-                v1 = mat_cur @ v1
+                # v1 = mat_cur @ v1
 
                 
 
@@ -520,23 +520,25 @@ class SetLength(bpy.types.Operator):
         
 
 
-        #Set Cursor location and mode      
+        #Set Cursor location and mode
+             
         if bool== 1:
-            bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world  @ mv
+            if prog != "cursor_matrix":
+                bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world  @ mv
             pp = mv
         else:
-            bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world @ v1
+            if prog != "cursor_matrix":
+                bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world @ v1
             pp = v1
-            
-            
         
-        # Set cursor rotation
-        obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor
-        loc_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor.matrix.to_translation()
-        direction = normalgl
-        # point the cameras '-Z' and use its 'Y' as up
-        rot_quat = direction.to_track_quat('-Z', 'Y')
-        obj_camera.rotation_euler = rot_quat.to_euler()
+        if prog != "cursor_matrix": 
+            # Set cursor rotation
+            obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor
+            loc_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor.matrix.to_translation()
+            direction = normalgl
+            # point the cameras '-Z' and use its 'Y' as up
+            rot_quat = direction.to_track_quat('-Z', 'Y')
+            obj_camera.rotation_euler = rot_quat.to_euler()
         
         
         # Create Matrix
