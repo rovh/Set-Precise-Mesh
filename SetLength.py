@@ -202,16 +202,71 @@ class SetLength(bpy.types.Operator):
             war = "ERROR"
             self.report({war}, text)
             return{"FINISHED"}
-        if len(vec) == 1:
-            
-            if prog == "global_matrix":
 
-                Clear_angle = False
+        
+
+
+
+        
+
+        # Get values
+        settings = bpy.context.preferences.addons[__name__].preferences
+        invert_direction = settings.direction_of_length
+
+
+        # remember_length = bpy.types.Scene.remember_length
+
+        # invert_direction_local = invert_direction_local
+        # remember_invert_direction = False
+        # result = 1
+        # try:
+        #     result = list(set(remember_length) ^ set(ind))
+        #     pass
+        # except TypeError:
+        #     print("TypeError")
+        #     pass
+        # else:
+        #     result = list(set(remember_length) ^ set(ind))
+        #     result = len(result)
+        #     if result == 0:
+        #         # def remember_invert_direction_for_length():
+        #         bpy.ops.ed.undo()
+        #         remember_invert_direction = True
+        #         print("it works")
+                
+
+        # bpy.types.Scene.remember_length = ind
+        # print(bpy.types.Scene.remember_length)
+        
+        # print(result)
+        # if remember_invert_direction == 1:
+            # vec.reverse()
+            # vec = remember_length.reverse()
+            # ind = remember_length.reverse()
+            # ind.reverse()
+            # vec.reverse()
+            # ind.reverse()
+
+
+        # Invert direction for edge
+        if invert_direction == 1:
+            vec.reverse()
+            ind.reverse()
+
+        
+        # Set values
+        v1=vec[0]
+        v2=vec[1]
+        lv=v2-v1
+
+        if len(vec) == 1:
+
+            if prog == "global_matrix":
 
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
 
-                v2_prg = bpy.context.active_object.matrix_world  @ v2
+                v2_prg = bpy.context.active_object.matrix_world  @ vec
                 v1 = bpy.context.active_object.matrix_world  @ v3
 
                 wm = bpy.context.active_object.matrix_world.copy()
@@ -439,58 +494,6 @@ class SetLength(bpy.types.Operator):
                 bpy.context.view_layer.update()
 
 
-
-        
-
-        # Get values
-        settings = bpy.context.preferences.addons[__name__].preferences
-        invert_direction = settings.direction_of_length
-
-
-        # remember_length = bpy.types.Scene.remember_length
-
-        # invert_direction_local = invert_direction_local
-        # remember_invert_direction = False
-        # result = 1
-        # try:
-        #     result = list(set(remember_length) ^ set(ind))
-        #     pass
-        # except TypeError:
-        #     print("TypeError")
-        #     pass
-        # else:
-        #     result = list(set(remember_length) ^ set(ind))
-        #     result = len(result)
-        #     if result == 0:
-        #         # def remember_invert_direction_for_length():
-        #         bpy.ops.ed.undo()
-        #         remember_invert_direction = True
-        #         print("it works")
-                
-
-        # bpy.types.Scene.remember_length = ind
-        # print(bpy.types.Scene.remember_length)
-        
-        # print(result)
-        # if remember_invert_direction == 1:
-            # vec.reverse()
-            # vec = remember_length.reverse()
-            # ind = remember_length.reverse()
-            # ind.reverse()
-            # vec.reverse()
-            # ind.reverse()
-
-
-        # Invert direction for edge
-        if invert_direction == 1:
-            vec.reverse()
-            ind.reverse()
-
-        
-        # Set values
-        v1=vec[0]
-        v2=vec[1]
-        lv=v2-v1
 
 
         # Get global normal 
