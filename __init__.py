@@ -798,6 +798,177 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
         return {'FINISHED'}
 
+class Set_Mesh_Position (bpy.types.Operator):
+    """Tooltip"""
+    bl_idname = "mesh.set_mesh_to_cursor_position"
+    bl_label = "Set Mesh Position"
+    bl_description = "Set the cursor location to the selected vertex/edge/face and rotate it by normal\
+        \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        return context.active_object is not None
+
+    def execute(self, context):
+
+        obj = bpy.context.edit_object
+        me = obj.data
+        bm = bmesh.from_edit_mesh(me)
+
+        bpy.context.object.update_from_editmode()
+        # bmesh.update_edit_mesh(me, True, True)
+
+        # bpy.context.object.update_from_editmode()
+        # bmesh.update_edit_mesh(me, True, True)
+        # bpy.context.scene.update_tag()
+        # bpy.context.view_layer.update()
+        mat_loc =  mathutils.Matrix.Translation(( 0.0 ,  0.0 ,  0.0 ))        
+        mat_sca =  mathutils.Matrix.Scale( 1.0 ,  4 ,  ( 0.0 ,  0.0 ,  1.0 ))
+        mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
+
+        mat_out =  mat_loc @  mat_rot @  mat_sca
+
+
+        selected_verts = [verts for verts in bm.verts if verts.select]
+        selected_edges = [edge for edge in bm.edges if edge.select]
+        selected_faces = [face for face in bm.faces if face.select]
+
+        wm = bpy.context.active_object.matrix_world.copy()
+        wm_inverted = wm.inverted()
+
+
+        if len(selected_verts) == 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
+
+            text = "You need to select one vertex/edge/face"
+            war = "ERROR"
+            self.report({war}, text)
+            return{"FINISHED"}
+
+
+        if len(selected_verts) != 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
+
+            if len(selected_verts) > 1:
+                text = "You need to select only one vertex"
+                war = "ERROR"
+                self.report({war}, text)
+                return{"FINISHED"}
+
+            
+            # bpy.context.scene.cursor.location = wm @ selected_verts[0].co
+
+            mat_out.translation = wm @ selected_verts[0].co
+            print(mat_out.translation)
+
+            normal = selected_verts[0].normal @ wm_inverted
+
+            obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor
+            # obj_camera =        
+            direction = normal
+            # point the cameras '-Z' and use its 'Y' as up
+            rot_quat = direction.to_track_quat('-Z', 'Y')
+            obj_camera.rotation_euler = rot_quat.to_euler()
+
+            mat_out = mat_out.to_3x3()
+            mat_out.rotate(rot_quat.to_euler())
+            # rot_quat =  rot_quat.to_euler()
+
+            # print(rot_quat)
+
+            # mat_out.rotate
+
+
+        if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) == 0:
+
+            if len(selected_edges) > 1:
+                text = "You need to select only one edge"
+                war = "ERROR"
+                self.report({war}, text)
+                return{"FINISHED"}
+
+            
+            edge_verts = selected_edges[0].verts
+
+
+            location_of_edge = ((wm @ edge_verts[0].co) + (wm @ edge_verts[1].co)) / 2
+            bpy.context.scene.cursor.location = location_of_edge
+
+
+            normal = ((edge_verts[0].normal @ wm_inverted) + (edge_verts[1].normal @ wm_inverted)) / 2
+
+
+            obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
+            direction = normal
+            # point the cameras '-Z' and use its 'Y' as up
+            rot_quat = direction.to_track_quat('-Z', 'Y')
+            obj_camera.rotation_euler = rot_quat.to_euler()
+            rot_quat =  rot_quat.to_euler()
+            
+
+
+        if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) != 0:
+
+            if len(selected_faces) > 1:
+                text = "You need to select only one face"
+                war = "ERROR"
+                self.report({war}, text)
+                return{"FINISHED"}
+
+
+            my_location = wm @ selected_faces[0].calc_center_median()
+            normalgl = selected_faces[0].normal @ wm_inverted
+
+                        
+            bpy.context.scene.cursor.location = my_location
+
+            # Set cursor direction
+            obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
+            direction = normalgl
+            # point the cameras '-Z' and use its 'Y' as up
+            rot_quat = direction.to_track_quat('-Z', 'Y')
+            obj_camera.rotation_euler = rot_quat.to_euler()
+            rot_quat =  rot_quat.to_euler()
+
+
+        # obj_matrix = bpy.context.active_object.matrix_world.copy()
+
+
+        # cursor_matrix = bpy.context.scene.cursor.matrix.copy()
+        # cursor_matrix = cursor_matrix.inverted()
+
+        # mat_cur =  cursor_matrix @ obj_matrix
+        # bpy.context.active_object.matrix_world = mat_cur
+        
+        mat_out = mat_out.to_4x4()
+        bpy.context.active_object.matrix_world = mat_out
+
+        # obj = bpy.context.edit_object
+        # me = obj.data
+        # bm = bmesh.from_edit_mesh(me)
+
+        # bpy.context.object.update_from_editmode()
+        # bmesh.update_edit_mesh(me, True, True)
+
+        
+        #Create lists
+        # face_ind = []
+        # edge_ind = []
+        # vec_ind  = []
+
+        # face_list = []
+        # edge_list = []
+        # vec_list  = []
+
+
+        
+
+
+        
+
+        bpy.context.object.update_from_editmode()
+        bmesh.update_edit_mesh(me, True, True)
+        return {"FINISHED"}
+
 class Browser_Link (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "wm.setprecisemesh_link"
@@ -1291,6 +1462,7 @@ blender_classes = [
     Header_Angle_Simulation_SetPreciseMesh,
     Header_Length_Simulation_SetPreciseMesh,
     Set_Cursor_To_Normal,
+    Set_Mesh_Position,
     Browser_Link,
     # ChooseItemOperator,
     # NewItemOperator,

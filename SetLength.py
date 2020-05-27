@@ -505,15 +505,15 @@ class SetLength(bpy.types.Operator):
 
         #Set Cursor location and mode
         if bool== 1:
-            if prog != "cursor_matrix":
+            if prog != "cursor_matrix" and prog != "cursor_location":
                 bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world  @ mv
             pp = mv
         else:
-            if prog != "cursor_matrix":
+            if prog != "cursor_matrix" and prog != "cursor_location":
                 bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world @ v1
             pp = v1
         
-        if prog != "cursor_matrix": 
+        if prog != "cursor_matrix" and prog != "cursor_location": 
             # Set cursor rotation
             obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor
             loc_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor.matrix.to_translation()
