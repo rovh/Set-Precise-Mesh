@@ -394,8 +394,7 @@ class Header_Length_Simulation_SetPreciseMesh (bpy.types.Operator):
         # if prog == "custom_object_location" or  prog == "custom_object_matrix":
         #     sub_col.prop(context.scene, "my_property", text = "")
 
-        sub_col.prop(context.scene, "my_property", text = "")
-
+        sub_col.prop(context.scene, "my_property_2", text = "")
 
 def   header_draw(self, context):
     layout = self.layout
@@ -410,9 +409,10 @@ def   header_draw(self, context):
         sub = sub.operator("mesh.set_cursor", text="", icon = "ORIENTATION_CURSOR")
         
         sub = row.row(align = 1)
-        sub.scale_x = 0.8
-        sub.operator("wm.header_angle_simulation_setprecisemesh", text="Angle Simulation", icon = "MOD_SIMPLIFY")
-        sub.operator("wm.header_length_simulation_setprecisemesh", text="Angle Simulation", icon = "MOD_SIMPLIFY")
+        sub.scale_x = 0.6
+        split = sub.split(align = 1, factor = 0.5)
+        split.operator("wm.header_angle_simulation_setprecisemesh", text="Angle Simulation", icon = "MOD_SIMPLIFY")
+        split.operator("wm.header_length_simulation_setprecisemesh", text="Distance Simulation", icon = "CON_DISTLIMIT")
  
 
 class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
@@ -1305,6 +1305,7 @@ def register():
     bpy.types.VIEW3D_HT_tool_header.append(header_draw)
 
     bpy.types.Scene.my_property = PointerProperty(type=bpy.types.Object)
+    bpy.types.Scene.my_property_2 = PointerProperty(type=bpy.types.Object)
 
     bpy.types.Scene.bool_panel_arrow = bpy.props.BoolProperty(
         name="bool_panel_arrow",
