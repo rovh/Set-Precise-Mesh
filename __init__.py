@@ -149,39 +149,36 @@ class Dialog_Warning_Operator_3 (bpy.types.Operator):
         lay = layout.label(text = "Your rotation can be not correct")
         lay = layout.label(text = "Please, change (cursor/custom object) location or change selected vertices")
 
-# class Dialog_Warning_Operator_4 (bpy.types.Operator):
-#     bl_idname = "object.dialog_warning_operator_4"
-#     bl_label = "Warning Panel Operator"
+class Dialog_Warning_Operator_4 (bpy.types.Operator):
+    bl_idname = "object.dialog_warning_operator_4"
+    bl_label = "Warning Panel Operator"
 
-#     warnin: StringProperty()
+    warnin: StringProperty()
 
-#     @classmethod
-#     def poll(cls, context):
-#         return context.active_object is not None
+    @classmethod
+    def poll(cls, context):
+        return context.active_object is not None
 
-#     def execute(self, context):
-#         return {'FINISHED'}
+    def execute(self, context):
+        return {'FINISHED'}
 
-#     def invoke(self, context, event): 
+    def invoke(self, context, event): 
 
-#         # return context.window_manager.invoke_props_dialog(self)
-#         return context.window_manager.invoke_popup(self, width=400)
-#         # return context.window_manager.invoke_popup(self)
-#         # return context.window_manager.invoke_props_popup(self, event)
-#         # return context.window_manager.invoke_confirm(self, event)
+    #     # return context.window_manager.invoke_props_dialog(self)
+        return context.window_manager.invoke_popup(self, width=200)
+    #     # return context.window_manager.invoke_popup(self)
+    #     # return context.window_manager.invoke_props_popup(self, event)
+    #     # return context.window_manager.invoke_confirm(self, event)
 
-#     def draw(self, context):
-#         layout = self.layout
-#         lay = layout.label(text= "Warning" , icon="ERROR")
+    def draw(self, context):
+        layout = self.layout
+        lay = layout.label(text= "Warning" , icon="ERROR")
 
-#         row = layout.row()
-#         row.label(icon = "DRIVER_ROTATIONAL_DIFFERENCE")
-#         row.label(text = " = 0 ")
-#         row.scale_x = 0.1
+        # row = layout.row()
+        # row.label(text = " = 0 ")
+        # row.scale_x = 0.1
         
-#         lay = layout.label(text = "Angle between your cursor or custom object is zero")
-#         lay = layout.label(text = "Your rotation can be not correct")
-#         lay = layout.label(text = "Please, change (cursor/custom object) location or change selected vertices")
+        lay = layout.label(text = "You length/distance will be zero")
 
 class Header_SetPreciseMesh (bpy.types.Operator):
    
@@ -1002,8 +999,8 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
         col.prop(self, "direction_of_length", text='Invert "Set Length" direction')
         
         row = col.row(align = False)
-        row.operator("wm.menu_setprecisemesh_setangle",icon="WINDOW", text="Pop-up Menu (Hover cursor on it for more information)")
-        row.operator("wm.menu_setprecisemesh_setlength",icon="WINDOW", text="Pop-up Menu (Hover cursor on it for more information)")
+        row.operator("wm.menu_setprecisemesh_setangle",icon="DRIVER_ROTATIONAL_DIFFERENCE", text="Pop-up Menu (Hover cursor on it for more information)")
+        row.operator("wm.menu_setprecisemesh_setlength",icon="DRIVER_DISTANCE", text="Pop-up Menu (Hover cursor on it for more information)")
 
         row = col.row()
         row.label(text = "")
@@ -1154,7 +1151,7 @@ blender_classes = [
     Dialog_Warning_Operator,
     Dialog_Warning_Operator_2,
     Dialog_Warning_Operator_3,
-    # Dialog_Warning_Operator_4,
+    Dialog_Warning_Operator_4,
     SetPreciseMesh_Props,
     SetPreciseMesh_Preferences,
     Popup_Menu_SetPreciseMesh_Operator,

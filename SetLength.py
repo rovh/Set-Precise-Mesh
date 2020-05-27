@@ -51,8 +51,7 @@ class SetLength_Plus(bpy.types.Operator):
             text = "You need to select 2 vertices"
             war = "ERROR"
             self.report({war}, text)
-        except ZeroDivisionError and RuntimeError:
-            pass
+
 
         # bpy.ops.mesh.change_length(plus_length = 1)
 
@@ -269,16 +268,14 @@ class SetLength(bpy.types.Operator):
         mv = (v1+v2)/2
         
         # Scale factor
-        if self.plus_length == 1:
-            try:
+        try:
+            if self.plus_length == 1:
                 length = lengthtrue  / (length + lengthtrue)
-            except ZeroDivisionError:
-                return {"FINISHED"}
-        else:
-            try:
+            else:
                 length = lengthtrue/length
-            except ZeroDivisionError:
-                return {"FINISHED"}
+        except ZeroDivisionError:
+            bpy.ops.object.dialog_warning_operator_4('INVOKE_DEFAULT')
+            return {"FINISHED"}
             
     
     
