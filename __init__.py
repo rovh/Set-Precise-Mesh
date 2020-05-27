@@ -180,9 +180,9 @@ class Dialog_Warning_Operator_4 (bpy.types.Operator):
         
         lay = layout.label(text = "You length/distance will be zero")
 
-class Header_SetPreciseMesh (bpy.types.Operator):
+class Header_Angle_Simulation_SetPreciseMesh (bpy.types.Operator):
    
-    bl_idname = "wm.header_setprecisemesh_operator"
+    bl_idname = "wm.header_angle_simulation_setprecisemesh"
     bl_label = "Header Menu"
     bl_description = "To make it convenient to use the this menu You can assign shortcut \n \
          ( For exaple Ctrl + Alt + Middle Mouse )\n \
@@ -288,6 +288,115 @@ class Header_SetPreciseMesh (bpy.types.Operator):
 
         sub_col.prop(context.scene, "my_property", text = "")
 
+class Header_Length_Simulation_SetPreciseMesh (bpy.types.Operator):
+   
+    bl_idname = "wm.header_length_simulation_setprecisemesh"
+    bl_label = "Header Menu"
+    bl_description = "To make it convenient to use the this menu You can assign shortcut \n \
+         ( For exaple Ctrl + Alt + Middle Mouse )\n \
+        How to do it: > right-click on this button > Assign Shortcut"
+  
+    
+    def invoke(self, context, event): 
+        
+        # return context.window_manager.invoke_props_dialog(self)
+        # return context.window_manager.invoke_popup(self, width=600, height=500)
+        # return context.window_manager.invoke_popup(self)
+        inv = context.window_manager.invoke_popup(self, width = 190)
+        # return context.window_manager.invoke_props_popup(self, event)
+        # return context.window_manager.popmenu_begin__internal()
+        # return context.window_manager.invoke_confirm(self, event)
+
+        return inv
+
+
+    def execute(self, context):
+        return {'FINISHED'}
+        # return {"INTERFACE"}
+
+
+    def draw(self, context):
+        layout=self.layout
+
+        w_m = context.window_manager.setprecisemesh
+
+        row = layout.row(align=0)
+        col_left = row.column(align=0)
+        col_right = row.column(align=0)
+        
+        # col_left.scale_y = 0.8
+        # col_right.scale_x = 5.0
+
+
+        # For Matrix
+        sub_col = col_left.column(align = 0)
+        sub_col.scale_y = 1.9
+        sub_col.label(icon='WORLD_DATA')
+
+        # For Cursor
+        sub_col = col_left.column(align = 0)
+        sub_col.scale_y = 2.7
+        sub_col.label(icon='PIVOT_CURSOR')
+        
+
+        # For Object
+        sub_col = col_left.column(align = 0)
+        sub_col.scale_y = 1.65
+        sub_col.label(icon='OBJECT_DATA')  
+
+        # Make space if
+        # prog = context.window_manager.setprecisemesh.projection_type
+
+        # if prog == "custom_object_location" or  prog == "custom_object_matrix":
+        #     sub_col = col_left.column(align = 0)
+        #     sub_col.scale_y = 0.9
+        #     sub_col.label(icon='BLANK1')         
+        
+        # col_left.prop(w_m, "projection_type", expand = 1)
+
+        # Matrix menu
+        sub_col = col_right.column(align = 1)
+        sub_col.prop_enum( w_m, "projection_type", "local_matrix")
+        sub_col.prop_enum( w_m, "projection_type", "global_matrix")
+
+        # space
+        sub_col = col_right.column(align = 0)
+        sub_col.scale_y = 0.15
+        sub_col = sub_col.label(text = "")
+
+        # Cursor menu
+        sub_col = col_right.column(align = 1)
+        sub_col.prop_enum( w_m, "projection_type", "cursor_location")
+        sub_col.prop_enum( w_m, "projection_type", "cursor_matrix")
+
+        # space
+        # sub_col = col_right.column(align = 0)
+        # sub_col.scale_y = 0.15
+        # sub_col = sub_col.label(text = "")
+
+        # # Cursor menu
+        # sub_col = col_right.column(align = 1)
+        # sub_col.prop_enum( w_m, "projection_type", "normal_matrix")
+        # sub_col.prop_enum( w_m, "projection_type", "cursor_matrix")
+
+        # space
+        sub_col = col_right.column(align = 0)
+        sub_col.scale_y = 0.15
+        sub_col = sub_col.label(text = "")
+
+        # Object menu
+        sub_col = col_right.column(align = 1)
+        sub_col.prop_enum( w_m, "projection_type", "custom_object_location")
+        
+        # sub_col.prop_enum( w_m, "projection_type", "custom_object_matrix")
+        # Make space object selection box
+        # prog = context.window_manager.setprecisemesh.projection_type
+        # if prog == "custom_object_location" or  prog == "custom_object_matrix":
+        #     sub_col.prop(context.scene, "my_property", text = "")
+
+        sub_col.prop(context.scene, "my_property", text = "")
+
+
 def   header_draw(self, context):
     layout = self.layout
     object_mode = bpy.context.active_object.mode
@@ -295,13 +404,16 @@ def   header_draw(self, context):
     if object_mode in {'EDIT'}:
         
         row = layout.row(align=1)
-        sub = row.row()
 
+        sub = row.row(align = 0)
         sub.scale_x = 1.5
         sub = sub.operator("mesh.set_cursor", text="", icon = "ORIENTATION_CURSOR")
         
-        sub = row.row()
-        sub.operator("wm.header_setprecisemesh_operator", text="Angle Simulation", icon = "MOD_SIMPLIFY")
+        sub = row.row(align = 1)
+        sub.scale_x = 0.8
+        sub.operator("wm.header_angle_simulation_setprecisemesh", text="Angle Simulation", icon = "MOD_SIMPLIFY")
+        sub.operator("wm.header_length_simulation_setprecisemesh", text="Angle Simulation", icon = "MOD_SIMPLIFY")
+ 
 
 class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_operator"
@@ -1115,8 +1227,25 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         ),
         description="Angle Simulation",
         default='global_matrix'
+    )
+    projection_type_2: bpy.props.EnumProperty(
+        name="Angle Simulation",
+        items=(
+            ("local_matrix"   , "Local Matrix  (Object)" , description_projection_type[0]  , "GRID"              , 0),
+            ("global_matrix"  , "Global Matrix (World)"  , description_projection_type[1]  , "VIEW_PERSPECTIVE"  , 1),
+            (None),
+            ("custom_object_location"  , "Custom Object Location" , description_projection_type[2] , "EMPTY_ARROWS", 2),
+            ("custom_object_matrix"    , "Custom Object Matrix"   , description_projection_type[3] , "GRID"        , 3),
+            (None),
+            ("cursor_location", "Cursor Location", description_projection_type[4] , "EMPTY_ARROWS", 4),
+            ("cursor_matrix"  , "Cursor Matrix"  , description_projection_type[5] , "GRID"        , 5),
+            (None),
+            ("normal_matrix"  , "Normal Matrix"  , description_projection_type[5] , "GRID"        , 6),
+        ),
+        description="Angle Simulation",
+        default='global_matrix'
         )
-        
+  
 """Duplications of the Main panel"""
 class Dupli (SetPresiceMesh_Panel):
     bl_label = "Set Presice Mesh1"
@@ -1157,7 +1286,8 @@ blender_classes = [
     Popup_Menu_SetPreciseMesh_Operator,
     Popup_Menu_SetPreciseMesh_SetAngle,
     Popup_Menu_SetPreciseMesh_SetLength,
-    Header_SetPreciseMesh,
+    Header_Angle_Simulation_SetPreciseMesh,
+    Header_Length_Simulation_SetPreciseMesh,
     Set_Cursor_To_Normal,
     Browser_Link,
     # ChooseItemOperator,
