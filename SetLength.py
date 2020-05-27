@@ -331,12 +331,12 @@ class SetLength(bpy.types.Operator):
 
                         
                 obj_matrix = bpy.context.active_object.matrix_world.copy()
-                # obj_matrix = obj_matrix.inverted()
+                obj_matrix = obj_matrix.inverted()
 
                 cursor_loc =  bpy.context.scene.cursor.location
 
                 cursor_matrix = bpy.context.scene.cursor.matrix.copy()
-                cursor_matrix = cursor_matrix.inverted()
+                # cursor_matrix = cursor_matrix.inverted()
 
                 # mat_cur = obj_matrix @ cursor_matrix
                 # mat_cur =  cursor_matrix @ obj_matrix
