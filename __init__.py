@@ -507,8 +507,8 @@ class Popup_Menu_SetPreciseMesh_SetLength (bpy.types.Operator):
 class Set_Cursor_To_Normal (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.set_cursor"
-    bl_label = "Set Cursor to normal"
-    bl_description = "Set cursor location to selected vertex/edge/face and rotate it by normal\
+    bl_label = "Set the Cursor to normal"
+    bl_description = "Set the cursor location to selected vertex/edge/face and rotate it by normal\
         \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     bl_options = {'REGISTER', 'UNDO'}
 
