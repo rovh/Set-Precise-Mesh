@@ -331,62 +331,46 @@ class SetLength(bpy.types.Operator):
 
                         
                 obj_matrix = bpy.context.active_object.matrix_world.copy()
-                # cursor_loc =  bpy.context.scene.cursor.location
+                # obj_matrix = obj_matrix.inverted()
+
+                cursor_loc =  bpy.context.scene.cursor.location
 
                 cursor_matrix = bpy.context.scene.cursor.matrix.copy()
                 cursor_matrix = cursor_matrix.inverted()
-                # obj_matrix = obj_matrix.inverted()
 
                 # mat_cur = obj_matrix @ cursor_matrix
-                mat_cur =  cursor_matrix @ obj_matrix
+                # mat_cur =  cursor_matrix @ obj_matrix
                 # mat_cur = cursor_matrix
 
                 # cursor_matrix_loc = bpy.context.scene.cursor.matrix.translation
                 # cursor_matrix_loc = mat_cur @ cursor_matrix_loc
                 # cursor_matrix_loc = mat_cur @ cursor_matrix_loc
 
-                # v2 =  v2
-                v2 = mat_cur @ v2
+                # v2 =  obj_matrix @ v2
+                # v2 =  cursor_matrix @ v2
+                v2 = v2 @ obj_matrix
+                v2 =  v2 @ cursor_matrix
+                # v2 =  v2 @ mat_cur
+                # v2 =  mat_cur @ v2
+                
 
                 v2_prg =  v2
-                # v2_prg = mat_cur  @ v2_prg
-
-                # v3_prg =  v3
-                # v3_prg = mat_cur @ v3_prg
-
+                # v1 = mathutils.Vector((v2_prg[0], v2_prg[1] , cursor_loc[2])) # 1 selected simulate
                 v1 = mathutils.Vector((v2_prg[0], v2_prg[1] , 0)) # 1 selected simulate
 
-                mat_cur = mat_cur.inverted()
+                # cursor_matrix = cursor_matrix.inverted()
+                # mat_cur = mat_cur.inverted()
+                obj_matrix = obj_matrix.inverted()
+                cursor_matrix = cursor_matrix.inverted()
 
-                v1 = mat_cur @ v1
+                # v1 = obj_matrix @ v1
+                # v1 = cursor_matrix @ v1
+                v1 = v1 @ obj_matrix
+                v1 = v1 @ cursor_matrix
 
-                # v3_prg = mat_cur @ v3_prg
-
-                # if v3_prg == v1:
-                #     Clear_angle = True
-
-                #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
-
-                    # if v2_prg[2] < 0:
-                    # if v2_prg[2] < cursor_matrix_loc[2]:
-                    #     print(v2_prg[2])
-                    #     print(cursor_matrix_loc[2])
-                    #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
-                    #     print("Location grater than")
-                    # else:
-                    #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 100.0)  ))
-                    #     print("Location lower than")
-
-                    # v3 = mat_cur @ v3
-                    # oldv3 = v3
-
-                
-                # if v2_prg == v1:
-                # # if v2 == v1:
-                #     bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT')
-
-                # v1 = mat_cur @ v1
-
+                # v1 = v1 @ mat_cur
+                # v1 = obj_matrix @ v1
+                # v1 = cursor_matrix @ v1
                 
 
                 bpy.context.object.update_from_editmode()
@@ -511,9 +495,6 @@ class SetLength(bpy.types.Operator):
             return {"FINISHED"}
             
     
-    
-        
-
         context = bpy.context
         scene = context.scene
         ob = context.edit_object
@@ -521,7 +502,6 @@ class SetLength(bpy.types.Operator):
 
 
         #Set Cursor location and mode
-             
         if bool== 1:
             if prog != "cursor_matrix":
                 bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world  @ mv
