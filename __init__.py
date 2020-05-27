@@ -16,7 +16,7 @@ bl_info = {
     "author" : "Rovh",
     "description" : "This addon allows you to set exact values for the mesh",
     "blender" : (2, 82, 0),
-    "version" : (1,1,0),
+    "version" : (1,1,1),
     "location" : "View3D > Sidebar in Edit Mode > Item Tab and View Tab",
     "warning" : "",
     "wiki_url": "https://github.com/rovh/Set-Precise-Mesh",
@@ -37,7 +37,9 @@ from bpy.props import (
         BoolProperty,
         PointerProperty,
         EnumProperty,
+        StringProperty,
         )
+
 
 """Pop up menus"""
 class Dialog_Warning_Operator   (bpy.types.Operator):
@@ -84,7 +86,6 @@ class Dialog_Warning_Operator   (bpy.types.Operator):
         layout.label(text="If you need to disable it globally (so that it does not show up in new Blender file), you need to go to Set Precise Mesh Preferences")
         layout.label(text="Warning Panel appears if object scale or delta scale is not by default")
         layout.label(text='You can find more info about this warning in README.md on Github page or in files')
-        # layout.label(text='https://github.com/rovh/Set-Precise-Mesh')
 
 class Dialog_Warning_Operator_2 (bpy.types.Operator):
     bl_idname = "object.dialog_warning_operator_2"
@@ -118,6 +119,12 @@ class Dialog_Warning_Operator_3 (bpy.types.Operator):
     bl_idname = "object.dialog_warning_operator_3"
     bl_label = "Warning Panel Operator"
 
+    warnin: StringProperty()
+
+    @classmethod
+    def poll(cls, context):
+        return context.active_object is not None
+
     def execute(self, context):
         return {'FINISHED'}
 
@@ -142,12 +149,43 @@ class Dialog_Warning_Operator_3 (bpy.types.Operator):
         lay = layout.label(text = "Your rotation can be not correct")
         lay = layout.label(text = "Please, change (cursor/custom object) location or change selected vertices")
 
+class Dialog_Warning_Operator_4 (bpy.types.Operator):
+    bl_idname = "object.dialog_warning_operator_4"
+    bl_label = "Warning Panel Operator"
+
+    warnin: StringProperty()
+
+    @classmethod
+    def poll(cls, context):
+        return context.active_object is not None
+
+    def execute(self, context):
+        return {'FINISHED'}
+
+    def invoke(self, context, event): 
+
+    #     # return context.window_manager.invoke_props_dialog(self)
+        return context.window_manager.invoke_popup(self, width=200)
+    #     # return context.window_manager.invoke_popup(self)
+    #     # return context.window_manager.invoke_props_popup(self, event)
+    #     # return context.window_manager.invoke_confirm(self, event)
+
+    def draw(self, context):
+        layout = self.layout
+        lay = layout.label(text= "Warning" , icon="ERROR")
+
+        # row = layout.row()
+        # row.label(text = " = 0 ")
+        # row.scale_x = 0.1
+        
+        lay = layout.label(text = "You length/distance will be zero")
+
 class Header_SetPreciseMesh (bpy.types.Operator):
    
     bl_idname = "wm.header_setprecisemesh_operator"
     bl_label = "Header Menu"
     bl_description = "To make it convenient to use the this menu You can assign shortcut \n \
-         ( For exaple Ctrl + Alt + Wheel Up )\n \
+         ( For exaple Ctrl + Alt + Middle Mouse )\n \
         How to do it: > right-click on this button > Assign Shortcut"
   
     
@@ -156,10 +194,13 @@ class Header_SetPreciseMesh (bpy.types.Operator):
         # return context.window_manager.invoke_props_dialog(self)
         # return context.window_manager.invoke_popup(self, width=600, height=500)
         # return context.window_manager.invoke_popup(self)
-        return context.window_manager.invoke_popup(self, width = 190)
+        inv = context.window_manager.invoke_popup(self, width = 190)
         # return context.window_manager.invoke_props_popup(self, event)
         # return context.window_manager.popmenu_begin__internal()
         # return context.window_manager.invoke_confirm(self, event)
+
+        return inv
+
 
     def execute(self, context):
         return {'FINISHED'}
@@ -168,6 +209,7 @@ class Header_SetPreciseMesh (bpy.types.Operator):
 
     def draw(self, context):
         layout=self.layout
+
         w_m = context.window_manager.setprecisemesh
 
         row = layout.row(align=0)
@@ -176,6 +218,7 @@ class Header_SetPreciseMesh (bpy.types.Operator):
         
         # col_left.scale_y = 0.8
         # col_right.scale_x = 5.0
+
 
         # For Matrix
         sub_col = col_left.column(align = 0)
@@ -219,6 +262,16 @@ class Header_SetPreciseMesh (bpy.types.Operator):
         sub_col.prop_enum( w_m, "projection_type", "cursor_matrix")
 
         # space
+        # sub_col = col_right.column(align = 0)
+        # sub_col.scale_y = 0.15
+        # sub_col = sub_col.label(text = "")
+
+        # # Cursor menu
+        # sub_col = col_right.column(align = 1)
+        # sub_col.prop_enum( w_m, "projection_type", "normal_matrix")
+        # sub_col.prop_enum( w_m, "projection_type", "cursor_matrix")
+
+        # space
         sub_col = col_right.column(align = 0)
         sub_col.scale_y = 0.15
         sub_col = sub_col.label(text = "")
@@ -226,11 +279,13 @@ class Header_SetPreciseMesh (bpy.types.Operator):
         # Object menu
         sub_col = col_right.column(align = 1)
         sub_col.prop_enum( w_m, "projection_type", "custom_object_location")
+        
         # sub_col.prop_enum( w_m, "projection_type", "custom_object_matrix")
         # Make space object selection box
         # prog = context.window_manager.setprecisemesh.projection_type
         # if prog == "custom_object_location" or  prog == "custom_object_matrix":
         #     sub_col.prop(context.scene, "my_property", text = "")
+
         sub_col.prop(context.scene, "my_property", text = "")
 
 def   header_draw(self, context):
@@ -239,17 +294,14 @@ def   header_draw(self, context):
 
     if object_mode in {'EDIT'}:
         
-        row = layout.row(align=0)
+        row = layout.row(align=1)
         sub = row.row()
 
-        # row.ui_units_x = 4.5
-        sub.scale_x = 1.2
+        sub.scale_x = 1.5
         sub = sub.operator("mesh.set_cursor", text="", icon = "ORIENTATION_CURSOR")
         
         sub = row.row()
         sub.operator("wm.header_setprecisemesh_operator", text="Angle Simulation", icon = "MOD_SIMPLIFY")
-        # sub.scale_x = 0.5
-        # row.ui_units_x = 100
 
 class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_operator"
@@ -259,24 +311,69 @@ class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
         How to do it: > right-click on this button > Assign Shortcut"
         
     def execute(self, context):
+
+        # context.window_manager.invoke_popup(self, width = 200)
         return {'FINISHED'}
 
-    def invoke(self, context, event): 
-        
+    def invoke(self, context, event):
+        x = event.mouse_x
+        y = event.mouse_y 
+
+        move_x = 0
+        move_y = 60
+
+        bpy.context.window.cursor_warp(x + move_x, y + move_y)
+        # context.window_manager.invoke_popup(self, width = 200)
         # return context.window_manager.invoke_props_dialog(self)
         # return context.window_manager.invoke_popup(self, width=600, height=500)
         # return context.window_manager.invoke_popup(self)
-        return context.window_manager.invoke_popup(self, width = 200)
+        inv = context.window_manager.invoke_popup(self, width = 200)
+        
+        bpy.context.window.cursor_warp(x, y)
+
+        return inv
+
+        # return {"INTERFACE"}
+
         # if self.return == {"CANCELLED"}:
             # context.window_manager.invoke_popup(self, width = 200)
-
-        # return  
+        # return
 
         # return context.window_manager.invoke_props_popup(self, event)
         # return context.window_manager.invoke_confirm(self, event)
-
-    
     def draw(self, context):
+        bpy.types.VIEW3D_PT_edit_mesh_set_precise_mesh1.draw(self, context)
+
+class Popup_Menu_SetPreciseMesh_SetAngle (bpy.types.Operator):
+    bl_idname = "wm.menu_setprecisemesh_setangle"
+    bl_label = "Pop-up Menu Set Angle"
+    bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
+         ( For exaple Ctrl + Alt + Wheel Down )\n \
+        How to do it: > right-click on this button > Assign Shortcut"
+        
+    def execute(self, context):
+        return {'FINISHED'}
+
+    def invoke(self, context, event):
+        x = event.mouse_x
+        y = event.mouse_y 
+
+        move_x = 0
+        move_y = 10
+
+        bpy.context.window.cursor_warp(x + move_x, y + move_y)
+        # context.window_manager.invoke_popup(self, width = 200)
+        # return context.window_manager.invoke_props_dialog(self)
+        # return context.window_manager.invoke_popup(self, width=600, height=500)
+        # return context.window_manager.invoke_popup(self)
+        inv = context.window_manager.invoke_popup(self, width = 200)
+        
+        bpy.context.window.cursor_warp(x, y)
+
+        return inv
+
+    def draw(self, context):
+        
         layout = self.layout
 
         scene = context.scene
@@ -289,15 +386,21 @@ class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
         bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
         bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
 
+        script_input = bpy.data.scenes[bpy.context.scene.name_full].script_input
+        script_input_2 = bpy.data.scenes[bpy.context.scene.name_full].script_input_2
+
         col = layout.column(align=True)
-        
-        split = col.split(factor=0.85, align=True)
+
+        split = col.split(factor=0.65, align=True)
         split.scale_y =1.2      
 
-        split.operator("mesh.change_angle", icon="DRIVER_ROTATIONAL_DIFFERENCE")
+        split.operator("mesh.change_angle_copy", icon="DRIVER_ROTATIONAL_DIFFERENCE")
 
-        
-    
+        split = split.split(factor=0.8, align=True)
+
+        split.operator("mesh.change_angle_plus", icon="ADD", text = "")
+
+
         if sc.bool_panel_arrow:
             split.prop(sc, "bool_panel_arrow", text="", icon='DOWNARROW_HLT')
         else:
@@ -306,22 +409,78 @@ class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
         if sc.bool_panel_arrow:
             
             box = col.column(align=True).box().column()
-            col_top = box.column(align=True)
-            
-            col_top.prop(w_m, "angle")
-            col_top.prop(w_m, "anglebool" )
-            # col_top.prop(ob, "angleinput")         
-                    
-        col = layout.column(align=False)
-        col = layout.column(align=True)
 
+            col_top = box.column(align = True)
+
+            row = col_top.row(align = True)
+            row.prop(w_m, "angle")
+
+            row = row.row(align = False)
+            row.scale_x = 1.2
+            row.prop(sc, "script_input", text = "", icon = "FILE_SCRIPT")
+
+
+            if script_input:
+                col_top.prop(w_m, "data_block", text = "")
+
+            col_top.prop(w_m, "anglebool" )
+
+class Popup_Menu_SetPreciseMesh_SetLength (bpy.types.Operator):
+    bl_idname = "wm.menu_setprecisemesh_setlength"
+    bl_label = "Pop-up Menu Set Length"
+    bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
+         ( For exaple Ctrl + Alt + Wheel Up )\n \
+        How to do it: > right-click on this button > Assign Shortcut"
         
-        split = col.split(factor=0.85, align=True)
-        split.scale_y =1.2
+    def execute(self, context):
+        return {'FINISHED'}
+
+    def invoke(self, context, event):
+        x = event.mouse_x
+        y = event.mouse_y 
+
+        move_x = 0
+        move_y = 10
+
+        bpy.context.window.cursor_warp(x + move_x, y + move_y)
+        # context.window_manager.invoke_popup(self, width = 200)
+        # return context.window_manager.invoke_props_dialog(self)
+        # return context.window_manager.invoke_popup(self, width=600, height=500)
+        # return context.window_manager.invoke_popup(self)
+        inv = context.window_manager.invoke_popup(self, width = 200)
         
-        split.operator("mesh.change_length",icon="DRIVER_DISTANCE")
+        bpy.context.window.cursor_warp(x, y)
+
+        return inv
+
+    def draw(self, context):
+
+        layout = self.layout
+
+        scene = context.scene
+        sc = scene
+        ob = context.object
+
+        w_m = context.window_manager.setprecisemesh
+
+        # Get values
+        bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
+        bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
+
+        script_input = bpy.data.scenes[bpy.context.scene.name_full].script_input
+        script_input_2 = bpy.data.scenes[bpy.context.scene.name_full].script_input_2
         
-    
+        col = layout.column(align= True )
+        
+        split = col.split(factor=0.65, align=True)
+        split.scale_y = 1.2
+        
+        split.operator("mesh.change_length_copy",icon="DRIVER_DISTANCE")
+
+        split = split.split(factor=0.8, align=True)
+
+        split.operator("mesh.change_length_plus",icon="ADD", text = "")
+
         if sc.bool_panel_arrow2:
             split.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
         else:
@@ -330,17 +489,27 @@ class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
         if sc.bool_panel_arrow2:            
             box = col.column(align=True).box().column()            
             col_top = box.column(align=True)
-            col_top.prop(w_m, "length")            
-            col_top.prop(w_m, "lengthbool") 
-                       
-            # col_top.prop(ob, "lengthinput")
+
+            row = col_top.row(align = True)
+            row.prop(w_m, "length")
+
+            row = row.row(align = False)
+            row.scale_x = 1.2
+            row.prop(sc, "script_input_2", text = "", icon = "FILE_SCRIPT")
+
+
+            if script_input_2:   
+                col_top.prop(w_m, "data_block_2", text = "") 
+
+            col_top.prop(w_m, "lengthbool")
 
 """Operators"""
 class Set_Cursor_To_Normal (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.set_cursor"
-    bl_label = "Set Cursor to normal face"
-    bl_description = "You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
+    bl_label = "Set the Cursor to the normal"
+    bl_description = "Set the cursor location to the selected vertex/edge/face and rotate it by normal\
+        \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod
@@ -355,60 +524,163 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
         bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True, True)
-        bpy.context.scene.update_tag()
-        bpy.context.view_layer.update()
-
-    
-        # obj = bpy.context.object
-        # text = "You need to select from 1 to 4 vertices"
-        # war = "ERROR"
-        # self.report({war}, text)
-
 
         
         #Create lists
-        vec = []
-        ind = []
+        # face_ind = []
+        # edge_ind = []
+        # vec_ind  = []
 
-        #Append to lists                                                            
-        for g in bm.select_history:
-            # if len(vec)<3:
-                vec.append(bm.verts[g.index].co)
-                # ind.append(g.index)
+        # face_list = []
+        # edge_list = []
+        # vec_list  = []
 
+
+        selected_verts = [verts for verts in bm.verts if verts.select]
+        selected_edges = [edge for edge in bm.edges if edge.select]
         selected_faces = [face for face in bm.faces if face.select]
-        try:
-            my_location = selected_faces[0].calc_center_median()
-        except IndexError:
-            text = "You need to select all vertices of the face"
+
+        # print("\n")        
+
+
+        """Maybe it will be need"""
+        # if len(selected_verts) != 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
+        #     print(bm.select_history)
+        #     for v in bm.select_history:
+        #         if v.select:
+        #             # vec_list.append(bm.verts[v.index].co)
+        #             vec_list.append(v)
+        #             vec_ind.append(v.index)
+
+        # if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) == 0:
+
+        #     for e in bm.select_history:
+        #         if e.select:
+        #             # edge_list.append(bm.edges[e.index])
+        #             edge_list.append(e)
+        #             edge_ind.append(e.index)
+
+        # if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) != 0:
+
+        #     for f in bm.select_history:
+        #         if f.select:
+        #             # face_list.append(bm.faces[f.index])
+        #             face_list.append(f)
+        #             # try:
+        #             #     # list_2 = list(set(selected_faces) & set(lst2))
+        #             #     # if bm.faces[f.index] == selected_faces[:]:
+        #             #     face_list.append(selected_faces[f.index])
+        #             # except IndexError:
+        #             #     pass
+        #             # else:
+        #             #     face_list.append(selected_faces[f.index])
+        #             face_ind.append(f.index)
+    
+
+
+
+        # for geom in bm.select_history:
+        #     if isinstance(geom, bmesh.types.BMFace):
+        #         print(geom.index, "geom.index")
+        
+        # print(f.select)
+        # print(len(vec_ind))
+        # print(len(edge_ind))
+        # print(len(face_ind))
+
+        # print(selected_faces, "selected_faces")
+        # print(selected_edges, "selected_edges")
+        # print(selected_verts, "selected_verts")
+
+        # print(vec_list,  "vec_list")
+        # print(edge_list, "edge_list")
+        # print(face_list, "face_list")
+
+        # print(vec_ind,  "vec_ind")
+        # print(edge_ind, "edge_ind")
+        # print(face_ind, "face_ind")
+
+        if len(selected_verts) == 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
+
+            text = "You need to select one vertex/edge/face"
             war = "ERROR"
             self.report({war}, text)
+            return{"FINISHED"}
 
-            return {"FINISHED"}
 
-        
-        matrix_location = bpy.context.active_object.matrix_world @ my_location
-        bpy.context.scene.cursor.location = matrix_location
+        if len(selected_verts) != 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
 
-        g = len(vec)
-        # print(g)
-        for k in range (0, g):
-            vec[k] = bpy.context.active_object.matrix_world  @ vec[k] # 1 selected
+            if len(selected_verts) > 1:
+                text = "You need to select only one vertex"
+                war = "ERROR"
+                self.report({war}, text)
+                return{"FINISHED"}
 
-        normallistgl = vec
-        normalgl = mathutils.geometry.normal(normallistgl)
+            bpy.context.scene.cursor.location = selected_verts[0].co
 
-        # Set cursor direction
-        obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
-        direction = normalgl
-        # point the cameras '-Z' and use its 'Y' as up
-        rot_quat = direction.to_track_quat('-Z', 'Y')
-        obj_camera.rotation_euler = rot_quat.to_euler()
-        rot_quat =  rot_quat.to_euler()
+            normal = selected_verts[0].normal
 
-        
+            obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
+            direction = normal
+            # point the cameras '-Z' and use its 'Y' as up
+            rot_quat = direction.to_track_quat('-Z', 'Y')
+            obj_camera.rotation_euler = rot_quat.to_euler()
+            rot_quat =  rot_quat.to_euler()
 
-        # print(normalgl," Normal was calculated")
+
+        if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) == 0:
+
+            if len(selected_edges) > 1:
+                text = "You need to select only one edge"
+                war = "ERROR"
+                self.report({war}, text)
+                return{"FINISHED"}
+
+            
+            edge_verts = selected_edges[0].verts
+
+
+            location_of_edge = (edge_verts[0].co + edge_verts[1].co) / 2
+            bpy.context.scene.cursor.location = location_of_edge
+
+
+            normal = (edge_verts[0].normal + edge_verts[1].normal) / 2
+
+
+            obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
+            direction = normal
+            # point the cameras '-Z' and use its 'Y' as up
+            rot_quat = direction.to_track_quat('-Z', 'Y')
+            obj_camera.rotation_euler = rot_quat.to_euler()
+            rot_quat =  rot_quat.to_euler()
+
+
+        if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) != 0:
+
+            if len(selected_faces) > 1:
+                text = "You need to select only one face"
+                war = "ERROR"
+                self.report({war}, text)
+                return{"FINISHED"}
+
+
+            my_location = selected_faces[0].calc_center_median()
+            normalgl = selected_faces[0].normal
+
+
+            matrix_location = bpy.context.active_object.matrix_world @ my_location
+                        
+            # bpy.context.scene.cursor.location = matrix_location
+            bpy.context.scene.cursor.location = my_location
+
+            # Set cursor direction
+            obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
+            direction = normalgl
+            # point the cameras '-Z' and use its 'Y' as up
+            rot_quat = direction.to_track_quat('-Z', 'Y')
+            obj_camera.rotation_euler = rot_quat.to_euler()
+            rot_quat =  rot_quat.to_euler()
+
 
         return {'FINISHED'}
 
@@ -416,7 +688,7 @@ class Browser_Link (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "wm.setprecisemesh_link"
     bl_label = "Change version"
-    bl_description = ""
+    bl_description = "Link"
     bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod
@@ -427,9 +699,67 @@ class Browser_Link (bpy.types.Operator):
         bpy.ops.wm.url_open(url = "https://github.com/rovh/Set-Precise-Mesh/releases")
         return {"FINISHED"}
 
+# items = [('one', 'Any', "", 'PRESET', 1), ('two', 'PropertyGroup', "", 'PRESET', 2), ('three', 'type', "", 'PRESET', 3)]
+
+# class ChooseItemOperator(bpy.types.Operator):
+#     bl_idname = "example.choose_item"
+#     bl_label = "Choose item"
+#     bl_options = {'INTERNAL'}
+#     bl_property = "enum"
+
+#     def get_enum_options(self, context):
+#         global items
+#         return items
+
+#     enum: EnumProperty(items=get_enum_options, name="Items")
+#     node_tree: StringProperty()
+#     node: StringProperty()
+
+#     def execute(self, context):
+#         tree = bpy.data.node_groups[self.node_tree]
+#         node = tree.nodes[self.node]
+#         node.item_set = True
+#         node.set_item(self.enum)
+#         return {"FINISHED"}
+
+#     def invoke(self, context, event):
+#         context.window_manager.invoke_search_popup(self)
+#         return {"FINISHED"}
+
+# class NewItemOperator(bpy.types.Operator):
+#     bl_idname = "example.new_item"
+#     bl_label = "New Item"
+#     bl_options = {'INTERNAL'}
+
+#     node_tree: StringProperty()
+#     node: StringProperty()
+
+#     def execute(self, context):
+#         global items
+#         tree = bpy.data.node_groups[self.node_tree]
+#         node = tree.nodes[self.node]
+#         node.item_set = True
+#         newitem = ('four', 'type', "", 'PRESET', 4)
+#         items.append(newitem)
+#         node.set_item(newitem)
+#         return {'FINISHED'}
+
+# class ClearItemOperator(bpy.types.Operator):
+#     bl_idname = "example.clear_item"
+#     bl_label = "Clear Item"
+#     bl_options = {'INTERNAL'}
+
+#     node_tree: StringProperty()
+#     node: StringProperty()
+
+#     def execute(self, context):
+#         tree = bpy.data.node_groups[self.node_tree]
+#         node = tree.nodes[self.node]
+#         node.item_set = False
+#         return {'FINISHED'}
+
 """Main Panel"""
 class SetPresiceMesh_Panel (bpy.types.Panel):
-    
     bl_label = "Set Presice Mesh"
     bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh"
     bl_space_type = 'VIEW_3D'
@@ -438,8 +768,9 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
     bl_context = "mesh_edit"
     bl_options = {'DEFAULT_CLOSED'}
     bl_label = "Set Precise Mesh / CAD"
-    
+
     def draw(self, context):
+
         layout = self.layout
 
         scene = context.scene
@@ -452,18 +783,21 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
         bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
         bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
 
+        script_input = bpy.data.scenes[bpy.context.scene.name_full].script_input
+        script_input_2 = bpy.data.scenes[bpy.context.scene.name_full].script_input_2
 
         col = layout.column(align=True)
 
-        
-        
-        split = col.split(factor=0.85, align=True)
+        split = col.split(factor=0.65, align=True)
         split.scale_y =1.2      
 
-        split.operator("mesh.change_angle", icon="DRIVER_ROTATIONAL_DIFFERENCE")
+        split.operator("mesh.change_angle_copy", icon="DRIVER_ROTATIONAL_DIFFERENCE")
 
-        
-    
+        split = split.split(factor=0.8, align=True)
+
+        split.operator("mesh.change_angle_plus", icon="ADD", text = "")
+
+
         if sc.bool_panel_arrow:
             split.prop(sc, "bool_panel_arrow", text="", icon='DOWNARROW_HLT')
         else:
@@ -472,10 +806,89 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
         if sc.bool_panel_arrow:
             
             box = col.column(align=True).box().column()
-            col_top = box.column(align=True)
-            
-            col_top.prop(w_m, "angle")
+
+            col_top = box.column(align = True)
+
+            row = col_top.row(align = True)
+            row.prop(w_m, "angle")
+
+            row = row.row(align = False)
+            row.scale_x = 1.2
+            row.prop(sc, "script_input", text = "", icon = "FILE_SCRIPT")
+
+
+            if script_input:
+                col_top.prop(w_m, "data_block", text = "")
+
             col_top.prop(w_m, "anglebool" )
+
+        col = layout.column(align= True )
+        
+        split = col.split(factor=0.65, align=True)
+        split.scale_y = 1.2
+        
+        split.operator("mesh.change_length_copy",icon="DRIVER_DISTANCE")
+
+        split = split.split(factor=0.8, align=True)
+
+        split.operator("mesh.change_length_plus",icon="ADD", text = "")
+
+        if sc.bool_panel_arrow2:
+            split.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
+        else:
+            split.prop(sc, "bool_panel_arrow2", text="", icon='RIGHTARROW')
+
+        if sc.bool_panel_arrow2:            
+            box = col.column(align=True).box().column()            
+            col_top = box.column(align=True)
+
+
+            # col_top.prop(w_m, "length") 
+
+            row = col_top.row(align = True)
+            row.prop(w_m, "length")
+
+            row = row.row(align = False)
+            row.scale_x = 1.2
+            row.prop(sc, "script_input_2", text = "", icon = "FILE_SCRIPT")
+
+
+            if script_input_2:   
+                col_top.prop(w_m, "data_block_2", text = "") 
+
+            col_top.prop(w_m, "lengthbool")
+                 
+            # row = col_top.row(align=1)
+            # row.scale_y = 0.25
+            # row.label(text = "")
+
+
+            # row_main = col_top.row(align=1)
+
+            # row_main.scale_y = 0.76
+
+            # row = row_main.row(align=1)
+
+            # row.alignment = "CENTER"
+
+            # if w_m.anglebool:
+            #     row.prop(w_m, "anglebool", icon = "CHECKMARK" , icon_only = 1)
+            #     row.scale_x = 1
+            #     row.scale_y = 1.2
+            # else:
+            #     # row.label(icon = "CHECKBOX_DEHLT")
+            #     row.prop(w_m, "anglebool", icon = "BLANK1" , icon_only = 1)
+            #     row.scale_x = 0.78
+            #     row.scale_y = 1
+
+            # row = row_main.row(align=1)
+            # row.scale_x = 0.9
+            # row.alignment = "LEFT"
+            # row.prop(w_m, "anglebool", emboss=0)
+
+
+
+
             # col_top.prop(self, "projection_type")
             # col_top.prop(ob, "angleinput")
             # row = layout.row(align=True)
@@ -489,37 +902,58 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             #     panel="VIEW3D_PT_Set_Precise_Mesh",
             # )         
                     
-        col = layout.column(align=False)
-        col = layout.column(align=True)
-
-        
-        split = col.split(factor=0.85, align=True)
-        split.scale_y =1.2
-        
-        split.operator("mesh.change_length",icon="DRIVER_DISTANCE")
-        
     
-        if sc.bool_panel_arrow2:
-            split.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
-        else:
-            split.prop(sc, "bool_panel_arrow2", text="", icon='RIGHTARROW')
 
-        if sc.bool_panel_arrow2:            
-            box = col.column(align=True).box().column()            
-            col_top = box.column(align=True)
-            col_top.prop(w_m, "length")            
-            col_top.prop(w_m, "lengthbool") 
-                     
+            # row = col_top.row(align=1)
+            # row.scale_y = 0.25
+            # row.label(text = "")
+
+            # row_main = col_top.row(align=1)
+            # row_main.scale_y = 0.76
+
+            # row = row_main.row(align=1)
+
+
+            # if w_m.lengthbool:
+
+            #     row.prop(w_m, "lengthbool", icon = "CHECKMARK" , icon_only = 1)
+            #     row.scale_x = 0.76
+            #     row.scale_y = 1
+
+            #     row = row_main.row(align=1)
+            #     row.scale_x = 1
+            #     row.alignment = "LEFT"
+            #     row.prop(w_m, "lengthbool", emboss=0)
+
+            # else:
+            #     row.prop(w_m, "lengthbool", icon = "BLANK1" , icon_only = 1)
+            #     row.scale_x = 0.76
+            #     row.scale_y = 1
+
+            #     row = row_main.row(align=1)
+            #     row.scale_x = 0.9
+            #     row.alignment = "LEFT"
+            #     row.prop(w_m, "lengthbool", emboss=0)
+
+
+
+            
+
+            # row = row_main.row(align=1)
+            # row.scale_x = 0.1
+            # row.label(text = "")
+
+
+        
             # col_top.prop(ob, "lengthinput")
             # col_top.operator(bpy.ops.ui.eyedropper_id.idname())
             # col_top.operator(bpy.ops.wm.url_open(url = "https://github.com/rovh/Set-Precise-Mesh"))
-            
-"""Preferences"""
+
+"""Preferences Panel and Props"""
 class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
     # this must match the addon name, use '__package__'
     # when defining this in a submodule of a python package.
     bl_idname = __name__
-
 
     direction_of_length: BoolProperty(
             name="bool",
@@ -537,29 +971,55 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
             description="Globally",
             default=True,
             )
+    # location_in_UI_1: BoolProperty(
+    #         name="location_in_UI",
+    #         description="location_in_UI",
+    #         default=True,
+    #         )
+    # location_in_UI_2: BoolProperty(
+    #         name="location_in_UI",
+    #         description="location_in_UI",
+    #         default=True,
+    #         )
+    # location_in_UI_3: BoolProperty(
+    #         name="location_in_UI",
+    #         description="location_in_UI",
+    #         default=True,
+    #         )
 
 
     def draw(self, context):
-        layout = self.layout
-        
-        # col = layout.column()
 
-        
+        layout = self.layout
+
         box = layout.box()
         box.label(icon="PREFERENCES", text = "Preferences")
         row = box.row()
-        col = row.column()
-        # col.label(text="Tab Category:")
+        col = row.column(align = False)
         col.prop(self, "direction_of_length", text='Invert "Set Length" direction')
-        # col.prop(self, "direction_of_angle", text='Invert "Set Angle" direction')
-        col.operator("wm.menu_setprecisemesh_operator",icon="MENU_PANEL", text="Pop-up Menu (Hover cursor on it for more information)")
+        
+        row = col.row(align = False)
+        row.operator("wm.menu_setprecisemesh_setangle",icon="DRIVER_ROTATIONAL_DIFFERENCE", text="Pop-up Menu (Hover cursor on it for more information)")
+        row.operator("wm.menu_setprecisemesh_setlength",icon="DRIVER_DISTANCE", text="Pop-up Menu (Hover cursor on it for more information)")
+
+        row = col.row()
+        row.label(text = "")
+        row.scale_y = 0.1
+
+        col.operator("wm.menu_setprecisemesh_operator",icon="WINDOW", text="Pop-up Menu (Hover cursor on it for more information)")
+
+
+        # split = col.split(align = 1 , factor = 0.5)
+        # row = col.row(align = 1)
+        # row.prop(self, "location_in_UI_1", text = "1", icon = "BLANK1")
+        # row.prop(self, "location_in_UI_2", text = "2", icon = "BLANK1")
+        # row.prop(self, "location_in_UI_3", text = "3", icon = "BLANK1")
+
         col.prop(self, "bool_warning_global", text='Show Warning Panel in Blender (Global)')
-        # row = layout.row()
-        # row.scale_x = 0.1
+
         col.label(icon="INFO", text = "If you don't like this version you can download the previous version or download the next version if it exists:")
+        
         col.operator("wm.setprecisemesh_link",icon="RECOVER_LAST", text="Change version")
-
-
 
 """Props"""
 class SetPreciseMesh_Props (bpy.types.PropertyGroup):
@@ -604,6 +1064,14 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         description='User Mode',
         default=False,
     )
+    data_block: bpy.props.StringProperty(
+        name = "Number input",
+        description = "" ,
+    )
+    data_block_2: bpy.props.StringProperty(
+        name = "Number input",
+        description = "",
+    )
     description_projection_type = [
         #description_0
         "Local Matrix. It uses the matrix of the editing object and projects the selected vertices onto it" ,
@@ -641,12 +1109,15 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
             (None),
             ("cursor_location", "Cursor Location", description_projection_type[4] , "EMPTY_ARROWS", 4),
             ("cursor_matrix"  , "Cursor Matrix"  , description_projection_type[5] , "GRID"        , 5),
+            (None),
+            ("normal_matrix"  , "Normal Matrix"  , description_projection_type[5] , "GRID"        , 6),
+
         ),
         description="Angle Simulation",
         default='global_matrix'
         )
         
-"""Duplication of Main panel"""
+"""Duplications of the Main panel"""
 class Dupli (SetPresiceMesh_Panel):
     bl_label = "Set Presice Mesh1"
     bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh1"
@@ -654,6 +1125,7 @@ class Dupli (SetPresiceMesh_Panel):
     bl_region_type = 'UI'
     bl_category = "View"
     bl_label = "Set Precise Mesh /CAD"
+
     # bl_order = 1
  
 class Dupli2 (SetPresiceMesh_Panel):
@@ -669,18 +1141,28 @@ class Dupli2 (SetPresiceMesh_Panel):
 blender_classes = [
     Dupli,
     Dupli2,
+    # SetPresiceMesh_Panel,
     SetAngle,
+    SetAngle_Copy,
+    SetAngle_Plus,
     SetLength,
+    SetLength_Copy,
+    SetLength_Plus,
     Dialog_Warning_Operator,
     Dialog_Warning_Operator_2,
     Dialog_Warning_Operator_3,
+    Dialog_Warning_Operator_4,
     SetPreciseMesh_Props,
     SetPreciseMesh_Preferences,
     Popup_Menu_SetPreciseMesh_Operator,
+    Popup_Menu_SetPreciseMesh_SetAngle,
+    Popup_Menu_SetPreciseMesh_SetLength,
     Header_SetPreciseMesh,
     Set_Cursor_To_Normal,
     Browser_Link,
-
+    # ChooseItemOperator,
+    # NewItemOperator,
+    # ClearItemOperator,
 
 ]
 
@@ -691,6 +1173,7 @@ def register():
 
     bpy.types.WindowManager.setprecisemesh = PointerProperty(type=SetPreciseMesh_Props)
     bpy.types.VIEW3D_HT_tool_header.append(header_draw)
+
     bpy.types.Scene.my_property = PointerProperty(type=bpy.types.Object)
 
     bpy.types.Scene.bool_panel_arrow = bpy.props.BoolProperty(
@@ -703,11 +1186,26 @@ def register():
         description="",
         default=True,
     )
+    bpy.types.Scene.script_input = bpy.props.BoolProperty(
+            name="Advanced input",
+            description="",
+            default=False,
+    )
+    bpy.types.Scene.script_input_2 = bpy.props.BoolProperty(
+            name="Advanced input",
+            description="",
+            default=False,
+    )
     bpy.types.Scene.bool_warning = bpy.props.BoolProperty(
         name="Show this warning panel next time",
         description="Warning Panel will appear if object scale or delta scale is not correct \n You can also enable it or disable in \n Property Editor > Scene Properties > Custom Properties",
         default=1,
         options = {"SKIP_SAVE"}
+    )
+    bpy.types.Scene.remember_length = bpy.props.FloatProperty(
+        name="remember_length",
+        description="",
+        # default=,
     )
 
 
@@ -719,7 +1217,10 @@ def unregister():
 
     del bpy.types.Scene.bool_panel_arrow
     del bpy.types.Scene.bool_panel_arrow2
+    del bpy.types.Scene.script_input
+    del bpy.types.Scene.script_input_2
     del bpy.types.Scene.bool_warning
+    del bpy.types.Scene.remember_length
 
     del bpy.types.Scene.my_property
     bpy.types.VIEW3D_HT_tool_header.remove(header_draw)
