@@ -31,8 +31,8 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
         x = event.mouse_x
         y = event.mouse_y 
 
-        move_x = -12
-        move_y = 20
+        move_x = -20
+        move_y = 25
 
         bpy.context.window.cursor_warp(x + move_x, y + move_y)
         # context.window_manager.invoke_popup(self, width = 200)
@@ -51,10 +51,21 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
         w_m = context.window_manager.setprecisemesh
 
 
-        col_top = layout.column(align = 0)
-        col_top.scale_y = 0.5
-        col_top.alignment = "RIGHT"
-        col_top = col_top.label(text = "Move")
+        col_top = layout.column(align = 1)
+        col_top.scale_y = 0.6
+        col_top.scale_x = 2
+
+        row = col_top.row(align = 1)
+        row.alignment = "RIGHT"
+        split = row
+        # split = row.split(factor = 0.5, align = 1)
+        # col_top.alignment = "RIGHT"
+        # split.alignment = "RIGHT"
+        split.label(text = "Move")
+        split.label(icon = "MOUSE_LMB_DRAG")
+        # row.label(text = "Move")
+        # row.labe
+        # col_top.alignment = "RIGHT"
 
         row = layout.row(align=0)
         col_left = row.column(align=0)
@@ -63,6 +74,7 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
         
 
         col_right_right.prop( w_m, "position_origin", icon = "CON_PIVOT", text = "")
+        col_right_right.prop( w_m, "position_origin_clear_matrix", icon = "FILE_REFRESH", text = "")
         col_right_right.scale_x = 1
         col_right_right.scale_y = 2
         # col_left.scale_y = 0.8
@@ -148,7 +160,7 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
             sub_col.scale_y = 1.2
         else:
 
-            sub_col.operator("mesh.set_mesh_position_object", text="Object")
+            sub_col.operator("mesh.set_mesh_position_object", text="Object", icon='OBJECT_DATA')
             sub_col.prop(context.scene, "object_position", text = "")
             sub_col.scale_y = 1.2
 
@@ -414,16 +426,17 @@ class Set_Mesh_Position (bpy.types.Operator):
    
             bpy.context.scene.cursor.location = my_location
 
-        if bpy.context.window_manager.setprecisemesh.position_origin == 1:
+        if bpy.context.window_manager.setprecisemesh.position_origin == True:
 
             bpy.ops.object.mode_set(mode='OBJECT')
-
             bpy.ops.object.origin_set(type='ORIGIN_CURSOR', center='MEDIAN')
+
+            if bpy.context.window_manager.setprecisemesh.position_origin_clear_matrix == True:
+                bpy.ops.object.transform_apply(location=False, rotation=True, scale=False)
 
             bpy.ops.object.mode_set(mode='EDIT')
 
-
-
+            
         bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True)
 

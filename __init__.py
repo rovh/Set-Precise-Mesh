@@ -191,7 +191,15 @@ class Header_Angle_Simulation_SetPreciseMesh (bpy.types.Operator):
   
     
     def invoke(self, context, event): 
+
+        x = event.mouse_x
+        y = event.mouse_y 
+
+        move_x = -15
+        move_y = 5
         
+        bpy.context.window.cursor_warp(x + move_x, y + move_y)
+
         # return context.window_manager.invoke_props_dialog(self)
         # return context.window_manager.invoke_popup(self, width=600, height=500)
         # return context.window_manager.invoke_popup(self)
@@ -199,6 +207,8 @@ class Header_Angle_Simulation_SetPreciseMesh (bpy.types.Operator):
         # return context.window_manager.invoke_props_popup(self, event)
         # return context.window_manager.popmenu_begin__internal()
         # return context.window_manager.invoke_confirm(self, event)
+
+        bpy.context.window.cursor_warp(x, y)
 
         return inv
 
@@ -300,6 +310,14 @@ class Header_Length_Simulation_SetPreciseMesh (bpy.types.Operator):
   
     
     def invoke(self, context, event): 
+
+        x = event.mouse_x
+        y = event.mouse_y 
+
+        move_x = -15
+        move_y = 5
+        
+        bpy.context.window.cursor_warp(x + move_x, y + move_y)
         
         # return context.window_manager.invoke_props_dialog(self)
         # return context.window_manager.invoke_popup(self, width=600, height=500)
@@ -308,6 +326,9 @@ class Header_Length_Simulation_SetPreciseMesh (bpy.types.Operator):
         # return context.window_manager.invoke_props_popup(self, event)
         # return context.window_manager.popmenu_begin__internal()
         # return context.window_manager.invoke_confirm(self, event)
+
+        bpy.context.window.cursor_warp(x, y)
+
 
         return inv
 
@@ -417,6 +438,16 @@ def   header_draw(self, context):
         split.operator("wm.header_angle_simulation_setprecisemesh", text="Angle Simulation", icon = "MOD_SIMPLIFY")
         split.operator("wm.header_length_simulation_setprecisemesh", text="Distance Simulation", icon = "CON_DISTLIMIT")
  
+def   operator_module(self, context):
+    layout = self.layout
+    # object_mode = bpy.context.active_object.mode
+
+    layout.separator()
+
+    layout.operator("mesh.set_mesh_position_pop_up", text="Mesh Position")
+
+
+
 class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_operator"
     bl_label = "Pop-up Menu"
@@ -1251,7 +1282,12 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
     position_origin: bpy.props.BoolProperty(
         name="Set Origin",
         description='Change length in two directions OR in the direction of the active vertex',
-        default=1,
+        default = True,
+    )
+    position_origin_clear_matrix: bpy.props.BoolProperty(
+        name="Set Origin",
+        description='Change length in two directions OR in the direction of the active vertex',
+        default = False,
     )
 """Duplications of the Main panel"""
 class Dupli (SetPresiceMesh_Panel):
@@ -1330,6 +1366,7 @@ def register():
 
     bpy.types.WindowManager.setprecisemesh = PointerProperty(type=SetPreciseMesh_Props)
     bpy.types.VIEW3D_HT_tool_header.append(header_draw)
+    bpy.types.VIEW3D_MT_transform.append(operator_module)
 
     bpy.types.Scene.my_property = PointerProperty(type=bpy.types.Object)
     bpy.types.Scene.my_property_2 = PointerProperty(type=bpy.types.Object)
@@ -1383,6 +1420,7 @@ def unregister():
 
     del bpy.types.Scene.my_property
     bpy.types.VIEW3D_HT_tool_header.remove(header_draw)
+    bpy.types.VIEW3D_MT_transform.remove(operator_module)
 
 
 if __name__ == "__main__":
