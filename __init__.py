@@ -17,7 +17,7 @@ bl_info = {
     "description" : "This addon allows you to set exact values for the mesh",
     "blender" : (2, 82, 0),
     "version" : (1,1,1),
-    "location" : "View3D > Sidebar in Edit Mode > Item Tab and View Tab",
+    "location" : "View3D > Sidebar in Edit Mode > Item Tab, View Tab and Edit Tab",
     "warning" : "",
     "wiki_url": "https://github.com/rovh/Set-Precise-Mesh",
     "category" : "Mesh",
@@ -445,8 +445,6 @@ def   operator_module(self, context):
     layout.separator()
 
     layout.operator("mesh.set_mesh_position_pop_up", text="Mesh Position")
-
-
 
 class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_operator"
@@ -1289,6 +1287,7 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         description='Change length in two directions OR in the direction of the active vertex',
         default = False,
     )
+
 """Duplications of the Main panel"""
 class Dupli (SetPresiceMesh_Panel):
     bl_label = "Set Presice Mesh1"
@@ -1309,11 +1308,22 @@ class Dupli2 (SetPresiceMesh_Panel):
     bl_label = "Set Precise Mesh /CAD"
     # bl_order = 1
     
+class Dupli3 (SetPresiceMesh_Panel):
+    bl_label = "Set Presice Mesh2"
+    bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh3"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = "Edit"
+    bl_label = "Set Precise Mesh /CAD"
+    # bl_order = 1
+
+
 """Classes registration"""
 blender_classes = [
 
     Dupli,
     Dupli2,
+    Dupli3,
     # SetPresiceMesh_Panel,
 
 
