@@ -119,14 +119,29 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
 
         # Object menu
         sub_col = col_right.column(align = 1)
-        sub_col.operator("mesh.set_mesh_position_object", text="object")
-        sub_col.scale_y = 1.5
+
+        print(str(bpy.context.scene.object_position))
+
+
+        if bpy.context.scene.object_position == None:
+
+            sub_col.prop(context.scene, "object_position", text = "")
+            sub_col.scale_y = 1.5
+
+
+        else:
+
+
+            sub_col.operator("mesh.set_mesh_position_object", text="object")
+
+            sub_col.prop(context.scene, "object_position", text = "")
+            sub_col.scale_y = 1.5
 
 
         # Make space object selection box
         # position = context.window_manager.setprecisemesh.position
         # if position == "object":
-        sub_col.prop(context.scene, "my_property", text = "")
+        
 
         # sub_col.prop(context.scene, "my_property", text = "")
     
