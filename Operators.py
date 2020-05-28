@@ -369,16 +369,16 @@ class Set_Mesh_Position (bpy.types.Operator):
 
         if position == "global":
             bpy.context.active_object.matrix_world = mat_cur
-            bpy.context.scene.cursor.matrix = mat_cur
+            # bpy.context.scene.cursor.matrix = mat_cur
 
         elif position == "local":
             # bpy.context.active_object.matrix_world = mat_cur @ obj_matrix
             bpy.context.active_object.matrix_world = obj_matrix @ mat_cur
-            bpy.context.scene.cursor.matrix = obj_matrix @ mat_cur
+            # bpy.context.scene.cursor.matrix = obj_matrix @ mat_cur
         
         elif position == "cursor":
             bpy.context.active_object.matrix_world = cursor_matrix_old @ mat_cur
-            bpy.context.scene.cursor.matrix = cursor_matrix_old @ mat_cur
+            # bpy.context.scene.cursor.matrix = cursor_matrix_old @ mat_cur
 
         elif position == "object":
 
@@ -390,6 +390,12 @@ class Set_Mesh_Position (bpy.types.Operator):
             # bpy.context.scene.cursor.matrix = obj_marx @ mat_cur
 
 
+
+        bpy.context.object.update_from_editmode()
+        bmesh.update_edit_mesh(me, True)
+
+        wm = bpy.context.active_object.matrix_world.copy()
+        wm_inverted = wm.inverted()
 
         if len(selected_verts) != 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
 
@@ -408,17 +414,18 @@ class Set_Mesh_Position (bpy.types.Operator):
    
             bpy.context.scene.cursor.location = my_location
 
-
         if bpy.context.window_manager.setprecisemesh.position_origin == 1:
-
-            # bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world
 
             bpy.ops.object.mode_set(mode='OBJECT')
 
             bpy.ops.object.origin_set(type='ORIGIN_CURSOR', center='MEDIAN')
 
             bpy.ops.object.mode_set(mode='EDIT')
-            # pass
+
+
+
+        bpy.context.object.update_from_editmode()
+        bmesh.update_edit_mesh(me, True)
 
 
         bpy.context.scene.cursor.matrix = cursor_matrix_old
@@ -429,15 +436,9 @@ class Set_Mesh_Position (bpy.types.Operator):
         # bpy.context.active_object.matrix_world = mat_out
 
 
-
-
-        
-
-
-        
-
         bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True, True)
+
         return {"FINISHED"}
 
 if __name__ == "__main__":
