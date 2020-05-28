@@ -929,6 +929,7 @@ class Set_Mesh_Position (bpy.types.Operator):
         # position = "global"
         position = "local"
         position = "cursor"
+        position = "object"
 
         if position == "global":
             bpy.context.active_object.matrix_world = mat_cur
@@ -938,7 +939,16 @@ class Set_Mesh_Position (bpy.types.Operator):
             bpy.context.active_object.matrix_world = obj_matrix @ mat_cur
         
         elif position == "cursor":
-            bpy.context.active_object.matrix_world = obj_matrix @ cursor_matrix_old
+            bpy.context.active_object.matrix_world = cursor_matrix_old @ mat_cur
+
+        elif position == "object":
+
+            obj_name = bpy.data.scenes[bpy.context.scene.name_full].object_position.name_full
+            obj_marx = bpy.data.objects[obj_name].matrix_world
+
+            # obj_marx = bpy.data.objects["Empty"].matrix_world
+            bpy.context.active_object.matrix_world = obj_marx @ mat_cur
+
 
 
         bpy.context.scene.cursor.matrix = cursor_matrix_old
@@ -1471,6 +1481,7 @@ def register():
 
     bpy.types.Scene.my_property = PointerProperty(type=bpy.types.Object)
     bpy.types.Scene.my_property_2 = PointerProperty(type=bpy.types.Object)
+    bpy.types.Scene.object_position = PointerProperty(type=bpy.types.Object)
 
     bpy.types.Scene.bool_panel_arrow = bpy.props.BoolProperty(
         name="bool_panel_arrow",
