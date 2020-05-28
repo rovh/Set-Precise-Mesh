@@ -108,14 +108,25 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
 
         # Object menu
         sub_col = col_right.column(align = 1)
-        sub_col.prop_enum( w_m, "projection_type", "custom_object_location")
-        
-        sub_col.prop_enum( w_m, "projection_type", "custom_object_matrix")
+        sub_col.operator("mesh.set_mesh_position_cursor", text="cursor")
+        sub_col.scale_y = 1.5
+
+
+
+        sub_col = col_right.column(align = 0)
+        sub_col.scale_y = 0.15
+        sub_col = sub_col.label(text = "")
+
+        # Object menu
+        sub_col = col_right.column(align = 1)
+        sub_col.operator("mesh.set_mesh_position_object", text="object")
+        sub_col.scale_y = 1.5
+
 
         # Make space object selection box
-        prog = context.window_manager.setprecisemesh.projection_type
-        if prog == "custom_object_location" or  prog == "custom_object_matrix":
-            sub_col.prop(context.scene, "my_property", text = "")
+        # position = context.window_manager.setprecisemesh.position
+        # if position == "object":
+        sub_col.prop(context.scene, "my_property", text = "")
 
         # sub_col.prop(context.scene, "my_property", text = "")
     
