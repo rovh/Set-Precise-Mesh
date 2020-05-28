@@ -793,6 +793,18 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
             normal = ((edge_verts[0].normal @ wm_inverted) + (edge_verts[1].normal @ wm_inverted)) / 2
 
+            normal_projection = mathutils.geometry.intersect_point_line(normal, (edge_verts[0].co @ wm_inverted), (edge_verts[1].co @ wm_inverted))
+
+            normal_projection = normal_projection[0]
+
+            normal = normal - normal_projection
+
+            # normal_2 = normal + normal_projection
+
+            print(normal_projection)
+
+            print(normal)
+
 
             obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
             direction = normal
