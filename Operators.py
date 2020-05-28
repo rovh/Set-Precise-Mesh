@@ -266,7 +266,7 @@ class Set_Mesh_Position (bpy.types.Operator):
         bm = bmesh.from_edit_mesh(me)
 
         bpy.context.object.update_from_editmode()
-        # bmesh.update_edit_mesh(me, True, True)
+        bmesh.update_edit_mesh(me, True)
 
         # bpy.context.object.update_from_editmode()
         # bmesh.update_edit_mesh(me, True, True)
@@ -278,7 +278,6 @@ class Set_Mesh_Position (bpy.types.Operator):
 
         # mat_out =  mat_loc @  mat_rot @  mat_sca
 
-        cursor_matrix_old = bpy.context.scene.cursor.matrix.copy()
 
         selected_verts = [verts for verts in bm.verts if verts.select]
         selected_edges = [edge for edge in bm.edges if edge.select]
@@ -286,6 +285,9 @@ class Set_Mesh_Position (bpy.types.Operator):
 
         wm = bpy.context.active_object.matrix_world.copy()
         wm_inverted = wm.inverted()
+
+        cursor_matrix_old = bpy.context.scene.cursor.matrix.copy()
+        cursor_location_old = bpy.context.scene.cursor.location
 
 
         if len(selected_verts) == 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
@@ -367,6 +369,10 @@ class Set_Mesh_Position (bpy.types.Operator):
             obj_camera.rotation_euler = rot_quat.to_euler()
             rot_quat =  rot_quat.to_euler()
 
+        
+        # bpy.context.object.update_from_editmode()
+        # bmesh.update_edit_mesh(me, True)
+
         obj_matrix = bpy.context.active_object.matrix_world.copy()
 
         cursor_matrix = bpy.context.scene.cursor.matrix.copy()
@@ -381,26 +387,18 @@ class Set_Mesh_Position (bpy.types.Operator):
 
         if position == "global":
             bpy.context.active_object.matrix_world = mat_cur
-            # bpy.context.scene.cursor.matrix = mat_cur
 
         elif position == "local":
-            # bpy.context.active_object.matrix_world = mat_cur @ obj_matrix
             bpy.context.active_object.matrix_world = obj_matrix @ mat_cur
-            # bpy.context.scene.cursor.matrix = obj_matrix @ mat_cur
         
         elif position == "cursor":
             bpy.context.active_object.matrix_world = cursor_matrix_old @ mat_cur
-            # bpy.context.scene.cursor.matrix = cursor_matrix_old @ mat_cur
 
         elif position == "object":
-
             obj_name = bpy.data.scenes[bpy.context.scene.name_full].object_position.name_full
             obj_marx = bpy.data.objects[obj_name].matrix_world
 
-            # obj_marx = bpy.data.objects["Empty"].matrix_world
             bpy.context.active_object.matrix_world = obj_marx @ mat_cur
-            # bpy.context.scene.cursor.matrix = obj_marx @ mat_cur
-
 
 
         bpy.context.object.update_from_editmode()
@@ -430,20 +428,19 @@ class Set_Mesh_Position (bpy.types.Operator):
 
             bpy.ops.object.mode_set(mode='OBJECT')
             bpy.ops.object.origin_set(type='ORIGIN_CURSOR', center='MEDIAN')
-
-            if bpy.context.window_manager.setprecisemesh.position_origin_clear_matrix == True:
-                bpy.ops.object.transform_apply(location=False, rotation=True, scale=False)
-
             bpy.ops.object.mode_set(mode='EDIT')
 
+        if bpy.context.window_manager.setprecisemesh.position_origin_clear_matrix == True:
+
+            bpy.ops.object.mode_set(mode='OBJECT')
+            bpy.ops.object.transform_apply(location=False, rotation=True, scale=False)
+            bpy.ops.object.mode_set(mode='EDIT')
             
         bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True)
 
-
+        bpy.context.scene.cursor.location = cursor_location_old
         bpy.context.scene.cursor.matrix = cursor_matrix_old
-
-
 
         # mat_out = mat_out.to_4x4()
         # bpy.context.active_object.matrix_world = mat_out

@@ -436,7 +436,7 @@ def   header_draw(self, context):
         sub.scale_x = 0.6
         split = sub.split(align = 1, factor = 0.5)
         split.operator("wm.header_angle_simulation_setprecisemesh", text="Angle Simulation", icon = "MOD_SIMPLIFY")
-        split.operator("wm.header_length_simulation_setprecisemesh", text="Distance Simulation", icon = "CON_DISTLIMIT")
+        split.operator("wm.header_length_simulation_setprecisemesh", text="Distance Simulation", icon = "CON_TRACKTO")
  
 def   operator_module(self, context):
     layout = self.layout
