@@ -823,12 +823,13 @@ class Set_Mesh_Position (bpy.types.Operator):
         # bmesh.update_edit_mesh(me, True, True)
         # bpy.context.scene.update_tag()
         # bpy.context.view_layer.update()
-        mat_loc =  mathutils.Matrix.Translation(( 0.0 ,  0.0 ,  0.0 ))        
-        mat_sca =  mathutils.Matrix.Scale( 1.0 ,  4 ,  ( 0.0 ,  0.0 ,  1.0 ))
-        mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
+        # mat_loc =  mathutils.Matrix.Translation(( 0.0 ,  0.0 ,  0.0 ))        
+        # mat_sca =  mathutils.Matrix.Scale( 1.0 ,  4 ,  ( 0.0 ,  0.0 ,  1.0 ))
+        # mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
 
-        mat_out =  mat_loc @  mat_rot @  mat_sca
+        # mat_out =  mat_loc @  mat_rot @  mat_sca
 
+        cursor_matrix_old = bpy.context.scene.cursor.matrix.copy()
 
         selected_verts = [verts for verts in bm.verts if verts.select]
         selected_edges = [edge for edge in bm.edges if edge.select]
@@ -855,28 +856,16 @@ class Set_Mesh_Position (bpy.types.Operator):
                 return{"FINISHED"}
 
             
-            # bpy.context.scene.cursor.location = wm @ selected_verts[0].co
-
-            mat_out.translation = wm @ selected_verts[0].co
-            print(mat_out.translation)
+            bpy.context.scene.cursor.location = wm @ selected_verts[0].co
 
             normal = selected_verts[0].normal @ wm_inverted
 
-            obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor
-            # obj_camera =        
+            obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
             direction = normal
             # point the cameras '-Z' and use its 'Y' as up
             rot_quat = direction.to_track_quat('-Z', 'Y')
             obj_camera.rotation_euler = rot_quat.to_euler()
-
-            mat_out = mat_out.to_3x3()
-            mat_out.rotate(rot_quat.to_euler())
-            # rot_quat =  rot_quat.to_euler()
-
-            # print(rot_quat)
-
-            # mat_out.rotate
-
+            rot_quat =  rot_quat.to_euler()
 
         if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) == 0:
 
@@ -905,7 +894,6 @@ class Set_Mesh_Position (bpy.types.Operator):
             rot_quat =  rot_quat.to_euler()
             
 
-
         if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) != 0:
 
             if len(selected_faces) > 1:
@@ -930,17 +918,19 @@ class Set_Mesh_Position (bpy.types.Operator):
             rot_quat =  rot_quat.to_euler()
 
 
-        # obj_matrix = bpy.context.active_object.matrix_world.copy()
+        bpy.context.scene.cursor.matrix = cursor_matrix_old
+
+        obj_matrix = bpy.context.active_object.matrix_world.copy()
+
+        cursor_matrix = bpy.context.scene.cursor.matrix.copy()
+        cursor_matrix = cursor_matrix.inverted()
+
+        mat_cur =  cursor_matrix @ obj_matrix
+        bpy.context.active_object.matrix_world = mat_cur
 
 
-        # cursor_matrix = bpy.context.scene.cursor.matrix.copy()
-        # cursor_matrix = cursor_matrix.inverted()
-
-        # mat_cur =  cursor_matrix @ obj_matrix
-        # bpy.context.active_object.matrix_world = mat_cur
-        
-        mat_out = mat_out.to_4x4()
-        bpy.context.active_object.matrix_world = mat_out
+        # mat_out = mat_out.to_4x4()
+        # bpy.context.active_object.matrix_world = mat_out
 
         # obj = bpy.context.edit_object
         # me = obj.data
