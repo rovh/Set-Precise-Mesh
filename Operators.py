@@ -387,7 +387,26 @@ class Set_Mesh_Position (bpy.types.Operator):
 
             # obj_marx = bpy.data.objects["Empty"].matrix_world
             bpy.context.active_object.matrix_world = obj_marx @ mat_cur
-            bpy.context.scene.cursor.matrix = obj_marx @ mat_cur
+            # bpy.context.scene.cursor.matrix = obj_marx @ mat_cur
+
+
+
+        if len(selected_verts) != 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
+
+            bpy.context.scene.cursor.location = wm @ selected_verts[0].co
+
+        if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) == 0:
+            
+            edge_verts = selected_edges[0].verts
+
+            location_of_edge = ((wm @ edge_verts[0].co) + (wm @ edge_verts[1].co)) / 2
+            bpy.context.scene.cursor.location = location_of_edge
+            
+        if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) != 0:
+
+            my_location = wm @ selected_faces[0].calc_center_median()
+   
+            bpy.context.scene.cursor.location = my_location
 
 
         if bpy.context.window_manager.setprecisemesh.position_origin == 1:
