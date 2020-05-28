@@ -361,8 +361,6 @@ class Set_Mesh_Position (bpy.types.Operator):
         cursor_matrix_inverted = cursor_matrix.inverted()
         mat_cur =  cursor_matrix_inverted @ obj_matrix
 
-
-
         # position = "global"
         # position = "local"
         # position = "cursor"
@@ -371,13 +369,16 @@ class Set_Mesh_Position (bpy.types.Operator):
 
         if position == "global":
             bpy.context.active_object.matrix_world = mat_cur
+            bpy.context.scene.cursor.matrix = mat_cur
 
         elif position == "local":
             # bpy.context.active_object.matrix_world = mat_cur @ obj_matrix
             bpy.context.active_object.matrix_world = obj_matrix @ mat_cur
+            bpy.context.scene.cursor.matrix = obj_matrix @ mat_cur
         
         elif position == "cursor":
             bpy.context.active_object.matrix_world = cursor_matrix_old @ mat_cur
+            bpy.context.scene.cursor.matrix = cursor_matrix_old @ mat_cur
 
         elif position == "object":
 
@@ -386,9 +387,12 @@ class Set_Mesh_Position (bpy.types.Operator):
 
             # obj_marx = bpy.data.objects["Empty"].matrix_world
             bpy.context.active_object.matrix_world = obj_marx @ mat_cur
+            bpy.context.scene.cursor.matrix = obj_marx @ mat_cur
 
 
         if bpy.context.window_manager.setprecisemesh.position_origin == 1:
+
+            # bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world
 
             bpy.ops.object.mode_set(mode='OBJECT')
 
