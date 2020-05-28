@@ -918,7 +918,7 @@ class Set_Mesh_Position (bpy.types.Operator):
             rot_quat =  rot_quat.to_euler()
 
 
-        bpy.context.scene.cursor.matrix = cursor_matrix_old
+        
 
         obj_matrix = bpy.context.active_object.matrix_world.copy()
 
@@ -927,6 +927,8 @@ class Set_Mesh_Position (bpy.types.Operator):
 
         mat_cur =  cursor_matrix @ obj_matrix
         bpy.context.active_object.matrix_world = mat_cur
+
+        bpy.context.scene.cursor.matrix = cursor_matrix_old
 
 
         # mat_out = mat_out.to_4x4()
