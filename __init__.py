@@ -786,14 +786,13 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
             
             edge_verts = selected_edges[0].verts
 
-
             location_of_edge = ((wm @ edge_verts[0].co) + (wm @ edge_verts[1].co)) / 2
             bpy.context.scene.cursor.location = location_of_edge
 
+            # normal = ((edge_verts[0].normal @ wm_inverted) + (edge_verts[1].normal @ wm_inverted)) / 2
+            normal = ((wm @ edge_verts[0].normal) + (wm @ edge_verts[1].normal)) / 2
 
-            normal = ((edge_verts[0].normal @ wm_inverted) + (edge_verts[1].normal @ wm_inverted)) / 2
-
-            normal_projection = mathutils.geometry.intersect_point_line(normal, (edge_verts[0].co @ wm_inverted), (edge_verts[1].co @ wm_inverted))
+            normal_projection = mathutils.geometry.intersect_point_line(normal, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
 
             normal_projection = normal_projection[0]
 
@@ -801,7 +800,7 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
             # normal_2 = normal + normal_projection
 
-            print(normal_projection)
+            # print(normal_projection)
 
             print(normal)
 
