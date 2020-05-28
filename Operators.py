@@ -28,12 +28,20 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
 
     def invoke(self, context, event):
 
-        # bpy.context.window.cursor_warp(x + move_x, y + move_y)
+        x = event.mouse_x
+        y = event.mouse_y 
+
+        move_x = -12
+        move_y = 20
+
+        bpy.context.window.cursor_warp(x + move_x, y + move_y)
         # context.window_manager.invoke_popup(self, width = 200)
         # return context.window_manager.invoke_props_dialog(self)
         # return context.window_manager.invoke_popup(self, width=600, height=500)
         # return context.window_manager.invoke_popup(self)
         inv = context.window_manager.invoke_popup(self, width = 200)
+
+        bpy.context.window.cursor_warp(x, y)
 
         return inv
 
@@ -42,28 +50,39 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
 
         w_m = context.window_manager.setprecisemesh
 
+
+        col_top = layout.column(align = 0)
+        col_top.scale_y = 0.5
+        col_top.alignment = "RIGHT"
+        col_top = col_top.label(text = "Move")
+
         row = layout.row(align=0)
         col_left = row.column(align=0)
         col_right = row.column(align=0)
+        col_right_right = row.column(align = 1)
         
+
+        col_right_right.prop( w_m, "position_origin", icon = "CON_PIVOT", text = "")
+        col_right_right.scale_x = 1
+        col_right_right.scale_y = 2
         # col_left.scale_y = 0.8
         # col_right.scale_x = 5.0
 
 
         # For Matrix
         sub_col = col_left.column(align = 0)
-        sub_col.scale_y = 1.9
+        sub_col.scale_y = 2.65
         sub_col.label(icon='WORLD_DATA')
 
         # For Cursor
         sub_col = col_left.column(align = 0)
-        sub_col.scale_y = 2.7
+        sub_col.scale_y = 1.5
         sub_col.label(icon='PIVOT_CURSOR')
         
 
         # For Object
         sub_col = col_left.column(align = 0)
-        sub_col.scale_y = 1.65
+        sub_col.scale_y = 1.3
         sub_col.label(icon='OBJECT_DATA')  
 
         # Make space if
@@ -78,19 +97,19 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
 
         # Matrix menu
         sub_col = col_right.column(align = 1)
-        sub_col.operator("mesh.set_mesh_position_global", text="global")
-        sub_col.scale_y = 1.5
+        sub_col.operator("mesh.set_mesh_position_global", text="Global", icon = "VIEW_PERSPECTIVE")
+        sub_col.scale_y = 1.2
 
 
         # space
         sub_col = col_right.column(align = 0)
-        sub_col.scale_y = 0.15
+        sub_col.scale_y = 0.1
         sub_col = sub_col.label(text = "")
 
         # Cursor menu
         sub_col = col_right.column(align = 1)
-        sub_col.operator("mesh.set_mesh_position_local", text="local")
-        sub_col.scale_y = 1.5
+        sub_col.operator("mesh.set_mesh_position_local", text="Local" , icon = "GRID")
+        sub_col.scale_y = 1.2
         # space
         # sub_col = col_right.column(align = 0)
         # sub_col.scale_y = 0.15
@@ -103,39 +122,35 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
 
         # space
         sub_col = col_right.column(align = 0)
-        sub_col.scale_y = 0.15
+        sub_col.scale_y = 0.1
         sub_col = sub_col.label(text = "")
 
         # Object menu
         sub_col = col_right.column(align = 1)
-        sub_col.operator("mesh.set_mesh_position_cursor", text="cursor")
-        sub_col.scale_y = 1.5
+        sub_col.operator("mesh.set_mesh_position_cursor", text="Cursor", icon = "PIVOT_CURSOR")
+        sub_col.scale_y = 1.2
 
 
 
         sub_col = col_right.column(align = 0)
-        sub_col.scale_y = 0.15
+        sub_col.scale_y = 0.1
         sub_col = sub_col.label(text = "")
 
         # Object menu
         sub_col = col_right.column(align = 1)
 
-        print(str(bpy.context.scene.object_position))
+        # print(str(bpy.context.scene.object_position))
 
 
         if bpy.context.scene.object_position == None:
 
-            sub_col.prop(context.scene, "object_position", text = "")
-            sub_col.scale_y = 1.5
-
-
+            sub_col.prop(context.scene, "object_position", text = "" )
+            sub_col.scale_y = 1.2
         else:
 
-
-            sub_col.operator("mesh.set_mesh_position_object", text="object")
-
+            sub_col.operator("mesh.set_mesh_position_object", text="Object")
             sub_col.prop(context.scene, "object_position", text = "")
-            sub_col.scale_y = 1.5
+            sub_col.scale_y = 1.2
 
 
         # Make space object selection box
@@ -300,7 +315,7 @@ class Set_Mesh_Position (bpy.types.Operator):
             edge_verts = selected_edges[0].verts
 
 
-            location_of_edge = ((wm @ edge_verts[0].co) + (wm @ edge_verts[0].co)) / 2
+            location_of_edge = ((wm @ edge_verts[0].co) + (wm @ edge_verts[1].co)) / 2
             bpy.context.scene.cursor.location = location_of_edge
 
             # diraction_for_edge = (wm @ edge_verts[1].co) - (wm @ edge_verts[0].co)
@@ -372,6 +387,15 @@ class Set_Mesh_Position (bpy.types.Operator):
             # obj_marx = bpy.data.objects["Empty"].matrix_world
             bpy.context.active_object.matrix_world = obj_marx @ mat_cur
 
+
+        if bpy.context.window_manager.setprecisemesh.position_origin == 1:
+
+            bpy.ops.object.mode_set(mode='OBJECT')
+
+            bpy.ops.object.origin_set(type='ORIGIN_CURSOR', center='MEDIAN')
+
+            bpy.ops.object.mode_set(mode='EDIT')
+            # pass
 
 
         bpy.context.scene.cursor.matrix = cursor_matrix_old

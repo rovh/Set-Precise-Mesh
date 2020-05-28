@@ -1247,8 +1247,12 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         ),
         description="Angle Simulation",
         default='global_matrix'
-        )
-  
+    )
+    position_origin: bpy.props.BoolProperty(
+        name="Set Origin",
+        description='Change length in two directions OR in the direction of the active vertex',
+        default=1,
+    )
 """Duplications of the Main panel"""
 class Dupli (SetPresiceMesh_Panel):
     bl_label = "Set Presice Mesh1"
