@@ -305,10 +305,34 @@ class Set_Mesh_Position (bpy.types.Operator):
                 self.report({war}, text)
                 return{"FINISHED"}
 
-            
+
+            edge_verts = selected_edges[0].verts
+
             bpy.context.scene.cursor.location = wm @ selected_verts[0].co
 
             normal = selected_verts[0].normal @ wm_inverted
+
+            location_of_edge = ((wm @ edge_verts[0].co) + (wm @ edge_verts[1].co)) /2
+            bpy.context.scene.cursor.location = location_of_edge
+
+            faces_of_edge = selected_edges[0].link_faces
+
+            normals_of_the_faces = []
+
+            for f in range(0, len(faces_of_edge)):
+                print(faces_of_edge[f])
+                normals_of_the_faces.append(faces_of_edge[f].normal) 
+
+            normal_from_face = ((wm @ normals_of_the_faces[0]) + (wm @ normals_of_the_faces[1])) /2
+            normal = ((wm @ edge_verts[0].normal) + (wm @ edge_verts[1].normal)) /2
+            normal = (normal + normal_from_face) /2
+
+            normal_projection = mathutils.geometry.intersect_point_line(normal, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
+            normal_projection = normal_projection[0]
+            normal = normal - normal_projection
+
+            
+ 
 
             obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
             direction = normal

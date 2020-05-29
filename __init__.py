@@ -802,33 +802,13 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
             print(normals_of_the_faces)
 
-            normal_from_face = (normals_of_the_faces[0] + normals_of_the_faces[1]) /2
-
-
-
-            # for f in range(0, len(normals_of_the_faces)):
-                # print(faces_of_edge[f])
-                # normals_of_the_faces.append(faces_of_edge[f].normal) 
-
-                # normal_from_face = normals_of_the_faces
-
-            
-
-
-
-            # normal = ((edge_verts[0].normal @ wm_inverted) + (edge_verts[1].normal @ wm_inverted)) / 2
+            normal_from_face = ((wm @ normals_of_the_faces[0]) + (wm @ normals_of_the_faces[1])) /2
             normal = ((wm @ edge_verts[0].normal) + (wm @ edge_verts[1].normal)) /2
-
             normal = (normal + normal_from_face) /2
 
             normal_projection = mathutils.geometry.intersect_point_line(normal, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
-            
             normal_projection = normal_projection[0]
-
             normal = normal - normal_projection
-
-
-
 
             # normal_2 = normal + normal_projection
 
