@@ -797,21 +797,22 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
             print(normals_of_the_faces)
 
-            normal_from_face = ((wm @ normals_of_the_faces[0]) + (wm @ normals_of_the_faces[1])) /2
+            normal_from_face = ((normals_of_the_faces[0]) + (normals_of_the_faces[1])) /2
 
             print(normals_of_the_faces)
             
-            normal = ((wm @ edge_verts[0].normal) + (wm @ edge_verts[1].normal)) /2
+            # normal = ((wm @ edge_verts[0].normal) + (wm @ edge_verts[1].normal)) /2
+            normal_from_face = location_of_edge + normal_from_face
             
             normal_projection_from_face = mathutils.geometry.intersect_point_line(normal_from_face, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
             normal_projection_from_face = normal_projection_from_face[0]
             normal_from_face = (normal_from_face - normal_projection_from_face)
 
-            normal_projection = mathutils.geometry.intersect_point_line(normal, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
-            normal_projection = normal_projection[0]
-            normal = (normal - normal_projection)
+            # normal_projection = mathutils.geometry.intersect_point_line(normal, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
+            # normal_projection = normal_projection[0]
+            # normal = (normal - normal_projection)
 
-            normal = (normal + normal_from_face)
+            normal = normal_from_face
 
             obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
             direction = normal
