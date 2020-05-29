@@ -962,17 +962,32 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
         split = col.split(factor=0.65, align=True)
         split.scale_y =1.2      
 
-        split.operator("mesh.change_angle_copy", icon="DRIVER_ROTATIONAL_DIFFERENCE")
+        # split.operator("mesh.change_angle_copy", icon="DRIVER_ROTATIONAL_DIFFERENCE")
 
-        split = split.split(factor=0.8, align=True)
+        # split = split.split(factor=0.8, align=True)
 
-        split.operator("mesh.change_angle_plus", icon="ADD", text = "")
+        # split.operator("mesh.change_angle_plus", icon="ADD", text = "")
 
+        split_left = col.split(factor=0.55, align=True)
+        split_left.scale_y = 1.2
+        
+        split_left.operator("mesh.change_angle_copy", icon="DRIVER_ROTATIONAL_DIFFERENCE")
+
+        split_center = split_left.split(factor=0.43, align=True)
+
+        split_center.operator("mesh.change_angle_plus", icon="ADD", text = "")
+            # 
+        split_right = split_center.split(factor=0.8, align=True)
+
+        split_right.operator("mesh.change_angle_minus", icon="REMOVE", text = "")
+        
+
+        # split = split.split(factor=1, align=True)
 
         if sc.bool_panel_arrow:
-            split.prop(sc, "bool_panel_arrow", text="", icon='DOWNARROW_HLT')
+            split_right.prop(sc, "bool_panel_arrow", text="", icon='DOWNARROW_HLT')
         else:
-            split.prop(sc, "bool_panel_arrow", text="", icon='RIGHTARROW')
+            split_right.prop(sc, "bool_panel_arrow", text="", icon='RIGHTARROW')
 
         if sc.bool_panel_arrow:
             
@@ -995,19 +1010,25 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
 
         col = layout.column(align= True )
         
-        split = col.split(factor=0.65, align=True)
-        split.scale_y = 1.2
+        split_left = col.split(factor=0.55, align=True)
+        split_left.scale_y = 1.2
         
-        split.operator("mesh.change_length_copy",icon="DRIVER_DISTANCE")
+        split_left.operator("mesh.change_length_copy",icon="DRIVER_DISTANCE")
 
-        split = split.split(factor=0.8, align=True)
+        split_center = split_left.split(factor=0.43, align=True)
 
-        split.operator("mesh.change_length_plus",icon="ADD", text = "")
+        split_center.operator("mesh.change_length_plus",icon="ADD", text = "")
+            # 
+        split_right = split_center.split(factor=0.8, align=True)
+
+        split_right.operator("mesh.change_length_minus", icon="REMOVE", text = "")
+
+        # split_right = split_center.split(factor=0.9, align=True)
 
         if sc.bool_panel_arrow2:
-            split.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
+            split_right.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
         else:
-            split.prop(sc, "bool_panel_arrow2", text="", icon='RIGHTARROW')
+            split_right.prop(sc, "bool_panel_arrow2", text="", icon='RIGHTARROW')
 
         if sc.bool_panel_arrow2:            
             box = col.column(align=True).box().column()            
@@ -1357,11 +1378,13 @@ blender_classes = [
     SetAngle,
     SetAngle_Copy,
     SetAngle_Plus,
+    SetAngle_Minus,
 
 
     SetLength,
     SetLength_Copy,
     SetLength_Plus,
+    SetLength_Minus,
 
 
     Dialog_Warning_Operator,

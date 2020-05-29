@@ -49,6 +49,34 @@ class SetAngle_Plus(bpy.types.Operator):
 
         return {"FINISHED"}
 
+class SetAngle_Minus(bpy.types.Operator):
+    """Tooltip"""
+    bl_idname = "mesh.change_angle_minus"
+    bl_label = "Plus Angle"
+    bl_description = 'Minus angle to selected angle\
+    \n\
+    \nYou can also assign shortcut\
+    \nHow to do it: > right-click on this button > Assign Shortcut'
+    bl_options = {'REGISTER', 'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        return context.active_object is not None
+
+    def execute(self, context):
+
+        # The script crashes due to the fact that "self.report"
+        # as I understand does not work  it in the case of embedding one operator in another
+
+        try:
+            bpy.ops.mesh.change_angle(Clear_angle_globally = -1)
+        except RuntimeError:
+            text = "You need to select from 1 to 4 vertices"
+            war = "ERROR"
+            self.report({war}, text)
+
+        return {"FINISHED"}
+
 class SetAngle_Copy(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_angle_copy"
@@ -75,7 +103,9 @@ class SetAngle_Copy(bpy.types.Operator):
             self.report({war}, text)
 
         return {"FINISHED"}
-                
+
+
+
 class SetAngle(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_angle"
@@ -83,7 +113,7 @@ class SetAngle(bpy.types.Operator):
     bl_description = "Set Angle \n You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     bl_options = {'REGISTER', 'UNDO'}
 
-    Clear_angle_globally: bpy.props.BoolProperty()
+    Clear_angle_globally: bpy.props.IntProperty()
 
     @classmethod
     def poll(cls, context):
@@ -508,10 +538,14 @@ class SetAngle(bpy.types.Operator):
             angle = 0.0
         elif self.Clear_angle_globally == 1:
             angle = 0.0
+        elif self.Clear_angle_globally == -1:
+            height = -height
+            angle = 0.0
         else:
             v1ch=v1-v2
             v3ch=v3-v2
             angle = v3ch.angle(v1ch, 0.0)
+        
 
 
         bmesh.update_edit_mesh(me, True, True)

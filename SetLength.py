@@ -58,6 +58,39 @@ class SetLength_Plus(bpy.types.Operator):
 
         return {"FINISHED"}
 
+class SetLength_Minus(bpy.types.Operator):
+    """Tooltip"""
+    bl_idname = "mesh.change_length_minus"
+    bl_label = "Plus Length / Distance"
+    bl_description = 'Minus length/distance to selected item \
+    \n\
+    \nYou can also assign shortcut\
+    \nHow to do it: > right-click on this button > Assign Shortcut'
+    bl_options = {'REGISTER', 'UNDO'}
+
+
+    @classmethod
+    def poll(cls, context):
+        return context.active_object is not None
+
+    def execute(self, context):
+
+        # The script crashes due to the fact that "self.report"
+        # as I understand does not work  it in the case of embedding one operator in another
+
+        try:
+            bpy.ops.mesh.change_length(plus_length = -1)
+        except RuntimeError:
+            text = "You need to select 2 vertices"
+            war = "ERROR"
+            self.report({war}, text)
+
+
+        # bpy.ops.mesh.change_length(plus_length = 1)
+
+
+        return {"FINISHED"}
+
 class SetLength_Copy(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_length_copy"
@@ -96,7 +129,7 @@ class SetLength(bpy.types.Operator):
     bl_description = 'Set Length / Distance \n You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut'
     bl_options = {'REGISTER', 'UNDO'}
 
-    plus_length: bpy.props.BoolProperty()  
+    plus_length: bpy.props.IntProperty() 
     
     @classmethod
     def poll(cls, context):
@@ -490,6 +523,8 @@ class SetLength(bpy.types.Operator):
         try:
             if self.plus_length == 1:
                 length = lengthtrue  / (length + lengthtrue)
+            elif self.plus_length == -1:
+                length = lengthtrue/(-length + lengthtrue)
             else:
                 length = lengthtrue/length
         except ZeroDivisionError:
