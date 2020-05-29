@@ -666,7 +666,7 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
         bm = bmesh.from_edit_mesh(me)
 
         bpy.context.object.update_from_editmode()
-        bmesh.update_edit_mesh(me, True, True)
+        bmesh.update_edit_mesh(me, True)
 
         
         #Create lists
@@ -798,13 +798,14 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
             print(normals_of_the_faces)
 
             normal_from_face = ((wm @ normals_of_the_faces[0]) + (wm @ normals_of_the_faces[1])) /2
+
+            print(normals_of_the_faces)
             
             normal = ((wm @ edge_verts[0].normal) + (wm @ edge_verts[1].normal)) /2
             
             normal_projection_from_face = mathutils.geometry.intersect_point_line(normal_from_face, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
             normal_projection_from_face = normal_projection_from_face[0]
             normal_from_face = (normal_from_face - normal_projection_from_face)
-
 
             normal_projection = mathutils.geometry.intersect_point_line(normal, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
             normal_projection = normal_projection[0]
@@ -841,6 +842,10 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
             rot_quat = direction.to_track_quat('-Z', 'Y')
             obj_camera.rotation_euler = rot_quat.to_euler()
             rot_quat =  rot_quat.to_euler()
+
+
+        bpy.context.object.update_from_editmode()
+        bmesh.update_edit_mesh(me, True)
 
 
         return {'FINISHED'}
