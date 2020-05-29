@@ -665,6 +665,7 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
         me = obj.data
         bm = bmesh.from_edit_mesh(me)
 
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
         bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True)
 
@@ -809,7 +810,7 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
             normal = ((edge_verts[0].normal) + (edge_verts[1].normal)) /2
 
-            normal = normal + location_of_edge
+            normal = (location_of_edge) + normal
 
             normal_projection = mathutils.geometry.intersect_point_line(normal, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
             normal_projection = normal_projection[0]
@@ -847,7 +848,7 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
             obj_camera.rotation_euler = rot_quat.to_euler()
             rot_quat =  rot_quat.to_euler()
 
-
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
         bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True)
 
