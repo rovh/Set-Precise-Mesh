@@ -753,7 +753,6 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
             self.report({war}, text)
             return{"FINISHED"}
 
-
         if len(selected_verts) != 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
 
             if len(selected_verts) > 1:
@@ -774,7 +773,6 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
             obj_camera.rotation_euler = rot_quat.to_euler()
             rot_quat =  rot_quat.to_euler()
 
-
         if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) == 0:
 
             if len(selected_edges) > 1:
@@ -791,31 +789,28 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
             faces_of_edge = selected_edges[0].link_faces
 
-            # print(faces_of_edge[1], "\n")
-            print("\n")
-
             normals_of_the_faces = []
 
             for f in range(0, len(faces_of_edge)):
-                print(faces_of_edge[f])
+                # print(faces_of_edge[f])
                 normals_of_the_faces.append(faces_of_edge[f].normal) 
 
             print(normals_of_the_faces)
 
             normal_from_face = ((wm @ normals_of_the_faces[0]) + (wm @ normals_of_the_faces[1])) /2
+            
             normal = ((wm @ edge_verts[0].normal) + (wm @ edge_verts[1].normal)) /2
-            normal = (normal + normal_from_face) /2
+            
+            normal_projection_from_face = mathutils.geometry.intersect_point_line(normal_from_face, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
+            normal_projection_from_face = normal_projection_from_face[0]
+            normal_from_face = (normal_from_face - normal_projection_from_face)
+
 
             normal_projection = mathutils.geometry.intersect_point_line(normal, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
             normal_projection = normal_projection[0]
-            normal = normal - normal_projection
+            normal = (normal - normal_projection)
 
-            # normal_2 = normal + normal_projection
-
-            # print(normal_projection)
-
-            # print(normal)
-
+            normal = (normal + normal_from_face)
 
             obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
             direction = normal
@@ -823,7 +818,6 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
             rot_quat = direction.to_track_quat('-Z', 'Y')
             obj_camera.rotation_euler = rot_quat.to_euler()
             rot_quat =  rot_quat.to_euler()
-
 
         if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) != 0:
 

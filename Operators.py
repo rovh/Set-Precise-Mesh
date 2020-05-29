@@ -331,9 +331,6 @@ class Set_Mesh_Position (bpy.types.Operator):
             normal_projection = normal_projection[0]
             normal = normal - normal_projection
 
-            
- 
-
             obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
             direction = normal
             # point the cameras '-Z' and use its 'Y' as up
