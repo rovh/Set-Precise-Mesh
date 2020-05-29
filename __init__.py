@@ -786,23 +786,55 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
             
             edge_verts = selected_edges[0].verts
 
-            location_of_edge = ((wm @ edge_verts[0].co) + (wm @ edge_verts[1].co)) / 2
+            location_of_edge = ((wm @ edge_verts[0].co) + (wm @ edge_verts[1].co)) /2
             bpy.context.scene.cursor.location = location_of_edge
 
+            faces_of_edge = selected_edges[0].link_faces
+
+            # print(faces_of_edge[1], "\n")
+            print("\n")
+
+            normals_of_the_faces = []
+
+            for f in range(0, len(faces_of_edge)):
+                print(faces_of_edge[f])
+                normals_of_the_faces.append(faces_of_edge[f].normal) 
+
+            print(normals_of_the_faces)
+
+            normal_from_face = (normals_of_the_faces[0] + normals_of_the_faces[1]) /2
+
+
+
+            # for f in range(0, len(normals_of_the_faces)):
+                # print(faces_of_edge[f])
+                # normals_of_the_faces.append(faces_of_edge[f].normal) 
+
+                # normal_from_face = normals_of_the_faces
+
+            
+
+
+
             # normal = ((edge_verts[0].normal @ wm_inverted) + (edge_verts[1].normal @ wm_inverted)) / 2
-            normal = ((wm @ edge_verts[0].normal) + (wm @ edge_verts[1].normal)) / 2
+            normal = ((wm @ edge_verts[0].normal) + (wm @ edge_verts[1].normal)) /2
 
-            # normal_projection = mathutils.geometry.intersect_point_line(normal, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
+            normal = (normal + normal_from_face) /2
 
-            # normal_projection = normal_projection[0]
+            normal_projection = mathutils.geometry.intersect_point_line(normal, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
+            
+            normal_projection = normal_projection[0]
 
-            # normal = normal - normal_projection
+            normal = normal - normal_projection
+
+
+
 
             # normal_2 = normal + normal_projection
 
             # print(normal_projection)
 
-            print(normal)
+            # print(normal)
 
 
             obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
