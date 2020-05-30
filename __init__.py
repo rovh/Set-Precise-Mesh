@@ -32,6 +32,7 @@ from .SetAngle import *
 from .SetLength import *
 from .Operators import *
 
+
 from bpy import types
 from bpy.props import (
         FloatProperty,
@@ -444,6 +445,11 @@ def   draw_VIEW3D_MT_transform(self, context):
     layout.separator()
 
     layout.operator("mesh.set_mesh_position_pop_up", text="Set Mesh Position")
+
+
+
+# draw_buttons(self, context, layout)
+
 
 class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_operator"
@@ -894,13 +900,15 @@ class ChooseItemOperator(bpy.types.Operator):
     def execute(self, context):
         tree = bpy.data.node_groups[self.node_tree]
         node = tree.nodes[self.node]
-        node.item_set = true
+        node.item_set = True
         node.set_item(self.enum)
         return {"FINISHED"}
 
     def invoke(self, context, event):
         context.window_manager.invoke_search_popup(self)
         return {"FINISHED"}
+
+        
 
 class NewItemOperator(bpy.types.Operator):
     bl_idname = "example.new_item"
@@ -1055,22 +1063,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
 
             col_top.prop(w_m, "lengthbool")
 
-            def draw_buttons(self, context, layout):
-                group = layout.row(align=True)
-                choose_props = group.operator('example.choose_item', text="", icon='PRESET')
-                if self.item_set:
-                    group.prop(self.get_item(), "name", text="", expand=True)
-                    clear_props = group.operator('example.clear_item', icon='X', text="")
-                    clear_props.node_tree = self.id_data.name
-                    clear_props.node = self.name
-                else:
-                    new_props = group.operator('example.new_item', icon='ADD', text='New')
-                    new_props.node_tree = self.id_data.name
-                    new_props.node = self.name
-                choose_props.node_tree = self.id_data.name
-                choose_props.name = self.name
-
-            draw_buttons(self, context, layout)
+            
 
 
 
