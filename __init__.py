@@ -420,7 +420,7 @@ class Header_Length_Simulation_SetPreciseMesh (bpy.types.Operator):
 
         # sub_col.prop(context.scene, "my_property_2", text = "")
 
-def   header_draw(self, context):
+def   header_draw   (self, context):
     layout = self.layout
     object_mode = bpy.context.active_object.mode
 
@@ -438,13 +438,12 @@ def   header_draw(self, context):
         split.operator("wm.header_angle_simulation_setprecisemesh", text="Angle Simulation", icon = "MOD_SIMPLIFY")
         split.operator("wm.header_length_simulation_setprecisemesh", text="Distance Simulation", icon = "CON_TRACKTO")
  
-def   operator_module(self, context):
+def   draw_VIEW3D_MT_transform(self, context):
     layout = self.layout
-    # object_mode = bpy.context.active_object.mode
 
     layout.separator()
 
-    layout.operator("mesh.set_mesh_position_pop_up", text="Mesh Position")
+    layout.operator("mesh.set_mesh_position_pop_up", text="Set Mesh Position")
 
 class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_operator"
@@ -1430,7 +1429,7 @@ def register():
 
     bpy.types.WindowManager.setprecisemesh = PointerProperty(type=SetPreciseMesh_Props)
     bpy.types.VIEW3D_HT_tool_header.append(header_draw)
-    bpy.types.VIEW3D_MT_transform.append(operator_module)
+    bpy.types.VIEW3D_MT_transform.append(draw_VIEW3D_MT_transform)
 
     bpy.types.Scene.my_property = PointerProperty(type=bpy.types.Object)
     bpy.types.Scene.my_property_2 = PointerProperty(type=bpy.types.Object)
@@ -1484,7 +1483,7 @@ def unregister():
 
     del bpy.types.Scene.my_property
     bpy.types.VIEW3D_HT_tool_header.remove(header_draw)
-    bpy.types.VIEW3D_MT_transform.remove(operator_module)
+    bpy.types.VIEW3D_MT_transform.remove(draw_VIEW3D_MT_transform)
 
 
 if __name__ == "__main__":
