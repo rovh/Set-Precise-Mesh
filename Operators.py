@@ -1,7 +1,8 @@
 import bpy
 
 # from bpy import types
-
+import mathutils
+# from bpy import types
 import bmesh
 
 # from bpy import types
@@ -349,24 +350,36 @@ class Set_Mesh_Position (bpy.types.Operator):
             
             edge_verts = selected_edges[0].verts
 
-
-            location_of_edge = ((wm @ edge_verts[0].co) + (wm @ edge_verts[1].co)) / 2
+            location_of_edge = ((wm @ edge_verts[0].co) + (wm @ edge_verts[1].co)) /2
             bpy.context.scene.cursor.location = location_of_edge
 
-            # diraction_for_edge = (wm @ edge_verts[1].co) - (wm @ edge_verts[0].co)
+            faces_of_edge = selected_edges[0].link_faces
+
+            normals_of_the_faces = []
+
+            # normal_from_face = 
+
+            for f in range(0, len(faces_of_edge)):
+                # print(faces_of_edge[f])
+                normals_of_the_faces.append(faces_of_edge[f].normal @ wm_inverted) 
 
 
-            normal = ((edge_verts[0].normal @ wm_inverted) + (edge_verts[1].normal @ wm_inverted)) / 2
+            normal_from_face = ((normals_of_the_faces[0]) + (normals_of_the_faces[1])) /2
+            normal_from_face = (normal_from_face) + (location_of_edge) 
+            normal_projection_from_face = mathutils.geometry.intersect_point_line(normal_from_face, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
+            normal_projection_from_face = normal_projection_from_face[0]
+            # normal_from_face = normal_projection_from_face
+            normal_from_face = (normal_from_face - normal_projection_from_face)
+            normal = normal_from_face
 
 
             obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
             direction = normal
             # point the cameras '-Z' and use its 'Y' as up
-            # rot_quat = direction.to_track_quat('-Z', 'Y')
             rot_quat = direction.to_track_quat('-Z', 'Y')
             obj_camera.rotation_euler = rot_quat.to_euler()
             rot_quat =  rot_quat.to_euler()
-            
+
         if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) != 0:
 
             if len(selected_faces) > 1:

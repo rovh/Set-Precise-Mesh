@@ -799,7 +799,6 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
                 normals_of_the_faces.append(faces_of_edge[f].normal @ wm_inverted) 
 
 
-
             normal_from_face = ((normals_of_the_faces[0]) + (normals_of_the_faces[1])) /2
             normal_from_face = (normal_from_face) + (location_of_edge) 
             normal_projection_from_face = mathutils.geometry.intersect_point_line(normal_from_face, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
