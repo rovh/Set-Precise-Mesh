@@ -30,7 +30,7 @@ class SetAngle_Plus(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_angle_plus"
     bl_label = "Plus Angle"
-    bl_description = 'Add/plus angle to selected angle\
+    bl_description = 'Add/plus the angle to the selected angle\
     \n\
     \nYou can also assign shortcut\
     \nHow to do it: > right-click on this button > Assign Shortcut'
@@ -57,8 +57,8 @@ class SetAngle_Plus(bpy.types.Operator):
 class SetAngle_Minus(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_angle_minus"
-    bl_label = "Plus Angle"
-    bl_description = 'Minus angle to selected angle\
+    bl_label = "Minus Angle"
+    bl_description = 'Reduce/Minus the angle of the selected angle\
     \n\
     \nYou can also assign shortcut\
     \nHow to do it: > right-click on this button > Assign Shortcut'
