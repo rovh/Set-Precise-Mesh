@@ -31,6 +31,7 @@ import bpy
 from .SetAngle import *
 from .SetLength import *
 from .Operators import *
+# from .UI import *
 
 
 from bpy import types
@@ -433,11 +434,11 @@ def   header_draw   (self, context):
         sub.scale_x = 1.5
         sub = sub.operator("mesh.set_cursor", text="", icon = "ORIENTATION_CURSOR")
         
-        sub = row.row(align = 1)
-        sub.scale_x = 0.6
-        split = sub.split(align = 1, factor = 0.5)
-        split.operator("wm.header_angle_simulation_setprecisemesh", text="Angle Simulation", icon = "MOD_SIMPLIFY")
-        split.operator("wm.header_length_simulation_setprecisemesh", text="Distance Simulation", icon = "CON_TRACKTO")
+        # sub = row.row(align = 1)
+        # sub.scale_x = 0.6
+        # split = sub.split(align = 1, factor = 0.5)
+        # split.operator("wm.header_angle_simulation_setprecisemesh", text="Angle Simulation", icon = "MOD_SIMPLIFY")
+        # split.operator("wm.header_length_simulation_setprecisemesh", text="Distance Simulation", icon = "CON_TRACKTO")
  
 def   draw_VIEW3D_MT_transform(self, context):
     layout = self.layout
@@ -446,10 +447,7 @@ def   draw_VIEW3D_MT_transform(self, context):
 
     layout.operator("mesh.set_mesh_position_pop_up", text="Set Mesh Position")
 
-
-
 # draw_buttons(self, context, layout)
-
 
 class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_operator"
@@ -880,67 +878,66 @@ class Browser_Link (bpy.types.Operator):
         return {"FINISHED"}
 
 
+# items = [('one', 'Any', "", 'PRESET', 1), ('two', 'PropertyGroup', "", 'PRESET', 2), ('three', 'type', "", 'PRESET', 3)]
 
-items = [('one', 'Any', "", 'PRESET', 1), ('two', 'PropertyGroup', "", 'PRESET', 2), ('three', 'type', "", 'PRESET', 3)]
+# class ChooseItemOperator(bpy.types.Operator):
+#     bl_idname = "example.choose_item"
+#     bl_label = "Choose item"
+#     bl_options = {'INTERNAL'}
+#     bl_property = "enum"
 
-class ChooseItemOperator(bpy.types.Operator):
-    bl_idname = "example.choose_item"
-    bl_label = "Choose item"
-    bl_options = {'INTERNAL'}
-    bl_property = "enum"
+#     def get_enum_options(self, context):
+#         global items
+#         return items
 
-    def get_enum_options(self, context):
-        global items
-        return items
+#     enum: EnumProperty(items=get_enum_options, name="Items")
+#     node_tree: StringProperty()
+#     node: StringProperty()
 
-    enum: EnumProperty(items=get_enum_options, name="Items")
-    node_tree: StringProperty()
-    node: StringProperty()
+#     def execute(self, context):
+#         tree = bpy.data.node_groups[self.node_tree]
+#         node = tree.nodes[self.node]
+#         node.item_set = True
+#         node.set_item(self.enum)
+#         return {"FINISHED"}
 
-    def execute(self, context):
-        tree = bpy.data.node_groups[self.node_tree]
-        node = tree.nodes[self.node]
-        node.item_set = True
-        node.set_item(self.enum)
-        return {"FINISHED"}
-
-    def invoke(self, context, event):
-        context.window_manager.invoke_search_popup(self)
-        return {"FINISHED"}
+#     def invoke(self, context, event):
+#         context.window_manager.invoke_search_popup(self)
+#         return {"FINISHED"}
 
         
 
-class NewItemOperator(bpy.types.Operator):
-    bl_idname = "example.new_item"
-    bl_label = "New Item"
-    bl_options = {'INTERNAL'}
+# class NewItemOperator(bpy.types.Operator):
+#     bl_idname = "example.new_item"
+#     bl_label = "New Item"
+#     bl_options = {'INTERNAL'}
 
-    node_tree: StringProperty()
-    node: StringProperty()
+#     node_tree: StringProperty()
+#     node: StringProperty()
 
-    def execute(self, context):
-        global items
-        tree = bpy.data.node_groups[self.node_tree]
-        node = tree.nodes[self.node]
-        node.item_set = True
-        newitem = ('four', 'type', "", 'PRESET', 4)
-        items.append(newitem)
-        node.set_item(newitem)
-        return {'FINISHED'}
+#     def execute(self, context):
+#         global items
+#         tree = bpy.data.node_groups[self.node_tree]
+#         node = tree.nodes[self.node]
+#         node.item_set = True
+#         newitem = ('four', 'type', "", 'PRESET', 4)
+#         items.append(newitem)
+#         node.set_item(newitem)
+#         return {'FINISHED'}
 
-class ClearItemOperator(bpy.types.Operator):
-    bl_idname = "example.clear_item"
-    bl_label = "Clear Item"
-    bl_options = {'INTERNAL'}
+# class ClearItemOperator(bpy.types.Operator):
+#     bl_idname = "example.clear_item"
+#     bl_label = "Clear Item"
+#     bl_options = {'INTERNAL'}
 
-    node_tree: StringProperty()
-    node: StringProperty()
+#     node_tree: StringProperty()
+#     node: StringProperty()
 
-    def execute(self, context):
-        tree = bpy.data.node_groups[self.node_tree]
-        node = tree.nodes[self.node]
-        node.item_set = False
-        return {'FINISHED'}
+#     def execute(self, context):
+#         tree = bpy.data.node_groups[self.node_tree]
+#         node = tree.nodes[self.node]
+#         node.item_set = False
+#         return {'FINISHED'}
 
 """Main Panel"""
 class SetPresiceMesh_Panel (bpy.types.Panel):
@@ -1019,7 +1016,16 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             if script_input:
                 col_top.prop(w_m, "data_block", text = "")
 
-            col_top.prop(w_m, "anglebool" )
+
+            split = col_top.split(factor = 0.835, align = 0)
+            split.prop(w_m, "anglebool" )
+            split.operator("wm.header_angle_simulation_setprecisemesh", text=" Angle Simulation", icon = "MOD_SIMPLIFY")
+
+
+        #  sub = row.row(align = 1)
+        # sub.scale_x = 0.6
+        # split = sub.split(align = 1, factor = 0.5)
+
 
         col = layout.column(align= True )
         
@@ -1061,19 +1067,10 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             if script_input_2:   
                 col_top.prop(w_m, "data_block_2", text = "") 
 
-            col_top.prop(w_m, "lengthbool")
-
-            
-
-
-
-
-
-
-
-
-
-
+           
+            split = col_top.split(factor = 0.835, align = 0)
+            split.prop(w_m, "lengthbool")
+            split.operator("wm.header_length_simulation_setprecisemesh", text=" Distance Simulation", icon = "CON_TRACKTO")
 
 
                  
@@ -1440,9 +1437,9 @@ blender_classes = [
     Set_Mesh_Position,
 
     
-    ChooseItemOperator,
-    NewItemOperator,
-    ClearItemOperator,
+    # ChooseItemOperator,
+    # NewItemOperator,
+    # ClearItemOperator,
 
 ]
 
