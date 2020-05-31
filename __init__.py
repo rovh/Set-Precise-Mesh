@@ -1406,8 +1406,8 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         default='global_matrix'
     )
     position_origin: bpy.props.BoolProperty(
-        name="Set Origin",
-        description='Set Origin of the active mesh',
+        name="Set Origin Location",
+        description='Set Origin location of the active mesh',
         default = True,
     )
     position_origin_clear_matrix: bpy.props.BoolProperty(
