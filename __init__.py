@@ -540,17 +540,32 @@ class Popup_Menu_SetPreciseMesh_SetAngle (bpy.types.Operator):
         split = col.split(factor=0.65, align=True)
         split.scale_y =1.2      
 
-        split.operator("mesh.change_angle_copy", icon="DRIVER_ROTATIONAL_DIFFERENCE")
+        # split.operator("mesh.change_angle_copy", icon="DRIVER_ROTATIONAL_DIFFERENCE")
 
-        split = split.split(factor=0.8, align=True)
+        # split = split.split(factor=0.8, align=True)
 
-        split.operator("mesh.change_angle_plus", icon="ADD", text = "")
+        # split.operator("mesh.change_angle_plus", icon="ADD", text = "")
 
+        split_left = col.split(factor=0.55, align=True)
+        split_left.scale_y = 1.2
+        
+        split_left.operator("mesh.change_angle_copy", icon="DRIVER_ROTATIONAL_DIFFERENCE")
+
+        split_center = split_left.split(factor=0.43, align=True)
+
+        split_center.operator("mesh.change_angle_plus", icon="ADD", text = "")
+            # 
+        split_right = split_center.split(factor=0.8, align=True)
+
+        split_right.operator("mesh.change_angle_minus", icon="REMOVE", text = "")
+        
+
+        # split = split.split(factor=1, align=True)
 
         if sc.bool_panel_arrow:
-            split.prop(sc, "bool_panel_arrow", text="", icon='DOWNARROW_HLT')
+            split_right.prop(sc, "bool_panel_arrow", text="", icon='DOWNARROW_HLT')
         else:
-            split.prop(sc, "bool_panel_arrow", text="", icon='RIGHTARROW')
+            split_right.prop(sc, "bool_panel_arrow", text="", icon='RIGHTARROW')
 
         if sc.bool_panel_arrow:
             
@@ -569,7 +584,10 @@ class Popup_Menu_SetPreciseMesh_SetAngle (bpy.types.Operator):
             if script_input:
                 col_top.prop(w_m, "data_block", text = "")
 
-            col_top.prop(w_m, "anglebool" )
+
+            split = col_top.split(factor = 0.835, align = 0)
+            split.prop(w_m, "anglebool" )
+            split.operator("wm.header_angle_simulation_setprecisemesh", text=" Angle Simulation", icon = "MOD_SIMPLIFY")
 
 class Popup_Menu_SetPreciseMesh_SetLength (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_setlength"
@@ -618,23 +636,32 @@ class Popup_Menu_SetPreciseMesh_SetLength (bpy.types.Operator):
         
         col = layout.column(align= True )
         
-        split = col.split(factor=0.65, align=True)
-        split.scale_y = 1.2
+        split_left = col.split(factor=0.55, align=True)
+        split_left.scale_y = 1.2
         
-        split.operator("mesh.change_length_copy",icon="DRIVER_DISTANCE")
+        split_left.operator("mesh.change_length_copy",icon="DRIVER_DISTANCE")
 
-        split = split.split(factor=0.8, align=True)
+        split_center = split_left.split(factor=0.43, align=True)
 
-        split.operator("mesh.change_length_plus",icon="ADD", text = "")
+        split_center.operator("mesh.change_length_plus",icon="ADD", text = "")
+            # 
+        split_right = split_center.split(factor=0.8, align=True)
+
+        split_right.operator("mesh.change_length_minus", icon="REMOVE", text = "")
+
+        # split_right = split_center.split(factor=0.9, align=True)
 
         if sc.bool_panel_arrow2:
-            split.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
+            split_right.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
         else:
-            split.prop(sc, "bool_panel_arrow2", text="", icon='RIGHTARROW')
+            split_right.prop(sc, "bool_panel_arrow2", text="", icon='RIGHTARROW')
 
         if sc.bool_panel_arrow2:            
             box = col.column(align=True).box().column()            
             col_top = box.column(align=True)
+
+
+            # col_top.prop(w_m, "length") 
 
             row = col_top.row(align = True)
             row.prop(w_m, "length")
@@ -647,7 +674,10 @@ class Popup_Menu_SetPreciseMesh_SetLength (bpy.types.Operator):
             if script_input_2:   
                 col_top.prop(w_m, "data_block_2", text = "") 
 
-            col_top.prop(w_m, "lengthbool")
+           
+            split = col_top.split(factor = 0.835, align = 0)
+            split.prop(w_m, "lengthbool")
+            split.operator("wm.header_length_simulation_setprecisemesh", text=" Distance Simulation", icon = "CON_TRACKTO")
 
 """Operators"""
 class Set_Cursor_To_Normal (bpy.types.Operator):
