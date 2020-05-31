@@ -173,12 +173,12 @@ class SetAngle(bpy.types.Operator):
         bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True, True)
 
-        recalculate = 1
-        for cycle in range (0, recalculate + 1):
-            print("cycle")
+        # recalculate = 0
+        # for cycle in range (0, recalculate + 1):
+        #     print("cycle")
 
-        bpy.context.object.update_from_editmode()
-        bmesh.update_edit_mesh(me, True)
+        # bpy.context.object.update_from_editmode()
+        # bmesh.update_edit_mesh(me, True)
 
         #Create lists
         vec = []
