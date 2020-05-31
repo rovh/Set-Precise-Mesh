@@ -21,6 +21,11 @@ def check(self):
     if obj.scale != Vector((1.0, 1.0, 1.0)) or obj.delta_scale != Vector((1.0, 1.0, 1.0)):
         bpy.ops.object.dialog_warning_operator('INVOKE_DEFAULT') 
 
+
+# def recalculate(self):
+
+
+
 class SetAngle_Plus(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_angle_plus"
@@ -167,6 +172,10 @@ class SetAngle(bpy.types.Operator):
 
         bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True, True)
+
+        # cycle = 1
+        # for cycle in range (0, cycle):
+        #     print("cycle")
         
         #Create lists
         vec = []
@@ -188,7 +197,6 @@ class SetAngle(bpy.types.Operator):
             war = 'ERROR'
             self.report({war}, text)
             return {"FINISHED"}
-
 
         # Differrent cases for progection
         prog = context.window_manager.setprecisemesh.projection_type
@@ -546,8 +554,6 @@ class SetAngle(bpy.types.Operator):
             v3ch=v3-v2
             angle = v3ch.angle(v1ch, 0.0)
         
-
-
         bmesh.update_edit_mesh(me, True, True)
 
         """Select cases for number of selected vertices"""
