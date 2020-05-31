@@ -110,7 +110,7 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
 
         # Matrix menu
         sub_col = col_right.column(align = 1)
-        sub_col.operator("mesh.set_mesh_position_global", text="Global", icon = "VIEW_PERSPECTIVE")
+        sub_col.operator("mesh.set_mesh_position_global", text="Globally", icon = "VIEW_PERSPECTIVE")
         sub_col.scale_y = 1.2
 
 
@@ -121,7 +121,7 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
 
         # Cursor menu
         sub_col = col_right.column(align = 1)
-        sub_col.operator("mesh.set_mesh_position_local", text="Local" , icon = "GRID")
+        sub_col.operator("mesh.set_mesh_position_local", text="Locally " , icon = "GRID")
         sub_col.scale_y = 1.2
         # space
         # sub_col = col_right.column(align = 0)
@@ -140,7 +140,7 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
 
         # Object menu
         sub_col = col_right.column(align = 1)
-        sub_col.operator("mesh.set_mesh_position_cursor", text="Cursor", icon = "PIVOT_CURSOR")
+        sub_col.operator("mesh.set_mesh_position_cursor", text="To the Cursor", icon = "PIVOT_CURSOR")
         sub_col.scale_y = 1.2
 
 
@@ -161,7 +161,7 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
             sub_col.scale_y = 1.2
         else:
 
-            sub_col.operator("mesh.set_mesh_position_object", text="Object", icon='OBJECT_DATA')
+            sub_col.operator("mesh.set_mesh_position_object", text="To the Object", icon='OBJECT_DATA')
             sub_col.prop(context.scene, "object_position", text = "")
             sub_col.scale_y = 1.2
 
@@ -181,8 +181,8 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
 class Set_Mesh_Position_Global (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.set_mesh_position_global"
-    bl_label = "Set Mesh Position Global"
-    bl_description = "Set the cursor location to the selected vertex/edge/face and rotate it by normal\
+    bl_label = "Set Mesh Position Globally"
+    bl_description = "Set the mesh position based on the normal of the selected part of the mesh (vertex/edge/face)\
         \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -197,8 +197,8 @@ class Set_Mesh_Position_Global (bpy.types.Operator):
 class Set_Mesh_Position_Local (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.set_mesh_position_local"
-    bl_label = "Set Mesh Position Global"
-    bl_description = "Set the cursor location to the selected vertex/edge/face and rotate it by normal\
+    bl_label = "Set Mesh Position Locally"
+    bl_description = "Set the mesh position based on the normal of the selected part of the mesh (vertex/edge/face)\
         \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -213,8 +213,8 @@ class Set_Mesh_Position_Local (bpy.types.Operator):
 class Set_Mesh_Position_Cursor (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.set_mesh_position_cursor"
-    bl_label = "Set Mesh Position Cursor"
-    bl_description = "Set the cursor location to the selected vertex/edge/face and rotate it by normal\
+    bl_label = "Set Mesh Position to the Cursor"
+    bl_description = "Set the mesh position based on the normal of the selected part of the mesh (vertex/edge/face)\
         \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -229,8 +229,8 @@ class Set_Mesh_Position_Cursor (bpy.types.Operator):
 class Set_Mesh_Position_Object (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.set_mesh_position_object"
-    bl_label = "Set Mesh Position Object"
-    bl_description = "Set the cursor location to the selected vertex/edge/face and rotate it by normal\
+    bl_label = "Set Mesh Position to the Object"
+    bl_description = "Set the mesh position based on the normal of the selected part of the mesh (vertex/edge/face)\
         \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     bl_options = {'REGISTER', 'UNDO'}
 

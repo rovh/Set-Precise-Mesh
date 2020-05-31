@@ -1362,31 +1362,57 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         description="Angle Simulation",
         default='global_matrix'
     )
+    description_projection_type_2 = [
+        #description_0
+        "Local Matrix. It uses the matrix of the editing object and projects the selected vertex onto it" ,
+
+        #description_1
+        "Global Matrix. It uses the matrix of the world and projects the selected vertex onto it",
+
+        #description_2
+        "Custon Object Location. It uses the location of the specified object to simulate the distance",
+
+        #description_3
+        "Custon Object Matrix. It uses the matrix of the specified object\
+        \nand projects the selected vertex onto it",
+
+        #description_4
+        'Cursor Location. It uses the location of the 3d cursor to simulate the distance\
+        \n To make it more convinient to use 3d cursor in the cursor settings You can enable\
+        \n "Surface Project" and "Orintation: Geometry" ',
+
+        #description_5
+        'Cursor Matrix. It uses the matrix of the 3d cursor and projects the selected vertex onto it\
+        \n To make it more convinient to use 3d cursor You can use\
+        \n "Set Cursor to normal face" which you can find next to "Angle Simulation"\
+        \n Also in the cursor settings You can enable\
+        \n "Surface Project" and "Orintation: Geometry" (Warning: Use it very carefully for "Cursor Matrix")',
+    ]
     projection_type_2: bpy.props.EnumProperty(
-        name="Angle Simulation",
+        name="Length\Distance Simulation",
         items=(
-            ("local_matrix"   , "Local Matrix  (Object)" , description_projection_type[0]  , "GRID"              , 0),
-            ("global_matrix"  , "Global Matrix (World)"  , description_projection_type[1]  , "VIEW_PERSPECTIVE"  , 1),
+            ("local_matrix"   , "Local Matrix  (Object)" , description_projection_type_2[0]  , "GRID"              , 0),
+            ("global_matrix"  , "Global Matrix (World)"  , description_projection_type_2[1]  , "VIEW_PERSPECTIVE"  , 1),
             (None),
-            ("custom_object_location"  , "Custom Object Location" , description_projection_type[2] , "EMPTY_ARROWS", 2),
-            ("custom_object_matrix"    , "Custom Object Matrix"   , description_projection_type[3] , "GRID"        , 3),
+            ("custom_object_location"  , "Custom Object Location" , description_projection_type_2[2] , "EMPTY_ARROWS", 2),
+            ("custom_object_matrix"    , "Custom Object Matrix"   , description_projection_type_2[3] , "GRID"        , 3),
             (None),
-            ("cursor_location", "Cursor Location", description_projection_type[4] , "EMPTY_ARROWS", 4),
-            ("cursor_matrix"  , "Cursor Matrix"  , description_projection_type[5] , "GRID"        , 5),
+            ("cursor_location", "Cursor Location", description_projection_type_2[4] , "EMPTY_ARROWS", 4),
+            ("cursor_matrix"  , "Cursor Matrix"  , description_projection_type_2[5] , "GRID"        , 5),
             (None),
-            ("normal_matrix"  , "Normal Matrix"  , description_projection_type[5] , "GRID"        , 6),
+            ("normal_matrix"  , "Normal Matrix"  , description_projection_type_2[5] , "GRID"        , 6),
         ),
-        description="Angle Simulation",
+        description="Length\Distance Simulation",
         default='global_matrix'
     )
     position_origin: bpy.props.BoolProperty(
         name="Set Origin",
-        description='Change length in two directions OR in the direction of the active vertex',
+        description='Set Origin of the active mesh',
         default = True,
     )
     position_origin_clear_matrix: bpy.props.BoolProperty(
-        name="Set Origin",
-        description='Change length in two directions OR in the direction of the active vertex',
+        name="Clear Rotation",
+        description="Apply the object's rotation transformation to its data",
         default = False,
     )
 
