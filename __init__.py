@@ -183,12 +183,12 @@ class Dialog_Warning_Operator_4 (bpy.types.Operator):
         
         lay = layout.label(text = "You length/distance will be zero")
 
-class Header_Angle_Simulation_SetPreciseMesh (bpy.types.Operator):
+class Angle_Simulation_SetPreciseMesh (bpy.types.Operator):
    
     bl_idname = "wm.header_angle_simulation_setprecisemesh"
     bl_label = "Header Menu"
-    bl_description = "To make it convenient to use the this menu You can assign shortcut \n \
-         ( For exaple Ctrl + Alt + Middle Mouse )\n \
+    bl_description = "To make it convenient to use this menu You can assign shortcut \n \
+         ( For example Ctrl + Alt + Middle Mouse )\n \
         How to do it: > right-click on this button > Assign Shortcut"
   
     
@@ -302,12 +302,12 @@ class Header_Angle_Simulation_SetPreciseMesh (bpy.types.Operator):
 
         # sub_col.prop(context.scene, "my_property", text = "")
 
-class Header_Length_Simulation_SetPreciseMesh (bpy.types.Operator):
+class Length_Simulation_SetPreciseMesh (bpy.types.Operator):
    
     bl_idname = "wm.header_length_simulation_setprecisemesh"
     bl_label = "Header Menu"
-    bl_description = "To make it convenient to use the this menu You can assign shortcut \n \
-         ( For exaple Ctrl + Alt + Middle Mouse )\n \
+    bl_description = "To make it convenient to use this menu You can assign shortcut \n \
+         ( For example Ctrl + Alt + Middle Mouse )\n \
         How to do it: > right-click on this button > Assign Shortcut"
   
     
@@ -684,7 +684,7 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.set_cursor"
     bl_label = "Set the Cursor to the normal"
-    bl_description = "Set the cursor location to the selected vertex/edge/face and rotate it by normal\
+    bl_description = "Set the cursor location to the selected vertex/edge/face and set the cursor direction along its normal\
         \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -1452,8 +1452,8 @@ blender_classes = [
     Popup_Menu_SetPreciseMesh_Operator,
     Popup_Menu_SetPreciseMesh_SetAngle,
     Popup_Menu_SetPreciseMesh_SetLength,
-    Header_Angle_Simulation_SetPreciseMesh,
-    Header_Length_Simulation_SetPreciseMesh,
+    Angle_Simulation_SetPreciseMesh,
+    Length_Simulation_SetPreciseMesh,
 
 
     Set_Cursor_To_Normal,
