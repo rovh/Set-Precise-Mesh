@@ -175,7 +175,7 @@ class SetAngle(bpy.types.Operator):
 
         recalculate = 1
         for cycle in range (0, recalculate + 1):
-            print("cycle")3
+            print("cycle")
 
         bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True)
