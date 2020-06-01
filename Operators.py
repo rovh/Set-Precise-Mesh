@@ -19,7 +19,7 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.set_mesh_position_pop_up"
     bl_label = "Set Mesh Position Pop up menu"
-    bl_description = "Set the cursor location to the selected vertex/edge/face and rotate it by normal\
+    bl_description = "Set the mesh position according to the normal of the selected part of the mesh (vertex/edge/face)\
         \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -182,7 +182,7 @@ class Set_Mesh_Position_Global (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.set_mesh_position_global"
     bl_label = "Set Mesh Position Globally"
-    bl_description = "Set the mesh position based on the normal of the selected part of the mesh (vertex/edge/face)\
+    bl_description = "Set the mesh position to the World Matrix\
         \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -198,7 +198,7 @@ class Set_Mesh_Position_Local (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.set_mesh_position_local"
     bl_label = "Set Mesh Position Locally"
-    bl_description = "Set the mesh position based on the normal of the selected part of the mesh (vertex/edge/face)\
+    bl_description = "Set the mesh position to the Matrix of the Active Object\
         \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -214,7 +214,7 @@ class Set_Mesh_Position_Cursor (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.set_mesh_position_cursor"
     bl_label = "Set Mesh Position to the Cursor"
-    bl_description = "Set the mesh position based on the normal of the selected part of the mesh (vertex/edge/face)\
+    bl_description = "Set the mesh to the Matrix of the Cursor\
         \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -230,7 +230,7 @@ class Set_Mesh_Position_Object (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.set_mesh_position_object"
     bl_label = "Set Mesh Position to the Object"
-    bl_description = "Set the mesh position based on the normal of the selected part of the mesh (vertex/edge/face)\
+    bl_description = "Set the mesh position to the Matrix of the Custom Object \
         \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -248,7 +248,7 @@ class Set_Mesh_Position (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.set_mesh_position"
     bl_label = "Set Mesh Position"
-    bl_description = "Set the cursor location to the selected vertex/edge/face and rotate it by normal\
+    bl_description = "Set the mesh location and rotation according to the normal of the selected part of the mesh (vertex/edge/face)\
         \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     bl_options = {'REGISTER', 'UNDO'}
 
