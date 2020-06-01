@@ -274,7 +274,7 @@ class SetLength(bpy.types.Operator):
 
         
 
-       
+        offset = False 
 
         # Check number
         if len(vec) < 1:
@@ -286,7 +286,10 @@ class SetLength(bpy.types.Operator):
 
         elif len(vec) == 1:
 
-            v2 = vec[0]            
+            v2 = vec[0] 
+
+            offset = False 
+            offset_unit = -50          
 
             if prog == "global_matrix":
 
@@ -300,7 +303,13 @@ class SetLength(bpy.types.Operator):
                               
                 v1 = mathutils.Vector((v2_prg[0], v2_prg[1] , 0)) # 1 selected simulate
 
-                v1 = wm @ v1                 
+                v1 = wm @ v1  
+
+                if v1 == v2:
+                    offset = True                     
+                    v1 = mathutils.Vector((v2_prg[0], v2_prg[1] , offset_unit))
+                    v1 = wm @ v1
+
 
                 bpy.context.object.update_from_editmode()
                 bmesh.update_edit_mesh(me, True, True)
@@ -495,7 +504,7 @@ class SetLength(bpy.types.Operator):
 
         else:
 
-            
+
             # Invert direction for edge
             if invert_direction == 1:
                 vec.reverse()
@@ -519,22 +528,25 @@ class SetLength(bpy.types.Operator):
         # Length of the edge
         lengthtrue =lv.length
         
-
         # Center of the edge
         mv = (v1+v2)/2
         
         # Scale factor
         try:
             if self.plus_length == 1:
-                length = lengthtrue  / (length + lengthtrue)
+                length = lengthtrue / (length + lengthtrue)
             elif self.plus_length == -1:
-                length = lengthtrue/(-length + lengthtrue)
+                length = lengthtrue / (-length + lengthtrue) 
             else:
-                length = lengthtrue/length
+                length = lengthtrue / length
         except ZeroDivisionError:
             bpy.ops.object.dialog_warning_operator_4('INVOKE_DEFAULT')
             return {"FINISHED"}
-            
+
+        if offset == True:                     
+            length = length - (lengthtrue / offset_unit)
+
+         
     
         context = bpy.context
         scene = context.scene
