@@ -396,11 +396,15 @@ class Set_Mesh_Position (bpy.types.Operator):
 
 
         obj_matrix = bpy.context.active_object.matrix_world.copy()
-        obj_matrix_local = bpy.context.active_object.matrix_local.copy()
+        # obj_matrix_local = bpy.context.active_object.matrix_local.copy()
 
         cursor_matrix = bpy.context.scene.cursor.matrix.copy()
         cursor_matrix_inverted = cursor_matrix.inverted()
-        mat_cur =  cursor_matrix_inverted @ obj_matrix
+
+        mat_cur   =  cursor_matrix_inverted @ obj_matrix
+
+        # mat_cur_2 =  obj_matrix @ cursor_matrix_inverted
+
 
         position = self.position
 
@@ -410,7 +414,6 @@ class Set_Mesh_Position (bpy.types.Operator):
         elif position == "local":
             bpy.context.active_object.matrix_world = obj_matrix @ mat_cur
 
-            # bpy.context.active_object.matrix_world = obj_matrix_local @ mat_cur
             # bpy.context.active_object.matrix_world = mat_cur @ obj_matrix
 
             bpy.context.object.scale[0] = scale_remember_1
@@ -467,14 +470,6 @@ class Set_Mesh_Position (bpy.types.Operator):
 
         # bpy.context.scene.cursor.location = cursor_location_old
         bpy.context.scene.cursor.matrix = cursor_matrix_old
-
-        # mat_out = mat_out.to_4x4()
-        # bpy.context.active_object.matrix_world = mat_out
-
-        # bpy.context.object.scale[0] = 1
-        # bpy.context.object.scale[1] = 1
-        # bpy.context.object.scale[2] = 1
-
 
 
         bpy.context.object.update_from_editmode()

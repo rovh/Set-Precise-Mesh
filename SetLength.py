@@ -322,7 +322,6 @@ class SetLength(bpy.types.Operator):
 
                 v2_prg = v2
 
-                # v1 = v3
                 v1 = mathutils.Vector((v2_prg[0], v2_prg[1] , 0)) # 1 selected simulate
 
                 if v1 == v2:
@@ -330,10 +329,7 @@ class SetLength(bpy.types.Operator):
 
                     v2[0] = v2_prg[0]
                     v2[1] = v2_prg[1]
-                    v2[2] = offset_unit
-        
-                    v2 = wm @ v2
-
+                    v2[2] =  offset_unit
 
             elif prog == "cursor_location":
                 wm = bpy.context.active_object.matrix_world.copy()
@@ -345,19 +341,15 @@ class SetLength(bpy.types.Operator):
 
                 v1 = wm @ v1
 
-                if v1 == v2:
-                    offset = True 
+                # if v1 == v2:
+                #     offset = True 
 
-                    v2[0] = v2_prg[0]
-                    v2[1] = v2_prg[1]
-                    v2[2] = offset_unit
+                #     v2[0] = v2_prg[0]
+                #     v2[1] = v2_prg[1]
+                #     v2[2] = v2_prg[2] + offset_unit
         
-                    v2 = wm @ v2
+                #     v2 = wm @ v2
 
-                
-
-
-               
             elif prog == "cursor_matrix":
 
                 bpy.context.object.update_from_editmode()
@@ -368,46 +360,34 @@ class SetLength(bpy.types.Operator):
 
                         
                 obj_matrix = bpy.context.active_object.matrix_world.copy()
-                # obj_matrix = obj_matrix.inverted()
+                obj_matrix_inverted = obj_matrix.inverted()
+
 
                 cursor_loc =  bpy.context.scene.cursor.location
 
+
                 cursor_matrix = bpy.context.scene.cursor.matrix.copy()
-                cursor_matrix = cursor_matrix.inverted()
+                cursor_matrix_inverted = cursor_matrix.inverted()
 
-                # mat_cur = obj_matrix @ cursor_matrix
-                mat_cur =  cursor_matrix @ obj_matrix
-                # mat_cur = cursor_matrix
 
-                # cursor_matrix_loc = bpy.context.scene.cursor.matrix.translation
-                # cursor_matrix_loc = mat_cur @ cursor_matrix_loc
-                # cursor_matrix_loc = mat_cur @ cursor_matrix_loc
+                mat_cur =  obj_matrix @ cursor_matrix_inverted
+                # mat_cur =  cursor_matrix_inverted @ obj_matrix
 
-                # v2 =  obj_matrix @ v2
-                # v2 =  cursor_matrix @ v2
-                # v2 = v2 @ obj_matrix
-                # v2 =  v2 @ cursor_matrix
-                # v2 =  v2 @ mat_cur
                 v2_prg =  mat_cur @ v2
                 
-                # v2_prg =  v2
-                # v1 = mathutils.Vector((v2_prg[0], v2_prg[1] , cursor_loc[2])) # 1 selected simulate
                 v1 = mathutils.Vector((v2_prg[0], v2_prg[1] , 0)) # 1 selected simulate
 
-                # cursor_matrix = cursor_matrix.inverted()
-                mat_cur = mat_cur.inverted()
-                # obj_matrix = obj_matrix.inverted()
-                # cursor_matrix = cursor_matrix.inverted()
+                mat_cur_inverted = mat_cur.inverted()
+                v1 = mat_cur_inverted @ v1
 
-                # v1 = obj_matrix @ v1
-                # v1 = cursor_matrix @ v1
-                # v1 = v1 @ obj_matrix
-                # v1 = v1 @ cursor_matrix
+                if v1 == v2:
+                    offset = True
 
-                # v1 = v1 @ mat_cur
-                v1 = mat_cur @ v1
-                # v1 = obj_matrix @ v1
-                # v1 = cursor_matrix @ v1
+                    v2[0] = v2_prg[0]
+                    v2[1] = v2_prg[1]
+                    v2[2] = offset_unit   
+
+                    v2 = mat_cur_inverted @ v2
                 
 
                 bpy.context.object.update_from_editmode()
@@ -448,51 +428,32 @@ class SetLength(bpy.types.Operator):
                 custom_obj_matrix = bpy.data.objects[obj_name].matrix_world
 
                 custom_obj_matrix = custom_obj_matrix.copy()
-                custom_obj_matrix = custom_obj_matrix.inverted()
+                custom_obj_matrix_inverted = custom_obj_matrix.inverted()
 
                 obj_matrix = bpy.context.active_object.matrix_world.copy()
 
-                # obj_matrix_invert = obj_matrix.inverted()
-
-                # custom_obj_matrix = bpy.data.objects[obj_name].matrix_world
-                # mat = obj_matrix @ custom_obj_matrix
-                mat = custom_obj_matrix @ obj_matrix
-
-                # custom_obj_loc = bpy.data.objects[obj_name].matrix_world.translation
-                # custom_obj_loc = custom_obj_loc.copy()
-                # custom_obj_loc =  custom_obj_loc @ obj_matrix_invert
-
-                # v3_prg =  v3
-                # v3_prg = mat @ v3_prg
-
-                # v2_prg =  v2
-                # v2_prg =  mat @ v2_prg
+                # mat = custom_obj_matrix_inverted @ obj_matrix
+                mat = obj_matrix @ custom_obj_matrix_inverted
 
                 v2_prg = mat @ v2
                 
                 v1 = mathutils.Vector((v2_prg[0], v2_prg[1] , 0)) # 1 selected simulate
                 
-                mat = mat.inverted()
+                mat_inverted = mat.inverted()
 
-                v1 = mat @ v1
+                v1 = mat_inverted @ v1
 
-                # if v3_prg == v1 :
-                #     Clear_angle = True
+                if v1 == v2 :
+                    offset = True 
 
-                #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
-                    
-                    # if v2_prg[2] < 0:
-                    # if v2_prg[2] < custom_obj_loc[2]:
-                    #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 100.0)  ))
-                    # else:
-                    #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 100.0)  ))
-                    # v3 = mat @ v3
-                    # oldv3 = v3
+                    # v2 = mat_cur @ v2
 
-                # if v2_prg == v1:
-                #     bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT')
+                    v2[0] = v2_prg[0]
+                    v2[1] = v2_prg[1]
+                    v2[2] = offset_unit   
 
-                
+                    v2 = mat_inverted @ v2
+
 
 
                 bpy.context.object.update_from_editmode()
