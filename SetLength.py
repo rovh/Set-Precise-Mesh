@@ -289,7 +289,7 @@ class SetLength(bpy.types.Operator):
             v2 = vec[0] 
 
             offset = False 
-            offset_unit = -50          
+            offset_unit = 50          
 
             if prog == "global_matrix":
 
@@ -306,9 +306,13 @@ class SetLength(bpy.types.Operator):
                 v1 = wm @ v1  
 
                 if v1 == v2:
-                    offset = True                     
-                    v1 = mathutils.Vector((v2_prg[0], v2_prg[1] , offset_unit))
-                    v1 = wm @ v1
+                    offset = True 
+
+                    v2[0] = v2_prg[0]
+                    v2[1] = v2_prg[1]
+                    v2[2] = offset_unit
+        
+                    v2 = wm @ v2
 
 
                 bpy.context.object.update_from_editmode()
@@ -320,45 +324,39 @@ class SetLength(bpy.types.Operator):
 
                 # v1 = v3
                 v1 = mathutils.Vector((v2_prg[0], v2_prg[1] , 0)) # 1 selected simulate
-                # v3_prg = v3
 
-                # if v3_prg == v1 :
-                #     Clear_angle = 1
+                if v1 == v2:
+                    offset = True 
 
-                #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
+                    v2[0] = v2_prg[0]
+                    v2[1] = v2_prg[1]
+                    v2[2] = offset_unit
+        
+                    v2 = wm @ v2
 
-                #     # if v2_prg[2] < 0:
-                #     #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] - 1.0)  ))
-                #     # else:
-                #     #     v3 = mathutils.Vector((  v3_prg[0] , v3_prg[1] , (v2_prg[2] + 1.0)  ))
-
-                #     oldv3 = v3
-                # if v2_prg == v1:
-                #     bpy.ops.object.dialog_warning_operator_2('INVOKE_DEFAULT')
 
             elif prog == "cursor_location":
                 wm = bpy.context.active_object.matrix_world.copy()
                 wm = wm.inverted()
 
-                # v3_prg = bpy.context.active_object.matrix_world  @ v3
-                # v2_prg =  bpy.context.active_object.matrix_world @ v2
 
                 v1 = bpy.context.scene.cursor.location
-
-                # v1 = wm @ v1
-
-                # length_of_v1 = (v2_prg - v1).length
-                # print(length_of_v1)
-
+                v2_prg = v1
 
                 v1 = wm @ v1
 
-                # v1ch=v1-v2
-                # v3ch=v3-v2
-                # angle = v3ch.angle(v1ch, 0.0)
+                if v1 == v2:
+                    offset = True 
 
-                # if angle == 0.0 :
-                #     bpy.ops.object.dialog_warning_operator_3('INVOKE_DEFAULT') 
+                    v2[0] = v2_prg[0]
+                    v2[1] = v2_prg[1]
+                    v2[2] = offset_unit
+        
+                    v2 = wm @ v2
+
+                
+
+
                
             elif prog == "cursor_matrix":
 
@@ -543,8 +541,8 @@ class SetLength(bpy.types.Operator):
             bpy.ops.object.dialog_warning_operator_4('INVOKE_DEFAULT')
             return {"FINISHED"}
 
-        if offset == True:                     
-            length = length - (lengthtrue / offset_unit)
+        # if offset == True:                     
+            # length = length * (length / (length + offset_unit))
 
          
     
