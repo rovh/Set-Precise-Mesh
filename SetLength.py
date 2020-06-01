@@ -341,14 +341,16 @@ class SetLength(bpy.types.Operator):
 
                 v1 = wm @ v1
 
-                # if v1 == v2:
-                #     offset = True 
+                if v1 == v2:
 
-                #     v2[0] = v2_prg[0]
-                #     v2[1] = v2_prg[1]
-                #     v2[2] = v2_prg[2] + offset_unit
+                    return {"FINISHED"}
+                    # offset = True
+
+                    # v2[0] = v2_prg[0]
+                    # v2[1] = v2_prg[1]
+                    # v2[2] = offset_unit
         
-                #     v2 = wm @ v2
+                    # v2 = wm @ v2
 
             elif prog == "cursor_matrix":
 
@@ -408,14 +410,11 @@ class SetLength(bpy.types.Operator):
                 v1 = obj_loc
                 v1 = wm @ v1 
 
-                # v1ch=v1-v2
-                # v3ch=v3-v2
-                # angle = v3ch.angle(v1ch, 0.0)
-                # print(angle, "angle1111111111111")
-                # if length_intersect != 0:
+                if v1 == v2:
+                    
+                    return {"FINISHED"}
 
-                # if angle == 0.0 :
-                #     bpy.ops.object.dialog_warning_operator_3('INVOKE_DEFAULT')     
+                    
 
             elif prog == "custom_object_matrix":
 
@@ -462,7 +461,6 @@ class SetLength(bpy.types.Operator):
                 # bpy.context.view_layer.update()
 
         else:
-
 
             # Invert direction for edge
             if invert_direction == 1:
