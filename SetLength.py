@@ -272,11 +272,8 @@ class SetLength(bpy.types.Operator):
             # vec.reverse()
             # ind.reverse()
 
+        
 
-        # Invert direction for edge
-        if invert_direction == 1:
-            vec.reverse()
-            ind.reverse()
        
 
         # Check number
@@ -497,6 +494,13 @@ class SetLength(bpy.types.Operator):
                 # bpy.context.view_layer.update()
 
         else:
+
+            
+            # Invert direction for edge
+            if invert_direction == 1:
+                vec.reverse()
+                ind.reverse()
+
             # Set values
             v1=vec[0]
             v2=vec[1]
