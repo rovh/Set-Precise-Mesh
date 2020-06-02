@@ -387,8 +387,8 @@ class Set_Mesh_Position (bpy.types.Operator):
         #     rot_quat =  rot_quat.to_euler()
 
         
-        # bpy.context.object.update_from_editmode()
-        # bmesh.update_edit_mesh(me, True)
+        bpy.context.object.update_from_editmode()
+        bmesh.update_edit_mesh(me, True)
 
         scale_remember_1 = bpy.context.object.scale[0]
         scale_remember_2 = bpy.context.object.scale[1]
