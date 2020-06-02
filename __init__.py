@@ -31,7 +31,7 @@ import bpy
 from .SetAngle import *
 from .SetLength import *
 from .Operators import *
-# from .UI import *
+from .UI import *
 
 
 from bpy import types
@@ -1498,6 +1498,17 @@ blender_classes = [
 
 ]
 
+classes = (
+    CUSTOM_OT_actions,
+    CUSTOM_OT_clearList,
+    CUSTOM_OT_removeDuplicates,
+    CUSTOM_OT_selectItems,
+    CUSTOM_UL_items,
+    CUSTOM_PT_objectList,
+    CUSTOM_objectCollection,
+)
+
+
 def register():
     for blender_class in blender_classes:
         bpy.utils.register_class(blender_class)
@@ -1544,6 +1555,15 @@ def register():
     )
 
 
+    from bpy.utils import register_class
+    for cls in classes:
+        register_class(cls)
+
+    # Custom scene properties
+    bpy.types.Scene.custom = CollectionProperty(type=CUSTOM_objectCollection)
+    bpy.types.Scene.custom_index = IntProperty()
+
+
 def unregister():
     for blender_class in blender_classes:
         bpy.utils.unregister_class(blender_class)
@@ -1560,6 +1580,13 @@ def unregister():
     del bpy.types.Scene.my_property
     bpy.types.VIEW3D_HT_tool_header.remove(header_draw)
     bpy.types.VIEW3D_MT_transform.remove(draw_VIEW3D_MT_transform)
+
+    from bpy.utils import unregister_class
+    for cls in reversed(classes):
+        unregister_class(cls)
+
+    del bpy.types.Scene.custom
+    del bpy.types.Scene.custom_index
 
 
 if __name__ == "__main__":
