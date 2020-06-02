@@ -907,7 +907,6 @@ class Browser_Link (bpy.types.Operator):
         bpy.ops.wm.url_open(url = "https://github.com/rovh/Set-Precise-Mesh/releases")
         return {"FINISHED"}
 
-
 # items = [('one', 'Any', "", 'PRESET', 1), ('two', 'PropertyGroup', "", 'PRESET', 2), ('three', 'type', "", 'PRESET', 3)]
 
 # class ChooseItemOperator(bpy.types.Operator):
