@@ -1502,7 +1502,6 @@ classes = (
     CUSTOM_OT_actions,
     CUSTOM_OT_clearList,
     CUSTOM_OT_removeDuplicates,
-    # CUSTOM_OT_selectItems,
     CUSTOM_UL_items,
     CUSTOM_PT_objectList,
     CUSTOM_objectCollection,

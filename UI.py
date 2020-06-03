@@ -153,6 +153,10 @@ class CUSTOM_PT_objectList(Panel):
     bl_region_type = "UI"
     bl_label = "Custom Object List Demo"
 
+    # bl_space_type = 'PROPERTIES'
+    # bl_region_type = 'WINDOW'
+    # bl_context = "scene"
+
     def draw(self, context):
         layout = self.layout
         scn = bpy.context.scene
