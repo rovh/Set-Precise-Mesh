@@ -121,7 +121,6 @@ class SetLength_Copy(bpy.types.Operator):
 
         return {"FINISHED"}
 
-
 class SetLength(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_length"
@@ -213,6 +212,10 @@ class SetLength(bpy.types.Operator):
                     length = unit
         else:
             length = bpy.context.window_manager.setprecisemesh.length
+
+        idx = context.scene.custom_index
+        length = bpy.context.scene.custom[idx].unit
+
 
 
         bool = bpy.context.window_manager.setprecisemesh.lengthbool
