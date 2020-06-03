@@ -146,8 +146,6 @@ class CUSTOM_OT_actions_refresh(Operator):
     bl_label = "Add"
     bl_description = "Move items up and down, add and remove"
     bl_options = {'REGISTER'}
-    # bl_options = {'BLOCKING'}
-    # bl_options = {'INTERNAL'}
 
     def execute(self, context):
 
@@ -164,7 +162,6 @@ class CUSTOM_OT_actions_refresh(Operator):
         if bpy.context.active_object:
     
             bpy.context.window_manager.setprecisemesh.length = item.unit
-
             bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1, time_limit = 0.0)
 
         else:
@@ -239,8 +236,6 @@ class CUSTOM_OT_removeDuplicates(Operator):
 class CUSTOM_UL_items(UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         
-        
-
         scn = context.scene
         idx = scn.custom_index
 
@@ -249,13 +244,16 @@ class CUSTOM_UL_items(UIList):
             # split.label(text="Index: %d" % (index))
             # custom_icon = "OUTLINER_OB_%s" % item.obj_type
             #split.prop(item, "name", text="", emboss=False, translate=False, icon=custom_icon)
-        row = layout.row()
+        row = layout.row(align = 0)
+
+        row.scale_y = 1.1
+        row.scale_x = 1.1
         # row.label(text=item.name, icon=custom_icon) # avoids renaming the item by accident
         
 
         row.prop(item, "name_unit", emboss=False, text = "")
         row.prop(item, "unit", emboss=0, text = "")
-        row.operator("custom.list_action_refresh", text = "", icon = "EXPORT", emboss = 1)
+        row.operator("custom.list_action_refresh", text = "", icon = "EXPORT", emboss = 0)
 
             # print(item)
 
@@ -292,11 +290,14 @@ class CUSTOM_PT_objectList(Panel):
         layout = self.layout
         scn = bpy.context.scene
 
-        rows = 2
+        rows = 4
         row = layout.row()
         row.template_list("CUSTOM_UL_items", "", scn, "custom", scn, "custom_index", rows=rows)
 
         col = row.column(align=True)
+        col.scale_x = 1.1
+        col.scale_y = 1.2
+
         # col.operator("custom.list_action", icon='ADD', text="").action = 'ADD'
         col.operator("custom.list_action_add", icon='ADD', text="")
         col.operator("custom.list_action", icon='REMOVE', text="").action = 'REMOVE'
