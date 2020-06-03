@@ -42,6 +42,7 @@ from bpy.props import (
         PointerProperty,
         EnumProperty,
         StringProperty,
+        IntProperty,
         )
 
 
@@ -1414,6 +1415,10 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         name="Clear Rotation",
         description="Apply the object's rotation transformation to its data",
         default = False,
+    )
+    length_remember_index_for_preset: bpy.props.IntProperty(
+        name = "Remember",
+        default = -1,
     )
 
 """Duplications of the Main panel"""

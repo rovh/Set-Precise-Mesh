@@ -213,11 +213,14 @@ class SetLength(bpy.types.Operator):
         else:
             length = bpy.context.window_manager.setprecisemesh.length
 
-        idx = context.scene.custom_index
-        length = bpy.context.scene.custom[idx].unit
-        bpy.context.window_manager.setprecisemesh.length = length
+        length_remember_index_for_preset = bpy.context.window_manager.setprecisemesh.length_remember_index_for_preset
 
+        if length_remember_index_for_preset != bpy.context.scene.custom_index:
+            idx = context.scene.custom_index
+            length = bpy.context.scene.custom[idx].unit
+            bpy.context.window_manager.setprecisemesh.length = length
 
+        bpy.context.window_manager.setprecisemesh.length_remember_index_for_preset = bpy.context.scene.custom_index
 
         bool = bpy.context.window_manager.setprecisemesh.lengthbool
         bool2 = bpy.context.window_manager.setprecisemesh.lengthinput

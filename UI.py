@@ -114,10 +114,11 @@ class CUSTOM_OT_actions_add(Operator):
         if bpy.context.active_object:
             item = scn.custom.add()
 
-            item.name = context.active_object.name
+            # item.name = context.active_object.name
+            # item.obj_type = context.active_object.type
+
             item.name_unit = self.name_input
-            item.obj_type = context.active_object.type
-            item.obj_id = len(scn.custom)
+            # item.obj_id = len(scn.custom)
             item.unit = bpy.context.window_manager.setprecisemesh.length
             scn.custom_index = len(scn.custom)-1
         else:
@@ -193,10 +194,10 @@ class CUSTOM_UL_items(UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         # split = layout.split(factor=0.3)
         # split.label(text="Index: %d" % (index))
-        custom_icon = "OUTLINER_OB_%s" % item.obj_type
+        # custom_icon = "OUTLINER_OB_%s" % item.obj_type
         #split.prop(item, "name", text="", emboss=False, translate=False, icon=custom_icon)
         row = layout.row()
-        row.label(text=item.name, icon=custom_icon) # avoids renaming the item by accident
+        # row.label(text=item.name, icon=custom_icon) # avoids renaming the item by accident
         row.label(text = str(item.name_unit) + ":")
         row.label(text = str(item.unit))
 
@@ -244,8 +245,8 @@ class CUSTOM_objectCollection(PropertyGroup):
     #name: StringProperty() -> Instantiated by default
     unit: FloatProperty()
     name_unit: StringProperty()
-    obj_type: StringProperty()
-    obj_id: IntProperty()
+    # obj_type: StringProperty()
+    # obj_id: IntProperty()
 
 if __name__ == "__main__":
     register()
