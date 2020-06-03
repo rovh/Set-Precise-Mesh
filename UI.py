@@ -55,6 +55,13 @@ class CUSTOM_OT_actions(Operator):
 
         if self.action == 'ADD':
             if context.object:
+
+                # context.window_manager.invoke_popup(self, width = 190)
+                # context.window_manager.invoke_props_dialog(self)
+
+                # def draw(self, context):
+
+
                 item = scn.custom.add()
                 item.name = context.object.name
                 item.obj_type = context.object.type
@@ -131,12 +138,13 @@ class CUSTOM_OT_removeDuplicates(Operator):
 # -------------------------------------------------------------------
 class CUSTOM_UL_items(UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
-        split = layout.split(factor=0.3)
-        split.label(text="Index: %d" % (index))
+        # split = layout.split(factor=0.3)
+        row = layout.row()
+        # split.label(text="Index: %d" % (index))
         custom_icon = "OUTLINER_OB_%s" % item.obj_type
         #split.prop(item, "name", text="", emboss=False, translate=False, icon=custom_icon)
-        split.label(text=item.name, icon=custom_icon) # avoids renaming the item by accident
-        split.label(text = str(item.unit))
+        row.label(text=item.name, icon=custom_icon) # avoids renaming the item by accident
+        row.label(text = str(item.unit))
 
     def invoke(self, context, event):
         pass   
@@ -161,8 +169,8 @@ class CUSTOM_PT_objectList(Panel):
         row.template_list("CUSTOM_UL_items", "", scn, "custom", scn, "custom_index", rows=rows)
 
         col = row.column(align=True)
-        col.operator("custom.list_action", icon='ZOOM_IN', text="").action = 'ADD'
-        col.operator("custom.list_action", icon='ZOOM_OUT', text="").action = 'REMOVE'
+        col.operator("custom.list_action", icon='ADD', text="").action = 'ADD'
+        col.operator("custom.list_action", icon='REMOVE', text="").action = 'REMOVE'
         col.separator()
         col.operator("custom.list_action", icon='TRIA_UP', text="").action = 'UP'
         col.operator("custom.list_action", icon='TRIA_DOWN', text="").action = 'DOWN'
@@ -180,6 +188,7 @@ class CUSTOM_PT_objectList(Panel):
 class CUSTOM_objectCollection(PropertyGroup):
     #name: StringProperty() -> Instantiated by default
     unit: FloatProperty()
+    name: StringProperty()
     obj_type: StringProperty()
     obj_id: IntProperty()
 

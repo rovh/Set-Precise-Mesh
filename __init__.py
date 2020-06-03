@@ -1507,12 +1507,6 @@ classes = (
     CUSTOM_PT_objectList,
     CUSTOM_objectCollection,
 
-    # CUSTOM_OT_actions2,
-    # CUSTOM_OT_clearList2,
-    # CUSTOM_OT_removeDuplicates2,
-    # CUSTOM_UL_items2,
-    # CUSTOM_PT_objectList2,
-    # CUSTOM_objectCollection2,
 )
 
 

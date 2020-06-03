@@ -215,6 +215,7 @@ class SetLength(bpy.types.Operator):
 
         idx = context.scene.custom_index
         length = bpy.context.scene.custom[idx].unit
+        bpy.context.window_manager.setprecisemesh.length = length
 
 
 
