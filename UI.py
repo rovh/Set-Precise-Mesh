@@ -79,12 +79,8 @@ class CUSTOM_OT_actions(Operator):
         #         scn.custom_index = len(scn.custom)-1
         #     else:
         #         self.report({'INFO'}, "Nothing selected in the Viewport")
+
         return {"FINISHED"}
-
-    # def draw(self, context):
-    #     col_top.prop(w_m, "data_block", text = "")
-
-    # return inv
 
 class CUSTOM_OT_actions_add(Operator):
     """Move items up and down, add and remove"""
@@ -114,12 +110,13 @@ class CUSTOM_OT_actions_add(Operator):
             pass
             
         # if self.action == 'ADD':
-        if bpy.context.object:
-
+        # if bpy.context.object:
+        if bpy.context.active_object:
             item = scn.custom.add()
+
+            item.name = context.active_object.name
             item.name_unit = self.name_input
-            item.name = context.object.name
-            item.obj_type = context.object.type
+            item.obj_type = context.active_object.type
             item.obj_id = len(scn.custom)
             item.unit = bpy.context.window_manager.setprecisemesh.length
             scn.custom_index = len(scn.custom)-1
@@ -127,37 +124,6 @@ class CUSTOM_OT_actions_add(Operator):
             self.report({'INFO'}, "Nothing selected in the Viewport")
 
         return {"FINISHED"}
-
-class CUSTOM_OT_pop_up(Operator):
-    """Clear all items of the list"""
-    bl_idname = "wm.menu_setprecisemesh_operator_2"
-    bl_label = "Pop-up Menu"
-    bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
-         ( For exaple Ctrl + Alt + Wheel Down )\n \
-        How to do it: > right-click on this button > Assign Shortcut"
-        
-    def execute(self, context):
-        return {'FINISHED'}
-
-    def invoke(self, context, event):
-  
-        return context.window_manager.invoke_props_dialog(self)
-
-    def draw(self, context):
-
-        idx = context.scene.custom_index
-        scn = bpy.context.scene.custom[idx]
-
-        # idx = scn.custom_index
-        # try:
-        #     item = scn.custom[idx]
-        # except IndexError:
-        #     pass
-
-        layout = self.layout
-        # w_m = context.window_manager.setprecisemesh
-        # layout.prop(w_m, "data_block", text = "")
-        layout.prop(scn, "name_unit" , text = "")
 
 class CUSTOM_OT_clearList(Operator):
     """Clear all items of the list"""
@@ -226,13 +192,13 @@ class CUSTOM_OT_removeDuplicates(Operator):
 class CUSTOM_UL_items(UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         # split = layout.split(factor=0.3)
-        row = layout.row()
         # split.label(text="Index: %d" % (index))
         custom_icon = "OUTLINER_OB_%s" % item.obj_type
         #split.prop(item, "name", text="", emboss=False, translate=False, icon=custom_icon)
+        row = layout.row()
         row.label(text=item.name, icon=custom_icon) # avoids renaming the item by accident
+        row.label(text = str(item.name_unit) + ":")
         row.label(text = str(item.unit))
-        row.label(text = str(item.name_unit))
 
     def invoke(self, context, event):
         pass   
@@ -240,12 +206,12 @@ class CUSTOM_UL_items(UIList):
 class CUSTOM_PT_objectList(Panel):
     """Adds a custom panel to the TEXT_EDITOR"""
     bl_idname = 'TEXT_PT_my_panel'
-    bl_space_type = "TEXT_EDITOR"
-    bl_region_type = "UI"
-    bl_label = "Custom Object List Demo"
+    # bl_space_type = "TEXT_EDITOR"
+    # bl_region_type = "UI"
+    bl_label = "Length Presets"
 
-    # bl_space_type = 'PROPERTIES'
-    # bl_region_type = 'WINDOW'
+    bl_space_type = 'PROPERTIES'
+    bl_region_type = 'WINDOW'
     bl_context = "scene"
 
     def draw(self, context):

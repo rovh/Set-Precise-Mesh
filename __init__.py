@@ -1506,7 +1506,6 @@ classes = (
     CUSTOM_UL_items,
     CUSTOM_PT_objectList,
     CUSTOM_objectCollection,
-    CUSTOM_OT_pop_up,
     CUSTOM_OT_actions_add,
 
 )
