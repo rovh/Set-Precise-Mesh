@@ -70,8 +70,6 @@ class CUSTOM_OT_actions(Operator):
                 self.report({'INFO'}, "Nothing selected in the Viewport")
         return {"FINISHED"}
 
-
-
 class CUSTOM_OT_clearList(Operator):
     """Clear all items of the list"""
     bl_idname = "custom.clear_list"
@@ -93,7 +91,6 @@ class CUSTOM_OT_clearList(Operator):
         else:
             self.report({'INFO'}, "Nothing to remove")
         return{'FINISHED'}
-
 
 class CUSTOM_OT_removeDuplicates(Operator):
     """Remove all duplicates"""
@@ -134,68 +131,6 @@ class CUSTOM_OT_removeDuplicates(Operator):
 
     def invoke(self, context, event):
         return context.window_manager.invoke_confirm(self, event)
-
-
-class CUSTOM_OT_selectItems(Operator):
-    """Select Items in the Viewport"""
-    bl_idname = "custom.select_items"
-    bl_label = "Select Item(s) in Viewport"
-    bl_description = "Select Items in the Viewport"
-    bl_options = {'REGISTER', 'UNDO'}
-
-    select_all: BoolProperty(
-        default=False,
-        name="Select all Items of List",
-        options={'SKIP_SAVE'})
-
-    @classmethod
-    def poll(cls, context):
-        return bool(context.scene.custom)
-
-    def execute(self, context):
-        scn = context.scene
-        idx = scn.custom_index
-
-        try:
-            item = scn.custom[idx]
-        except IndexError:
-            self.report({'INFO'}, "Nothing selected in the list")
-            return{'CANCELLED'}
-
-        obj_error = False
-        bpy.ops.object.select_all(action='DESELECT')
-        if not self.select_all:
-            obj = scn.objects.get(scn.custom[idx].name, None)
-            if not obj: 
-                obj_error = True
-            else:
-                obj.select_set(True)
-                info = '"%s" selected in Viewport' % (obj.name)
-        else:
-            selected_items = []
-            unique_objs = set([i.name for i in scn.custom])
-            for i in unique_objs:
-                obj = scn.objects.get(i, None)
-                if obj:
-                    obj.select_set(True)
-                    selected_items.append(obj.name)
-
-            if not selected_items: 
-                obj_error = True
-            else:
-                missing_items = unique_objs.difference(selected_items)
-                if not missing_items:
-                    info = '"%s" selected in Viewport' \
-                        % (', '.join(map(str, selected_items)))
-                else:
-                    info = 'Missing items: "%s"' \
-                        % (', '.join(map(str, missing_items)))
-        if obj_error: 
-            info = "Nothing to select, object removed from scene"
-        self.report({'INFO'}, info)    
-        return{'FINISHED'}
-
-
 # -------------------------------------------------------------------
 #   Drawing
 # -------------------------------------------------------------------
@@ -235,15 +170,9 @@ class CUSTOM_PT_objectList(Panel):
 
         row = layout.row()
         col = row.column(align=True)
-        # row = col.row(align=True)
-        # row.operator("custom.print_items", icon="LINENUMBERS_ON") #LINENUMBERS_OFF, ANIM
-        row = col.row(align=True)
-        row.operator("custom.select_items", icon="VIEW3D", text="Select Item")
-        row.operator("custom.select_items", icon="GROUP", text="Select all Items").select_all = True
         row = col.row(align=True)
         row.operator("custom.clear_list", icon="X")
         row.operator("custom.remove_duplicates", icon="GHOST_ENABLED")
-
 
 # -------------------------------------------------------------------
 #   Collection
@@ -253,13 +182,6 @@ class CUSTOM_objectCollection(PropertyGroup):
     #name: StringProperty() -> Instantiated by default
     obj_type: StringProperty()
     obj_id: IntProperty()
-
-
-# -------------------------------------------------------------------
-#   Register & Unregister
-# -------------------------------------------------------------------
-
-
 
 if __name__ == "__main__":
     register()
