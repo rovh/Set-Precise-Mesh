@@ -15,7 +15,7 @@ bl_info = {
     "name" : "Set Presice Mesh /CAD",
     "author" : "Rovh",
     "description" : "This addon allows you to set exact values for the mesh",
-    "blender" : (2, 82, 0),
+    "blender" : (2, 83, 0),
     "version" : (1,1,3),
     "location" : "View3D > Sidebar in Edit Mode > Item Tab, View Tab and Edit Tab",
     "warning" : "",
@@ -1512,6 +1512,7 @@ classes = (
     CUSTOM_PT_objectList,
     CUSTOM_objectCollection,
     CUSTOM_OT_actions_add,
+    CUSTOM_OT_actions_change,
 
 )
 
