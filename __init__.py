@@ -1512,7 +1512,7 @@ classes = (
     CUSTOM_PT_objectList,
     CUSTOM_objectCollection,
     CUSTOM_OT_actions_add,
-    CUSTOM_OT_actions_change,
+    # CUSTOM_OT_actions_change,
 
 )
 

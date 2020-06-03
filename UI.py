@@ -85,7 +85,7 @@ class CUSTOM_OT_actions(Operator):
 class CUSTOM_OT_actions_add(Operator):
     """Move items up and down, add and remove"""
     bl_idname = "custom.list_action_add"
-    bl_label = "List Actions"
+    bl_label = "12"
     bl_description = "Move items up and down, add and remove"
     bl_options = {'REGISTER'}
 
@@ -133,58 +133,6 @@ class CUSTOM_OT_actions_add(Operator):
             # item.obj_id = len(scn.custom)
             # item.unit = bpy.context.window_manager.setprecisemesh.length
             scn.custom_index = len(scn.custom)-1
-        else:
-            self.report({'INFO'}, "Nothing selected in the Viewport")
-
-        return {"FINISHED"}
-
-class CUSTOM_OT_actions_change(Operator):
-    """Move items up and down, add and remove"""
-    bl_idname = "custom.list_action_change"
-    bl_label = "List Actions"
-    bl_description = "Move items up and down, add and remove"
-    bl_options = {'REGISTER'}
-
-    name_input: StringProperty()
-    unit_input: FloatProperty(
-        name="Length",
-        description="Length of the edge",
-        default=1.0,
-        step = 100.0,
-        unit='LENGTH',
-        precision = 6,
-    )
-
-    def draw(self, context):
-        layout = self.layout
-        layout.prop(self, "unit_input", text = "")
-        layout.prop(self, "name_input", text = "Name:")
-
-    def invoke(self, context, event):
-        self.unit_input = bpy.context.window_manager.setprecisemesh.length
-        return context.window_manager.invoke_props_dialog(self)
-
-    def execute(self, context):
-
-        scn = context.scene
-        idx = scn.custom_index
-
-        try:
-            item = scn.custom[idx]
-        except IndexError:
-            pass
-            
-        # if self.action == 'ADD':
-        # if bpy.context.object:
-        if bpy.context.active_object:
-            # item = scn.custom.add()
-
-            # item.name = context.active_object.name
-            # item.obj_type = context.active_object.type
-
-            item.name_unit = self.name_input
-            item.unit = self.unit_input
-            # bpy.context.window_manager.setprecisemesh.length = self.unit_input
         else:
             self.report({'INFO'}, "Nothing selected in the Viewport")
 
@@ -256,14 +204,35 @@ class CUSTOM_OT_removeDuplicates(Operator):
 # -------------------------------------------------------------------
 class CUSTOM_UL_items(UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
-        # split = layout.split(factor=0.3)
-        # split.label(text="Index: %d" % (index))
-        # custom_icon = "OUTLINER_OB_%s" % item.obj_type
-        #split.prop(item, "name", text="", emboss=False, translate=False, icon=custom_icon)
-        row = layout.row()
-        # row.label(text=item.name, icon=custom_icon) # avoids renaming the item by accident
-        row.label(text = str(item.name_unit) + ":")
-        row.label(text = str(item.unit))
+        
+        scn = context.scene
+        idx = scn.custom_index
+
+        if self.layout_type in {'DEFAULT', 'COMPACT'}:
+            # split = layout.split(factor=0.3)
+            # split.label(text="Index: %d" % (index))
+            # custom_icon = "OUTLINER_OB_%s" % item.obj_type
+            #split.prop(item, "name", text="", emboss=False, translate=False, icon=custom_icon)
+            row = layout.row()
+            # row.label(text=item.name, icon=custom_icon) # avoids renaming the item by accident
+            
+
+            row.prop(item, "name_unit", emboss=False, text = "")
+            row.prop(item, "unit", emboss=0, text = "")
+
+            # print(item)
+
+            # if bpy.context.scene.custom_index == idx:
+
+            # row.prop(item, "unit", emboss=0, text = "")
+
+
+
+            # row.label(text = str(item.name_unit) + ":")
+            # row.label(text = str(item.unit))
+
+
+            # layout.prop(vgroup, "name", text="", emboss=False, icon_value=icon)
 
     def invoke(self, context, event):
         pass   
@@ -294,10 +263,6 @@ class CUSTOM_PT_objectList(Panel):
         # col.operator("custom.list_action", icon='ADD', text="").action = 'ADD'
         col.operator("custom.list_action_add", icon='ADD', text="")
         col.operator("custom.list_action", icon='REMOVE', text="").action = 'REMOVE'
-
-        col.separator()
-
-        col.operator("custom.list_action_change", icon='FILE_REFRESH', text="")
         
         col.separator()
 
@@ -316,10 +281,16 @@ class CUSTOM_PT_objectList(Panel):
 
 class CUSTOM_objectCollection(PropertyGroup):
     #name: StringProperty() -> Instantiated by default
-    unit: FloatProperty()
+    unit: FloatProperty(
+        name="Length",
+        description="Length of the edge",
+        step = 100.0,
+        unit='LENGTH',
+        precision = 6,
+    )
     name_unit: StringProperty()
-    obj_type: StringProperty()
-    obj_id: IntProperty()
+    # obj_type: StringProperty()
+    # obj_id: IntProperty()
 
 if __name__ == "__main__":
     register()
