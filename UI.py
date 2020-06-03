@@ -90,13 +90,23 @@ class CUSTOM_OT_actions_add(Operator):
     bl_options = {'REGISTER'}
 
     name_input: StringProperty()
+    unit_input: FloatProperty(
+        name="Length",
+        description="Length of the edge",
+        default=1.0,
+        step = 100.0,
+        unit='LENGTH',
+        precision = 6,
+    )
 
     def draw(self, context):
         layout = self.layout
-        layout.prop(self, "name_input", text = "Name")
+        layout.prop(self, "unit_input", text = "")
+        layout.prop(self, "name_input", text = "Name:")
 
 
     def invoke(self, context, event):
+        self.unit_input = bpy.context.window_manager.setprecisemesh.length
         return context.window_manager.invoke_props_dialog(self)
 
     def execute(self, context):
@@ -118,8 +128,10 @@ class CUSTOM_OT_actions_add(Operator):
             # item.obj_type = context.active_object.type
 
             item.name_unit = self.name_input
+            item.unit = self.unit_input
+
             # item.obj_id = len(scn.custom)
-            item.unit = bpy.context.window_manager.setprecisemesh.length
+            # item.unit = bpy.context.window_manager.setprecisemesh.length
             scn.custom_index = len(scn.custom)-1
         else:
             self.report({'INFO'}, "Nothing selected in the Viewport")
@@ -142,11 +154,11 @@ class CUSTOM_OT_actions_change(Operator):
         unit='LENGTH',
         precision = 6,
     )
-    
+
     def draw(self, context):
         layout = self.layout
         layout.prop(self, "unit_input", text = "")
-        layout.prop(self, "name_input", text = "Name")
+        layout.prop(self, "name_input", text = "Name:")
 
     def invoke(self, context, event):
         self.unit_input = bpy.context.window_manager.setprecisemesh.length
@@ -171,8 +183,8 @@ class CUSTOM_OT_actions_change(Operator):
             # item.obj_type = context.active_object.type
 
             item.name_unit = self.name_input
-            
-            bpy.context.window_manager.setprecisemesh.length = self.unit_input
+            item.unit = self.unit_input
+            # bpy.context.window_manager.setprecisemesh.length = self.unit_input
         else:
             self.report({'INFO'}, "Nothing selected in the Viewport")
 
@@ -306,8 +318,8 @@ class CUSTOM_objectCollection(PropertyGroup):
     #name: StringProperty() -> Instantiated by default
     unit: FloatProperty()
     name_unit: StringProperty()
-    # obj_type: StringProperty()
-    # obj_id: IntProperty()
+    obj_type: StringProperty()
+    obj_id: IntProperty()
 
 if __name__ == "__main__":
     register()
