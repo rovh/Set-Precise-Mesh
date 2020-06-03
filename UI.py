@@ -3,7 +3,9 @@ import bpy
 from bpy.props import (IntProperty,
                        BoolProperty,
                        StringProperty,
-                       CollectionProperty)
+                       CollectionProperty,
+                       FloatProperty,
+                       )
 
 from bpy.types import (Operator,
                        Panel,
@@ -38,24 +40,18 @@ class CUSTOM_OT_actions(Operator):
             pass
         else:
             if self.action == 'DOWN' and idx < len(scn.custom) - 1:
-                item_next = scn.custom[idx+1].name
+                # item_next = scn.custom[idx+1].name
                 scn.custom.move(idx, idx+1)
                 scn.custom_index += 1
-                info = 'Item "%s" moved to position %d' % (item.name, scn.custom_index + 1)
-                self.report({'INFO'}, info)
 
             elif self.action == 'UP' and idx >= 1:
-                item_prev = scn.custom[idx-1].name
+                # item_prev = scn.custom[idx-1].name
                 scn.custom.move(idx, idx-1)
                 scn.custom_index -= 1
-                info = 'Item "%s" moved to position %d' % (item.name, scn.custom_index + 1)
-                self.report({'INFO'}, info)
-
             elif self.action == 'REMOVE':
-                info = 'Item "%s" removed from list' % (scn.custom[idx].name)
+                # info = 'Item "%s" removed from list' % (scn.custom[idx].name)
                 scn.custom_index -= 1
                 scn.custom.remove(idx)
-                self.report({'INFO'}, info)
 
         if self.action == 'ADD':
             if context.object:
@@ -63,9 +59,8 @@ class CUSTOM_OT_actions(Operator):
                 item.name = context.object.name
                 item.obj_type = context.object.type
                 item.obj_id = len(scn.custom)
+                item.unit = bpy.context.window_manager.setprecisemesh.length
                 scn.custom_index = len(scn.custom)-1
-                info = '"%s" added to list' % (item.name)
-                self.report({'INFO'}, info)
             else:
                 self.report({'INFO'}, "Nothing selected in the Viewport")
         return {"FINISHED"}
@@ -134,7 +129,6 @@ class CUSTOM_OT_removeDuplicates(Operator):
 # -------------------------------------------------------------------
 #   Drawing
 # -------------------------------------------------------------------
-
 class CUSTOM_UL_items(UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         split = layout.split(factor=0.3)
@@ -142,6 +136,7 @@ class CUSTOM_UL_items(UIList):
         custom_icon = "OUTLINER_OB_%s" % item.obj_type
         #split.prop(item, "name", text="", emboss=False, translate=False, icon=custom_icon)
         split.label(text=item.name, icon=custom_icon) # avoids renaming the item by accident
+        split.label(text = str(item.unit))
 
     def invoke(self, context, event):
         pass   
@@ -184,6 +179,7 @@ class CUSTOM_PT_objectList(Panel):
 
 class CUSTOM_objectCollection(PropertyGroup):
     #name: StringProperty() -> Instantiated by default
+    unit: FloatProperty()
     obj_type: StringProperty()
     obj_id: IntProperty()
 
