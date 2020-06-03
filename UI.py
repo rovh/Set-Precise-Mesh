@@ -28,7 +28,9 @@ class CUSTOM_OT_actions(Operator):
             ('UP', "Up", ""),
             ('DOWN', "Down", ""),
             ('REMOVE', "Remove", ""),
-            ('ADD', "Add", "")))
+            # ('ADD', "Add", "")
+            )
+            )
 
     def invoke(self, context, event):
         scn = context.scene
@@ -53,29 +55,78 @@ class CUSTOM_OT_actions(Operator):
                 scn.custom_index -= 1
                 scn.custom.remove(idx)
 
-        if self.action == 'ADD':
-            if context.object:
+        # if self.action == 'ADD':
+        #     if context.object:
 
-                # context.window_manager.invoke_popup(self, width = 190)
-                bpy.ops.wm.menu_setprecisemesh_operator_2("INVOKE_DEFAULT")
-            
-                # def draw(self, context):
+        #         # def ret(self):
+        #         #     return bpy.ops.wm.menu_setprecisemesh_operator_2("INVOKE_DEFAULT")
 
+        #         # context.window_manager.invoke_popup(self, width = 190)
+                
+        #         # def draw(self, context):
 
-                item = scn.custom.add()
-                item.name = context.object.name
-                item.obj_type = context.object.type
-                item.obj_id = len(scn.custom)
-                item.unit = bpy.context.window_manager.setprecisemesh.length
-                scn.custom_index = len(scn.custom)-1
-            else:
-                self.report({'INFO'}, "Nothing selected in the Viewport")
+        #         # idx = context.scene.custom_index
+        #         # scn = bpy.context.scene.custom[idx]
+
+        #         item = scn.custom.add()
+        #         # ret(self)
+        #         # bpy.ops.wm.menu_setprecisemesh_operator_2("INVOKE_DEFAULT")
+        #         # item.name_unit = bpy.context.scene.custom[idx].name_unit
+        #         item.name = context.object.name
+        #         item.obj_type = context.object.type
+        #         item.obj_id = len(scn.custom)
+        #         item.unit = bpy.context.window_manager.setprecisemesh.length
+        #         scn.custom_index = len(scn.custom)-1
+        #     else:
+        #         self.report({'INFO'}, "Nothing selected in the Viewport")
         return {"FINISHED"}
 
-    def draw(self, context):
-        col_top.prop(w_m, "data_block", text = "")
+    # def draw(self, context):
+    #     col_top.prop(w_m, "data_block", text = "")
 
     # return inv
+
+class CUSTOM_OT_actions_add(Operator):
+    """Move items up and down, add and remove"""
+    bl_idname = "custom.list_action_add"
+    bl_label = "List Actions"
+    bl_description = "Move items up and down, add and remove"
+    bl_options = {'REGISTER'}
+
+    name_input: StringProperty()
+
+    def draw(self, context):
+        layout = self.layout
+        layout.prop(self, "name_input", text = "Name")
+
+
+    def invoke(self, context, event):
+        return context.window_manager.invoke_props_dialog(self)
+
+    def execute(self, context):
+
+        scn = context.scene
+        idx = scn.custom_index
+
+        try:
+            item = scn.custom[idx]
+        except IndexError:
+            pass
+            
+        # if self.action == 'ADD':
+        if bpy.context.object:
+
+            item = scn.custom.add()
+            item.name_unit = self.name_input
+            item.name = context.object.name
+            item.obj_type = context.object.type
+            item.obj_id = len(scn.custom)
+            item.unit = bpy.context.window_manager.setprecisemesh.length
+            scn.custom_index = len(scn.custom)-1
+        else:
+            self.report({'INFO'}, "Nothing selected in the Viewport")
+
+        return {"FINISHED"}
 
 class CUSTOM_OT_pop_up(Operator):
     """Clear all items of the list"""
@@ -86,44 +137,27 @@ class CUSTOM_OT_pop_up(Operator):
         How to do it: > right-click on this button > Assign Shortcut"
         
     def execute(self, context):
-
-        # context.window_manager.invoke_popup(self, width = 200)
         return {'FINISHED'}
 
     def invoke(self, context, event):
-        # x = event.mouse_x
-        # y = event.mouse_y 
-
-        # move_x = 0
-        # move_y = 60
-
-        # bpy.context.window.cursor_warp(x + move_x, y + move_y)
-        # context.window_manager.invoke_popup(self, width = 200)
+  
         return context.window_manager.invoke_props_dialog(self)
-        # return context.window_manager.invoke_popup(self, width=600, height=500)
-        # return context.window_manager.invoke_popup(self)
-        # inv = context.window_manager.invoke_popup(self, width = 200)
-        
-        # bpy.context.window.cursor_warp(x, y)
 
-        # return inv
-
-        # return {"INTERFACE"}
-
-        # if self.return == {"CANCELLED"}:
-            # context.window_manager.invoke_popup(self, width = 200)
-        # return
-
-        # return context.window_manager.invoke_props_popup(self, event)
-        # return context.window_manager.invoke_confirm(self, event)
     def draw(self, context):
+
+        idx = context.scene.custom_index
+        scn = bpy.context.scene.custom[idx]
+
+        # idx = scn.custom_index
+        # try:
+        #     item = scn.custom[idx]
+        # except IndexError:
+        #     pass
+
         layout = self.layout
-
-        w_m = context.window_manager.setprecisemesh
-
-        layout.prop(w_m, "data_block", text = "")
-        # bpy.types.VIEW3D_PT_edit_mesh_set_precise_mesh1.draw(self, context)
-
+        # w_m = context.window_manager.setprecisemesh
+        # layout.prop(w_m, "data_block", text = "")
+        layout.prop(scn, "name_unit" , text = "")
 
 class CUSTOM_OT_clearList(Operator):
     """Clear all items of the list"""
@@ -198,6 +232,7 @@ class CUSTOM_UL_items(UIList):
         #split.prop(item, "name", text="", emboss=False, translate=False, icon=custom_icon)
         row.label(text=item.name, icon=custom_icon) # avoids renaming the item by accident
         row.label(text = str(item.unit))
+        row.label(text = str(item.name_unit))
 
     def invoke(self, context, event):
         pass   
@@ -222,7 +257,8 @@ class CUSTOM_PT_objectList(Panel):
         row.template_list("CUSTOM_UL_items", "", scn, "custom", scn, "custom_index", rows=rows)
 
         col = row.column(align=True)
-        col.operator("custom.list_action", icon='ADD', text="").action = 'ADD'
+        # col.operator("custom.list_action", icon='ADD', text="").action = 'ADD'
+        col.operator("custom.list_action_add", icon='ADD', text="")
         col.operator("custom.list_action", icon='REMOVE', text="").action = 'REMOVE'
         col.separator()
         col.operator("custom.list_action", icon='TRIA_UP', text="").action = 'UP'
@@ -241,7 +277,7 @@ class CUSTOM_PT_objectList(Panel):
 class CUSTOM_objectCollection(PropertyGroup):
     #name: StringProperty() -> Instantiated by default
     unit: FloatProperty()
-    name: StringProperty()
+    name_unit: StringProperty()
     obj_type: StringProperty()
     obj_id: IntProperty()
 
