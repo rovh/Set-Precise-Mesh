@@ -204,7 +204,7 @@ class Angle_Simulation_SetPreciseMesh (bpy.types.Operator):
         
         bpy.context.window.cursor_warp(x + move_x, y + move_y)
 
-        # return context.window_manager.invoke_props_dialog(self)
+        # inv = context.window_manager.invoke_props_dialog(self)
         # return context.window_manager.invoke_popup(self, width=600, height=500)
         # return context.window_manager.invoke_popup(self)
         inv = context.window_manager.invoke_popup(self, width = 190)
@@ -1512,7 +1512,7 @@ classes = (
     CUSTOM_PT_objectList,
     CUSTOM_objectCollection,
     CUSTOM_OT_actions_add,
-    # CUSTOM_OT_actions_change,
+    CUSTOM_OT_actions_refresh,
 
 )
 

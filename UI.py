@@ -85,9 +85,11 @@ class CUSTOM_OT_actions(Operator):
 class CUSTOM_OT_actions_add(Operator):
     """Move items up and down, add and remove"""
     bl_idname = "custom.list_action_add"
-    bl_label = "12"
+    bl_label = "Add"
     bl_description = "Move items up and down, add and remove"
     bl_options = {'REGISTER'}
+    # bl_options = {'BLOCKING'}
+    # bl_options = {'INTERNAL'}
 
     name_input: StringProperty()
     unit_input: FloatProperty(
@@ -102,7 +104,7 @@ class CUSTOM_OT_actions_add(Operator):
     def draw(self, context):
         layout = self.layout
         layout.prop(self, "unit_input", text = "")
-        layout.prop(self, "name_input", text = "Name:")
+        layout.prop(self, "name_input", text = "Name")
 
 
     def invoke(self, context, event):
@@ -133,6 +135,38 @@ class CUSTOM_OT_actions_add(Operator):
             # item.obj_id = len(scn.custom)
             # item.unit = bpy.context.window_manager.setprecisemesh.length
             scn.custom_index = len(scn.custom)-1
+        else:
+            self.report({'INFO'}, "Nothing selected in the Viewport")
+
+        return {"FINISHED"}
+
+class CUSTOM_OT_actions_refresh(Operator):
+    """Move items up and down, add and remove"""
+    bl_idname = "custom.list_action_refresh"
+    bl_label = "Add"
+    bl_description = "Move items up and down, add and remove"
+    bl_options = {'REGISTER'}
+    # bl_options = {'BLOCKING'}
+    # bl_options = {'INTERNAL'}
+
+    def execute(self, context):
+
+        scn = context.scene
+        idx = scn.custom_index
+
+        try:
+            item = scn.custom[idx]
+        except IndexError:
+            pass
+            
+        # if self.action == 'ADD':
+        # if bpy.context.object:
+        if bpy.context.active_object:
+    
+            bpy.context.window_manager.setprecisemesh.length = item.unit
+
+            bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1, time_limit = 0.0)
+
         else:
             self.report({'INFO'}, "Nothing selected in the Viewport")
 
@@ -205,20 +239,23 @@ class CUSTOM_OT_removeDuplicates(Operator):
 class CUSTOM_UL_items(UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         
+        
+
         scn = context.scene
         idx = scn.custom_index
 
-        if self.layout_type in {'DEFAULT', 'COMPACT'}:
+        # if self.layout_type in {'DEFAULT', 'COMPACT'}:
             # split = layout.split(factor=0.3)
             # split.label(text="Index: %d" % (index))
             # custom_icon = "OUTLINER_OB_%s" % item.obj_type
             #split.prop(item, "name", text="", emboss=False, translate=False, icon=custom_icon)
-            row = layout.row()
-            # row.label(text=item.name, icon=custom_icon) # avoids renaming the item by accident
-            
+        row = layout.row()
+        # row.label(text=item.name, icon=custom_icon) # avoids renaming the item by accident
+        
 
-            row.prop(item, "name_unit", emboss=False, text = "")
-            row.prop(item, "unit", emboss=0, text = "")
+        row.prop(item, "name_unit", emboss=False, text = "")
+        row.prop(item, "unit", emboss=0, text = "")
+        row.operator("custom.list_action_refresh", text = "", icon = "EXPORT", emboss = 1)
 
             # print(item)
 
