@@ -191,49 +191,54 @@ class CUSTOM_OT_clearList(Operator):
             self.report({'INFO'}, "Nothing to remove")
         return{'FINISHED'}
 
-class CUSTOM_OT_removeDuplicates(Operator):
-    """Remove all duplicates"""
-    bl_idname = "custom.remove_duplicates"
-    bl_label = "Remove Duplicates"
-    bl_description = "Remove all duplicates"
-    bl_options = {'INTERNAL'}
+# class CUSTOM_OT_removeDuplicates(Operator):
+#     """Remove all duplicates"""
+#     bl_idname = "custom.remove_duplicates"
+#     bl_label = "Remove Duplicates"
+#     bl_description = "Remove all duplicates"
+#     bl_options = {'INTERNAL'}
 
-    def find_duplicates(self, context):
-        """find all duplicates by name"""
-        name_lookup = {}
-        for c, i in enumerate(context.scene.custom):
-            name_lookup.setdefault(i.name, []).append(c)
-        duplicates = set()
-        for name, indices in name_lookup.items():
-            for i in indices[1:]:
-                duplicates.add(i)
-        return sorted(list(duplicates))
+#     def find_duplicates(self, context):
+#         """find all duplicates by name"""
+#         name_lookup = {}
+#         for c, i in enumerate(context.scene.custom):
+#             name_lookup.setdefault(i.name, []).append(c)
+#         duplicates = set()
+#         for name, indices in name_lookup.items():
+#             for i in indices[1:]:
+#                 duplicates.add(i)
+#         return sorted(list(duplicates))
 
-    @classmethod
-    def poll(cls, context):
-        return bool(context.scene.custom)
+#     @classmethod
+#     def poll(cls, context):
+#         return bool(context.scene.custom)
 
-    def execute(self, context):
-        scn = context.scene
-        removed_items = []
-        # Reverse the list before removing the items
-        for i in self.find_duplicates(context)[::-1]:
-            scn.custom.remove(i)
-            removed_items.append(i)
-        if removed_items:
-            scn.custom_index = len(scn.custom)-1
-            info = ', '.join(map(str, removed_items))
-            self.report({'INFO'}, "Removed indices: %s" % (info))
-        else:
-            self.report({'INFO'}, "No duplicates")
-        return{'FINISHED'}
+#     def execute(self, context):
+#         scn = context.scene
+#         removed_items = []
+#         # Reverse the list before removing the items
+#         for i in self.find_duplicates(context)[::-1]:
+#             scn.custom.remove(i)
+#             removed_items.append(i)
+#         if removed_items:
+#             scn.custom_index = len(scn.custom)-1
+#             info = ', '.join(map(str, removed_items))
+#             self.report({'INFO'}, "Removed indices: %s" % (info))
+#         else:
+#             self.report({'INFO'}, "No duplicates")
+#         return{'FINISHED'}
 
-    def invoke(self, context, event):
-        return context.window_manager.invoke_confirm(self, event)
+#     def invoke(self, context, event):
+#         return context.window_manager.invoke_confirm(self, event)
 # -------------------------------------------------------------------
 #   Drawing
 # -------------------------------------------------------------------
 class CUSTOM_UL_items(UIList):
+
+    
+
+    
+
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         
         scn = context.scene
@@ -255,6 +260,20 @@ class CUSTOM_UL_items(UIList):
         row.prop(item, "unit", emboss=0, text = "")
         row.operator("custom.list_action_refresh", text = "", icon = "EXPORT", emboss = 0)
 
+        # length_remember_index_for_preset = bpy.context.window_manager.setprecisemesh.length_remember_index_for_preset
+
+        # if bpy.context.scene.custom_index == length_remember_index_for_preset:
+        # def do(self):
+        #     bpy.ops.custom.list_action_refresh()
+
+        # do(self)
+
+        # bpy.context.window_manager.setprecisemesh.length = item.unit
+
+        # bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1, time_limit = 0.0)
+            
+        print("\n", idx)
+
             # print(item)
 
             # if bpy.context.scene.custom_index == idx:
@@ -270,7 +289,14 @@ class CUSTOM_UL_items(UIList):
             # layout.prop(vgroup, "name", text="", emboss=False, icon_value=icon)
 
     def invoke(self, context, event):
+        bpy.ops.custom.list_action_refresh()
+        
+        # print(222222222222222222222)
         pass   
+
+    def execute(self,context):
+        bpy.ops.custom.list_action_refresh()
+        return {"FINISHED"}
 
 class CUSTOM_PT_objectList(Panel):
     """Adds a custom panel to the TEXT_EDITOR"""
@@ -284,6 +310,8 @@ class CUSTOM_PT_objectList(Panel):
     bl_region_type = 'WINDOW'
     bl_context = "scene"
     # bl_context = "mesh_edit"
+
+    # bl_options = {"HIDE_HEADER"}
     
 
     def draw(self, context):
@@ -311,7 +339,7 @@ class CUSTOM_PT_objectList(Panel):
         col = row.column(align=True)
         row = col.row(align=True)
         row.operator("custom.clear_list", icon="X")
-        row.operator("custom.remove_duplicates", icon="GHOST_ENABLED")
+        # row.operator("custom.remove_duplicates", icon="GHOST_ENABLED")
 
 # -------------------------------------------------------------------
 #   Collection
