@@ -167,8 +167,8 @@ class CUSTOM_OT_actions_refresh(Operator):
         else:
             self.report({'INFO'}, "Nothing selected in the Viewport")
 
-        return {'RUNNING_MODAL'}
-        # return {"FINISHED"}
+        # return {'RUNNING_MODAL'}
+        return {"FINISHED"}
 
 class CUSTOM_OT_clearList(Operator):
     """Clear all items of the list"""
@@ -356,6 +356,33 @@ class CUSTOM_objectCollection(PropertyGroup):
     name_unit: StringProperty()
     # obj_type: StringProperty()
     # obj_id: IntProperty()
+
+def my_handler(scene):
+    # print("Frame Change", scene.frame_current)
+    print("Index", bpy.context.scene.custom_index)
+    # bpy.ops.custom.list_action_refresh()
+    scn = bpy.context.scene
+    idx = scn.custom_index
+
+    try:
+        item = scn.custom[idx]
+    except IndexError:
+        pass
+        
+    # if self.action == 'ADD':
+    # if bpy.context.object:
+    if bpy.context.active_object:
+
+        bpy.context.window_manager.setprecisemesh.length = item.unit
+        # bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1, time_limit = 0.0)
+
+    # else:
+    #     self.report({'INFO'}, "Nothing selected in the Viewport")
+
+        # return {'RUNNING_MODAL'}
+        # return {"FINISHED"}
+
+    # print("\n")
 
 if __name__ == "__main__":
     register()
