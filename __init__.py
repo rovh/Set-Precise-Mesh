@@ -1516,9 +1516,7 @@ classes = (
 
 )
 
-def my_handler(scene):
-    # print("Frame Change", scene.frame_current)
-    print(bpy.context.scene.custom_index)
+
 
 
 
