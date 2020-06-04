@@ -167,7 +167,8 @@ class CUSTOM_OT_actions_refresh(Operator):
         else:
             self.report({'INFO'}, "Nothing selected in the Viewport")
 
-        return {"FINISHED"}
+        return {'RUNNING_MODAL'}
+        # return {"FINISHED"}
 
 class CUSTOM_OT_clearList(Operator):
     """Clear all items of the list"""
@@ -235,9 +236,6 @@ class CUSTOM_OT_clearList(Operator):
 # -------------------------------------------------------------------
 class CUSTOM_UL_items(UIList):
 
-    
-
-    
 
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         
@@ -272,7 +270,7 @@ class CUSTOM_UL_items(UIList):
 
         # bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1, time_limit = 0.0)
             
-        print("\n", idx)
+        # print("\n", idx)
 
             # print(item)
 
@@ -288,15 +286,16 @@ class CUSTOM_UL_items(UIList):
 
             # layout.prop(vgroup, "name", text="", emboss=False, icon_value=icon)
 
-    def invoke(self, context, event):
-        bpy.ops.custom.list_action_refresh()
+    # def invoke(self, context, event):
+    #     bpy.ops.custom.list_action_refresh()
         
-        # print(222222222222222222222)
-        pass   
+    #     # print(222222222222222222222)
+    #     pass   
 
-    def execute(self,context):
-        bpy.ops.custom.list_action_refresh()
-        return {"FINISHED"}
+    # def execute(self,context):
+    #     bpy.ops.custom.list_action_refresh()
+    #     return {'RUNNING_MODAL'}
+        # return {"FINISHED"}
 
 class CUSTOM_PT_objectList(Panel):
     """Adds a custom panel to the TEXT_EDITOR"""

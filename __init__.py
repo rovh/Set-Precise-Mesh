@@ -1516,8 +1516,18 @@ classes = (
 
 )
 
+def my_handler(scene):
+    # print("Frame Change", scene.frame_current)
+    print(bpy.context.scene.custom_index)
+
+
 
 def register():
+
+    bpy.app.handlers.depsgraph_update_pre.append(my_handler)
+
+
+
     for blender_class in blender_classes:
         bpy.utils.register_class(blender_class)
     # pynput.register()
