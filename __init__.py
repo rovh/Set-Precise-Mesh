@@ -1524,7 +1524,7 @@ def register():
 
     # bpy.app.handlers.depsgraph_update_pre.append(my_handler)
     # bpy.app.handlers.n_fields .append(my_handler)
-    bpy.app.handlers.depsgraph_update_post.append(my_handler)
+    # bpy.app.handlers.depsgraph_update_post.append(my_handler)
     # bpy.app.handlers.on_scene_update_pre.append(my_handler)
 
 
