@@ -357,24 +357,31 @@ class CUSTOM_objectCollection(PropertyGroup):
     # obj_type: StringProperty()
     # obj_id: IntProperty()
 
-# k=0
 
-def my_handler(space_data):
+# @call_once(bpy.app.handlers.depsgraph_update_pre)
+def my_handler(scene):
     # print("Frame Change", scene.frame_current)
+    # print("\n")
     print("Index", bpy.context.scene.custom_index)
+    # print(custom_index)
+    # print(scene)
+
     # print( k + 1)
     # bpy.ops.custom.list_action_refresh()
-    scn = bpy.context.scene
-    idx = scn.custom_index
+    if bpy.context.scene.custom_index:
+        scn = bpy.context.scene
+        idx = scn.custom_index
 
-    try:
-        item = scn.custom[idx]
-        if bpy.context.active_object:
-            bpy.context.window_manager.setprecisemesh.length = item.unit
-    except IndexError:
-        pass
-    except UnboundLocalError:
-        pass
+        try:
+            item = scn.custom[idx]
+            if bpy.context.active_object:
+                bpy.context.window_manager.setprecisemesh.length = item.unit
+        except IndexError:
+            pass
+        except UnboundLocalError:
+            pass
+
+    # bpy.app.handlers.depsgraph_update_pre.remove(my_handler)
     # else:
         
     # if self.action == 'ADD':
