@@ -249,14 +249,51 @@ class CUSTOM_UL_items(UIList):
             #split.prop(item, "name", text="", emboss=False, translate=False, icon=custom_icon)
         row = layout.row(align = 0)
 
+        # row = row.column()
+
         row.scale_y = 1.1
         row.scale_x = 1.1
         # row.label(text=item.name, icon=custom_icon) # avoids renaming the item by accident
         
 
+
+        # row.
+        # row.scale_x = 1.1
+        # row.activate_init = 1
+
         row.prop(item, "name_unit", emboss=False, text = "")
-        row.prop(item, "unit", emboss=0, text = "")
-        row.operator("custom.list_action_refresh", text = "", icon = "EXPORT", emboss = 0)
+        row.prop(item, "unit", emboss=0, text = "", expand = 1)
+        row.operator("custom.list_action_refresh", text = "", icon = "EXPORT", emboss = 1, depress=0)
+        # row.operator("custom.list_action_refresh", text = "", icon = "EXPORT", emboss = 0)
+        
+        # row.operator("custom.list_action_refresh", emboss = 1, depress=0)
+
+        # template_input_status()
+
+        # row.scale_y = 1.1
+        # row.scale_x = 1.1
+
+    # def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
+        
+    #     scn = context.scene
+    #     idx = scn.custom_index
+
+        # if self.layout_type in {'DEFAULT', 'COMPACT'}:
+            # split = layout.split(factor=0.3)
+            # split.label(text="Index: %d" % (index))
+            # custom_icon = "OUTLINER_OB_%s" % item.obj_type
+            #split.prop(item, "name", text="", emboss=False, translate=False, icon=custom_icon)
+        # row = layout.row(align = 0)
+
+        # row.scale_y = 1.1
+        # row.scale_x = 1.1
+        # row.label(text=item.name, icon=custom_icon) # avoids renaming the item by accident
+        
+
+        # row.prop(item, "name_unit", emboss=False, text = "")
+        # row.prop(item, "unit", emboss=0, text = "")
+        # layout.operator("custom.list_action_refresh", text = "", icon = "EXPORT", emboss = 1)
+        # layout.operator("custom.list_action_refresh", emboss = 0)
 
         # length_remember_index_for_preset = bpy.context.window_manager.setprecisemesh.length_remember_index_for_preset
 
@@ -320,6 +357,7 @@ class CUSTOM_PT_objectList(Panel):
         rows = 4
         row = layout.row()
         row.template_list("CUSTOM_UL_items", "", scn, "custom", scn, "custom_index", rows=rows)
+        # row.template_list("CUSTOM_UL_items", "", scn, "custom", bpy.ops.custom, "list_action_refresh", rows=rows)
 
         col = row.column(align=True)
         col.scale_x = 1.1
