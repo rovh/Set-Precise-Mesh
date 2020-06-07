@@ -147,6 +147,8 @@ class CUSTOM_OT_actions_refresh(Operator):
     bl_description = "Move items up and down, add and remove"
     bl_options = {'REGISTER'}
 
+    index: IntProperty()
+
     def execute(self, context):
 
         scn = context.scene
@@ -162,6 +164,7 @@ class CUSTOM_OT_actions_refresh(Operator):
         if bpy.context.active_object:
     
             bpy.context.window_manager.setprecisemesh.length = item.unit
+            bpy.context.scene.custom_index = self.index
             bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1, time_limit = 0.0)
 
         else:
@@ -252,8 +255,8 @@ class CUSTOM_UL_items(UIList):
         # row = row.column()
 
         row.scale_y = 1.1
-        row.scale_x = 1.1
-        # row.label(text=item.name, icon=custom_icon) # avoids renaming the item by accident
+        # row.scale_x = 1.1
+        # row.label(text=item.name) # avoids renaming the item by accident
         
 
 
@@ -261,9 +264,11 @@ class CUSTOM_UL_items(UIList):
         # row.scale_x = 1.1
         # row.activate_init = 1
 
+        # row.operator("custom.list_action_refresh", text = item.name_unit, emboss = 0, depress=0).custom_index = idx
+        # row.operator("custom.list_action_refresh", text = item.name_unit, emboss = 0, depress=0).index = idx
+        # row.alignment = "LEFT"
         row.prop(item, "name_unit", emboss=False, text = "")
         row.prop(item, "unit", emboss=0, text = "", expand = 1)
-        row.operator("custom.list_action_refresh", text = "", icon = "EXPORT", emboss = 1, depress=0)
         # row.operator("custom.list_action_refresh", text = "", icon = "EXPORT", emboss = 0)
         
         # row.operator("custom.list_action_refresh", emboss = 1, depress=0)
