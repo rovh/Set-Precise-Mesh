@@ -277,7 +277,6 @@ class CUSTOM_OT_Rename(Operator):
 
     def draw(self, context):
         layout = self.layout
-        # layout.prop(self, "unit_input", text = "")
         layout.prop(self, "name_input", text = "Name")
 
     def invoke(self, context, event):
@@ -297,22 +296,27 @@ class CUSTOM_OT_Rename(Operator):
 
     def execute(self, context):
 
-        # bpy.context.scene.custom_index = self.my_index
-
         scn = context.scene
 
         try:
             item = scn.custom[self.my_index]
         except IndexError:
             pass
-            
+
         if bpy.context.active_object:
 
+            for i in range(-1, len(scn.custom)):
+                if scn.custom[i].name_unit == self.name_input     and    i != self.my_index:
+                    text = "Name"
+                    war = "WARNING"
+                    self.report({war}, text)
+                    break
+            
             item.name_unit = self.name_input
         else:
             self.report({'INFO'}, "Nothing selected in the Viewport")
 
-        # return {'RUNNING_MODAL'}
+
         return {"FINISHED"}
 
 class CUSTOM_OT_clearList(Operator):
