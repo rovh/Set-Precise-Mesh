@@ -1513,6 +1513,7 @@ classes = (
     CUSTOM_objectCollection,
     CUSTOM_OT_actions_add,
     CUSTOM_OT_actions_refresh,
+    CUSTOM_OT_Rename,
 
 )
 
@@ -1522,7 +1523,7 @@ classes = (
 
 def register():
 
-    bpy.app.handlers.depsgraph_update_pre.append(my_handler)
+    # bpy.app.handlers.depsgraph_update_pre.append(my_handler)
     # bpy.app.handlers.n_fields.append(my_handler)
     # bpy.app.handlers.n_fields .append(my_handler)
     # bpy.app.handlers.depsgraph_update_post.append(my_handler)
@@ -1585,8 +1586,10 @@ def register():
 
 def unregister():
 
-    if my_handler in bpy.app.handlers.depsgraph_update_pre:
-        bpy.app.handlers.depsgraph_update_pre.remove(my_handler)
+    # if my_handler in bpy.app.handlers.depsgraph_update_pre:
+    #     bpy.app.handlers.depsgraph_update_pre.remove(my_handler)
+
+
     # if my_handler in bpy.app.handlers.n_fields:
     #     bpy.app.handlers.n_fields.remove(my_handler)
 

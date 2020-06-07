@@ -151,6 +151,31 @@ class CUSTOM_OT_actions_refresh(Operator):
 
     def execute(self, context):
 
+        _timer = None
+
+        def modal(self, context, event):
+            scene = context.scene
+            obj = context.object
+            region = context.area.regions[-1]
+
+            if event.type in {'ESC'}:
+                self.cancel(context)
+                return {'CANCELLED'}
+
+            if event.type in {'RIGHTMOUSE'}:
+                print("modal")
+                if obj.mode == 'EDIT' and obj.type == 'MESH':
+                    camframe = view3d_camera_border(scene)
+
+                    #print([xy for xy in camframe])
+
+                    bpy.ops.view3d.select_border(gesture_mode=3, xmin=camframe[2].x, xmax=camframe[0].x,
+                                                ymin=camframe[1].y, ymax=camframe[0].y)
+
+            return {'PASS_THROUGH'}
+
+        bpy.context.scene.custom_index = self.my_index
+
         scn = context.scene
         idx = scn.custom_index
 
@@ -159,14 +184,74 @@ class CUSTOM_OT_actions_refresh(Operator):
         except IndexError:
             pass
             
-        # if self.action == 'ADD':
-        # if bpy.context.object:
         if bpy.context.active_object:
     
             bpy.context.window_manager.setprecisemesh.length = item.unit
-            bpy.context.scene.custom_index = self.my_index
-            bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1, time_limit = 0.0)
+            # bpy.context.region.tag_redraw()
+            # context.area.tag_redraw()
+            # bpy.context.scene.update()
 
+            for region in context.area.regions:
+                if region.type == "UI":
+                    region.tag_redraw()
+
+            # bpy.data.scenes.update()
+
+            try:
+                bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1, time_limit = 0.0)
+                # bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1)
+            except Warning:
+                pass
+
+
+            # bpy.ops.wm.redraw_timer(type = "UNDO", iterations = 1, time_limit = 0.0)
+            # bpy.ops.wm.redraw_timer(type = "DRAW_WIN", iterations = 1, time_limit = 0.0)
+
+            # bpy.ops.wm.redraw_timer(type = "DRAW_SWAP", iterations = 1, time_limit = 0.0)
+            # bpy.ops.wm.redraw_timer(type = "DRAW", iterations = 1, time_limit = 0.0)
+
+
+
+            # bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1, time_limit = 0.0)
+
+        else:
+            self.report({'INFO'}, "Nothing selected in the Viewport")
+
+        # return {'RUNNING_MODAL'}
+        return {"FINISHED"}
+
+class CUSTOM_OT_Rename(Operator):
+    """Clear all items of the list"""
+    bl_idname = "custom.rename"
+    bl_label = "Rename"
+    bl_description = "Rename"
+    bl_options = {'INTERNAL'}
+
+    name_input: StringProperty()
+
+    def draw(self, context):
+        layout = self.layout
+        # layout.prop(self, "unit_input", text = "")
+        layout.prop(self, "name_input", text = "Name")
+
+    def invoke(self, context, event):
+        return context.window_manager.invoke_props_dialog(self)
+
+    def execute(self, context):
+
+        # bpy.context.scene.custom_index = self.my_index
+
+        scn = context.scene
+        idx = scn.custom_index
+
+        try:
+            item = scn.custom[idx]
+        except IndexError:
+            pass
+            
+        if bpy.context.active_object:
+
+            item.name_unit = self.name_input
         else:
             self.report({'INFO'}, "Nothing selected in the Viewport")
 
@@ -243,12 +328,12 @@ class CUSTOM_UL_items(UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
 
 
-        print("""Information start""")
-        print(data)
-        print(item)
-        print(active_data)
-        print(active_propname)
-        print(index)
+        # print("""Information start""")
+        # print(data)
+        # print(item)
+        # print(active_data)
+        # print(active_propname)
+        # print(index)
         # print()
         # print()
         # print()
@@ -280,6 +365,7 @@ class CUSTOM_UL_items(UIList):
         # row.alignment = "LEFT"
         # row.prop(item, "name_unit", emboss=False, text = "")
         row.prop(item, "unit", emboss=0, text = "", expand = 1)
+        row.operator("custom.rename", text = "", icon = "SORTALPHA", emboss = 0).name_input = item.name_unit
         # row.operator("custom.list_action_refresh", text = "", icon = "EXPORT", emboss = 0)
         
         # row.operator("custom.list_action_refresh", emboss = 1, depress=0)
@@ -431,6 +517,7 @@ def my_handler(scene):
             item = scn.custom[idx]
             if bpy.context.active_object:
                 bpy.context.window_manager.setprecisemesh.length = item.unit
+                # pass
         except IndexError:
             pass
         except UnboundLocalError:
