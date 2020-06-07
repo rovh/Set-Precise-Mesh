@@ -227,6 +227,17 @@ class CUSTOM_OT_Rename(Operator):
         layout.prop(self, "name_input", text = "Name")
 
     def invoke(self, context, event):
+
+        scn = context.scene
+        idx = scn.custom_index
+
+        try:
+            item = scn.custom[self.my_index]
+            # print(self.my_index)
+        except IndexError:
+            pass
+
+        self.name_input = item.name_unit
         return context.window_manager.invoke_props_dialog(self)
 
     def execute(self, context):
@@ -358,7 +369,16 @@ class CUSTOM_UL_items(UIList):
         # row.alignment = "LEFT"
         # row.prop(item, "name_unit", emboss=False, text = "")
         row.prop(item, "unit", emboss=0, text = "", expand = 1)
-        row.operator("custom.rename", text = "", icon = "SORTALPHA", emboss = 0).my_index = index, name_input = item.name_unit
+
+        def cust(self):
+
+            # self.my_index = index  
+            self.name_input = item.name_unit
+            return self.name_input
+
+        # row.operator("custom.rename", text = "", icon = "SORTALPHA", emboss = 0).cust()
+        row.operator("custom.rename", text = "", icon = "SORTALPHA", emboss = 0).my_index = index#, name_input = item.name_unit
+        
         # row.operator("custom.list_action_refresh", text = "", icon = "EXPORT", emboss = 0)
         
         # row.operator("custom.list_action_refresh", emboss = 1, depress=0)
