@@ -181,17 +181,72 @@ class CUSTOM_OT_actions_refresh(Operator):
             # context.area.tag_redraw()
             # bpy.context.scene.update()
 
-            for region in context.area.regions:
-                if region.type == "UI":
-                    region.tag_redraw()
+            # for region in context.area.regions:
+            #     if region.type == "UI":
+            #         region.tag_redraw()
 
             # bpy.data.scenes.update()
 
-            try:
-                bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1, time_limit = 0.0)
+            
+            bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1, time_limit = 0.0)
+            print("Warning because of Set Precise Mesh")
                 # bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1)
-            except Warning:
-                pass
+
+
+
+            # bpy.ops.wm.redraw_timer(type = "UNDO", iterations = 1, time_limit = 0.0)
+            # bpy.ops.wm.redraw_timer(type = "DRAW_WIN", iterations = 1, time_limit = 0.0)
+
+            # bpy.ops.wm.redraw_timer(type = "DRAW_SWAP", iterations = 1, time_limit = 0.0)
+            # bpy.ops.wm.redraw_timer(type = "DRAW", iterations = 1, time_limit = 0.0)
+
+
+
+            # bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1, time_limit = 0.0)
+
+        else:
+            self.report({'INFO'}, "Nothing selected in the Viewport")
+
+        # return {'RUNNING_MODAL'}
+        return {"FINISHED"}
+
+class CUSTOM_OT_actions_import(Operator):
+    """Move items up and down, add and remove"""
+    bl_idname = "custom.list_action_import"
+    bl_label = "Add"
+    bl_description = "Move items up and down, add and remove"
+    bl_options = {'REGISTER'}
+
+    my_index: IntProperty()
+
+    def execute(self, context):
+
+        scn = context.scene
+        idx = scn.custom_index
+
+        try:
+            item = scn.custom[self.my_index]
+        except IndexError:
+            pass
+            
+        if bpy.context.active_object:
+    
+            item.unit = bpy.context.window_manager.setprecisemesh.length
+            # bpy.context.region.tag_redraw()
+            # context.area.tag_redraw()
+            # bpy.context.scene.update()
+
+            # for region in context.area.regions:
+            #     if region.type == "UI":
+            #         region.tag_redraw()
+
+            # bpy.data.scenes.update()
+
+            
+            bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1, time_limit = 0.0)
+            print("Warning because of Set Precise Mesh")
+                # bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1)
+
 
 
             # bpy.ops.wm.redraw_timer(type = "UNDO", iterations = 1, time_limit = 0.0)
@@ -217,7 +272,6 @@ class CUSTOM_OT_Rename(Operator):
     bl_description = "Rename"
     bl_options = {'INTERNAL'}
 
-    # group: PointerProperty(type=SetPreciseMesh_Props)
     name_input: StringProperty()
     my_index: IntProperty()
 
@@ -229,27 +283,26 @@ class CUSTOM_OT_Rename(Operator):
     def invoke(self, context, event):
 
         scn = context.scene
-        idx = scn.custom_index
 
         try:
             item = scn.custom[self.my_index]
-            # print(self.my_index)
         except IndexError:
             pass
 
         self.name_input = item.name_unit
+
         return context.window_manager.invoke_props_dialog(self)
+        # return context.window_manager.invoke_popup(self)
+        # return context.window_manager.invoke_confirm(self, event)
 
     def execute(self, context):
 
         # bpy.context.scene.custom_index = self.my_index
 
         scn = context.scene
-        idx = scn.custom_index
 
         try:
             item = scn.custom[self.my_index]
-            # print(self.my_index)
         except IndexError:
             pass
             
@@ -330,17 +383,6 @@ class CUSTOM_UL_items(UIList):
 
 
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
-
-
-        # print("""Information start""")
-        # print(data)
-        # print(item)
-        # print(active_data)
-        # print(active_propname)
-        # print(index)
-        # print()
-        # print()
-        # print()
         
         scn = context.scene
         idx = scn.custom_index
@@ -355,11 +397,6 @@ class CUSTOM_UL_items(UIList):
         # row = row.column()
 
         row.scale_y = 1.1
-        # row.scale_x = 1.1
-        # row.label(text=str(index)) # avoids renaming the item by accident
-        
-
-
         # row.
         # row.scale_x = 1.1
         # row.activate_init = 1
@@ -370,14 +407,10 @@ class CUSTOM_UL_items(UIList):
         # row.prop(item, "name_unit", emboss=False, text = "")
         row.prop(item, "unit", emboss=0, text = "", expand = 1)
 
-        def cust(self):
 
-            # self.my_index = index  
-            self.name_input = item.name_unit
-            return self.name_input
+        row.operator("custom.list_action_import", text = "", icon = "IMPORT", emboss = 0).my_index = index
 
-        # row.operator("custom.rename", text = "", icon = "SORTALPHA", emboss = 0).cust()
-        row.operator("custom.rename", text = "", icon = "SORTALPHA", emboss = 0).my_index = index#, name_input = item.name_unit
+        row.operator("custom.rename", text = "", icon = "SORTALPHA", emboss = 0).my_index = index
         
         # row.operator("custom.list_action_refresh", text = "", icon = "EXPORT", emboss = 0)
         

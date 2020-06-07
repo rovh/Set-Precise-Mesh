@@ -1514,6 +1514,7 @@ classes = (
     CUSTOM_OT_actions_add,
     CUSTOM_OT_actions_refresh,
     CUSTOM_OT_Rename,
+    CUSTOM_OT_actions_import,
 
 )
 
