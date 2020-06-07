@@ -151,28 +151,18 @@ class CUSTOM_OT_actions_refresh(Operator):
 
     def execute(self, context):
 
-        _timer = None
+        # _timer = None
 
-        def modal(self, context, event):
-            scene = context.scene
-            obj = context.object
-            region = context.area.regions[-1]
+        # def modal(self, context, event):
+        #     if event.type in {'ESC'}:
+        #         self.cancel(context)
+        #         return {'CANCELLED'}
 
-            if event.type in {'ESC'}:
-                self.cancel(context)
-                return {'CANCELLED'}
+        #     if event.type in {'RIGHTMOUSE'}:
+        #         # print("modal")
+        #             bpy.ops.custom.rename()
 
-            if event.type in {'RIGHTMOUSE'}:
-                print("modal")
-                if obj.mode == 'EDIT' and obj.type == 'MESH':
-                    camframe = view3d_camera_border(scene)
-
-                    #print([xy for xy in camframe])
-
-                    bpy.ops.view3d.select_border(gesture_mode=3, xmin=camframe[2].x, xmax=camframe[0].x,
-                                                ymin=camframe[1].y, ymax=camframe[0].y)
-
-            return {'PASS_THROUGH'}
+        #     return {'PASS_THROUGH'}
 
         bpy.context.scene.custom_index = self.my_index
 
@@ -227,7 +217,9 @@ class CUSTOM_OT_Rename(Operator):
     bl_description = "Rename"
     bl_options = {'INTERNAL'}
 
+    # group: PointerProperty(type=SetPreciseMesh_Props)
     name_input: StringProperty()
+    my_index: IntProperty()
 
     def draw(self, context):
         layout = self.layout
@@ -245,7 +237,8 @@ class CUSTOM_OT_Rename(Operator):
         idx = scn.custom_index
 
         try:
-            item = scn.custom[idx]
+            item = scn.custom[self.my_index]
+            # print(self.my_index)
         except IndexError:
             pass
             
@@ -365,7 +358,7 @@ class CUSTOM_UL_items(UIList):
         # row.alignment = "LEFT"
         # row.prop(item, "name_unit", emboss=False, text = "")
         row.prop(item, "unit", emboss=0, text = "", expand = 1)
-        row.operator("custom.rename", text = "", icon = "SORTALPHA", emboss = 0).name_input = item.name_unit
+        row.operator("custom.rename", text = "", icon = "SORTALPHA", emboss = 0).my_index = index, name_input = item.name_unit
         # row.operator("custom.list_action_refresh", text = "", icon = "EXPORT", emboss = 0)
         
         # row.operator("custom.list_action_refresh", emboss = 1, depress=0)
