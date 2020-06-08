@@ -1501,16 +1501,22 @@ blender_classes = [
 
 """Classes of Presets"""
 classes = (
-    CUSTOM_OT_actions,
-    CUSTOM_OT_clearList,
-    # CUSTOM_OT_removeDuplicates,
-    CUSTOM_UL_items,
-    CUSTOM_PT_objectList,
-    CUSTOM_objectCollection,
-    CUSTOM_OT_actions_add,
-    CUSTOM_OT_actions_refresh,
-    CUSTOM_OT_Rename,
-    CUSTOM_OT_actions_import,
+    PRESETS_OT_actions,
+    PRESETS_OT_clearList,
+    PRESETS_OT_actions_add,
+    PRESETS_OT_actions_refresh,
+    PRESETS_OT_Rename,
+    PRESETS_OT_actions_import,
+    # PRESETS_OT_removeDuplicates,
+
+    PRESETS_UL_items_Angle,
+    PRESETS_PT_presets_List_Angle,
+
+    PRESETS_UL_items_Length,
+    PRESETS_PT_presets_List_Length,
+
+    PRESETS_presets_angle_Collection,
+    PRESETS_presets_length_Collection,
 
 )
 
@@ -1569,7 +1575,7 @@ def register():
         register_class(cls)
 
     # Custom scene properties
-    bpy.types.Scene.custom = CollectionProperty(type=CUSTOM_objectCollection)
+    bpy.types.Scene.custom = CollectionProperty(type=PRESETS_presets_length_Collection)
     bpy.types.Scene.custom_index = IntProperty()
 
 

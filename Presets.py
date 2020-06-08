@@ -18,7 +18,7 @@ from bpy.types import (Operator,
     
 
 
-class CUSTOM_OT_actions(Operator):
+class PRESETS_OT_actions(Operator):
     """Move items up and down, add and remove"""
     bl_idname = "custom.list_action"
     bl_label = "List Actions"
@@ -84,7 +84,7 @@ class CUSTOM_OT_actions(Operator):
 
         return {"FINISHED"}
 
-class CUSTOM_OT_actions_add(Operator):
+class PRESETS_OT_actions_add(Operator):
     """Move items up and down, add and remove"""
     bl_idname = "custom.list_action_add"
     bl_label = "Add"
@@ -145,7 +145,7 @@ class CUSTOM_OT_actions_add(Operator):
 
         return {"FINISHED"}
 
-class CUSTOM_OT_actions_refresh(Operator):
+class PRESETS_OT_actions_refresh(Operator):
     """Move items up and down, add and remove"""
     bl_idname = "custom.list_action_refresh"
     bl_label = "Add"
@@ -198,7 +198,7 @@ class CUSTOM_OT_actions_refresh(Operator):
 
         return {"FINISHED"}
 
-class CUSTOM_OT_actions_import(Operator):
+class PRESETS_OT_actions_import(Operator):
     """Move items up and down, add and remove"""
     bl_idname = "custom.list_action_import"
     bl_label = "Add"
@@ -251,7 +251,7 @@ class CUSTOM_OT_actions_import(Operator):
 
         return {"FINISHED"}
 
-class CUSTOM_OT_Rename(Operator):
+class PRESETS_OT_Rename(Operator):
     """Clear all items of the list"""
     bl_idname = "custom.rename"
     bl_label = "Rename"
@@ -306,7 +306,7 @@ class CUSTOM_OT_Rename(Operator):
 
         return {"FINISHED"}
 
-class CUSTOM_OT_clearList(Operator):
+class PRESETS_OT_clearList(Operator):
     """Clear all items of the list"""
     bl_idname = "custom.clear_list"
     bl_label = "Clear List"
@@ -328,7 +328,7 @@ class CUSTOM_OT_clearList(Operator):
             self.report({'INFO'}, "Nothing to remove")
         return{'FINISHED'}
 
-# class CUSTOM_OT_removeDuplicates(Operator):
+# class PRESETS_OT_removeDuplicates(Operator):
 #     """Remove all duplicates"""
 #     bl_idname = "custom.remove_duplicates"
 #     bl_label = "Remove Duplicates"
@@ -371,8 +371,8 @@ class CUSTOM_OT_clearList(Operator):
 # -------------------------------------------------------------------
 #   Drawing
 # -------------------------------------------------------------------
-class CUSTOM_UL_items(UIList):
-
+        
+class PRESETS_UL_items_Angle(UIList):
 
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         
@@ -425,12 +425,12 @@ class CUSTOM_UL_items(UIList):
         # row.scale_y = 1.1
         # row.scale_x = 1.1
         # row.label(text=item.name, icon=custom_icon) # avoids renaming the item by accident
-        
-class CUSTOM_PT_objectList(Panel):
+
+class PRESETS_PT_presets_List_Angle(Panel):
     """Adds a custom panel to the TEXT_EDITOR"""
     
-    bl_idname = 'TEXT_PT_my_panel'
-    bl_label = "Length / Distance Presets"
+    bl_idname = 'SCENE_PT_presets_angle'
+    bl_label = "Angle Presets"
 
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
@@ -439,7 +439,7 @@ class CUSTOM_PT_objectList(Panel):
 
     def draw_header(self, context):
         layout = self.layout
-        layout.label(icon = "DRIVER_DISTANCE")
+        layout.label(icon = "DRIVER_ROTATIONAL_DIFFERENCE")
 
     def draw(self, context):
 
@@ -450,7 +450,7 @@ class CUSTOM_PT_objectList(Panel):
 
             rows = 4
             row = layout.row()
-            row.template_list("CUSTOM_UL_items", "", scn, "custom", scn, "custom_index", rows=rows)
+            row.template_list("PRESETS_UL_items_Angle", "", scn, "custom", scn, "custom_index", rows=rows)
 
             col = row.column(align=True)
             col.scale_x = 1.1
@@ -471,20 +471,133 @@ class CUSTOM_PT_objectList(Panel):
             row.operator("custom.clear_list", icon="X")
             # row.operator("custom.remove_duplicates", icon="GHOST_ENABLED")
 
+
+
+class PRESETS_UL_items_Length(UIList):
+
+    def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
+        
+        scn = context.scene
+        idx = scn.custom_index
+
+        # if self.layout_type in {'DEFAULT', 'COMPACT'}:
+            # split = layout.split(factor=0.3)
+            # split.label(text="Index: %d" % (index))
+            # custom_icon = "OUTLINER_OB_%s" % item.obj_type
+            #split.prop(item, "name", text="", emboss=False, translate=False, icon=custom_icon)
+        row = layout.row(align = 0)
+
+        # name
+        # print("\n")
+        # print(1111111111111111111111111111111111111)
+        # print(layout)
+        # print(data)
+        # print(item)
+        # print(icon)
+        # print(active_data)
+        # # self.active_data = item.name
+        # # active_propname = item.name
+        # print(active_propname)
+        # print(111111111111111111111111111111111111111)
+
+        row.scale_y = 1.1
+
+        row.operator("custom.list_action_refresh", text = item.name, emboss = 0, depress=0).my_index = index
+        # row.prop(item, "name", emboss=False, text = "")
+        row.prop(item, "unit", emboss=0, text = "", expand = 1)
+
+        row.operator("custom.list_action_import", text = "", icon = "IMPORT", emboss = 0).my_index = index
+        row.operator("custom.rename", text = "", icon = "SORTALPHA", emboss = 0).my_index = index
+
+        # template_input_status()
+
+    # def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
+        
+    #     scn = context.scene
+    #     idx = scn.custom_index
+
+        # if self.layout_type in {'DEFAULT', 'COMPACT'}:
+            # split = layout.split(factor=0.3)
+            # split.label(text="Index: %d" % (index))
+            # custom_icon = "OUTLINER_OB_%s" % item.obj_type
+            #split.prop(item, "name", text="", emboss=False, translate=False, icon=custom_icon)
+        # row = layout.row(align = 0)
+
+        # row.scale_y = 1.1
+        # row.scale_x = 1.1
+        # row.label(text=item.name, icon=custom_icon) # avoids renaming the item by accident
+
+class PRESETS_PT_presets_List_Length(Panel):
+    """Adds a custom panel to the TEXT_EDITOR"""
+    
+    bl_idname = 'SCENE_PT_presets_length'
+    bl_label = "Length / Distance Presets"
+
+    bl_space_type = 'PROPERTIES'
+    bl_region_type = 'WINDOW'
+    bl_context = "scene"
+    # bl_context = "mesh_edit"
+
+    def draw_header(self, context):
+        layout = self.layout
+        layout.label(icon = "DRIVER_DISTANCE")
+
+    def draw(self, context):
+
+        if bpy.context.active_object.mode in {'EDIT'}:
+        
+            layout = self.layout
+            scn = bpy.context.scene
+
+            rows = 4
+            row = layout.row()
+            row.template_list("PRESETS_UL_items_Length", "", scn, "custom", scn, "custom_index", rows=rows)
+
+            col = row.column(align=True)
+            col.scale_x = 1.1
+            col.scale_y = 1.2
+
+            # col.operator("custom.list_action", icon='ADD', text="").action = 'ADD'
+            col.operator("custom.list_action_add", icon='ADD', text="")
+            col.operator("custom.list_action", icon='REMOVE', text="").action = 'REMOVE'
+            
+            col.separator()
+
+            col.operator("custom.list_action", icon='TRIA_UP', text="").action = 'UP'
+            col.operator("custom.list_action", icon='TRIA_DOWN', text="").action = 'DOWN'
+
+            row = layout.row()
+            col = row.column(align=True)
+            row = col.row(align=True)
+            row.operator("custom.clear_list", icon="X")
+            # row.operator("custom.remove_duplicates", icon="GHOST_ENABLED")
+
+
 # -------------------------------------------------------------------
 #   Collection
 # -------------------------------------------------------------------
 
-class CUSTOM_objectCollection(PropertyGroup):
+class PRESETS_presets_length_Collection(PropertyGroup):
 
     unit: FloatProperty(
         name="Length",
         description="Length of the edge",
         step = 100.0,
         unit='LENGTH',
-        precision = 6,
-    )
+        precision = 6,)
     name: StringProperty()
+
+class PRESETS_presets_angle_Collection(PropertyGroup):
+
+    unit: FloatProperty(
+        name="Length",
+        description="Length of the edge",
+        step = 100.0,
+        unit='LENGTH',
+        precision = 6,)
+    name: StringProperty()
+
+
     # remember_index = IntProperty()
     # obj_type: StringProperty()
     # obj_id: IntProperty()
