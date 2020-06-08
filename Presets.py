@@ -386,6 +386,19 @@ class CUSTOM_UL_items(UIList):
             #split.prop(item, "name", text="", emboss=False, translate=False, icon=custom_icon)
         row = layout.row(align = 0)
 
+        # name_unit
+        # print("\n")
+        # print(1111111111111111111111111111111111111)
+        # print(layout)
+        # print(data)
+        # print(item)
+        # print(icon)
+        # print(active_data)
+        # # self.active_data = item.name_unit
+        # # active_propname = item.name_unit
+        # print(active_propname)
+        # print(111111111111111111111111111111111111111)
+
         row.scale_y = 1.1
 
         row.operator("custom.list_action_refresh", text = item.name_unit, emboss = 0, depress=0).my_index = index
@@ -437,7 +450,6 @@ class CUSTOM_PT_objectList(Panel):
             rows = 4
             row = layout.row()
             row.template_list("CUSTOM_UL_items", "", scn, "custom", scn, "custom_index", rows=rows)
-            # row.template_list("CUSTOM_UL_items", "", scn, "custom", bpy.ops.custom, "list_action_refresh", rows=rows)
 
             col = row.column(align=True)
             col.scale_x = 1.1
