@@ -434,7 +434,7 @@ class CUSTOM_PT_objectList(Panel):
 
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
-    # bl_context = "scene"
+    bl_context = "scene"
     # bl_context = "mesh_edit"
 
     def draw_header(self, context):
