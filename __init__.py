@@ -1415,10 +1415,6 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         description="Apply the object's rotation transformation to its data",
         default = False,
     )
-    length_remember_index_for_preset: bpy.props.IntProperty(
-        name = "Remember",
-        default = -1,
-    )
 
 """Duplications of the Main panel"""
 class Dupli (SetPresiceMesh_Panel):
@@ -1503,6 +1499,7 @@ blender_classes = [
 
 ]
 
+"""Classes of Presets"""
 classes = (
     CUSTOM_OT_actions,
     CUSTOM_OT_clearList,
@@ -1567,7 +1564,7 @@ def register():
     )
 
 
-    from bpy.utils import register_class
+    from  bpy.utils import register_class
     for cls in classes:
         register_class(cls)
 
