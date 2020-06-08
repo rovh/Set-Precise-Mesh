@@ -121,20 +121,14 @@ class CUSTOM_OT_actions_add(Operator):
         except IndexError:
             pass
             
-        # if self.action == 'ADD':
-        # if bpy.context.object:
         if bpy.context.active_object:
             item = scn.custom.add()
-
-            # item.name = context.active_object.name
-            # item.obj_type = context.active_object.type
 
             item.name_unit = self.name_input
             item.unit = self.unit_input
 
             # item.obj_id = len(scn.custom)
-            # item.unit = bpy.context.window_manager.setprecisemesh.length
-            scn.custom_index = len(scn.custom)-1
+            scn.custom_index = len(scn.custom) - 1
         else:
             self.report({'INFO'}, "Nothing selected in the Viewport")
 
@@ -151,19 +145,6 @@ class CUSTOM_OT_actions_refresh(Operator):
 
     def execute(self, context):
 
-        # _timer = None
-
-        # def modal(self, context, event):
-        #     if event.type in {'ESC'}:
-        #         self.cancel(context)
-        #         return {'CANCELLED'}
-
-        #     if event.type in {'RIGHTMOUSE'}:
-        #         # print("modal")
-        #             bpy.ops.custom.rename()
-
-        #     return {'PASS_THROUGH'}
-
         bpy.context.scene.custom_index = self.my_index
 
         scn = context.scene
@@ -177,6 +158,7 @@ class CUSTOM_OT_actions_refresh(Operator):
         if bpy.context.active_object:
     
             bpy.context.window_manager.setprecisemesh.length = item.unit
+
             # bpy.context.region.tag_redraw()
             # context.area.tag_redraw()
             # bpy.context.scene.update()
@@ -188,9 +170,9 @@ class CUSTOM_OT_actions_refresh(Operator):
             # bpy.data.scenes.update()
 
             
-            bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1, time_limit = 0.0)
+            # bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1, time_limit = 0.0)
+            bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1)
             print("Warning because of Set Precise Mesh")
-                # bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1)
 
 
 
@@ -200,14 +182,9 @@ class CUSTOM_OT_actions_refresh(Operator):
             # bpy.ops.wm.redraw_timer(type = "DRAW_SWAP", iterations = 1, time_limit = 0.0)
             # bpy.ops.wm.redraw_timer(type = "DRAW", iterations = 1, time_limit = 0.0)
 
-
-
-            # bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1, time_limit = 0.0)
-
         else:
             self.report({'INFO'}, "Nothing selected in the Viewport")
 
-        # return {'RUNNING_MODAL'}
         return {"FINISHED"}
 
 class CUSTOM_OT_actions_import(Operator):
@@ -232,6 +209,7 @@ class CUSTOM_OT_actions_import(Operator):
         if bpy.context.active_object:
     
             item.unit = bpy.context.window_manager.setprecisemesh.length
+
             # bpy.context.region.tag_redraw()
             # context.area.tag_redraw()
             # bpy.context.scene.update()
@@ -243,9 +221,9 @@ class CUSTOM_OT_actions_import(Operator):
             # bpy.data.scenes.update()
 
             
-            bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1, time_limit = 0.0)
+            # bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1, time_limit = 0.0)
+            bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1)
             print("Warning because of Set Precise Mesh")
-                # bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1)
 
 
 
@@ -255,14 +233,11 @@ class CUSTOM_OT_actions_import(Operator):
             # bpy.ops.wm.redraw_timer(type = "DRAW_SWAP", iterations = 1, time_limit = 0.0)
             # bpy.ops.wm.redraw_timer(type = "DRAW", iterations = 1, time_limit = 0.0)
 
-
-
             # bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1, time_limit = 0.0)
 
         else:
             self.report({'INFO'}, "Nothing selected in the Viewport")
 
-        # return {'RUNNING_MODAL'}
         return {"FINISHED"}
 
 class CUSTOM_OT_Rename(Operator):
@@ -303,11 +278,12 @@ class CUSTOM_OT_Rename(Operator):
         except IndexError:
             pass
 
+
         if bpy.context.active_object:
 
             for i in range(-1, len(scn.custom)):
-                if scn.custom[i].name_unit == self.name_input     and    i != self.my_index:
-                    text = "Name"
+                if scn.custom[i].name_unit == self.name_input and i != self.my_index:
+                    text = "A preset with this name already exists"
                     war = "WARNING"
                     self.report({war}, text)
                     break
@@ -398,32 +374,16 @@ class CUSTOM_UL_items(UIList):
             #split.prop(item, "name", text="", emboss=False, translate=False, icon=custom_icon)
         row = layout.row(align = 0)
 
-        # row = row.column()
-
         row.scale_y = 1.1
-        # row.
-        # row.scale_x = 1.1
-        # row.activate_init = 1
 
-        # row.operator("custom.list_action_refresh", text = item.name_unit, emboss = 0, depress=0).custom_index = idx
         row.operator("custom.list_action_refresh", text = item.name_unit, emboss = 0, depress=0).my_index = index
-        # row.alignment = "LEFT"
         # row.prop(item, "name_unit", emboss=False, text = "")
         row.prop(item, "unit", emboss=0, text = "", expand = 1)
 
-
         row.operator("custom.list_action_import", text = "", icon = "IMPORT", emboss = 0).my_index = index
-
         row.operator("custom.rename", text = "", icon = "SORTALPHA", emboss = 0).my_index = index
-        
-        # row.operator("custom.list_action_refresh", text = "", icon = "EXPORT", emboss = 0)
-        
-        # row.operator("custom.list_action_refresh", emboss = 1, depress=0)
 
         # template_input_status()
-
-        # row.scale_y = 1.1
-        # row.scale_x = 1.1
 
     # def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         
@@ -441,51 +401,6 @@ class CUSTOM_UL_items(UIList):
         # row.scale_x = 1.1
         # row.label(text=item.name, icon=custom_icon) # avoids renaming the item by accident
         
-
-        # row.prop(item, "name_unit", emboss=False, text = "")
-        # row.prop(item, "unit", emboss=0, text = "")
-        # layout.operator("custom.list_action_refresh", text = "", icon = "EXPORT", emboss = 1)
-        # layout.operator("custom.list_action_refresh", emboss = 0)
-
-        # length_remember_index_for_preset = bpy.context.window_manager.setprecisemesh.length_remember_index_for_preset
-
-        # if bpy.context.scene.custom_index == length_remember_index_for_preset:
-        # def do(self):
-        #     bpy.ops.custom.list_action_refresh()
-
-        # do(self)
-
-        # bpy.context.window_manager.setprecisemesh.length = item.unit
-
-        # bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1, time_limit = 0.0)
-            
-        # print("\n", idx)
-
-            # print(item)
-
-            # if bpy.context.scene.custom_index == idx:
-
-            # row.prop(item, "unit", emboss=0, text = "")
-
-
-
-            # row.label(text = str(item.name_unit) + ":")
-            # row.label(text = str(item.unit))
-
-
-            # layout.prop(vgroup, "name", text="", emboss=False, icon_value=icon)
-
-    # def invoke(self, context, event):
-    #     bpy.ops.custom.list_action_refresh()
-        
-    #     # print(222222222222222222222)
-    #     pass   
-
-    # def execute(self,context):
-    #     bpy.ops.custom.list_action_refresh()
-    #     return {'RUNNING_MODAL'}
-        # return {"FINISHED"}
-
 class CUSTOM_PT_objectList(Panel):
     """Adds a custom panel to the TEXT_EDITOR"""
     
@@ -535,7 +450,7 @@ class CUSTOM_PT_objectList(Panel):
 # -------------------------------------------------------------------
 
 class CUSTOM_objectCollection(PropertyGroup):
-    #name: StringProperty() -> Instantiated by default
+
     unit: FloatProperty(
         name="Length",
         description="Length of the edge",
