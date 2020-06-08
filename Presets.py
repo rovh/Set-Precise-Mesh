@@ -367,6 +367,7 @@ class CUSTOM_OT_clearList(Operator):
 
 #     def invoke(self, context, event):
 #         return context.window_manager.invoke_confirm(self, event)
+
 # -------------------------------------------------------------------
 #   Drawing
 # -------------------------------------------------------------------
@@ -416,45 +417,46 @@ class CUSTOM_PT_objectList(Panel):
     """Adds a custom panel to the TEXT_EDITOR"""
     
     bl_idname = 'TEXT_PT_my_panel'
-    # bl_space_type = "TEXT_EDITOR"
-    # bl_region_type = "UI"
-    bl_label = "Length Presets"
+    bl_label = "Length / Distance Presets"
 
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
     bl_context = "scene"
-    # bl_context = "mesh_edit"
 
-    # bl_options = {"HIDE_HEADER"}
-    
+    def draw_header(self, context):
+        layout = self.layout
+        layout.label(icon = "DRIVER_DISTANCE")
 
     def draw(self, context):
-        layout = self.layout
-        scn = bpy.context.scene
 
-        rows = 4
-        row = layout.row()
-        row.template_list("CUSTOM_UL_items", "", scn, "custom", scn, "custom_index", rows=rows)
-        # row.template_list("CUSTOM_UL_items", "", scn, "custom", bpy.ops.custom, "list_action_refresh", rows=rows)
-
-        col = row.column(align=True)
-        col.scale_x = 1.1
-        col.scale_y = 1.2
-
-        # col.operator("custom.list_action", icon='ADD', text="").action = 'ADD'
-        col.operator("custom.list_action_add", icon='ADD', text="")
-        col.operator("custom.list_action", icon='REMOVE', text="").action = 'REMOVE'
+        if bpy.context.active_object.mode in {'EDIT'}:
         
-        col.separator()
+            layout = self.layout
+            scn = bpy.context.scene
 
-        col.operator("custom.list_action", icon='TRIA_UP', text="").action = 'UP'
-        col.operator("custom.list_action", icon='TRIA_DOWN', text="").action = 'DOWN'
+            rows = 4
+            row = layout.row()
+            row.template_list("CUSTOM_UL_items", "", scn, "custom", scn, "custom_index", rows=rows)
+            # row.template_list("CUSTOM_UL_items", "", scn, "custom", bpy.ops.custom, "list_action_refresh", rows=rows)
 
-        row = layout.row()
-        col = row.column(align=True)
-        row = col.row(align=True)
-        row.operator("custom.clear_list", icon="X")
-        # row.operator("custom.remove_duplicates", icon="GHOST_ENABLED")
+            col = row.column(align=True)
+            col.scale_x = 1.1
+            col.scale_y = 1.2
+
+            # col.operator("custom.list_action", icon='ADD', text="").action = 'ADD'
+            col.operator("custom.list_action_add", icon='ADD', text="")
+            col.operator("custom.list_action", icon='REMOVE', text="").action = 'REMOVE'
+            
+            col.separator()
+
+            col.operator("custom.list_action", icon='TRIA_UP', text="").action = 'UP'
+            col.operator("custom.list_action", icon='TRIA_DOWN', text="").action = 'DOWN'
+
+            row = layout.row()
+            col = row.column(align=True)
+            row = col.row(align=True)
+            row.operator("custom.clear_list", icon="X")
+            # row.operator("custom.remove_duplicates", icon="GHOST_ENABLED")
 
 # -------------------------------------------------------------------
 #   Collection
