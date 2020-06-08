@@ -73,7 +73,7 @@ class CUSTOM_OT_actions(Operator):
         #         item = scn.custom.add()
         #         # ret(self)
         #         # bpy.ops.wm.menu_setprecisemesh_operator_2("INVOKE_DEFAULT")
-        #         # item.name_unit = bpy.context.scene.custom[idx].name_unit
+        #         # item.name = bpy.context.scene.custom[idx].name
         #         item.name = context.object.name
         #         item.obj_type = context.object.type
         #         item.obj_id = len(scn.custom)
@@ -126,7 +126,7 @@ class CUSTOM_OT_actions_add(Operator):
         if bpy.context.active_object:
 
             for i in range(-1, len(scn.custom) - 1):
-                if scn.custom[i].name_unit == self.name_input and i != len(scn.custom) - 1:
+                if scn.custom[i].name == self.name_input and i != len(scn.custom) - 1:
                     text = "A preset with this name already exists"
                     war = "WARNING"
                     self.report({war}, text)
@@ -134,7 +134,7 @@ class CUSTOM_OT_actions_add(Operator):
 
             item = scn.custom.add()
 
-            item.name_unit = self.name_input
+            item.name = self.name_input
             item.unit = self.unit_input
 
 
@@ -274,7 +274,7 @@ class CUSTOM_OT_Rename(Operator):
         except IndexError:
             pass
 
-        self.name_input = item.name_unit
+        self.name_input = item.name
 
         return context.window_manager.invoke_props_dialog(self)
         # return context.window_manager.invoke_popup(self)
@@ -293,13 +293,13 @@ class CUSTOM_OT_Rename(Operator):
         if bpy.context.active_object:
 
             for i in range(-1, len(scn.custom) - 1):
-                if scn.custom[i].name_unit == self.name_input and i != self.my_index:
+                if scn.custom[i].name == self.name_input and i != self.my_index:
                     text = "A preset with this name already exists"
                     war = "WARNING"
                     self.report({war}, text)
                     break
             
-            item.name_unit = self.name_input
+            item.name = self.name_input
         else:
             self.report({'INFO'}, "Nothing selected in the Viewport")
 
@@ -386,7 +386,7 @@ class CUSTOM_UL_items(UIList):
             #split.prop(item, "name", text="", emboss=False, translate=False, icon=custom_icon)
         row = layout.row(align = 0)
 
-        # name_unit
+        # name
         # print("\n")
         # print(1111111111111111111111111111111111111)
         # print(layout)
@@ -394,15 +394,15 @@ class CUSTOM_UL_items(UIList):
         # print(item)
         # print(icon)
         # print(active_data)
-        # # self.active_data = item.name_unit
-        # # active_propname = item.name_unit
+        # # self.active_data = item.name
+        # # active_propname = item.name
         # print(active_propname)
         # print(111111111111111111111111111111111111111)
 
         row.scale_y = 1.1
 
-        row.operator("custom.list_action_refresh", text = item.name_unit, emboss = 0, depress=0).my_index = index
-        # row.prop(item, "name_unit", emboss=False, text = "")
+        row.operator("custom.list_action_refresh", text = item.name, emboss = 0, depress=0).my_index = index
+        # row.prop(item, "name", emboss=False, text = "")
         row.prop(item, "unit", emboss=0, text = "", expand = 1)
 
         row.operator("custom.list_action_import", text = "", icon = "IMPORT", emboss = 0).my_index = index
@@ -483,7 +483,7 @@ class CUSTOM_objectCollection(PropertyGroup):
         unit='LENGTH',
         precision = 6,
     )
-    name_unit: StringProperty()
+    name: StringProperty()
     # remember_index = IntProperty()
     # obj_type: StringProperty()
     # obj_id: IntProperty()
