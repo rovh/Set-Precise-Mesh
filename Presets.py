@@ -15,6 +15,8 @@ from bpy.types import (Operator,
 # -------------------------------------------------------------------
 #   Operators
 # -------------------------------------------------------------------
+    
+
 
 class CUSTOM_OT_actions(Operator):
     """Move items up and down, add and remove"""
@@ -122,10 +124,19 @@ class CUSTOM_OT_actions_add(Operator):
             pass
             
         if bpy.context.active_object:
+
+            for i in range(-1, len(scn.custom) - 1):
+                if scn.custom[i].name_unit == self.name_input and i != len(scn.custom) - 1:
+                    text = "A preset with this name already exists"
+                    war = "WARNING"
+                    self.report({war}, text)
+                    break
+
             item = scn.custom.add()
 
             item.name_unit = self.name_input
             item.unit = self.unit_input
+
 
             # item.obj_id = len(scn.custom)
             scn.custom_index = len(scn.custom) - 1
@@ -281,7 +292,7 @@ class CUSTOM_OT_Rename(Operator):
 
         if bpy.context.active_object:
 
-            for i in range(-1, len(scn.custom)):
+            for i in range(-1, len(scn.custom) - 1):
                 if scn.custom[i].name_unit == self.name_input and i != self.my_index:
                     text = "A preset with this name already exists"
                     war = "WARNING"
@@ -465,43 +476,30 @@ class CUSTOM_objectCollection(PropertyGroup):
 
 
 # @call_once(bpy.app.handlers.depsgraph_update_pre)
-def my_handler(scene):
-    # print("Frame Change", scene.frame_current)
-    # print("\n")
-    print("Index", bpy.context.scene.custom_index)
-    # print(custom_index)
-    # print(scene)
+# def my_handler(scene):
+#     # print("Frame Change", scene.frame_current)
+#     # print("\n")
+#     print("Index", bpy.context.scene.custom_index)
+#     # print(custom_index)
+#     # print(scene)
 
-    # print( k + 1)
-    # bpy.ops.custom.list_action_refresh()
-    if bpy.context.scene.custom_index:
-        scn = bpy.context.scene
-        idx = scn.custom_index
+#     # print( k + 1)
+#     # bpy.ops.custom.list_action_refresh()
+#     if bpy.context.scene.custom_index:
+#         scn = bpy.context.scene
+#         idx = scn.custom_index
 
-        try:
-            item = scn.custom[idx]
-            if bpy.context.active_object:
-                bpy.context.window_manager.setprecisemesh.length = item.unit
-                # pass
-        except IndexError:
-            pass
-        except UnboundLocalError:
-            pass
+#         try:
+#             item = scn.custom[idx]
+#             if bpy.context.active_object:
+#                 bpy.context.window_manager.setprecisemesh.length = item.unit
+#                 # pass
+#         except IndexError:
+#             pass
+#         except UnboundLocalError:
+#             pass
 
-    # bpy.app.handlers.depsgraph_update_pre.remove(my_handler)
-    # else:
-        
-    # if self.action == 'ADD':
-    # if bpy.context.object:
-        # bpy.ops.wm.redraw_timer(type = "DRAW_WIN_SWAP", iterations = 1, time_limit = 0.0)
-
-    # else:
-    #     self.report({'INFO'}, "Nothing selected in the Viewport")
-
-        # return {'RUNNING_MODAL'}
-        # return {"FINISHED"}
-
-    # print("\n")
+#     # bpy.app.handlers.depsgraph_update_pre.remove(my_handler)
 
 if __name__ == "__main__":
     register()

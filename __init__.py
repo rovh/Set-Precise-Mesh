@@ -1517,18 +1517,10 @@ classes = (
 
 )
 
-
-
-
-
 def register():
 
-    # bpy.app.handlers.depsgraph_update_pre.append(my_handler)
-    # bpy.app.handlers.n_fields.append(my_handler)
-    # bpy.app.handlers.n_fields .append(my_handler)
     # bpy.app.handlers.depsgraph_update_post.append(my_handler)
     # bpy.app.handlers.on_scene_update_pre.append(my_handler)
-
 
     for blender_class in blender_classes:
         bpy.utils.register_class(blender_class)
@@ -1588,12 +1580,6 @@ def unregister():
 
     # if my_handler in bpy.app.handlers.depsgraph_update_pre:
     #     bpy.app.handlers.depsgraph_update_pre.remove(my_handler)
-
-
-    # if my_handler in bpy.app.handlers.n_fields:
-    #     bpy.app.handlers.n_fields.remove(my_handler)
-
-
 
     for blender_class in blender_classes:
         bpy.utils.unregister_class(blender_class)
