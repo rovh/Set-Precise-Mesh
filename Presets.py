@@ -743,6 +743,7 @@ class PRESETS_PT_presets_List_Angle(Panel):
     
     bl_idname = 'SCENE_PT_presets_angle'
     bl_label = "Angle Presets"
+    bl_options = {'DEFAULT_CLOSED'}
 
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
@@ -844,6 +845,7 @@ class PRESETS_PT_presets_List_Length(Panel):
     
     bl_idname = 'SCENE_PT_presets_length'
     bl_label = "Length / Distance Presets"
+    bl_options = {'DEFAULT_CLOSED'}
 
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
