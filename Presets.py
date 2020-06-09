@@ -21,8 +21,8 @@ from bpy.types import (Operator,
 class PRESETS_OT_Length_actions(Operator):
     """Move items up and down, add and remove"""
     bl_idname = "presets_length.list_action"
-    bl_label = "List Actions"
-    bl_description = "Move items up and down, add and remove"
+    bl_label = "Actions"
+    bl_description = "Move items up and down or remove"
     bl_options = {'REGISTER'}
 
     action: bpy.props.EnumProperty(
@@ -88,24 +88,29 @@ class PRESETS_OT_Length_actions_add(Operator):
     """Move items up and down, add and remove"""
     bl_idname = "presets_length.list_action_add"
     bl_label = "Add"
-    bl_description = "Move items up and down, add and remove"
+    bl_description = "Add item"
     bl_options = {'REGISTER'}
     # bl_options = {'BLOCKING'}
     # bl_options = {'INTERNAL'}
 
-    name_input: StringProperty()
+    name_input: StringProperty(
+        name = "Name")
     unit_input: FloatProperty(
         name="Length",
         description="Length of the edge",
         default=1.0,
         step = 100.0,
         unit='LENGTH',
-        precision = 6,
-    )
+        precision = 6,)
 
     def draw(self, context):
         layout = self.layout
+
+        # row = layout.row()
+        # row.alignment = "RIGHT"
+        # row.scale_x = 1.7
         layout.prop(self, "unit_input", text = "")
+
         layout.prop(self, "name_input", text = "Name")
 
 
@@ -148,8 +153,8 @@ class PRESETS_OT_Length_actions_add(Operator):
 class PRESETS_OT_Length_actions_refresh(Operator):
     """Move items up and down, add and remove"""
     bl_idname = "presets_length.list_action_refresh"
-    bl_label = "Add"
-    bl_description = "Move items up and down, add and remove"
+    bl_label = "Export"
+    bl_description = "Export item"
     bl_options = {'REGISTER'}
 
     my_index: IntProperty()
@@ -201,8 +206,8 @@ class PRESETS_OT_Length_actions_refresh(Operator):
 class PRESETS_OT_Length_actions_import(Operator):
     """Move items up and down, add and remove"""
     bl_idname = "presets_length.list_action_import"
-    bl_label = "Add"
-    bl_description = "Move items up and down, add and remove"
+    bl_label = "Import"
+    bl_description = "Import item"
     bl_options = {'REGISTER'}
 
     my_index: IntProperty()
@@ -255,7 +260,7 @@ class PRESETS_OT_Length_Rename(Operator):
     """Clear all items of the list"""
     bl_idname = "presets_length.rename"
     bl_label = "Rename"
-    bl_description = "Rename"
+    bl_description = "Rename item"
     bl_options = {'INTERNAL'}
 
     name_input: StringProperty()
@@ -371,8 +376,8 @@ class PRESETS_OT_Length_clearList(Operator):
 class PRESETS_OT_Angle_actions(Operator):
     """Move items up and down, add and remove"""
     bl_idname = "presets_angle.list_action"
-    bl_label = "List Actions"
-    bl_description = "Move items up and down, add and remove"
+    bl_label = "Actions"
+    bl_description = "Move items up and down or remove"
     bl_options = {'REGISTER'}
 
     action: bpy.props.EnumProperty(
@@ -438,12 +443,13 @@ class PRESETS_OT_Angle_actions_add(Operator):
     """Move items up and down, add and remove"""
     bl_idname = "presets_angle.list_action_add"
     bl_label = "Add"
-    bl_description = "Move items up and down, add and remove"
+    bl_description = "Add item"
     bl_options = {'REGISTER'}
     # bl_options = {'BLOCKING'}
     # bl_options = {'INTERNAL'}
 
-    name_input: StringProperty()
+    name_input: StringProperty(
+        name = "Name")
     unit_input: FloatProperty(
         name="Angle",
         description="Angle",
@@ -451,12 +457,16 @@ class PRESETS_OT_Angle_actions_add(Operator):
         default=0.0,
         step = 100.0,
         unit="ROTATION",
-        precision = 6,
-    )
+        precision = 6,)
 
     def draw(self, context):
         layout = self.layout
+
+        # row = layout.row()
+        # row.alignment = "RIGHT"
+        # row.scale_x = 1.7
         layout.prop(self, "unit_input", text = "")
+
         layout.prop(self, "name_input", text = "Name")
 
 
@@ -499,8 +509,8 @@ class PRESETS_OT_Angle_actions_add(Operator):
 class PRESETS_OT_Angle_actions_refresh(Operator):
     """Move items up and down, add and remove"""
     bl_idname = "presets_angle.list_action_refresh"
-    bl_label = "Add"
-    bl_description = "Move items up and down, add and remove"
+    bl_label = "Export"
+    bl_description = "Export item"
     bl_options = {'REGISTER'}
 
     my_index: IntProperty()
@@ -552,8 +562,8 @@ class PRESETS_OT_Angle_actions_refresh(Operator):
 class PRESETS_OT_Angle_actions_import(Operator):
     """Move items up and down, add and remove"""
     bl_idname = "presets_angle.list_action_import"
-    bl_label = "Add"
-    bl_description = "Move items up and down, add and remove"
+    bl_label = "Import"
+    bl_description = "Import item"
     bl_options = {'REGISTER'}
 
     my_index: IntProperty()
@@ -606,7 +616,7 @@ class PRESETS_OT_Angle_Rename(Operator):
     """Clear all items of the list"""
     bl_idname = "presets_angle.rename"
     bl_label = "Rename"
-    bl_description = "Rename"
+    bl_description = "Rename item"
     bl_options = {'INTERNAL'}
 
     name_input: StringProperty()
