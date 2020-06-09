@@ -1501,13 +1501,22 @@ blender_classes = [
 
 """Classes of Presets"""
 classes = (
-    PRESETS_OT_actions,
-    PRESETS_OT_clearList,
-    PRESETS_OT_actions_add,
-    PRESETS_OT_actions_refresh,
-    PRESETS_OT_Rename,
-    PRESETS_OT_actions_import,
+    PRESETS_OT_Length_actions,
+    PRESETS_OT_Length_clearList,
+    PRESETS_OT_Length_actions_add,
+    PRESETS_OT_Length_actions_refresh,
+    PRESETS_OT_Length_Rename,
+    PRESETS_OT_Length_actions_import,
     # PRESETS_OT_removeDuplicates,
+
+
+    PRESETS_OT_Angle_actions,
+    PRESETS_OT_Angle_actions_add,
+    PRESETS_OT_Angle_actions_refresh,
+    PRESETS_OT_Angle_actions_import,
+    PRESETS_OT_Angle_Rename,
+    PRESETS_OT_Angle_clearList,
+
 
     PRESETS_UL_items_Angle,
     PRESETS_PT_presets_List_Angle,
