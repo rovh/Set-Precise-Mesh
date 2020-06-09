@@ -1575,9 +1575,11 @@ def register():
         register_class(cls)
 
     # Custom scene properties
-    bpy.types.Scene.custom = CollectionProperty(type=PRESETS_presets_length_Collection)
-    bpy.types.Scene.custom_index = IntProperty()
+    bpy.types.Scene.presets_length = CollectionProperty(type=PRESETS_presets_length_Collection)
+    bpy.types.Scene.presets_length_index = IntProperty()
 
+    bpy.types.Scene.presets_angle = CollectionProperty(type=PRESETS_presets_angle_Collection)
+    bpy.types.Scene.presets_angle_index = IntProperty()
 
 def unregister():
 
@@ -1604,9 +1606,11 @@ def unregister():
     for cls in reversed(classes):
         unregister_class(cls)
 
-    del bpy.types.Scene.custom
-    del bpy.types.Scene.custom_index
+    del bpy.types.Scene.presets_length
+    del bpy.types.Scene.presets_length_index
 
+    del bpy.types.Scene.presets_angle
+    del bpy.types.Scene.presets_angle_index
 
 if __name__ == "__main__":
     register()
