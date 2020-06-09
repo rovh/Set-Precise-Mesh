@@ -1526,7 +1526,6 @@ classes = (
 
     PRESETS_presets_angle_Collection,
     PRESETS_presets_length_Collection,
-
 )
 
 def register():
@@ -1578,12 +1577,11 @@ def register():
         # default=,
     )
 
-
+    """Register Presets"""
     from  bpy.utils import register_class
     for cls in classes:
         register_class(cls)
 
-    # Custom scene properties
     bpy.types.Scene.presets_length = CollectionProperty(type=PRESETS_presets_length_Collection)
     bpy.types.Scene.presets_length_index = IntProperty()
 
@@ -1611,6 +1609,8 @@ def unregister():
     bpy.types.VIEW3D_HT_tool_header.remove(header_draw)
     bpy.types.VIEW3D_MT_transform.remove(draw_VIEW3D_MT_transform)
 
+
+    """Unregister Presets"""
     from bpy.utils import unregister_class
     for cls in reversed(classes):
         unregister_class(cls)
