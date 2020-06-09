@@ -15,8 +15,8 @@ bl_info = {
     "name" : "Set Presice Mesh /CAD",
     "author" : "Rovh",
     "description" : "This addon allows you to set exact values for the mesh",
-    "blender" : (2, 82, 0),
-    "version" : (1,1,2),
+    "blender" : (2, 83, 0),
+    "version" : (1,1,3),
     "location" : "View3D > Sidebar in Edit Mode > Item Tab, View Tab and Edit Tab",
     "warning" : "",
     "wiki_url": "https://github.com/rovh/Set-Precise-Mesh",
@@ -31,7 +31,7 @@ import bpy
 from .SetAngle import *
 from .SetLength import *
 from .Operators import *
-# from .UI import *
+from .Presets import *
 
 
 from bpy import types
@@ -41,6 +41,7 @@ from bpy.props import (
         PointerProperty,
         EnumProperty,
         StringProperty,
+        IntProperty,
         )
 
 
@@ -202,7 +203,7 @@ class Angle_Simulation_SetPreciseMesh (bpy.types.Operator):
         
         bpy.context.window.cursor_warp(x + move_x, y + move_y)
 
-        # return context.window_manager.invoke_props_dialog(self)
+        # inv = context.window_manager.invoke_props_dialog(self)
         # return context.window_manager.invoke_popup(self, width=600, height=500)
         # return context.window_manager.invoke_popup(self)
         inv = context.window_manager.invoke_popup(self, width = 190)
@@ -1498,7 +1499,40 @@ blender_classes = [
 
 ]
 
+"""Classes of Presets"""
+classes = (
+    PRESETS_OT_Length_actions,
+    PRESETS_OT_Length_clearList,
+    PRESETS_OT_Length_actions_add,
+    PRESETS_OT_Length_actions_refresh,
+    PRESETS_OT_Length_Rename,
+    PRESETS_OT_Length_actions_import,
+    # PRESETS_OT_removeDuplicates,
+
+
+    PRESETS_OT_Angle_actions,
+    PRESETS_OT_Angle_actions_add,
+    PRESETS_OT_Angle_actions_refresh,
+    PRESETS_OT_Angle_actions_import,
+    PRESETS_OT_Angle_Rename,
+    PRESETS_OT_Angle_clearList,
+
+
+    PRESETS_UL_items_Angle,
+    PRESETS_PT_presets_List_Angle,
+
+    PRESETS_UL_items_Length,
+    PRESETS_PT_presets_List_Length,
+
+    PRESETS_presets_angle_Collection,
+    PRESETS_presets_length_Collection,
+)
+
 def register():
+
+    # bpy.app.handlers.depsgraph_update_post.append(my_handler)
+    # bpy.app.handlers.on_scene_update_pre.append(my_handler)
+
     for blender_class in blender_classes:
         bpy.utils.register_class(blender_class)
     # pynput.register()
@@ -1543,8 +1577,22 @@ def register():
         # default=,
     )
 
+    """Register Presets"""
+    from  bpy.utils import register_class
+    for cls in classes:
+        register_class(cls)
+
+    bpy.types.Scene.presets_length = CollectionProperty(type=PRESETS_presets_length_Collection)
+    bpy.types.Scene.presets_length_index = IntProperty()
+
+    bpy.types.Scene.presets_angle = CollectionProperty(type=PRESETS_presets_angle_Collection)
+    bpy.types.Scene.presets_angle_index = IntProperty()
 
 def unregister():
+
+    # if my_handler in bpy.app.handlers.depsgraph_update_pre:
+    #     bpy.app.handlers.depsgraph_update_pre.remove(my_handler)
+
     for blender_class in blender_classes:
         bpy.utils.unregister_class(blender_class)
 
@@ -1561,6 +1609,17 @@ def unregister():
     bpy.types.VIEW3D_HT_tool_header.remove(header_draw)
     bpy.types.VIEW3D_MT_transform.remove(draw_VIEW3D_MT_transform)
 
+
+    """Unregister Presets"""
+    from bpy.utils import unregister_class
+    for cls in reversed(classes):
+        unregister_class(cls)
+
+    del bpy.types.Scene.presets_length
+    del bpy.types.Scene.presets_length_index
+
+    del bpy.types.Scene.presets_angle
+    del bpy.types.Scene.presets_angle_index
 
 if __name__ == "__main__":
     register()
