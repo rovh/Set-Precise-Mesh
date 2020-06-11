@@ -215,6 +215,8 @@ class SetLength(bpy.types.Operator):
 
         bool = bpy.context.window_manager.setprecisemesh.lengthbool
         bool2 = bpy.context.window_manager.setprecisemesh.lengthinput
+
+        length_copy = length
         
         obj = bpy.context.edit_object
         me = obj.data
@@ -223,13 +225,53 @@ class SetLength(bpy.types.Operator):
         # Create list
         vec = []
         ind = []
+
+        # edge = []
+        # edge_ind = []
         
         #Append to lists
+        # for g in bm.select_history:
+        #     # if len(vec)<3:
+        #     vec.append(bm.verts[g.index].co)
+        #     ind.append(g.index)
+
+
         for g in bm.select_history:
-            # if len(vec)<3:
-            vec.append(bm.verts[g.index].co)
-            ind.append(g.index)
-                
+            print("\n")
+
+            if isinstance(g, bmesh.types.BMVert):
+                print("BMVert")
+                vec.append(bm.verts[g.index].co)
+                ind.append(g.index)
+
+            if isinstance(g, bmesh.types.BMEdge):
+                print("BMEdge")
+                ind.append(g.index)
+                vec.append((g.verts[0].co + g.verts[1].co) / 2)
+
+            if isinstance(g, bmesh.types.BMFace):
+                print("BMFace")
+                ind.append(g.index)
+                vec.append(g.calc_center_median())
+
+                # for i in range(-1, 1):
+                    # vec.append(g.verts[i].co)
+
+        print(ind)
+            # if isinstance(g, bmesh.types.BMFace):
+            #     print(g)
+            #     for i in range(-1, 1):
+            #         elem_vert.append(g)
+            #         elem.append(g.verts[i].co)
+
+            # if g == bmesh.types.BM:
+                # for i in range(-1, 1):
+                #     elem_vert.append(g)
+                #     elem.append(g.verts[i].co)
+
+        
+            # ind.append(g.index)
+
         
         # Get values
         prog = context.window_manager.setprecisemesh.projection_type_2
@@ -459,9 +501,14 @@ class SetLength(bpy.types.Operator):
         else:
 
             # Invert direction for edge
-            if invert_direction == 1:
+            if invert_direction == True:
 
-                vec[1], vec[0] = vec[0], vec[1]
+                if len(vec) == 2:
+                    vec[0], vec[1] = vec[1], vec[0]
+                    ind[0], ind[1] = ind[1], ind[0]
+                else:
+                    vec[0], vec[1] = vec[len(vec)-1], vec[len(vec)-2]
+                    ind[0], ind[1] = ind[len(vec)-1], ind[len(vec)-2]
 
                 # Old method
                 # vec.reverse()
@@ -473,8 +520,6 @@ class SetLength(bpy.types.Operator):
             # lv=v2-v1
 
         lv=v2-v1
-
-
 
         # Get global normal 
         norv1 = bpy.context.active_object.matrix_world  @ v1
@@ -562,12 +607,36 @@ class SetLength(bpy.types.Operator):
         else:
 
             R = Matrix.Scale(1/length, 4, (lv))
-  
-            bmesh.ops.rotate(bm, 
-                    matrix=R,        
+
+            bm.verts[ind[0]].select = 0
+
+            l = (length_copy - lengthtrue)
+
+            print(lv.normalized() * l, 11111111111111, length_copy)
+
+            bmesh.ops.translate(
+                    bm,
+                    # matrix=R,
+                    vec = mathutils.Vector( lv.normalized() * l ),
                     verts=[v for v in bm.verts if v.select],
-                    space=S)
+                    space=S
+                    )
+
+            bm.verts[ind[0]].select = 1
                     
+            # bmesh.ops.rotate(
+            #         bm,
+            #         matrix=R,
+            #         verts=[v for v in bm.verts if v.select],
+            #         space=S
+            #         )
+
+            # bmesh.ops.scale(
+            #         bm,
+            #         verts=[v for v in bm.verts if v.select],
+            #         space=S
+            #         )
+
             bmesh.update_edit_mesh(me, True)
                   
         bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
