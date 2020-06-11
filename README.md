@@ -3,7 +3,7 @@
 Right now “Set Precise Mesh” allows users to set exact values of the angle between three vertexes and also sets the exact length of the edge and has extra features for it.
 
 ## Contents
-
+* <a href="#example_of_use">Example of use</a>
 * <a href="#set_angle">Set Angle</a>
 * <a href="#set_length">Set Length</a>
 * <a href="#angle_simulation">Angle Simulation</a>
@@ -13,7 +13,14 @@ Right now “Set Precise Mesh” allows users to set exact values of the angle b
 * <a href="#issues">Issues</a>
 
 ---
+* # <a name="example_of_use">Exanple of use</a>
+
+<a href="https://drive.google.com/file/d/1qAwyBlXf_b-5Hwuwp4QdpEgT5GQP6NKz/preview" target="_self">
+<img src="https://i.imgur.com/JSwlr2A.png" width=50% height=50% alt"Angle" style="border-radius: 30px">
+</a>
+---
 * # <a name="set_angle">Set Angle</a>
+
 <a href="https://drive.google.com/file/d/138wmaauvSyV0Aqim1AJA02god0OnEpcg/preview" target="_self">
 <img src="https://i.imgur.com/XBiNgOg.png" width=50% height=50% alt"Angle" style="border-radius: 30px">
 </a>
