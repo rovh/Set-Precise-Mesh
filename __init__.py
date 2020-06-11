@@ -188,9 +188,10 @@ class Angle_Simulation_SetPreciseMesh (bpy.types.Operator):
    
     bl_idname = "wm.header_angle_simulation_setprecisemesh"
     bl_label = "Header Menu"
-    bl_description = "To make it convenient to use this menu You can assign shortcut \n \
-         ( For example Ctrl + Alt + Middle Mouse )\n \
-        How to do it: > right-click on this button > Assign Shortcut"
+    bl_description = '\nYou need to select two vertexes to use "Angle Simulation"\n\n\
+    To make it convenient to use this menu You can assign shortcut \n \
+    ( For example Ctrl + Alt + Middle Mouse )\n \
+    How to do it: > right-click on this button > Assign Shortcut'
   
     
     def invoke(self, context, event): 
@@ -307,9 +308,10 @@ class Length_Simulation_SetPreciseMesh (bpy.types.Operator):
    
     bl_idname = "wm.header_length_simulation_setprecisemesh"
     bl_label = "Header Menu"
-    bl_description = "To make it convenient to use this menu You can assign shortcut \n \
-         ( For example Ctrl + Alt + Middle Mouse )\n \
-        How to do it: > right-click on this button > Assign Shortcut"
+    bl_description = '\nYou need to select one vertex to use "Length / Distance Simulation"\n\n\
+    To make it convenient to use this menu You can assign shortcut \n \
+    ( For example Ctrl + Alt + Middle Mouse )\n \
+    How to do it: > right-click on this button > Assign Shortcut'
   
     
     def invoke(self, context, event): 

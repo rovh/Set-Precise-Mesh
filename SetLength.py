@@ -460,10 +460,10 @@ class SetLength(bpy.types.Operator):
 
             # Invert direction for edge
             if invert_direction == 1:
-                vec[1] = vec[0]
-                vec[0] = vec
 
+                vec[1], vec[0] = vec[0], vec[1]
 
+                # Old method
                 # vec.reverse()
                 # ind.reverse()
 
