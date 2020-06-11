@@ -15,7 +15,7 @@ Right now “Set Precise Mesh” allows users to set exact values of the angle b
 ---
 * # <a name="example_of_use">Example of use</a>
 
-<a href="https://drive.google.com/file/d/1qAwyBlXf_b-5Hwuwp4QdpEgT5GQP6NKz/preview" target="_top">
+<a href="https://drive.google.com/file/d/1qAwyBlXf_b-5Hwuwp4QdpEgT5GQP6NKz/preview" target="_parent ">
 <img src="https://i.imgur.com/JSwlr2A.png" width=50% height=50% alt"Angle" style="border-radius: 30px">
 </a>
 
