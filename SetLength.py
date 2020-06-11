@@ -412,8 +412,6 @@ class SetLength(bpy.types.Operator):
                     
                     return {"FINISHED"}
 
-                    
-
             elif prog == "custom_object_matrix":
 
                 bpy.context.object.update_from_editmode()
@@ -462,8 +460,12 @@ class SetLength(bpy.types.Operator):
 
             # Invert direction for edge
             if invert_direction == 1:
-                vec.reverse()
-                ind.reverse()
+                vec[1] = vec[0]
+                vec[0] = vec
+
+
+                # vec.reverse()
+                # ind.reverse()
 
             # Set values
             v1=vec[0]
