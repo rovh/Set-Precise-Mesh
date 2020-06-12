@@ -282,7 +282,7 @@ class SetLength(bpy.types.Operator):
             distance_for_faces = mathutils.geometry.distance_point_to_plane(vec[0], elem_list[1].calc_center_median(), elem_list[1].normal )
             # plane_distance = mathutils.geometry.closest_point_on_tri(vec[0], vec[1], vec[2], vec[3])
 
-            vec[1] = plane_distance
+            # vec[1] = plane_distance
 
         print(vec)
         print(ind)
@@ -554,7 +554,7 @@ class SetLength(bpy.types.Operator):
         norv2 = bpy.context.active_object.matrix_world  @ v2
         normalgl = norv2 - norv1
 
-
+       
         # Length of the edge
         lengthtrue =lv.length
         
