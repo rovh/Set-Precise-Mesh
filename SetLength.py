@@ -614,15 +614,15 @@ class SetLength(bpy.types.Operator):
 
             print(lv.normalized() * l, 11111111111111, length_copy)
 
-            bmesh.ops.translate(
-                    bm,
-                    # matrix=R,
-                    vec = mathutils.Vector( lv.normalized() * l ),
-                    verts=[v for v in bm.verts if v.select],
-                    space=S
-                    )
+            # bmesh.ops.translate(
+            #         bm,
+            #         # matrix=R,
+            #         vec = mathutils.Vector( lv.normalized() * l ),
+            #         verts=[v for v in bm.verts if v.select],
+            #         space=S
+            #         )
 
-            bm.verts[ind[0]].select = 1
+            
                     
             # bmesh.ops.rotate(
             #         bm,
@@ -631,11 +631,14 @@ class SetLength(bpy.types.Operator):
             #         space=S
             #         )
 
-            # bmesh.ops.scale(
-            #         bm,
-            #         verts=[v for v in bm.verts if v.select],
-            #         space=S
-            #         )
+            bmesh.ops.scale(
+                    bm,
+                    vec = mathutils.Vector( (v2[0] * 1/length, v2[1] * 1/length, v2[2] * 1/length )),
+                    verts=[v for v in bm.verts if v.select],
+                    space=S
+                    )
+
+            bm.verts[ind[0]].select = 1
 
             bmesh.update_edit_mesh(me, True)
                   
