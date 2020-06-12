@@ -239,47 +239,45 @@ class SetLength(bpy.types.Operator):
         n = -1
 
         for g in bm.select_history:
-            print("\n")
+            # print("\n")
+            elem_list.append(g)
             
 
             n = n + 1
 
-            if isinstance(g, bmesh.types.BMVert):
-                print("BMVert")
-                elem_list.append(g)
-                if n == 0:
-                    vec.append(bm.verts[g.index].co)
-                    ind.append(g.index)
-                else:
-                    vec.append(bm.verts[g.index].co)
-                    ind.append(g.index)
+        if isinstance(elem_list[0], bmesh.types.BMVert):
+            print("BMVert")
+            # if n == 0:
+            vec.append(bm.verts[g.index].co)
+            ind.append(g.index)
+            # else:
+            #     vec.append(bm.verts[g.index].co)
+            #     ind.append(g.index)
 
-            if isinstance(g, bmesh.types.BMEdge):
-                print("BMEdge")
+        if isinstance(elem_list[0], bmesh.types.BMEdge):
+            print("BMEdge")
 
-                elem_list.append(g)
+            ind.append(g.index)
 
-                ind.append(g.index)
+            # if n == 0 :
+            vec.append((g.verts[0].co + g.verts[1].co) / 2)
+            # else:
+            #     for i in range(-1, 1):
+            #         vec.append(g.verts[i].co)
 
-                if n == 0 :
-                    vec.append((g.verts[0].co + g.verts[1].co) / 2)
-                else:
-                    for i in range(-1, 1):
-                        vec.append(g.verts[i].co)
+        if isinstance(elem_list[0], bmesh.types.BMFace):
+            print("BMFace")
 
-            if isinstance(g, bmesh.types.BMFace):
-                print("BMFace")
+            ind.append(g.index)
 
-                ind.append(g.index)
+            vec.append(g.calc_center_median())
 
-                # vec.append(g.calc_center_median())
-
-                for i in range(-1, len(g.verts)):
-                    vec.append(g.verts[i].co)
+            # for i in range(-1, len(g.verts)):
+            #     vec.append(g.verts[i].co)
 
         # for i in range(-1, len(vec)):
         if isinstance(elem_list[1], bmesh.types.BMEdge):
-            print("BMEdge")
+            print("BMEdge")5`
             vertical = mathutils.geometry.intersect_point_line(vec[0], vec[1], vec[2])
             vec[1] = vertical[0]
             print(vertical, 11111111111111111111111111)
