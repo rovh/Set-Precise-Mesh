@@ -225,6 +225,7 @@ class SetLength(bpy.types.Operator):
         # Create list
         vec = []
         ind = []
+        elem_list = []
 
         # edge = []
         # edge_ind = []
@@ -235,28 +236,55 @@ class SetLength(bpy.types.Operator):
         #     vec.append(bm.verts[g.index].co)
         #     ind.append(g.index)
 
+        n = -1
 
         for g in bm.select_history:
             print("\n")
+            
+
+            n = n + 1
 
             if isinstance(g, bmesh.types.BMVert):
                 print("BMVert")
-                vec.append(bm.verts[g.index].co)
-                ind.append(g.index)
+                elem_list.append(g)
+                if n == 0:
+                    vec.append(bm.verts[g.index].co)
+                    ind.append(g.index)
+                else:
+                    vec.append(bm.verts[g.index].co)
+                    ind.append(g.index)
 
             if isinstance(g, bmesh.types.BMEdge):
                 print("BMEdge")
+
+                elem_list.append(g)
+
                 ind.append(g.index)
-                vec.append((g.verts[0].co + g.verts[1].co) / 2)
+
+                if n == 0 :
+                    vec.append((g.verts[0].co + g.verts[1].co) / 2)
+                else:
+                    for i in range(-1, 1):
+                        vec.append(g.verts[i].co)
 
             if isinstance(g, bmesh.types.BMFace):
                 print("BMFace")
+
                 ind.append(g.index)
-                vec.append(g.calc_center_median())
 
-                # for i in range(-1, 1):
-                    # vec.append(g.verts[i].co)
+                # vec.append(g.calc_center_median())
 
+                for i in range(-1, len(g.verts)):
+                    vec.append(g.verts[i].co)
+
+        # for i in range(-1, len(vec)):
+        if isinstance(elem_list[1], bmesh.types.BMEdge):
+            print("BMEdge")
+            vertical = mathutils.geometry.intersect_point_line(vec[0], vec[1], vec[2])
+            vec[1] = vertical[0]
+            print(vertical, 11111111111111111111111111)
+
+        print(vec)
         print(ind)
             # if isinstance(g, bmesh.types.BMFace):
             #     print(g)
@@ -608,19 +636,20 @@ class SetLength(bpy.types.Operator):
 
             R = Matrix.Scale(1/length, 4, (lv))
 
-            bm.verts[ind[0]].select = 0
+            # bm.verts[ind[0]].select = 0
+            elem_list[0].select = 0
 
             l = (length_copy - lengthtrue)
 
-            print(lv.normalized() * l, 11111111111111, length_copy)
+            print(lv.normalized() * l, 222222222222222222, length_copy)
 
-            # bmesh.ops.translate(
-            #         bm,
-            #         # matrix=R,
-            #         vec = mathutils.Vector( lv.normalized() * l ),
-            #         verts=[v for v in bm.verts if v.select],
-            #         space=S
-            #         )
+            bmesh.ops.translate(
+                    bm,
+                    # matrix=R,
+                    vec = mathutils.Vector( lv.normalized() * l ),
+                    verts=[v for v in bm.verts if v.select],
+                    space=S
+                    )
 
             
                     
@@ -631,14 +660,16 @@ class SetLength(bpy.types.Operator):
             #         space=S
             #         )
 
-            bmesh.ops.scale(
-                    bm,
-                    vec = mathutils.Vector( (v2[0] * 1/length, v2[1] * 1/length, v2[2] * 1/length )),
-                    verts=[v for v in bm.verts if v.select],
-                    space=S
-                    )
+            # bmesh.ops.scale(
+            #         bm,
+            #         vec = mathutils.Vector( ( abs(1/length * lv[0]), abs(1/length * lv[1]), abs(1/length * lv[2]) )),
+            #         verts=[v for v in bm.verts if v.select],
+            #         space=S
+            #         )
+            # print(vec)
 
-            bm.verts[ind[0]].select = 1
+            # bm.verts[ind[0]].select = 1
+            elem_list[0].select = 1
 
             bmesh.update_edit_mesh(me, True)
                   
