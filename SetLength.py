@@ -236,51 +236,53 @@ class SetLength(bpy.types.Operator):
         #     vec.append(bm.verts[g.index].co)
         #     ind.append(g.index)
 
-        n = -1
-
         for g in bm.select_history:
-            # print("\n")
             elem_list.append(g)
-            
 
-            n = n + 1
 
         if isinstance(elem_list[0], bmesh.types.BMVert):
             print("BMVert")
-            # if n == 0:
-            vec.append(bm.verts[g.index].co)
-            ind.append(g.index)
-            # else:
-            #     vec.append(bm.verts[g.index].co)
-            #     ind.append(g.index)
-
-        if isinstance(elem_list[0], bmesh.types.BMEdge):
+            ind.append(elem_list[0].index)
+            vec.append(bm.verts[elem_list[0].index].co)
+            
+        elif isinstance(elem_list[0], bmesh.types.BMEdge):
             print("BMEdge")
+            ind.append(elem_list[0].index)
+            vec.append((elem_list[0].verts[0].co + elem_list[0].verts[1].co) / 2)
 
-            ind.append(g.index)
-
-            # if n == 0 :
-            vec.append((g.verts[0].co + g.verts[1].co) / 2)
-            # else:
-            #     for i in range(-1, 1):
-            #         vec.append(g.verts[i].co)
-
-        if isinstance(elem_list[0], bmesh.types.BMFace):
+        elif isinstance(elem_list[0], bmesh.types.BMFace):
             print("BMFace")
+            ind.append(elem_list[0].index)
+            vec.append(elem_list[0].calc_center_median())
 
-            ind.append(g.index)
 
-            vec.append(g.calc_center_median())
+        if isinstance(elem_list[1], bmesh.types.BMVert):
+            print("BMVert")
+            ind.append(elem_list[1].index)
+            vec.append(bm.verts[elem_list[1].index].co)
 
-            # for i in range(-1, len(g.verts)):
-            #     vec.append(g.verts[i].co)
+        elif isinstance(elem_list[1], bmesh.types.BMEdge):
+            print("BMEdge")
+            ind.append(elem_list[1].index)
+            for i in range(-1, 1):
+                vec.append(elem_list[1].verts[i].co)
 
-        # for i in range(-1, len(vec)):
-        if isinstance(elem_list[1], bmesh.types.BMEdge):
-            print("BMEdge")5`
             vertical = mathutils.geometry.intersect_point_line(vec[0], vec[1], vec[2])
             vec[1] = vertical[0]
             print(vertical, 11111111111111111111111111)
+
+        elif isinstance(elem_list[1], bmesh.types.BMFace):
+            print("BMFace")
+
+            ind.append(elem_list[1].index)
+
+            for i in range(-1, len(elem_list[1].verts) - 1):
+                vec.append(elem_list[1].verts[i].co)
+
+            distance_for_faces = mathutils.geometry.distance_point_to_plane(vec[0], elem_list[1].calc_center_median(), elem_list[1].normal )
+            # plane_distance = mathutils.geometry.closest_point_on_tri(vec[0], vec[1], vec[2], vec[3])
+
+            vec[1] = plane_distance
 
         print(vec)
         print(ind)
