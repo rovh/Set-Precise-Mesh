@@ -595,11 +595,14 @@ class SetLength(bpy.types.Operator):
         # Scale factor
         try:
             if self.plus_length == 1:
-                length = lengthtrue / (length + lengthtrue)
+                # length = lengthtrue / (length + lengthtrue)
+                l = length 
             elif self.plus_length == -1:
-                length = lengthtrue / (-length + lengthtrue) 
+                # length = lengthtrue / (-length + lengthtrue) 
+                l =  - length 
             else:
-                length = lengthtrue / length
+                # length = lengthtrue / length
+                l = length - lengthtrue
         except ZeroDivisionError:
             bpy.ops.object.dialog_warning_operator_4('INVOKE_DEFAULT')
             return {"FINISHED"}
@@ -612,7 +615,6 @@ class SetLength(bpy.types.Operator):
         context = bpy.context
         scene = context.scene
         ob = context.edit_object
-        
 
 
         #Set Cursor location and mode
@@ -641,13 +643,10 @@ class SetLength(bpy.types.Operator):
         mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
 
         mat_out =  mat_loc @  mat_rot @  mat_sca
-        
-        
+
         S = mat_out
         S.translation -= pp
-        
-        
-        
+
         if bool2 == 1:         
                                 
             m = bpy.context.scene.tool_settings.transform_pivot_point
@@ -660,20 +659,21 @@ class SetLength(bpy.types.Operator):
             
             bpy.context.scene.tool_settings.transform_pivot_point = m
 
-            bmesh.update_edit_mesh(me, True)
-
-                   
+            bmesh.update_edit_mesh(me, True)        
         else:
 
             R = Matrix.Scale(1/length, 4, (lv))
 
             if bool== 1:
+                if isinstance(elem_list[0], bmesh.types.BMVert):
+                    print(elem_list[0].link_edges)
+                    print(elem_list[0].link_faces)
+                    for i in elem_list[0].link_edges:
+                        print(i)
                 pass
             else:
                 elem_list[0].select = 0
-
-            l = (length_copy - lengthtrue)
-
+        
             bmesh.ops.translate(
                     bm,
                     # matrix=R,
@@ -690,7 +690,6 @@ class SetLength(bpy.types.Operator):
             
             # print(lv)
 
-
             # bmesh.ops.scale(
             #         bm,
             #         # vec = mathutils.Vector( ( abs(1/length * lv[0]), abs(1/length * lv[1]), abs(1/length * lv[2]) )),
@@ -699,7 +698,6 @@ class SetLength(bpy.types.Operator):
             #         space=S
             #         )
 
-                    
             # bmesh.ops.rotate(
             #         bm,
             #         matrix=R,
