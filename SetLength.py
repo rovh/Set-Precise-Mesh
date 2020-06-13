@@ -563,7 +563,7 @@ class SetLength(bpy.types.Operator):
 
 
         #Set Cursor location and mode
-        if bool== 1:
+        if bool== True:
             if prog != "cursor_matrix" and prog != "cursor_location":
                 bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world  @ mv
             pp = mv
@@ -614,22 +614,36 @@ class SetLength(bpy.types.Operator):
 
             R = Matrix.Scale(1/length, 4, (lv))
 
-            # bm.verts[ind[0]].select = 0
-            elem_list[0].select = 0
+            if bool== 1:
+                pass
+            else:
+                elem_list[0].select = 0
 
             l = (length_copy - lengthtrue)
 
-            print(lv.normalized() * l, 222222222222222222, length_copy)
+            # bmesh.ops.translate(
+            #         bm,
+            #         # matrix=R,
+            #         vec = mathutils.Vector( lv.normalized() * l ),
+            #         verts=[v for v in bm.verts if v.select],
+            #         space=S
+            #         )
 
-            bmesh.ops.translate(
+            for i in range(-1, 2):
+                if lv.normalized()[i] == 0:
+                    lv[i] = 1
+                else:
+                    lv[i] = 1/length
+
+
+            bmesh.ops.scale(
                     bm,
-                    # matrix=R,
-                    vec = mathutils.Vector( lv.normalized() * l ),
+                    # vec = mathutils.Vector( ( abs(1/length * lv[0]), abs(1/length * lv[1]), abs(1/length * lv[2]) )),
+                    vec = mathutils.Vector( ( lv )),
                     verts=[v for v in bm.verts if v.select],
                     space=S
                     )
 
-            
                     
             # bmesh.ops.rotate(
             #         bm,
@@ -638,15 +652,6 @@ class SetLength(bpy.types.Operator):
             #         space=S
             #         )
 
-            # bmesh.ops.scale(
-            #         bm,
-            #         vec = mathutils.Vector( ( abs(1/length * lv[0]), abs(1/length * lv[1]), abs(1/length * lv[2]) )),
-            #         verts=[v for v in bm.verts if v.select],
-            #         space=S
-            #         )
-            # print(vec)
-
-            # bm.verts[ind[0]].select = 1
             elem_list[0].select = 1
 
             bmesh.update_edit_mesh(me, True)
