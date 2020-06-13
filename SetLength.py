@@ -279,10 +279,9 @@ class SetLength(bpy.types.Operator):
             for i in range(-1, len(elem_list[1].verts) - 1):
                 vec.append(elem_list[1].verts[i].co)
 
-            distance_for_faces = mathutils.geometry.distance_point_to_plane(vec[0], elem_list[1].calc_center_median(), elem_list[1].normal )
-            # plane_distance = mathutils.geometry.closest_point_on_tri(vec[0], vec[1], vec[2], vec[3])
+            distance_for_faces = mathutils.geometry.intersect_line_plane(vec[0], vec[0] + elem_list[1].normal, elem_list[1].calc_center_median(), elem_list[1].normal )
 
-            # vec[1] = plane_distance
+            vec[1] = distance_for_faces
 
         print(vec)
         print(ind)
