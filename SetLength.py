@@ -226,9 +226,6 @@ class SetLength(bpy.types.Operator):
         vec = []
         ind = []
         elem_list = []
-
-        # edge = []
-        # edge_ind = []
         
         #Append to lists
         # for g in bm.select_history:
@@ -256,6 +253,8 @@ class SetLength(bpy.types.Operator):
             vec.append(elem_list[0].calc_center_median())
 
 
+
+
         if isinstance(elem_list[1], bmesh.types.BMVert):
             print("BMVert")
             ind.append(elem_list[1].index)
@@ -269,35 +268,15 @@ class SetLength(bpy.types.Operator):
 
             vertical = mathutils.geometry.intersect_point_line(vec[0], vec[1], vec[2])
             vec[1] = vertical[0]
-            print(vertical, 11111111111111111111111111)
 
         elif isinstance(elem_list[1], bmesh.types.BMFace):
             print("BMFace")
-
             ind.append(elem_list[1].index)
-
             for i in range(-1, len(elem_list[1].verts) - 1):
                 vec.append(elem_list[1].verts[i].co)
 
             distance_for_faces = mathutils.geometry.intersect_line_plane(vec[0], vec[0] + elem_list[1].normal, elem_list[1].calc_center_median(), elem_list[1].normal )
-
             vec[1] = distance_for_faces
-
-        print(vec)
-        print(ind)
-            # if isinstance(g, bmesh.types.BMFace):
-            #     print(g)
-            #     for i in range(-1, 1):
-            #         elem_vert.append(g)
-            #         elem.append(g.verts[i].co)
-
-            # if g == bmesh.types.BM:
-                # for i in range(-1, 1):
-                #     elem_vert.append(g)
-                #     elem.append(g.verts[i].co)
-
-        
-            # ind.append(g.index)
 
         
         # Get values
