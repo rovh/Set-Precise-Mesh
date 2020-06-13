@@ -674,30 +674,30 @@ class SetLength(bpy.types.Operator):
 
             l = (length_copy - lengthtrue)
 
-            # bmesh.ops.translate(
-            #         bm,
-            #         # matrix=R,
-            #         vec = mathutils.Vector( lv.normalized() * l ),
-            #         verts=[v for v in bm.verts if v.select],
-            #         space=S
-            #         )
-
-            for i in range(-1, 2):
-                if lv.normalized()[i] == 0:
-                    lv[i] = 1
-                else:
-                    lv[i] = 1/length
-            
-            print(lv)
-
-
-            bmesh.ops.scale(
+            bmesh.ops.translate(
                     bm,
-                    # vec = mathutils.Vector( ( abs(1/length * lv[0]), abs(1/length * lv[1]), abs(1/length * lv[2]) )),
-                    vec = mathutils.Vector( ( lv )),
+                    # matrix=R,
+                    vec = mathutils.Vector( lv.normalized() * l ),
                     verts=[v for v in bm.verts if v.select],
                     space=S
                     )
+
+            # for i in range(-1, 2):
+            #     if lv.normalized()[i] == 0:
+            #         lv[i] = 1
+            #     else:
+            #         lv[i] = 1/length
+            
+            # print(lv)
+
+
+            # bmesh.ops.scale(
+            #         bm,
+            #         # vec = mathutils.Vector( ( abs(1/length * lv[0]), abs(1/length * lv[1]), abs(1/length * lv[2]) )),
+            #         vec = mathutils.Vector( ( lv )),
+            #         verts=[v for v in bm.verts if v.select],
+            #         space=S
+            #         )
 
                     
             # bmesh.ops.rotate(
