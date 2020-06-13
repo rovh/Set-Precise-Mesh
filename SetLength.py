@@ -238,17 +238,17 @@ class SetLength(bpy.types.Operator):
 
 
         if isinstance(elem_list[0], bmesh.types.BMVert):
-            print("BMVert")
+            # print("BMVert")
             ind.append(elem_list[0].index)
             vec.append(bm.verts[elem_list[0].index].co)
             
         elif isinstance(elem_list[0], bmesh.types.BMEdge):
-            print("BMEdge")
+            # print("BMEdge")
             ind.append(elem_list[0].index)
             vec.append((elem_list[0].verts[0].co + elem_list[0].verts[1].co) / 2)
 
         elif isinstance(elem_list[0], bmesh.types.BMFace):
-            print("BMFace")
+            # print("BMFace")
             ind.append(elem_list[0].index)
             vec.append(elem_list[0].calc_center_median())
 
@@ -256,24 +256,77 @@ class SetLength(bpy.types.Operator):
 
 
         if isinstance(elem_list[1], bmesh.types.BMVert):
-            print("BMVert")
+            # print("BMVert")
             ind.append(elem_list[1].index)
             vec.append(bm.verts[elem_list[1].index].co)
 
         elif isinstance(elem_list[1], bmesh.types.BMEdge):
-            print("BMEdge")
+            # print("BMEdge")
+
             ind.append(elem_list[1].index)
+
             for i in range(-1, 1):
                 vec.append(elem_list[1].verts[i].co)
+
+            if isinstance(elem_list[0], bmesh.types.BMEdge):
+                perpendicular_1 = (elem_list[0].verts[0].co - vec[1]).length
+                perpendicular_2 = (elem_list[0].verts[1].co - vec[2]).length           
+                if perpendicular_1 == perpendicular_2:
+                    pass
+                else:
+                    text = "You"
+                    war = "WARNING"
+                    self.report({war}, text)
+                    
+            if isinstance(elem_list[0], bmesh.types.BMFace):
+
+                perpendicular_1 = mathutils.geometry.distance_point_to_plane(elem_list[1].verts[0].co, elem_list[0].calc_center_median(), elem_list[0].normal)
+                perpendicular_2 = mathutils.geometry.distance_point_to_plane(elem_list[1].verts[1].co, elem_list[0].calc_center_median(), elem_list[0].normal)
+
+                if perpendicular_1 == perpendicular_2:
+                    pass
+                else:
+                    text = "You"
+                    war = "WARNING"
+                    self.report({war}, text)
+
 
             vertical = mathutils.geometry.intersect_point_line(vec[0], vec[1], vec[2])
             vec[1] = vertical[0]
 
         elif isinstance(elem_list[1], bmesh.types.BMFace):
-            print("BMFace")
+            # print("BMFace")
             ind.append(elem_list[1].index)
+
             for i in range(-1, len(elem_list[1].verts) - 1):
                 vec.append(elem_list[1].verts[i].co)
+
+            if isinstance(elem_list[0], bmesh.types.BMEdge):
+
+                perpendicular_1 = mathutils.geometry.distance_point_to_plane(elem_list[0].verts[0].co, elem_list[1].calc_center_median(), elem_list[1].normal)
+                perpendicular_2 = mathutils.geometry.distance_point_to_plane(elem_list[0].verts[1].co, elem_list[1].calc_center_median(), elem_list[1].normal)
+
+                if perpendicular_1 == perpendicular_2:
+                    # print(4444444444444444444444444444444)
+                    pass
+                else:
+                    text = "You"
+                    war = "WARNING"
+                    self.report({war}, text)
+
+            if isinstance(elem_list[0], bmesh.types.BMFace):
+
+                perpendicular_1 = mathutils.geometry.distance_point_to_plane(elem_list[0].verts[0].co, elem_list[1].calc_center_median(), elem_list[1].normal)
+                perpendicular_2 = mathutils.geometry.distance_point_to_plane(elem_list[0].verts[1].co, elem_list[1].calc_center_median(), elem_list[1].normal)
+                perpendicular_3 = mathutils.geometry.distance_point_to_plane(elem_list[0].verts[2].co, elem_list[1].calc_center_median(), elem_list[1].normal)
+
+                if perpendicular_1 == perpendicular_2 and perpendicular_2 == perpendicular_3:
+                    # print(4444444444444444444444444444444)
+                    pass
+                else:
+                    text = "You"
+                    war = "WARNING"
+                    self.report({war}, text)
 
             distance_for_faces = mathutils.geometry.intersect_line_plane(vec[0], vec[0] + elem_list[1].normal, elem_list[1].calc_center_median(), elem_list[1].normal )
             vec[1] = distance_for_faces
@@ -634,6 +687,8 @@ class SetLength(bpy.types.Operator):
                     lv[i] = 1
                 else:
                     lv[i] = 1/length
+            
+            print(lv)
 
 
             bmesh.ops.scale(
