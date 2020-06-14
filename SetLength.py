@@ -233,6 +233,7 @@ class SetLength(bpy.types.Operator):
         #     vec.append(bm.verts[g.index].co)
         #     ind.append(g.index)
 
+        """List of selected elementes"""
         for g in bm.select_history:
             elem_list.append(g)
 
@@ -261,25 +262,24 @@ class SetLength(bpy.types.Operator):
             ind.append(elem_list[1].index)
             vec.append(elem_list[1].co)
 
-        elif isinstance(elem_list[1], bmesh.types.BMEdge):
+        elif isinstance(elem_list[1], bmesh.types.BMEdge):  # First selected element
             # print("BMEdge")
-
             ind.append(elem_list[1].index)
 
             for i in range(-1, 1):
                 vec.append(elem_list[1].verts[i].co)
 
-            if isinstance(elem_list[0], bmesh.types.BMEdge):
+            if isinstance(elem_list[0], bmesh.types.BMEdge): # Second Selected Element
                 perpendicular_1 = (elem_list[0].verts[0].co - vec[1]).length
                 perpendicular_2 = (elem_list[0].verts[1].co - vec[2]).length           
                 if perpendicular_1 == perpendicular_2:
                     pass
                 else:
-                    text = "You"
+                    text = "Edges are not parallel"
                     war = "WARNING"
                     self.report({war}, text)
                     
-            if isinstance(elem_list[0], bmesh.types.BMFace):
+            if isinstance(elem_list[0], bmesh.types.BMFace): # Second Selected Element
 
                 perpendicular_1 = mathutils.geometry.distance_point_to_plane(elem_list[1].verts[0].co, elem_list[0].calc_center_median(), elem_list[0].normal)
                 perpendicular_2 = mathutils.geometry.distance_point_to_plane(elem_list[1].verts[1].co, elem_list[0].calc_center_median(), elem_list[0].normal)
@@ -287,7 +287,7 @@ class SetLength(bpy.types.Operator):
                 if perpendicular_1 == perpendicular_2:
                     pass
                 else:
-                    text = "You"
+                    text = "The face and the edge are not parallel"
                     war = "WARNING"
                     self.report({war}, text)
 
@@ -311,7 +311,7 @@ class SetLength(bpy.types.Operator):
                     # print(4444444444444444444444444444444)
                     pass
                 else:
-                    text = "You"
+                    text = "The face and the edge are not parallel"
                     war = "WARNING"
                     self.report({war}, text)
 
@@ -325,7 +325,7 @@ class SetLength(bpy.types.Operator):
                     # print(4444444444444444444444444444444)
                     pass
                 else:
-                    text = "You"
+                    text = "Faces are not parallel"
                     war = "WARNING"
                     self.report({war}, text)
 
@@ -603,7 +603,6 @@ class SetLength(bpy.types.Operator):
                 # l =  - length 
             else:
                 length = lengthtrue / length
-                # length = length / lengthtrue
                 # l = length - lengthtrue
         except ZeroDivisionError:
             bpy.ops.object.dialog_warning_operator_4('INVOKE_DEFAULT')
@@ -611,8 +610,6 @@ class SetLength(bpy.types.Operator):
 
         # if offset == True:                     
             # length = length * (length / (length + offset_unit))
-
-         
     
         context = bpy.context
         scene = context.scene
@@ -650,7 +647,8 @@ class SetLength(bpy.types.Operator):
 
         S.translation -= pp
 
-        S = bpy.context.scene.cursor.matrix
+        # S =  bpy.context.active_object.matrix_world @ bpy.context.scene.cursor.matrix.inverted()
+        S =  bpy.context.scene.cursor.matrix.inverted() @ bpy.context.active_object.matrix_world
 
         if bool2 == 1:         
                                 
@@ -670,11 +668,6 @@ class SetLength(bpy.types.Operator):
             R = Matrix.Scale(1/length, 4, (lv))
 
             if bool== 1:
-                if isinstance(elem_list[0], bmesh.types.BMVert):
-                    print(elem_list[0].link_edges)
-                    print(elem_list[0].link_faces)
-                    for i in elem_list[0].link_edges:
-                        print(i)
                 pass
             else:
                 elem_list[0].select = 0
@@ -687,20 +680,20 @@ class SetLength(bpy.types.Operator):
             #         space=S
             #         )
 
-            for i in range(-1, 2):
-                if lv.normalized()[i] == 0:
-                    lv[i] = 1
-                else:
-                    lv[i] = 1/length
+            # for i in range(-1, 2):
+            #     if lv.normalized()[i] == 0:
+            #         lv[i] = 1
+            #     else:
+            #         lv[i] = 1/length
             
             # print(lv)
-            print(1/length,  33333333333333333333)
+            # print(1/length,  33333333333333333333)
 
             bmesh.ops.scale(
                     bm,
                     # vec = mathutils.Vector( ( abs(1/length * lv[0]), abs(1/length * lv[1]), abs(1/length * lv[2]) )),
-                    # vec = mathutils.Vector( ( 1, 1/length, 1 )),
-                    vec = mathutils.Vector( ( lv )),
+                    vec = mathutils.Vector( ( 1, 1, 1/length )),
+                    # vec = mathutils.Vector( ( lv )),
                     verts=[v for v in bm.verts if v.select],
                     space=S
                     )
