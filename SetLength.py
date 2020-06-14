@@ -126,7 +126,8 @@ class SetLength(bpy.types.Operator):
     bl_idname = "mesh.change_length"
     bl_label = "Set Length / Distance"
     bl_description = 'Set Length / Distance \n You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut'
-    bl_options = {'REGISTER', 'UNDO'}
+    # bl_options = {'REGISTER', 'UNDO'}
+    bl_options = {'UNDO'}
 
     plus_length: bpy.props.IntProperty() 
     
@@ -237,49 +238,57 @@ class SetLength(bpy.types.Operator):
         for g in bm.select_history:
             elem_list.append(g)
 
-
-        if isinstance(elem_list[0], bmesh.types.BMVert):
+        """First Selected Element"""
+        if isinstance(elem_list[0], bmesh.types.BMVert): # First Selected Elment
             # print("BMVert")
             ind.append(elem_list[0].index)
             vec.append(elem_list[0].co)
-            # vec.append(bm.verts[elem_list[0].index].co)
             
-        elif isinstance(elem_list[0], bmesh.types.BMEdge):
+        elif isinstance(elem_list[0], bmesh.types.BMEdge): # First Selected Elment
             # print("BMEdge")
             ind.append(elem_list[0].index)
             vec.append((elem_list[0].verts[0].co + elem_list[0].verts[1].co) / 2)
 
-        elif isinstance(elem_list[0], bmesh.types.BMFace):
+        elif isinstance(elem_list[0], bmesh.types.BMFace): # First Selected Elment
             # print("BMFace")
             ind.append(elem_list[0].index)
             vec.append(elem_list[0].calc_center_median())
 
 
-
-
-        if isinstance(elem_list[1], bmesh.types.BMVert):
+        """Second and First Selected Element Check"""
+        if isinstance(elem_list[1], bmesh.types.BMVert): # Second Selected Element
             # print("BMVert")
             ind.append(elem_list[1].index)
             vec.append(elem_list[1].co)
 
-        elif isinstance(elem_list[1], bmesh.types.BMEdge):  # First selected element
+            if isinstance(elem_list[0], bmesh.types.BMEdge): # First Selected Element
+    
+                vertical = mathutils.geometry.intersect_point_line(vec[1], elem_list[0].verts[0].co, elem_list[0].verts[1].co)
+                vec[0] = vertical[0]
+
+            elif isinstance(elem_list[0], bmesh.types.BMFace):
+
+                distance_for_faces = mathutils.geometry.intersect_line_plane(vec[1], vec[1] + elem_list[0].normal, elem_list[0].calc_center_median(), elem_list[0].normal )
+                vec[0] = distance_for_faces
+
+        elif isinstance(elem_list[1], bmesh.types.BMEdge):  # Second Selected Element
             # print("BMEdge")
             ind.append(elem_list[1].index)
 
             for i in range(-1, 1):
                 vec.append(elem_list[1].verts[i].co)
 
-            if isinstance(elem_list[0], bmesh.types.BMEdge): # Second Selected Element
+            if isinstance(elem_list[0], bmesh.types.BMEdge): # First Selected Element
                 perpendicular_1 = (elem_list[0].verts[0].co - vec[1]).length
-                perpendicular_2 = (elem_list[0].verts[1].co - vec[2]).length           
+                perpendicular_2 = (elem_list[0].verts[1].co - vec[2]).length         
                 if perpendicular_1 == perpendicular_2:
                     pass
                 else:
                     text = "Edges are not parallel"
                     war = "WARNING"
                     self.report({war}, text)
-                    
-            if isinstance(elem_list[0], bmesh.types.BMFace): # Second Selected Element
+
+            if isinstance(elem_list[0], bmesh.types.BMFace): # First Selected Element
 
                 perpendicular_1 = mathutils.geometry.distance_point_to_plane(elem_list[1].verts[0].co, elem_list[0].calc_center_median(), elem_list[0].normal)
                 perpendicular_2 = mathutils.geometry.distance_point_to_plane(elem_list[1].verts[1].co, elem_list[0].calc_center_median(), elem_list[0].normal)
@@ -291,38 +300,41 @@ class SetLength(bpy.types.Operator):
                     war = "WARNING"
                     self.report({war}, text)
 
+                center_of_the_edge = (elem_list[1].verts[0].co + elem_list[1].verts[1].co) / 2
+
+                distance_for_faces = mathutils.geometry.intersect_line_plane(center_of_the_edge, center_of_the_edge + elem_list[0].normal, elem_list[0].calc_center_median(), elem_list[0].normal )
+                vec[0] = distance_for_faces
+
 
             vertical = mathutils.geometry.intersect_point_line(vec[0], vec[1], vec[2])
             vec[1] = vertical[0]
 
-        elif isinstance(elem_list[1], bmesh.types.BMFace):
+        elif isinstance(elem_list[1], bmesh.types.BMFace):  # Second Selected Element
             # print("BMFace")
             ind.append(elem_list[1].index)
 
             for i in range(-1, len(elem_list[1].verts) - 1):
                 vec.append(elem_list[1].verts[i].co)
 
-            if isinstance(elem_list[0], bmesh.types.BMEdge):
+            if isinstance(elem_list[0], bmesh.types.BMEdge): # First Selected Element
 
                 perpendicular_1 = mathutils.geometry.distance_point_to_plane(elem_list[0].verts[0].co, elem_list[1].calc_center_median(), elem_list[1].normal)
                 perpendicular_2 = mathutils.geometry.distance_point_to_plane(elem_list[0].verts[1].co, elem_list[1].calc_center_median(), elem_list[1].normal)
 
                 if perpendicular_1 == perpendicular_2:
-                    # print(4444444444444444444444444444444)
                     pass
                 else:
                     text = "The face and the edge are not parallel"
                     war = "WARNING"
                     self.report({war}, text)
 
-            if isinstance(elem_list[0], bmesh.types.BMFace):
+            if isinstance(elem_list[0], bmesh.types.BMFace): # First Selected Element
 
                 perpendicular_1 = mathutils.geometry.distance_point_to_plane(elem_list[0].verts[0].co, elem_list[1].calc_center_median(), elem_list[1].normal)
                 perpendicular_2 = mathutils.geometry.distance_point_to_plane(elem_list[0].verts[1].co, elem_list[1].calc_center_median(), elem_list[1].normal)
                 perpendicular_3 = mathutils.geometry.distance_point_to_plane(elem_list[0].verts[2].co, elem_list[1].calc_center_median(), elem_list[1].normal)
 
                 if perpendicular_1 == perpendicular_2 and perpendicular_2 == perpendicular_3:
-                    # print(4444444444444444444444444444444)
                     pass
                 else:
                     text = "Faces are not parallel"
@@ -332,7 +344,6 @@ class SetLength(bpy.types.Operator):
             distance_for_faces = mathutils.geometry.intersect_line_plane(vec[0], vec[0] + elem_list[1].normal, elem_list[1].calc_center_median(), elem_list[1].normal )
             vec[1] = distance_for_faces
 
-        
         # Get values
         prog = context.window_manager.setprecisemesh.projection_type_2
         settings = bpy.context.preferences.addons[__name__].preferences
@@ -373,7 +384,6 @@ class SetLength(bpy.types.Operator):
             # ind.reverse()
 
         
-
         offset = False 
 
         # Check number
