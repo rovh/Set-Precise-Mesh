@@ -240,7 +240,8 @@ class SetLength(bpy.types.Operator):
         if isinstance(elem_list[0], bmesh.types.BMVert):
             # print("BMVert")
             ind.append(elem_list[0].index)
-            vec.append(bm.verts[elem_list[0].index].co)
+            vec.append(elem_list[0].co)
+            # vec.append(bm.verts[elem_list[0].index].co)
             
         elif isinstance(elem_list[0], bmesh.types.BMEdge):
             # print("BMEdge")
@@ -258,7 +259,7 @@ class SetLength(bpy.types.Operator):
         if isinstance(elem_list[1], bmesh.types.BMVert):
             # print("BMVert")
             ind.append(elem_list[1].index)
-            vec.append(bm.verts[elem_list[1].index].co)
+            vec.append(elem_list[1].co)
 
         elif isinstance(elem_list[1], bmesh.types.BMEdge):
             # print("BMEdge")
@@ -595,14 +596,15 @@ class SetLength(bpy.types.Operator):
         # Scale factor
         try:
             if self.plus_length == 1:
-                # length = lengthtrue / (length + lengthtrue)
-                l = length 
+                length = lengthtrue / (length + lengthtrue)
+                # l = length 
             elif self.plus_length == -1:
-                # length = lengthtrue / (-length + lengthtrue) 
-                l =  - length 
+                length = lengthtrue / (-length + lengthtrue) 
+                # l =  - length 
             else:
-                # length = lengthtrue / length
-                l = length - lengthtrue
+                length = lengthtrue / length
+                # length = length / lengthtrue
+                # l = length - lengthtrue
         except ZeroDivisionError:
             bpy.ops.object.dialog_warning_operator_4('INVOKE_DEFAULT')
             return {"FINISHED"}
@@ -645,7 +647,10 @@ class SetLength(bpy.types.Operator):
         mat_out =  mat_loc @  mat_rot @  mat_sca
 
         S = mat_out
+
         S.translation -= pp
+
+        S = bpy.context.scene.cursor.matrix
 
         if bool2 == 1:         
                                 
@@ -674,29 +679,31 @@ class SetLength(bpy.types.Operator):
             else:
                 elem_list[0].select = 0
         
-            bmesh.ops.translate(
-                    bm,
-                    # matrix=R,
-                    vec = mathutils.Vector( lv.normalized() * l ),
-                    verts=[v for v in bm.verts if v.select],
-                    space=S
-                    )
-
-            # for i in range(-1, 2):
-            #     if lv.normalized()[i] == 0:
-            #         lv[i] = 1
-            #     else:
-            #         lv[i] = 1/length
-            
-            # print(lv)
-
-            # bmesh.ops.scale(
+            # bmesh.ops.translate(
             #         bm,
-            #         # vec = mathutils.Vector( ( abs(1/length * lv[0]), abs(1/length * lv[1]), abs(1/length * lv[2]) )),
-            #         vec = mathutils.Vector( ( lv )),
+            #         # matrix=R,
+            #         vec = mathutils.Vector( lv.normalized() * l ),
             #         verts=[v for v in bm.verts if v.select],
             #         space=S
             #         )
+
+            for i in range(-1, 2):
+                if lv.normalized()[i] == 0:
+                    lv[i] = 1
+                else:
+                    lv[i] = 1/length
+            
+            # print(lv)
+            print(1/length,  33333333333333333333)
+
+            bmesh.ops.scale(
+                    bm,
+                    # vec = mathutils.Vector( ( abs(1/length * lv[0]), abs(1/length * lv[1]), abs(1/length * lv[2]) )),
+                    # vec = mathutils.Vector( ( 1, 1/length, 1 )),
+                    vec = mathutils.Vector( ( lv )),
+                    verts=[v for v in bm.verts if v.select],
+                    space=S
+                    )
 
             # bmesh.ops.rotate(
             #         bm,
