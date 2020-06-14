@@ -25,101 +25,6 @@ def check(self):
     if obj.scale != Vector((1.0, 1.0, 1.0)) or obj.delta_scale != Vector((1.0, 1.0, 1.0)):
         bpy.ops.object.dialog_warning_operator('INVOKE_DEFAULT')
 
-class SetLength_Plus(bpy.types.Operator):
-    """Tooltip"""
-    bl_idname = "mesh.change_length_plus"
-    bl_label = "Plus Length / Distance"
-    bl_description = 'Add/plus the length/distance to the selected item \
-    \n\
-    \nYou can also assign shortcut\
-    \nHow to do it: > right-click on this button > Assign Shortcut'
-    bl_options = {'REGISTER', 'UNDO'}
-
-
-    @classmethod
-    def poll(cls, context):
-        return context.active_object is not None
-
-    def execute(self, context):
-
-        # The script crashes due to the fact that "self.report"
-        # as I understand does not work  it in the case of embedding one operator in another
-
-        try:
-            bpy.ops.mesh.change_length(plus_length = 1)
-        except RuntimeError:
-            text = "You need to select 2 vertices"
-            war = "ERROR"
-            self.report({war}, text)
-
-
-        # bpy.ops.mesh.change_length(plus_length = 1)
-
-
-        return {"FINISHED"}
-
-class SetLength_Minus(bpy.types.Operator):
-    """Tooltip"""
-    bl_idname = "mesh.change_length_minus"
-    bl_label = "Minus Length / Distance"
-    bl_description = 'Reduse/Minus the length/distance of the selected item \
-    \n\
-    \nYou can also assign shortcut\
-    \nHow to do it: > right-click on this button > Assign Shortcut'
-    bl_options = {'REGISTER', 'UNDO'}
-
-
-    @classmethod
-    def poll(cls, context):
-        return context.active_object is not None
-
-    def execute(self, context):
-
-        # The script crashes due to the fact that "self.report"
-        # as I understand does not work  it in the case of embedding one operator in another
-
-        try:
-            bpy.ops.mesh.change_length(plus_length = -1)
-        except RuntimeError:
-            text = "You need to select 2 vertices"
-            war = "ERROR"
-            self.report({war}, text)
-
-
-        # bpy.ops.mesh.change_length(plus_length = 1)
-
-
-        return {"FINISHED"}
-
-class SetLength_Copy(bpy.types.Operator):
-    """Tooltip"""
-    bl_idname = "mesh.change_length_copy"
-    bl_label = "Set Length / Distance"
-    bl_description = '  You can also assign shortcut \
-    \n  How to do it: > right-click on this button > Assign Shortcut'
-    bl_options = {'REGISTER', 'UNDO'}
-
-
-    @classmethod
-    def poll(cls, context):
-        return context.active_object is not None
-
-    def execute(self, context):
-
-        # The script crashes due to the fact that "self.report"
-        # as I understand does not work  it in the case of embedding one operator in another
-
-        # try:
-        #     bpy.ops.mesh.change_length()
-        # except RuntimeError:
-        #     text = "You need to select 2 vertices"
-        #     war = "ERROR"
-        #     self.report({war}, text)
-
-        bpy.ops.mesh.change_length()
-
-
-        return {"FINISHED"}
 
 class SetLength(bpy.types.Operator):
     """Tooltip"""
@@ -301,7 +206,14 @@ class SetLength(bpy.types.Operator):
             #         war = "WARNING"
             #         self.report({war}, text)
 
+                # vec[0] = mathutils.geometry.intersect_point_line( (elem_list[0].verts[0].co + elem_list[0].verts[1].co ) / 2, elem_list[0].verts[0].co, elem_list[0].verts[1].co)
+
+
             if isinstance(elem_list[0], bmesh.types.BMFace): # First Selected Element
+
+                center_of_the_edge = (elem_list[1].verts[0].co + elem_list[1].verts[1].co) / 2
+                distance_for_faces = mathutils.geometry.intersect_line_plane(center_of_the_edge, center_of_the_edge + elem_list[0].normal, elem_list[0].calc_center_median(), elem_list[0].normal )
+                vec[0] = distance_for_faces
 
                 # perpendicular_1 = mathutils.geometry.distance_point_to_plane(elem_list[1].verts[0].co, elem_list[0].calc_center_median(), elem_list[0].normal)
                 # perpendicular_2 = mathutils.geometry.distance_point_to_plane(elem_list[1].verts[1].co, elem_list[0].calc_center_median(), elem_list[0].normal)
@@ -312,11 +224,6 @@ class SetLength(bpy.types.Operator):
                 #     text = "The face and the edge are not parallel"
                 #     war = "WARNING"
                 #     self.report({war}, text)
-
-                center_of_the_edge = (elem_list[1].verts[0].co + elem_list[1].verts[1].co) / 2
-                distance_for_faces = mathutils.geometry.intersect_line_plane(center_of_the_edge, center_of_the_edge + elem_list[0].normal, elem_list[0].calc_center_median(), elem_list[0].normal )
-                vec[0] = distance_for_faces
-
 
             vertical = mathutils.geometry.intersect_point_line(vec[0], vec[1], vec[2])
             vec[1] = vertical[0]
@@ -639,7 +546,6 @@ class SetLength(bpy.types.Operator):
         scene = context.scene
         ob = context.edit_object
 
-
         #Set Cursor location and mode
         if bool== True:
             if prog != "cursor_matrix" and prog != "cursor_location":
@@ -660,18 +566,17 @@ class SetLength(bpy.types.Operator):
             obj_camera.rotation_euler = rot_quat.to_euler()
         
         
-        # Create Matrix
-        mat_loc =  mathutils.Matrix.Translation(( 0.0 ,  0.0 ,  0.0 ))        
-        mat_sca =  mathutils.Matrix.Scale( 1.0 ,  4 ,  ( 0.0 ,  0.0 ,  1.0 ))
-        mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
+        # # Create Matrix
+        # mat_loc =  mathutils.Matrix.Translation(( 0.0 ,  0.0 ,  0.0 ))        
+        # mat_sca =  mathutils.Matrix.Scale( 1.0 ,  4 ,  ( 0.0 ,  0.0 ,  1.0 ))
+        # mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
 
-        mat_out =  mat_loc @  mat_rot @  mat_sca
+        # mat_out =  mat_loc @  mat_rot @  mat_sca
 
-        S = mat_out
+        # S = mat_out
 
-        S.translation -= pp
+        # S.translation -= pp
 
-        # S =  bpy.context.active_object.matrix_world @ bpy.context.scene.cursor.matrix.inverted()
         S =  bpy.context.scene.cursor.matrix.inverted() @ bpy.context.active_object.matrix_world
 
         if bool2 == 1:         
@@ -709,15 +614,10 @@ class SetLength(bpy.types.Operator):
             #         lv[i] = 1
             #     else:
             #         lv[i] = 1/length
-            
-            # print(lv)
-            # print(1/length,  33333333333333333333)
 
             bmesh.ops.scale(
                     bm,
-                    # vec = mathutils.Vector( ( abs(1/length * lv[0]), abs(1/length * lv[1]), abs(1/length * lv[2]) )),
                     vec = mathutils.Vector( ( 1, 1, 1/length )),
-                    # vec = mathutils.Vector( ( lv )),
                     verts=[v for v in bm.verts if v.select],
                     space=S
                     )

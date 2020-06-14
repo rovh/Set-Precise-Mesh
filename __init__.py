@@ -1462,12 +1462,7 @@ blender_classes = [
     SetAngle_Plus,
     SetAngle_Minus,
 
-
     SetLength,
-    SetLength_Copy,
-    SetLength_Plus,
-    SetLength_Minus,
-
 
     Dialog_Warning_Operator,
     Dialog_Warning_Operator_2,
