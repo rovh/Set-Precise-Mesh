@@ -223,10 +223,8 @@ class Set_Mesh_Position (bpy.types.Operator):
 
         cursor_matrix_old = bpy.context.scene.cursor.matrix.copy()
         cursor_location_old = bpy.context.scene.cursor.location
-        position_location = context.window_manager.setprecisemesh.position_location
 
         bpy.ops.mesh.set_cursor()
-
 
         # if len(selected_verts) == 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
 
@@ -333,31 +331,40 @@ class Set_Mesh_Position (bpy.types.Operator):
 
         cursor_matrix = bpy.context.scene.cursor.matrix.copy()
         cursor_matrix_inverted = cursor_matrix.inverted()
+        cursor_location =  bpy.context.scene.cursor.location
 
         mat_cur   =  cursor_matrix_inverted @ obj_matrix
 
         # mat_cur_2 =  obj_matrix @ cursor_matrix_inverted
 
-
         position = self.position
+        position_location = context.window_manager.setprecisemesh.position_location
+        object_location = bpy.context.active_object.matrix_world.translation
+
 
         if position == "global":
             if position_location == True:
-                bpy.context.active_object.matrix_world.translation = (0, 0, 0)
+                bpy.context.active_object.matrix_world.translation = object_location - cursor_location
             else:
                 bpy.context.active_object.matrix_world = mat_cur
 
         elif position == "local":
-            bpy.context.active_object.matrix_world = obj_matrix @ mat_cur
+            if position_location == True:
+                bpy.context.active_object.matrix_world.translation = object_location + object_location - cursor_location
+            else:
+                bpy.context.active_object.matrix_world = obj_matrix @ mat_cur
 
-            # bpy.context.active_object.matrix_world = mat_cur @ obj_matrix
+                # bpy.context.active_object.matrix_world = mat_cur @ obj_matrix
 
-            bpy.context.object.scale[0] = scale_remember_1
-            bpy.context.object.scale[1] = scale_remember_2
-            bpy.context.object.scale[2] = scale_remember_3
+                bpy.context.object.scale[0] = scale_remember_1
+                bpy.context.object.scale[1] = scale_remember_2
+                bpy.context.object.scale[2] = scale_remember_3
 
         elif position == "cursor":
-            bpy.context.active_object.matrix_world = cursor_matrix_old @ mat_cur
+            if position_location == True:
+                bpy.context.active_object.matrix_world.translation = -object_location + cursor_location
+            else:
+                bpy.context.active_object.matrix_world = cursor_matrix_old @ mat_cur
 
         elif position == "object":
             obj_name = bpy.data.scenes[bpy.context.scene.name_full].object_position.name_full
