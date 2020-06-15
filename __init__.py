@@ -642,15 +642,15 @@ class Popup_Menu_SetPreciseMesh_SetLength (bpy.types.Operator):
         split_left = col.split(factor=0.55, align=True)
         split_left.scale_y = 1.2
         
-        split_left.operator("mesh.change_length_copy",icon="DRIVER_DISTANCE")
+        split_left.operator("mesh.change_length",icon="DRIVER_DISTANCE").plus_length = 0
 
         split_center = split_left.split(factor=0.43, align=True)
 
-        split_center.operator("mesh.change_length_plus",icon="ADD", text = "")
-            # 
+        split_center.operator("mesh.change_length",icon="ADD", text = "").plus_length = 1
+        
         split_right = split_center.split(factor=0.8, align=True)
 
-        split_right.operator("mesh.change_length_minus", icon="REMOVE", text = "")
+        split_right.operator("mesh.change_length", icon="REMOVE", text = "").plus_length = -1
 
         # split_right = split_center.split(factor=0.9, align=True)
 
