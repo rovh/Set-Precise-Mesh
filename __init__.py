@@ -1244,7 +1244,9 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
         box.label(icon="PREFERENCES", text = "Preferences")
         row = box.row()
         col = row.column(align = False)
-        col.prop(self, "direction_of_length", text='Invert "Set Length" direction')
+        row = col.row(align = 1)
+        row.label(icon = "ARROW_LEFTRIGHT" )
+        row.prop(self, "direction_of_length", text='Invert / Reverse "Set Length" direction')
         
         row = col.row(align = False)
         row.operator("wm.menu_setprecisemesh_setangle",icon="DRIVER_ROTATIONAL_DIFFERENCE", text="Pop-up Menu (Hover cursor on it for more information)")

@@ -135,17 +135,12 @@ class SetLength(bpy.types.Operator):
         ind = []
         vec = []
         elem_list = []
-        # elem = []
         
         #Append to lists
         # for g in bm.select_history:
         #     # if len(vec)<3:
         #     vec.append(bm.verts[g.index].co)
         #     ind.append(g.index)
-
-        """List of selected elementes"""
-        for g in bm.select_history:
-            elem_list.append(g)
 
 
         # else:
@@ -188,8 +183,14 @@ class SetLength(bpy.types.Operator):
             # vec.reverse()
             # ind.reverse()
 
-        
         offset = False 
+
+        """List of selected elementes"""
+        for g in bm.select_history:
+            elem_list.append(g)
+        
+        if invert_direction == True:
+            elem_list[0], elem_list[1] = elem_list[len(elem_list)-1], elem_list[len(elem_list)-2]
 
         # Check number
         if len(elem_list) < 1 and bool == False:
@@ -201,12 +202,12 @@ class SetLength(bpy.types.Operator):
         elif len(elem_list) == 1 and bool == False:
 
             if isinstance(elem_list[0], bmesh.types.BMVert) == False:
-                text = '"Length / Distance simulation" only supports verteces'
+                text = '"Distance Simulation" supports only vertices'
                 war = "ERROR"
                 self.report({war}, text)
                 return{"FINISHED"}
 
-            v2 = vec[0] 
+            v2 = elem_list[0].co
 
             offset = False 
             offset_unit = 50          
@@ -391,63 +392,49 @@ class SetLength(bpy.types.Operator):
                 ind.append(elem_list[0].index)
                 vec.append((elem_list[0].verts[0].co + elem_list[0].verts[1].co) / 2)
 
+                if isinstance(elem_list[1], bmesh.types.BMVert): # Second Selected Element
+                    empty = mathutils.geometry.intersect_point_line(elem_list[1].co , elem_list[0].verts[0].co, elem_list[0].verts[1].co)
+                    vec[0] = empty[0]
+                
+                if isinstance(elem_list[1], bmesh.types.BMEdge): # Second Selected Element
+
+                    center_of_the_edge = (elem_list[1].verts[0].co + elem_list[1].verts[1].co ) / 2
+                    empty = mathutils.geometry.intersect_point_line( center_of_the_edge , elem_list[0].verts[0].co, elem_list[0].verts[1].co)
+                    vec[0] = empty[0]
+
+                    # perpendicular_1 = mathutils.geometry.intersect_point_line(elem_list[0].verts[0].co, elem_list[1].verts[0].co, elem_list[1].verts[1].co)
+                    # perpendicular_2 = mathutils.geometry.intersect_point_line(elem_list[0].verts[1].co, elem_list[1].verts[0].co, elem_list[1].verts[1].co)
+
+                    # perpendicular_1 = perpendicular_1[0] - elem_list[0].verts[0].co
+                    # perpendicular_2 = perpendicular_2[0] - elem_list[0].verts[1].co
+
+                    # perpendicular_1 = perpendicular_1.length
+                    # perpendicular_2 = perpendicular_2.length
+
+                    # print(perpendicular_1)
+                    # print(perpendicular_2)
+
+                    # if perpendicular_1 == perpendicular_2:
+                    #     pass
+                    # else:
+                    #     text = "Edges are not parallel"
+                    #     war = "WARNING"
+                    #     self.report({war}, text)
+
             elif isinstance(elem_list[0], bmesh.types.BMFace): # First Selected Elment
                 # print("BMFace")
                 ind.append(elem_list[0].index)
                 vec.append(elem_list[0].calc_center_median())
 
-            """Second and First Selected Element Check"""
-            if isinstance(elem_list[1], bmesh.types.BMVert): # Second Selected Element
-                # print("BMVert")
-                ind.append(elem_list[1].index)
-                vec.append(elem_list[1].co)
+                if isinstance(elem_list[1], bmesh.types.BMVert): # Second Selected Element
+                    empty = mathutils.geometry.intersect_line_plane(elem_list[1].co , elem_list[1].co + elem_list[0].normal, elem_list[0].calc_center_median(), elem_list[0].normal )
+                    vec[0] = empty
 
-                if isinstance(elem_list[0], bmesh.types.BMEdge): # First Selected Element
-        
-                    vertical = mathutils.geometry.intersect_point_line(vec[1], elem_list[0].verts[0].co, elem_list[0].verts[1].co)
-                    vec[0] = vertical[0]
-
-                elif isinstance(elem_list[0], bmesh.types.BMFace): # First Selected Element
-
-                    distance_for_faces = mathutils.geometry.intersect_line_plane(vec[1], vec[1] + elem_list[0].normal, elem_list[0].calc_center_median(), elem_list[0].normal )
-                    vec[0] = distance_for_faces
-
-            elif isinstance(elem_list[1], bmesh.types.BMEdge):  # Second Selected Element
-                # print("BMEdge")
-                ind.append(elem_list[1].index)
-
-                for i in range(-1, 1):
-                    vec.append(elem_list[1].verts[i].co)
-
-                if isinstance(elem_list[0], bmesh.types.BMEdge): # First Selected Element
-
-                #     perpendicular_1 = mathutils.geometry.intersect_point_line(elem_list[0].verts[0].co, elem_list[1].verts[0].co, elem_list[1].verts[1].co)
-                #     perpendicular_2 = mathutils.geometry.intersect_point_line(elem_list[0].verts[1].co, elem_list[1].verts[0].co, elem_list[1].verts[1].co)
-
-                #     perpendicular_1 = perpendicular_1[0] - elem_list[0].verts[0].co
-                #     perpendicular_2 = perpendicular_2[0] - elem_list[0].verts[1].co
-
-                #     perpendicular_1 = perpendicular_1.length
-                #     perpendicular_2 = perpendicular_2.length
-
-                #     print(perpendicular_1)
-                #     print(perpendicular_2)
-
-                #     if perpendicular_1 == perpendicular_2:
-                #         pass
-                #     else:
-                #         text = "Edges are not parallel"
-                #         war = "WARNING"
-                #         self.report({war}, text)
-
-                    empty = mathutils.geometry.intersect_point_line( (elem_list[1].verts[0].co + elem_list[1].verts[1].co ) / 2, elem_list[0].verts[0].co, elem_list[0].verts[1].co)
-                    vec[0] = empty[0]
-
-                if isinstance(elem_list[0], bmesh.types.BMFace): # First Selected Element
+                if isinstance(elem_list[1], bmesh.types.BMEdge): # Second Selected Element
 
                     center_of_the_edge = (elem_list[1].verts[0].co + elem_list[1].verts[1].co) / 2
-                    distance_for_faces = mathutils.geometry.intersect_line_plane(center_of_the_edge, center_of_the_edge + elem_list[0].normal, elem_list[0].calc_center_median(), elem_list[0].normal )
-                    vec[0] = distance_for_faces
+                    empty = mathutils.geometry.intersect_line_plane(center_of_the_edge, center_of_the_edge + elem_list[0].normal, elem_list[0].calc_center_median(), elem_list[0].normal )
+                    vec[0] = empty
 
                     # perpendicular_1 = mathutils.geometry.distance_point_to_plane(elem_list[1].verts[0].co, elem_list[0].calc_center_median(), elem_list[0].normal)
                     # perpendicular_2 = mathutils.geometry.distance_point_to_plane(elem_list[1].verts[1].co, elem_list[0].calc_center_median(), elem_list[0].normal)
@@ -460,15 +447,23 @@ class SetLength(bpy.types.Operator):
                     #     self.report({war}, text)
 
 
-                empty = mathutils.geometry.intersect_point_line(vec[0], vec[1], vec[2])
-                vec[1] = empty[0]
+            """Second Selected Element Check"""
+            if isinstance(elem_list[1], bmesh.types.BMVert): # Second Selected Element
+                # print("BMVert")
+                ind.append(elem_list[1].index)
+                vec.append(elem_list[1].co)
+
+            elif isinstance(elem_list[1], bmesh.types.BMEdge):  # Second Selected Element
+                # print("BMEdge")
+                ind.append(elem_list[1].index)
+                empty = mathutils.geometry.intersect_point_line(vec[0] , elem_list[1].verts[0].co, elem_list[1].verts[1].co)
+                vec.append(empty[0])
 
             elif isinstance(elem_list[1], bmesh.types.BMFace):  # Second Selected Element
                 # print("BMFace")
                 ind.append(elem_list[1].index)
-
-                for i in range(-1, len(elem_list[1].verts) - 1):
-                    vec.append(elem_list[1].verts[i].co)
+                empty = mathutils.geometry.intersect_line_plane(vec[0], vec[0] + elem_list[1].normal, elem_list[1].calc_center_median(), elem_list[1].normal )
+                vec.append(empty)
 
                 # if isinstance(elem_list[0], bmesh.types.BMEdge): # First Selected Element
 
@@ -495,30 +490,13 @@ class SetLength(bpy.types.Operator):
                     #     war = "WARNING"
                     #     self.report({war}, text)
 
-                distance_for_faces = mathutils.geometry.intersect_line_plane(vec[0], vec[0] + elem_list[1].normal, elem_list[1].calc_center_median(), elem_list[1].normal )
-                vec[1] = distance_for_faces
-        
-            # Invert direction for edge
-            if invert_direction == True:
-
-                if len(vec) == 2:
-                    vec[0], vec[1] = vec[1], vec[0]
-                    ind[0], ind[1] = ind[1], ind[0]
-                else:
-                    vec[0], vec[1] = vec[len(vec)-1], vec[len(vec)-2]
-                    ind[0], ind[1] = ind[len(vec)-1], ind[len(vec)-2]
-
-                # Old method
-                # vec.reverse()
-                # ind.reverse()
-
             # Set values
             v1=vec[0]
             v2=vec[1]
             # lv=v2-v1
         
         else:
-            text = 'In "Use two directions" mode You need to select from 1 to 2 elements'
+            text = 'In "Use two directions" mode You need to select only 2 elements (vertex, edge, face)'
             war = "ERROR"
             self.report({war}, text)
             return{"FINISHED"}
@@ -613,7 +591,9 @@ class SetLength(bpy.types.Operator):
 
             translate_vector = lv.normalized() * l
 
-            if bool== 1:
+
+
+            if bool== 1 and len(elem_list) != 1:
 
                     elem_list[0].select = 0
 
@@ -638,15 +618,31 @@ class SetLength(bpy.types.Operator):
                     elem_list[1].select = 1
 
             else:
-                elem_list[0].select = 0
-        
-                bmesh.ops.translate(
-                        bm,
-                        # matrix=R,
-                        vec = mathutils.Vector( translate_vector ),
-                        verts=[v for v in bm.verts if v.select],
-                        space=S
-                        )
+                if len(elem_list) != 1:
+
+                    elem_list[0].select = 0
+            
+                    bmesh.ops.translate(
+                            bm,
+                            # matrix=R,
+                            vec = mathutils.Vector( translate_vector ),
+                            verts=[v for v in bm.verts if v.select],
+                            space=S
+                            )
+                        
+                    elem_list[0].select = 1
+                
+                else:
+            
+                    bmesh.ops.translate(
+                            bm,
+                            # matrix=R,
+                            vec = mathutils.Vector( translate_vector ),
+                            verts=[v for v in bm.verts if v.select],
+                            space=S
+                            )
+                        
+
 
             # for i in range(-1, 2):
             #     if lv.normalized()[i] == 0:
@@ -668,7 +664,7 @@ class SetLength(bpy.types.Operator):
             #         space=S
             #         )
 
-            elem_list[0].select = 1
+            
 
             bmesh.update_edit_mesh(me, True)
                   
