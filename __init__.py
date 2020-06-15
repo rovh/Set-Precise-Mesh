@@ -30,7 +30,7 @@ import bpy
 
 from .SetAngle import *
 from .SetLength import *
-from .Operators import *
+from .Set_Mesh_Position import *
 from .Presets import *
 
 
@@ -1419,6 +1419,12 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         description="Apply the object's rotation transformation to its data",
         default = False,
     )
+    position_location: bpy.props.BoolProperty(
+        name="Move Location",
+        description="Apply the object's rotation transformation to its data",
+        default = False,
+    )
+
 
 """Duplications of the Main panel"""
 class Dupli (SetPresiceMesh_Panel):
@@ -1485,10 +1491,6 @@ blender_classes = [
     Browser_Link,
 
     Pop_Up_Set_Mesh_Position,
-    Set_Mesh_Position_Global,
-    Set_Mesh_Position_Local,
-    Set_Mesh_Position_Cursor,
-    Set_Mesh_Position_Object,
     Set_Mesh_Position,
 
     

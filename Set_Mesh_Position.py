@@ -74,9 +74,10 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
         
 
         col_right_right.prop( w_m, "position_origin", icon = "CON_PIVOT", text = "")
+        col_right_right.prop( w_m, "position_location", icon = "EMPTY_ARROWS", text = "")
         col_right_right.prop( w_m, "position_origin_clear_matrix", icon = "FILE_REFRESH", text = "")
         col_right_right.scale_x = 1
-        col_right_right.scale_y = 2
+        col_right_right.scale_y = 1.85
         # col_left.scale_y = 0.8
         # col_right.scale_x = 5.0
 
@@ -109,7 +110,7 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
 
         # Matrix menu
         sub_col = col_right.column(align = 1)
-        sub_col.operator("mesh.set_mesh_position_global", text="Globally", icon = "VIEW_PERSPECTIVE")
+        sub_col.operator("mesh.set_mesh_position", text="Globally", icon = "VIEW_PERSPECTIVE").position = "global"
         sub_col.scale_y = 1.2
 
 
@@ -120,7 +121,7 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
 
         # Cursor menu
         sub_col = col_right.column(align = 1)
-        sub_col.operator("mesh.set_mesh_position_local", text="Locally " , icon = "GRID")
+        sub_col.operator("mesh.set_mesh_position", text="Locally " , icon = "GRID").position = "local"
         sub_col.scale_y = 1.2
         # space
         # sub_col = col_right.column(align = 0)
@@ -139,7 +140,7 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
 
         # Object menu
         sub_col = col_right.column(align = 1)
-        sub_col.operator("mesh.set_mesh_position_cursor", text="To the Cursor", icon = "PIVOT_CURSOR")
+        sub_col.operator("mesh.set_mesh_position", text="To the Cursor", icon = "PIVOT_CURSOR").position = "cursor"
         sub_col.scale_y = 1.2
 
 
@@ -160,7 +161,7 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
             sub_col.scale_y = 1.2
         else:
 
-            sub_col.operator("mesh.set_mesh_position_object", text="To the Object", icon='OBJECT_DATA')
+            sub_col.operator("mesh.set_mesh_position", text="To the Object", icon='OBJECT_DATA').position = "object"
             sub_col.prop(context.scene, "object_position", text = "")
             sub_col.scale_y = 1.2
 
@@ -175,81 +176,13 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
     def execute(self, context):
         return {"FINISHED"}
 
-
-
-class Set_Mesh_Position_Global (bpy.types.Operator):
-    """Tooltip"""
-    bl_idname = "mesh.set_mesh_position_global"
-    bl_label = "Set Mesh Position Globally"
-    bl_description = "Set the mesh position to the World Matrix\
-        \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
-    bl_options = {'REGISTER', 'UNDO'}
-
-    @classmethod
-    def poll(cls, context):
-        return context.active_object is not None
-    
-    def execute(self, context):
-        bpy.ops.mesh.set_mesh_position(position = "global")
-        return {"FINISHED"}
-
-class Set_Mesh_Position_Local (bpy.types.Operator):
-    """Tooltip"""
-    bl_idname = "mesh.set_mesh_position_local"
-    bl_label = "Set Mesh Position Locally"
-    bl_description = "Set the mesh position to the Matrix of the Active Object\
-        \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
-    bl_options = {'REGISTER', 'UNDO'}
-
-    @classmethod
-    def poll(cls, context):
-        return context.active_object is not None
-    
-    def execute(self, context):
-        bpy.ops.mesh.set_mesh_position(position = "local")
-        return {"FINISHED"}
-
-class Set_Mesh_Position_Cursor (bpy.types.Operator):
-    """Tooltip"""
-    bl_idname = "mesh.set_mesh_position_cursor"
-    bl_label = "Set Mesh Position to the Cursor"
-    bl_description = "Set the mesh to the Matrix of the Cursor\
-        \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
-    bl_options = {'REGISTER', 'UNDO'}
-
-    @classmethod
-    def poll(cls, context):
-        return context.active_object is not None
-    
-    def execute(self, context):
-        bpy.ops.mesh.set_mesh_position(position = "cursor")
-        return {"FINISHED"}
-
-class Set_Mesh_Position_Object (bpy.types.Operator):
-    """Tooltip"""
-    bl_idname = "mesh.set_mesh_position_object"
-    bl_label = "Set Mesh Position to the Object"
-    bl_description = "Set the mesh position to the Matrix of the Custom Object \
-        \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
-    bl_options = {'REGISTER', 'UNDO'}
-
-    @classmethod
-    def poll(cls, context):
-        return context.active_object is not None
-    
-    def execute(self, context):
-        bpy.ops.mesh.set_mesh_position(position = "object")
-        return {"FINISHED"}
-
-
-
 class Set_Mesh_Position (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.set_mesh_position"
     bl_label = "Set Mesh Position"
     bl_description = "Set the mesh location and rotation according to the normal of the selected part of the mesh (vertex/edge/face)\
         \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
-    bl_options = {'REGISTER', 'UNDO'}
+    bl_options = {'UNDO'}
 
     position: bpy.props.StringProperty(
         default = "global"
@@ -290,6 +223,7 @@ class Set_Mesh_Position (bpy.types.Operator):
 
         cursor_matrix_old = bpy.context.scene.cursor.matrix.copy()
         cursor_location_old = bpy.context.scene.cursor.location
+        position_location = context.window_manager.setprecisemesh.position_location
 
         bpy.ops.mesh.set_cursor()
 
@@ -408,7 +342,10 @@ class Set_Mesh_Position (bpy.types.Operator):
         position = self.position
 
         if position == "global":
-            bpy.context.active_object.matrix_world = mat_cur
+            if position_location == True:
+                bpy.context.active_object.matrix_world.translation = (0, 0, 0)
+            else:
+                bpy.context.active_object.matrix_world = mat_cur
 
         elif position == "local":
             bpy.context.active_object.matrix_world = obj_matrix @ mat_cur
