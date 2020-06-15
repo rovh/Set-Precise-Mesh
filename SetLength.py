@@ -129,9 +129,10 @@ class SetLength(bpy.types.Operator):
         bm = bmesh.from_edit_mesh(me)
         
         # Create list
-        vec = []
         ind = []
+        vec = []
         elem_list = []
+        # elem = []
         
         #Append to lists
         # for g in bm.select_history:
@@ -142,6 +143,7 @@ class SetLength(bpy.types.Operator):
         """List of selected elementes"""
         for g in bm.select_history:
             elem_list.append(g)
+
 
         if len(elem_list) >= 2:
             """First Selected Element"""
@@ -172,7 +174,7 @@ class SetLength(bpy.types.Operator):
                     vertical = mathutils.geometry.intersect_point_line(vec[1], elem_list[0].verts[0].co, elem_list[0].verts[1].co)
                     vec[0] = vertical[0]
 
-                elif isinstance(elem_list[0], bmesh.types.BMFace):
+                elif isinstance(elem_list[0], bmesh.types.BMFace): # First Selected Element
 
                     distance_for_faces = mathutils.geometry.intersect_line_plane(vec[1], vec[1] + elem_list[0].normal, elem_list[0].calc_center_median(), elem_list[0].normal )
                     vec[0] = distance_for_faces
@@ -184,7 +186,7 @@ class SetLength(bpy.types.Operator):
                 for i in range(-1, 1):
                     vec.append(elem_list[1].verts[i].co)
 
-                # if isinstance(elem_list[0], bmesh.types.BMEdge): # First Selected Element
+                if isinstance(elem_list[0], bmesh.types.BMEdge): # First Selected Element
 
                 #     perpendicular_1 = mathutils.geometry.intersect_point_line(elem_list[0].verts[0].co, elem_list[1].verts[0].co, elem_list[1].verts[1].co)
                 #     perpendicular_2 = mathutils.geometry.intersect_point_line(elem_list[0].verts[1].co, elem_list[1].verts[0].co, elem_list[1].verts[1].co)
@@ -205,8 +207,8 @@ class SetLength(bpy.types.Operator):
                 #         war = "WARNING"
                 #         self.report({war}, text)
 
-                    # vec[0] = mathutils.geometry.intersect_point_line( (elem_list[0].verts[0].co + elem_list[0].verts[1].co ) / 2, elem_list[0].verts[0].co, elem_list[0].verts[1].co)
-
+                    empty = mathutils.geometry.intersect_point_line( (elem_list[1].verts[0].co + elem_list[1].verts[1].co ) / 2, elem_list[0].verts[0].co, elem_list[0].verts[1].co)
+                    vec[0] = empty[0]
 
                 if isinstance(elem_list[0], bmesh.types.BMFace): # First Selected Element
 
@@ -224,8 +226,9 @@ class SetLength(bpy.types.Operator):
                     #     war = "WARNING"
                     #     self.report({war}, text)
 
-                vertical = mathutils.geometry.intersect_point_line(vec[0], vec[1], vec[2])
-                vec[1] = vertical[0]
+
+                empty = mathutils.geometry.intersect_point_line(vec[0], vec[1], vec[2])
+                vec[1] = empty[0]
 
             elif isinstance(elem_list[1], bmesh.types.BMFace):  # Second Selected Element
                 # print("BMFace")
@@ -261,6 +264,12 @@ class SetLength(bpy.types.Operator):
 
                 distance_for_faces = mathutils.geometry.intersect_line_plane(vec[0], vec[0] + elem_list[1].normal, elem_list[1].calc_center_median(), elem_list[1].normal )
                 vec[1] = distance_for_faces
+        
+        # else:
+        #     for g in bm.select_history:
+        #         # if len(vec)<3:
+        #         vec.append(bm.verts[g.index].co)
+        #         ind.append(g.index)
 
 
 
@@ -313,7 +322,7 @@ class SetLength(bpy.types.Operator):
             self.report({war}, text)
             return{"FINISHED"}
 
-        elif len(elem_list) == 1:
+        elif len(elem_list) == 1 and isinstance(elem_list[0], bmesh.types.BMVert) == True:
 
             v2 = vec[0] 
 
@@ -487,7 +496,7 @@ class SetLength(bpy.types.Operator):
                 # bpy.context.scene.update_tag()
                 # bpy.context.view_layer.update()
 
-        else:
+        elif len(elem_list) >= 2:
 
             # Invert direction for edge
             if invert_direction == True:
@@ -507,6 +516,9 @@ class SetLength(bpy.types.Operator):
             v1=vec[0]
             v2=vec[1]
             # lv=v2-v1
+        
+        else:
+            pass
 
         lv=v2-v1
 
@@ -525,14 +537,14 @@ class SetLength(bpy.types.Operator):
         # Scale factor
         try:
             if self.plus_length == 1:
+                l = length 
                 length = lengthtrue / (length + lengthtrue)
-                # l = length 
             elif self.plus_length == -1:
+                l =  - length 
                 length = lengthtrue / (-length + lengthtrue) 
-                # l =  - length 
             else:
+                l = length - lengthtrue
                 length = lengthtrue / length
-                # l = length - lengthtrue
         except ZeroDivisionError:
             bpy.ops.object.dialog_warning_operator_4('INVOKE_DEFAULT')
             return {"FINISHED"}
@@ -564,18 +576,18 @@ class SetLength(bpy.types.Operator):
             obj_camera.rotation_euler = rot_quat.to_euler()
         
         
-        # # Create Matrix
-        # mat_loc =  mathutils.Matrix.Translation(( 0.0 ,  0.0 ,  0.0 ))        
-        # mat_sca =  mathutils.Matrix.Scale( 1.0 ,  4 ,  ( 0.0 ,  0.0 ,  1.0 ))
-        # mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
+        # Create Matrix
+        mat_loc =  mathutils.Matrix.Translation(( 0.0 ,  0.0 ,  0.0 ))        
+        mat_sca =  mathutils.Matrix.Scale( 1.0 ,  4 ,  ( 0.0 ,  0.0 ,  1.0 ))
+        mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
 
-        # mat_out =  mat_loc @  mat_rot @  mat_sca
+        mat_out =  mat_loc @  mat_rot @  mat_sca
 
-        # S = mat_out
+        S = mat_out
 
-        # S.translation -= pp
+        S.translation -= pp
 
-        S =  bpy.context.scene.cursor.matrix.inverted() @ bpy.context.active_object.matrix_world
+        # S =  bpy.context.scene.cursor.matrix.inverted() @ bpy.context.active_object.matrix_world
 
         if bool2 == 1:         
                                 
@@ -613,19 +625,19 @@ class SetLength(bpy.types.Operator):
             #     else:
             #         lv[i] = 1/length
 
-            bmesh.ops.scale(
-                    bm,
-                    vec = mathutils.Vector( ( 1, 1, 1/length )),
-                    verts=[v for v in bm.verts if v.select],
-                    space=S
-                    )
-
-            # bmesh.ops.rotate(
+            # bmesh.ops.scale(
             #         bm,
-            #         matrix=R,
+            #         vec = mathutils.Vector( ( 1, 1, 1/length )),
             #         verts=[v for v in bm.verts if v.select],
             #         space=S
             #         )
+
+            bmesh.ops.rotate(
+                    bm,
+                    matrix=R,
+                    verts=[v for v in bm.verts if v.select],
+                    space=S
+                    )
 
             elem_list[0].select = 1
 
