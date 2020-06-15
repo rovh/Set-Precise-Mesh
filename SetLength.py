@@ -25,108 +25,14 @@ def check(self):
     if obj.scale != Vector((1.0, 1.0, 1.0)) or obj.delta_scale != Vector((1.0, 1.0, 1.0)):
         bpy.ops.object.dialog_warning_operator('INVOKE_DEFAULT')
 
-class SetLength_Plus(bpy.types.Operator):
-    """Tooltip"""
-    bl_idname = "mesh.change_length_plus"
-    bl_label = "Plus Length / Distance"
-    bl_description = 'Add/plus the length/distance to the selected item \
-    \n\
-    \nYou can also assign shortcut\
-    \nHow to do it: > right-click on this button > Assign Shortcut'
-    bl_options = {'REGISTER', 'UNDO'}
-
-
-    @classmethod
-    def poll(cls, context):
-        return context.active_object is not None
-
-    def execute(self, context):
-
-        # The script crashes due to the fact that "self.report"
-        # as I understand does not work  it in the case of embedding one operator in another
-
-        try:
-            bpy.ops.mesh.change_length(plus_length = 1)
-        except RuntimeError:
-            text = "You need to select 2 vertices"
-            war = "ERROR"
-            self.report({war}, text)
-
-
-        # bpy.ops.mesh.change_length(plus_length = 1)
-
-
-        return {"FINISHED"}
-
-class SetLength_Minus(bpy.types.Operator):
-    """Tooltip"""
-    bl_idname = "mesh.change_length_minus"
-    bl_label = "Minus Length / Distance"
-    bl_description = 'Reduse/Minus the length/distance of the selected item \
-    \n\
-    \nYou can also assign shortcut\
-    \nHow to do it: > right-click on this button > Assign Shortcut'
-    bl_options = {'REGISTER', 'UNDO'}
-
-
-    @classmethod
-    def poll(cls, context):
-        return context.active_object is not None
-
-    def execute(self, context):
-
-        # The script crashes due to the fact that "self.report"
-        # as I understand does not work  it in the case of embedding one operator in another
-
-        try:
-            bpy.ops.mesh.change_length(plus_length = -1)
-        except RuntimeError:
-            text = "You need to select 2 vertices"
-            war = "ERROR"
-            self.report({war}, text)
-
-
-        # bpy.ops.mesh.change_length(plus_length = 1)
-
-
-        return {"FINISHED"}
-
-class SetLength_Copy(bpy.types.Operator):
-    """Tooltip"""
-    bl_idname = "mesh.change_length_copy"
-    bl_label = "Set Length / Distance"
-    bl_description = '  You can also assign shortcut \
-    \n  How to do it: > right-click on this button > Assign Shortcut'
-    bl_options = {'REGISTER', 'UNDO'}
-
-
-    @classmethod
-    def poll(cls, context):
-        return context.active_object is not None
-
-    def execute(self, context):
-
-        # The script crashes due to the fact that "self.report"
-        # as I understand does not work  it in the case of embedding one operator in another
-
-        # try:
-        #     bpy.ops.mesh.change_length()
-        # except RuntimeError:
-        #     text = "You need to select 2 vertices"
-        #     war = "ERROR"
-        #     self.report({war}, text)
-
-        bpy.ops.mesh.change_length()
-
-
-        return {"FINISHED"}
 
 class SetLength(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_length"
     bl_label = "Set Length / Distance"
     bl_description = 'Set Length / Distance \n You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut'
-    bl_options = {'REGISTER', 'UNDO'}
+    # bl_options = {'REGISTER', 'UNDO'}
+    bl_options = {'UNDO'}
 
     plus_length: bpy.props.IntProperty() 
     
@@ -215,26 +121,33 @@ class SetLength(bpy.types.Operator):
 
         bool = bpy.context.window_manager.setprecisemesh.lengthbool
         bool2 = bpy.context.window_manager.setprecisemesh.lengthinput
+
+        # Get values
+        prog = context.window_manager.setprecisemesh.projection_type_2
+        settings = bpy.context.preferences.addons[__name__].preferences
+        invert_direction = settings.direction_of_length
         
         obj = bpy.context.edit_object
         me = obj.data
         bm = bmesh.from_edit_mesh(me)
         
         # Create list
-        vec = []
         ind = []
+        vec = []
+        elem_list = []
         
         #Append to lists
-        for g in bm.select_history:
-            # if len(vec)<3:
-            vec.append(bm.verts[g.index].co)
-            ind.append(g.index)
-                
-        
-        # Get values
-        prog = context.window_manager.setprecisemesh.projection_type_2
-        settings = bpy.context.preferences.addons[__name__].preferences
-        invert_direction = settings.direction_of_length
+        # for g in bm.select_history:
+        #     # if len(vec)<3:
+        #     vec.append(bm.verts[g.index].co)
+        #     ind.append(g.index)
+
+
+        # else:
+        #     for g in bm.select_history:
+        #         # if len(vec)<3:
+        #         vec.append(bm.verts[g.index].co)
+        #         ind.append(g.index)
 
 
         # remember_length = bpy.types.Scene.remember_length
@@ -270,21 +183,31 @@ class SetLength(bpy.types.Operator):
             # vec.reverse()
             # ind.reverse()
 
-        
-
         offset = False 
 
+        """List of selected elementes"""
+        for g in bm.select_history:
+            elem_list.append(g)
+        
+        if invert_direction == True:
+            elem_list[0], elem_list[1] = elem_list[len(elem_list)-1], elem_list[len(elem_list)-2]
+
         # Check number
-        if len(vec) < 1:
+        if len(elem_list) < 1 and bool == False:
             text = "You need to select from 1 vertices"
             war = "ERROR"
             self.report({war}, text)
             return{"FINISHED"}
 
+        elif len(elem_list) == 1 and bool == False:
 
-        elif len(vec) == 1:
+            if isinstance(elem_list[0], bmesh.types.BMVert) == False:
+                text = '"Distance Simulation" supports only vertices'
+                war = "ERROR"
+                self.report({war}, text)
+                return{"FINISHED"}
 
-            v2 = vec[0] 
+            v2 = elem_list[0].co
 
             offset = False 
             offset_unit = 50          
@@ -412,8 +335,6 @@ class SetLength(bpy.types.Operator):
                     
                     return {"FINISHED"}
 
-                    
-
             elif prog == "custom_object_matrix":
 
                 bpy.context.object.update_from_editmode()
@@ -458,28 +379,136 @@ class SetLength(bpy.types.Operator):
                 # bpy.context.scene.update_tag()
                 # bpy.context.view_layer.update()
 
-        else:
+        elif (len(elem_list) > 1 and bool == False) or (len(elem_list) == 2 and bool == True):
 
-            # Invert direction for edge
-            if invert_direction == 1:
-                vec.reverse()
-                ind.reverse()
+            """First Selected Element"""
+            if isinstance(elem_list[0], bmesh.types.BMVert): # First Selected Elment
+                # print("BMVert")
+                ind.append(elem_list[0].index)
+                vec.append(elem_list[0].co)
+                
+            elif isinstance(elem_list[0], bmesh.types.BMEdge): # First Selected Elment
+                # print("BMEdge")
+                ind.append(elem_list[0].index)
+                vec.append((elem_list[0].verts[0].co + elem_list[0].verts[1].co) / 2)
+
+                if isinstance(elem_list[1], bmesh.types.BMVert): # Second Selected Element
+                    empty = mathutils.geometry.intersect_point_line(elem_list[1].co , elem_list[0].verts[0].co, elem_list[0].verts[1].co)
+                    vec[0] = empty[0]
+                
+                if isinstance(elem_list[1], bmesh.types.BMEdge): # Second Selected Element
+
+                    center_of_the_edge = (elem_list[1].verts[0].co + elem_list[1].verts[1].co ) / 2
+                    empty = mathutils.geometry.intersect_point_line( center_of_the_edge , elem_list[0].verts[0].co, elem_list[0].verts[1].co)
+                    vec[0] = empty[0]
+
+                    # perpendicular_1 = mathutils.geometry.intersect_point_line(elem_list[0].verts[0].co, elem_list[1].verts[0].co, elem_list[1].verts[1].co)
+                    # perpendicular_2 = mathutils.geometry.intersect_point_line(elem_list[0].verts[1].co, elem_list[1].verts[0].co, elem_list[1].verts[1].co)
+
+                    # perpendicular_1 = perpendicular_1[0] - elem_list[0].verts[0].co
+                    # perpendicular_2 = perpendicular_2[0] - elem_list[0].verts[1].co
+
+                    # perpendicular_1 = perpendicular_1.length
+                    # perpendicular_2 = perpendicular_2.length
+
+                    # print(perpendicular_1)
+                    # print(perpendicular_2)
+
+                    # if perpendicular_1 == perpendicular_2:
+                    #     pass
+                    # else:
+                    #     text = "Edges are not parallel"
+                    #     war = "WARNING"
+                    #     self.report({war}, text)
+
+            elif isinstance(elem_list[0], bmesh.types.BMFace): # First Selected Elment
+                # print("BMFace")
+                ind.append(elem_list[0].index)
+                vec.append(elem_list[0].calc_center_median())
+
+                if isinstance(elem_list[1], bmesh.types.BMVert): # Second Selected Element
+                    empty = mathutils.geometry.intersect_line_plane(elem_list[1].co , elem_list[1].co + elem_list[0].normal, elem_list[0].calc_center_median(), elem_list[0].normal )
+                    vec[0] = empty
+
+                if isinstance(elem_list[1], bmesh.types.BMEdge): # Second Selected Element
+
+                    center_of_the_edge = (elem_list[1].verts[0].co + elem_list[1].verts[1].co) / 2
+                    empty = mathutils.geometry.intersect_line_plane(center_of_the_edge, center_of_the_edge + elem_list[0].normal, elem_list[0].calc_center_median(), elem_list[0].normal )
+                    vec[0] = empty
+
+                    # perpendicular_1 = mathutils.geometry.distance_point_to_plane(elem_list[1].verts[0].co, elem_list[0].calc_center_median(), elem_list[0].normal)
+                    # perpendicular_2 = mathutils.geometry.distance_point_to_plane(elem_list[1].verts[1].co, elem_list[0].calc_center_median(), elem_list[0].normal)
+
+                    # if perpendicular_1 == perpendicular_2:
+                    #     pass
+                    # else:
+                    #     text = "The face and the edge are not parallel"
+                    #     war = "WARNING"
+                    #     self.report({war}, text)
+
+
+            """Second Selected Element Check"""
+            if isinstance(elem_list[1], bmesh.types.BMVert): # Second Selected Element
+                # print("BMVert")
+                ind.append(elem_list[1].index)
+                vec.append(elem_list[1].co)
+
+            elif isinstance(elem_list[1], bmesh.types.BMEdge):  # Second Selected Element
+                # print("BMEdge")
+                ind.append(elem_list[1].index)
+                empty = mathutils.geometry.intersect_point_line(vec[0] , elem_list[1].verts[0].co, elem_list[1].verts[1].co)
+                vec.append(empty[0])
+
+            elif isinstance(elem_list[1], bmesh.types.BMFace):  # Second Selected Element
+                # print("BMFace")
+                ind.append(elem_list[1].index)
+                empty = mathutils.geometry.intersect_line_plane(vec[0], vec[0] + elem_list[1].normal, elem_list[1].calc_center_median(), elem_list[1].normal )
+                vec.append(empty)
+
+                # if isinstance(elem_list[0], bmesh.types.BMEdge): # First Selected Element
+
+                    # perpendicular_1 = mathutils.geometry.distance_point_to_plane(elem_list[0].verts[0].co, elem_list[1].calc_center_median(), elem_list[1].normal)
+                    # perpendicular_2 = mathutils.geometry.distance_point_to_plane(elem_list[0].verts[1].co, elem_list[1].calc_center_median(), elem_list[1].normal)
+
+                    # if perpendicular_1 == perpendicular_2:
+                    #     pass
+                    # else:
+                    #     text = "The face and the edge are not parallel"
+                    #     war = "WARNING"
+                    #     self.report({war}, text)
+
+                # if isinstance(elem_list[0], bmesh.types.BMFace): # First Selected Element
+
+                    # perpendicular_1 = mathutils.geometry.distance_point_to_plane(elem_list[0].verts[0].co, elem_list[1].calc_center_median(), elem_list[1].normal)
+                    # perpendicular_2 = mathutils.geometry.distance_point_to_plane(elem_list[0].verts[1].co, elem_list[1].calc_center_median(), elem_list[1].normal)
+                    # perpendicular_3 = mathutils.geometry.distance_point_to_plane(elem_list[0].verts[2].co, elem_list[1].calc_center_median(), elem_list[1].normal)
+
+                    # if perpendicular_1 == perpendicular_2 and perpendicular_2 == perpendicular_3:
+                    #     pass
+                    # else:
+                    #     text = "Faces are not parallel"
+                    #     war = "WARNING"
+                    #     self.report({war}, text)
 
             # Set values
             v1=vec[0]
             v2=vec[1]
             # lv=v2-v1
+        
+        else:
+            text = 'In "Use two directions" mode You need to select only 2 elements (vertex, edge, face)'
+            war = "ERROR"
+            self.report({war}, text)
+            return{"FINISHED"}
 
         lv=v2-v1
-
-
 
         # Get global normal 
         norv1 = bpy.context.active_object.matrix_world  @ v1
         norv2 = bpy.context.active_object.matrix_world  @ v2
         normalgl = norv2 - norv1
 
-
+       
         # Length of the edge
         lengthtrue =lv.length
         
@@ -489,31 +518,31 @@ class SetLength(bpy.types.Operator):
         # Scale factor
         try:
             if self.plus_length == 1:
-                length = lengthtrue / (length + lengthtrue)
+                l = length 
+                # length = lengthtrue / (length + lengthtrue)
             elif self.plus_length == -1:
-                length = lengthtrue / (-length + lengthtrue) 
+                l =  - length 
+                # length = lengthtrue / (-length + lengthtrue) 
             else:
-                length = lengthtrue / length
+                l = length - lengthtrue
+                # length = lengthtrue / length
         except ZeroDivisionError:
             bpy.ops.object.dialog_warning_operator_4('INVOKE_DEFAULT')
             return {"FINISHED"}
 
         # if offset == True:                     
             # length = length * (length / (length + offset_unit))
-
-         
     
         context = bpy.context
         scene = context.scene
         ob = context.edit_object
-        
-
 
         #Set Cursor location and mode
-        if bool== 1:
+        if bool== True:
             if prog != "cursor_matrix" and prog != "cursor_location":
                 bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world  @ mv
             pp = mv
+        
         else:
             if prog != "cursor_matrix" and prog != "cursor_location":
                 bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world @ v1
@@ -535,13 +564,13 @@ class SetLength(bpy.types.Operator):
         mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
 
         mat_out =  mat_loc @  mat_rot @  mat_sca
-        
-        
+
         S = mat_out
+
         S.translation -= pp
-        
-        
-        
+
+        # S =  bpy.context.scene.cursor.matrix.inverted() @ bpy.context.active_object.matrix_world
+
         if bool2 == 1:         
                                 
             m = bpy.context.scene.tool_settings.transform_pivot_point
@@ -554,18 +583,89 @@ class SetLength(bpy.types.Operator):
             
             bpy.context.scene.tool_settings.transform_pivot_point = m
 
-            bmesh.update_edit_mesh(me, True)
-
-                   
+            bmesh.update_edit_mesh(me, True)        
+        
         else:
 
-            R = Matrix.Scale(1/length, 4, (lv))
-  
-            bmesh.ops.rotate(bm, 
-                    matrix=R,        
-                    verts=[v for v in bm.verts if v.select],
-                    space=S)
-                    
+            # R = Matrix.Scale(1/length, 4, (lv))
+
+            translate_vector = lv.normalized() * l
+
+
+
+            if bool== 1 and len(elem_list) != 1:
+
+                    elem_list[0].select = 0
+
+                    bmesh.ops.translate(
+                        bm,
+                        # matrix=R,
+                        vec = mathutils.Vector( translate_vector /2 ),
+                        verts=[v for v in bm.verts if v.select],
+                        space=S
+                        )
+                    elem_list[0].select = 1
+
+                    elem_list[1].select = 0
+
+                    bmesh.ops.translate(
+                        bm,
+                        # matrix=R,
+                        vec = mathutils.Vector( translate_vector * -1 / 2),
+                        verts=[v for v in bm.verts if v.select],
+                        space=S
+                        )
+                    elem_list[1].select = 1
+
+            else:
+                if len(elem_list) != 1:
+
+                    elem_list[0].select = 0
+            
+                    bmesh.ops.translate(
+                            bm,
+                            # matrix=R,
+                            vec = mathutils.Vector( translate_vector ),
+                            verts=[v for v in bm.verts if v.select],
+                            space=S
+                            )
+                        
+                    elem_list[0].select = 1
+                
+                else:
+            
+                    bmesh.ops.translate(
+                            bm,
+                            # matrix=R,
+                            vec = mathutils.Vector( translate_vector ),
+                            verts=[v for v in bm.verts if v.select],
+                            space=S
+                            )
+                        
+
+
+            # for i in range(-1, 2):
+            #     if lv.normalized()[i] == 0:
+            #         lv[i] = 1
+            #     else:
+            #         lv[i] = 1/length
+
+            # bmesh.ops.scale(
+            #         bm,
+            #         vec = mathutils.Vector( ( 1, 1, 1/length )),
+            #         verts=[v for v in bm.verts if v.select],
+            #         space=S
+            #         )
+
+            # bmesh.ops.rotate(
+            #         bm,
+            #         matrix=R,
+            #         verts=[v for v in bm.verts if v.select],
+            #         space=S
+            #         )
+
+            
+
             bmesh.update_edit_mesh(me, True)
                   
         bmesh.ops.recalc_face_normals(bm, faces=bm.faces)

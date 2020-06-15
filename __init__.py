@@ -16,7 +16,7 @@ bl_info = {
     "author" : "Rovh",
     "description" : "This addon allows you to set exact values for the mesh",
     "blender" : (2, 83, 0),
-    "version" : (1,1,3),
+    "version" : (1,2,0),
     "location" : "View3D > Sidebar in Edit Mode > Item Tab, View Tab and Edit Tab",
     "warning" : "",
     "wiki_url": "https://github.com/rovh/Set-Precise-Mesh",
@@ -188,9 +188,10 @@ class Angle_Simulation_SetPreciseMesh (bpy.types.Operator):
    
     bl_idname = "wm.header_angle_simulation_setprecisemesh"
     bl_label = "Header Menu"
-    bl_description = "To make it convenient to use this menu You can assign shortcut \n \
-         ( For example Ctrl + Alt + Middle Mouse )\n \
-        How to do it: > right-click on this button > Assign Shortcut"
+    bl_description = '\nYou need to select two vertexes to use "Angle Simulation"\n\n\
+    To make it convenient to use this menu You can assign shortcut \n \
+    ( For example Ctrl + Alt + Middle Mouse )\n \
+    How to do it: > right-click on this button > Assign Shortcut'
   
     
     def invoke(self, context, event): 
@@ -307,9 +308,10 @@ class Length_Simulation_SetPreciseMesh (bpy.types.Operator):
    
     bl_idname = "wm.header_length_simulation_setprecisemesh"
     bl_label = "Header Menu"
-    bl_description = "To make it convenient to use this menu You can assign shortcut \n \
-         ( For example Ctrl + Alt + Middle Mouse )\n \
-        How to do it: > right-click on this button > Assign Shortcut"
+    bl_description = '\nYou need to select one vertex to use "Length / Distance Simulation"\n\n\
+    To make it convenient to use this menu You can assign shortcut \n \
+    ( For example Ctrl + Alt + Middle Mouse )\n \
+    How to do it: > right-click on this button > Assign Shortcut'
   
     
     def invoke(self, context, event): 
@@ -640,15 +642,15 @@ class Popup_Menu_SetPreciseMesh_SetLength (bpy.types.Operator):
         split_left = col.split(factor=0.55, align=True)
         split_left.scale_y = 1.2
         
-        split_left.operator("mesh.change_length_copy",icon="DRIVER_DISTANCE")
+        split_left.operator("mesh.change_length",icon="DRIVER_DISTANCE").plus_length = 0
 
         split_center = split_left.split(factor=0.43, align=True)
 
-        split_center.operator("mesh.change_length_plus",icon="ADD", text = "")
-            # 
+        split_center.operator("mesh.change_length",icon="ADD", text = "").plus_length = 1
+        
         split_right = split_center.split(factor=0.8, align=True)
 
-        split_right.operator("mesh.change_length_minus", icon="REMOVE", text = "")
+        split_right.operator("mesh.change_length", icon="REMOVE", text = "").plus_length = -1
 
         # split_right = split_center.split(factor=0.9, align=True)
 
@@ -1062,15 +1064,15 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
         split_left = col.split(factor=0.55, align=True)
         split_left.scale_y = 1.2
         
-        split_left.operator("mesh.change_length_copy",icon="DRIVER_DISTANCE")
+        split_left.operator("mesh.change_length",icon="DRIVER_DISTANCE").plus_length = 0
 
         split_center = split_left.split(factor=0.43, align=True)
 
-        split_center.operator("mesh.change_length_plus",icon="ADD", text = "")
+        split_center.operator("mesh.change_length",icon="ADD", text = "").plus_length = 1
             # 
         split_right = split_center.split(factor=0.8, align=True)
 
-        split_right.operator("mesh.change_length_minus", icon="REMOVE", text = "")
+        split_right.operator("mesh.change_length", icon="REMOVE", text = "").plus_length = -1
 
         # split_right = split_center.split(factor=0.9, align=True)
 
@@ -1242,7 +1244,9 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
         box.label(icon="PREFERENCES", text = "Preferences")
         row = box.row()
         col = row.column(align = False)
-        col.prop(self, "direction_of_length", text='Invert "Set Length" direction')
+        row = col.row(align = 1)
+        row.label(icon = "ARROW_LEFTRIGHT" )
+        row.prop(self, "direction_of_length", text='Invert / Reverse "Set Length" direction')
         
         row = col.row(align = False)
         row.operator("wm.menu_setprecisemesh_setangle",icon="DRIVER_ROTATIONAL_DIFFERENCE", text="Pop-up Menu (Hover cursor on it for more information)")
@@ -1460,12 +1464,7 @@ blender_classes = [
     SetAngle_Plus,
     SetAngle_Minus,
 
-
     SetLength,
-    SetLength_Copy,
-    SetLength_Plus,
-    SetLength_Minus,
-
 
     Dialog_Warning_Operator,
     Dialog_Warning_Operator_2,

@@ -791,7 +791,7 @@ class PRESETS_PT_presets_List_Angle(Panel):
             row = layout.row()
             col = row.column(align=True)
             row = col.row(align=True)
-            row.operator("presets_angle.clear_list", icon="X")
+            row.operator("presets_angle.clear_list", icon="TRASH")
             # row.operator("presets_angle.remove_duplicates", icon="GHOST_ENABLED")
 
 
@@ -893,7 +893,7 @@ class PRESETS_PT_presets_List_Length(Panel):
             row = layout.row()
             col = row.column(align=True)
             row = col.row(align=True)
-            row.operator("presets_length.clear_list", icon="X")
+            row.operator("presets_length.clear_list", icon="TRASH")
             # row.operator("presets_length.remove_duplicates", icon="GHOST_ENABLED")
 
 

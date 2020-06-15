@@ -25,7 +25,6 @@ def check(self):
 # def recalculate(self):
 
 
-
 class SetAngle_Plus(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_angle_plus"
@@ -108,7 +107,6 @@ class SetAngle_Copy(bpy.types.Operator):
             self.report({war}, text)
 
         return {"FINISHED"}
-
 
 
 class SetAngle(bpy.types.Operator):

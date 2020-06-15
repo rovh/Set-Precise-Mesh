@@ -14,7 +14,6 @@ import bmesh
 #         StringProperty,
 #         )
 
-
 class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.set_mesh_position_pop_up"
