@@ -552,15 +552,15 @@ class Popup_Menu_SetPreciseMesh_SetAngle (bpy.types.Operator):
         split_left = col.split(factor=0.55, align=True)
         split_left.scale_y = 1.2
         
-        split_left.operator("mesh.change_angle_copy", icon="DRIVER_ROTATIONAL_DIFFERENCE")
+        split_left.operator("mesh.change_angle", icon="DRIVER_ROTATIONAL_DIFFERENCE").Clear_angle_globally = 0
 
         split_center = split_left.split(factor=0.43, align=True)
 
-        split_center.operator("mesh.change_angle_plus", icon="ADD", text = "")
+        split_center.operator("mesh.change_angle", icon="ADD", text = "").Clear_angle_globally = 1
             # 
         split_right = split_center.split(factor=0.8, align=True)
 
-        split_right.operator("mesh.change_angle_minus", icon="REMOVE", text = "")
+        split_right.operator("mesh.change_angle", icon="REMOVE", text = "").Clear_angle_globally = -1
         
 
         # split = split.split(factor=1, align=True)
