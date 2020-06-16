@@ -357,9 +357,9 @@ class Set_Mesh_Position (bpy.types.Operator):
         bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True)
 
-        scale_remember_1 = bpy.context.object.scale[0].copy()
-        scale_remember_2 = bpy.context.object.scale[1].copy()
-        scale_remember_3 = bpy.context.object.scale[2].copy()
+        scale_remember_1 = bpy.context.object.scale[0]
+        scale_remember_2 = bpy.context.object.scale[1]
+        scale_remember_3 = bpy.context.object.scale[2]
 
 
         obj_matrix = bpy.context.active_object.matrix_world.copy()
@@ -393,9 +393,9 @@ class Set_Mesh_Position (bpy.types.Operator):
 
                 # bpy.context.active_object.matrix_world = mat_cur @ obj_matrix
 
-                bpy.context.object.scale[0] = scale_remember_1
-                bpy.context.object.scale[1] = scale_remember_2
-                bpy.context.object.scale[2] = scale_remember_3
+                # bpy.context.object.scale[0] = scale_remember_1
+                # bpy.context.object.scale[1] = scale_remember_2
+                # bpy.context.object.scale[2] = scale_remember_3
 
         elif position == "cursor":
             if position_location == True:
