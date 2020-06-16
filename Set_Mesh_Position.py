@@ -222,102 +222,138 @@ class Set_Mesh_Position (bpy.types.Operator):
         wm_inverted = wm.inverted()
 
         cursor_matrix_old = bpy.context.scene.cursor.matrix.copy()
-        cursor_location_old = bpy.context.scene.cursor.location
+        cursor_location_old = bpy.context.scene.cursor.location.copy()
 
-        bpy.ops.mesh.set_cursor()
 
-        # if len(selected_verts) == 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
+        """bpy.ops.mesh.set_cursor()"""
+        # bpy.ops.mesh.set_cursor()
 
-        #     text = "You need to select one vertex/edge/face"
-        #     war = "ERROR"
-        #     self.report({war}, text)
-        #     return{"FINISHED"}
+        obj = bpy.context.edit_object
+        me = obj.data
+        bm = bmesh.from_edit_mesh(me)
 
-        # if len(selected_verts) != 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+        bpy.context.object.update_from_editmode()
+        bmesh.update_edit_mesh(me, True)
 
-        #     if len(selected_verts) > 1:
-        #         text = "You need to select only one vertex"
-        #         war = "ERROR"
-        #         self.report({war}, text)
-        #         return{"FINISHED"}
+        selected_verts = [verts for verts in bm.verts if verts.select]
+        selected_edges = [edge for edge in bm.edges if edge.select]
+        selected_faces = [face for face in bm.faces if face.select]
 
-            
-        #     bpy.context.scene.cursor.location = wm @ selected_verts[0].co
+        wm = bpy.context.active_object.matrix_world.copy()
+        wm_inverted = wm.inverted()
 
-        #     normal = selected_verts[0].normal @ wm_inverted
+        if len(selected_verts) == 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
 
-        #     obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
-        #     direction = normal
-        #     # point the cameras '-Z' and use its 'Y' as up
-        #     rot_quat = direction.to_track_quat('-Z', 'Y')
-        #     obj_camera.rotation_euler = rot_quat.to_euler()
-        #     rot_quat =  rot_quat.to_euler()
+            text = "You need to select one vertex/edge/face"
+            war = "ERROR"
+            self.report({war}, text)
+            return{"FINISHED"}
 
-        # if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) == 0:
+        if len(selected_verts) != 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
 
-        #     if len(selected_edges) > 1:
-        #         text = "You need to select only one edge"
-        #         war = "ERROR"
-        #         self.report({war}, text)
-        #         return{"FINISHED"}
+            if len(selected_verts) > 1:
+                text = "You need to select only one vertex"
+                war = "ERROR"
+                self.report({war}, text)
+                return{"FINISHED"}
 
             
-        #     edge_verts = selected_edges[0].verts
+            bpy.context.scene.cursor.location = wm @ selected_verts[0].co
 
-        #     location_of_edge = ((wm @ edge_verts[0].co) + (wm @ edge_verts[1].co)) /2
-        #     bpy.context.scene.cursor.location = location_of_edge
+            normal = selected_verts[0].normal @ wm_inverted
 
-        #     faces_of_edge = selected_edges[0].link_faces
+            obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
+            direction = normal
+            # point the cameras '-Z' and use its 'Y' as up
+            rot_quat = direction.to_track_quat('-Z', 'Y')
+            obj_camera.rotation_euler = rot_quat.to_euler()
+            rot_quat =  rot_quat.to_euler()
 
-        #     normals_of_the_faces = []
+        if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) == 0:
 
-        #     # normal_from_face = 
+            if len(selected_edges) > 1:
+                text = "You need to select only one edge"
+                war = "ERROR"
+                self.report({war}, text)
+                return{"FINISHED"}
 
-        #     for f in range(0, len(faces_of_edge)):
-        #         # print(faces_of_edge[f])
-        #         normals_of_the_faces.append(faces_of_edge[f].normal @ wm_inverted) 
+            
+            edge_verts = selected_edges[0].verts
 
+            location_of_edge = ((wm @ edge_verts[0].co) + (wm @ edge_verts[1].co)) /2
+            bpy.context.scene.cursor.location = location_of_edge
 
-        #     normal_from_face = ((normals_of_the_faces[0]) + (normals_of_the_faces[1])) /2
-        #     normal_from_face = (normal_from_face) + (location_of_edge) 
-        #     normal_projection_from_face = mathutils.geometry.intersect_point_line(normal_from_face, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
-        #     normal_projection_from_face = normal_projection_from_face[0]
-        #     # normal_from_face = normal_projection_from_face
-        #     normal_from_face = (normal_from_face - normal_projection_from_face)
-        #     normal = normal_from_face
+            faces_of_edge = selected_edges[0].link_faces
 
+            normals_of_the_faces = []
 
-        #     obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
-        #     direction = normal
-        #     # point the cameras '-Z' and use its 'Y' as up
-        #     rot_quat = direction.to_track_quat('-Z', 'Y')
-        #     obj_camera.rotation_euler = rot_quat.to_euler()
-        #     rot_quat =  rot_quat.to_euler()
+            # normal_from_face = 
 
-        # if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) != 0:
-
-        #     if len(selected_faces) > 1:
-        #         text = "You need to select only one face"
-        #         war = "ERROR"
-        #         self.report({war}, text)
-        #         return{"FINISHED"}
+            for f in range(0, len(faces_of_edge)):
+                # print(faces_of_edge[f])
+                normals_of_the_faces.append(faces_of_edge[f].normal @ wm_inverted) 
 
 
-        #     my_location = wm @ selected_faces[0].calc_center_median()
-        #     normalgl = selected_faces[0].normal @ wm_inverted
+            normal_from_face = ((normals_of_the_faces[0]) + (normals_of_the_faces[1])) /2
+            normal_from_face = (normal_from_face) + (location_of_edge) 
+            normal_projection_from_face = mathutils.geometry.intersect_point_line(normal_from_face, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
+            normal_projection_from_face = normal_projection_from_face[0]
+            # normal_from_face = normal_projection_from_face
+            normal_from_face = (normal_from_face - normal_projection_from_face)
+            normal = normal_from_face
+
+
+
+            # print(normals_of_the_faces[0])
+
+
+            # normal = ((edge_verts[0].normal) + (edge_verts[1].normal))
+            # normal = (location_of_edge) + normal
+            # normal_projection = mathutils.geometry.intersect_point_line(normal, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
+            # normal_projection = normal_projection[0]
+            # normal = (normal - normal_projection)
+
+            # normal = normal_from_face + normal
+
+            
+
+            obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
+            direction = normal
+            # point the cameras '-Z' and use its 'Y' as up
+            rot_quat = direction.to_track_quat('-Z', 'Y')
+            obj_camera.rotation_euler = rot_quat.to_euler()
+            rot_quat =  rot_quat.to_euler()
+
+        if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) != 0:
+
+            if len(selected_faces) > 1:
+                text = "You need to select only one face"
+                war = "ERROR"
+                self.report({war}, text)
+                return{"FINISHED"}
+
+
+            my_location = wm @ selected_faces[0].calc_center_median()
+            normalgl = selected_faces[0].normal @ wm_inverted
 
                         
-        #     bpy.context.scene.cursor.location = my_location
+            bpy.context.scene.cursor.location = my_location
 
-        #     # Set cursor direction
-        #     obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
-        #     direction = normalgl
-        #     # point the cameras '-Z' and use its 'Y' as up
-        #     rot_quat = direction.to_track_quat('-Z', 'Y')
-        #     obj_camera.rotation_euler = rot_quat.to_euler()
-        #     rot_quat =  rot_quat.to_euler()
+            # Set cursor direction
+            obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
+            direction = normalgl
+            # point the cameras '-Z' and use its 'Y' as up
+            rot_quat = direction.to_track_quat('-Z', 'Y')
+            obj_camera.rotation_euler = rot_quat.to_euler()
+            rot_quat =  rot_quat.to_euler()
+
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+        """   End    bpy.ops.mesh.set_cursor()""" 
 
         
+
+
         bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True)
 
@@ -331,7 +367,7 @@ class Set_Mesh_Position (bpy.types.Operator):
 
         cursor_matrix = bpy.context.scene.cursor.matrix.copy()
         cursor_matrix_inverted = cursor_matrix.inverted()
-        cursor_location =  bpy.context.scene.cursor.location
+        cursor_location =  bpy.context.scene.cursor.location.copy()
 
         mat_cur   =  cursor_matrix_inverted @ obj_matrix
 
@@ -339,7 +375,8 @@ class Set_Mesh_Position (bpy.types.Operator):
 
         position = self.position
         position_location = context.window_manager.setprecisemesh.position_location
-        object_location = bpy.context.active_object.matrix_world.translation
+        object_location = bpy.context.active_object.matrix_world.translation.copy()
+        object_location =  bpy.context.active_object.location.copy()
 
 
         if position == "global":
@@ -362,16 +399,20 @@ class Set_Mesh_Position (bpy.types.Operator):
 
         elif position == "cursor":
             if position_location == True:
-                bpy.context.active_object.matrix_world.translation = -object_location + cursor_location
+                bpy.context.active_object.matrix_world.translation = object_location - cursor_location + cursor_location_old
             else:
                 bpy.context.active_object.matrix_world = cursor_matrix_old @ mat_cur
 
         elif position == "object":
-            obj_name = bpy.data.scenes[bpy.context.scene.name_full].object_position.name_full
-            obj_marx = bpy.data.objects[obj_name].matrix_world
+            if position_location == True:
+                obj_name = bpy.data.scenes[bpy.context.scene.name_full].object_position.name_full
+                obj_location = bpy.data.objects[obj_name].matrix_world.translation.copy()
+                bpy.context.active_object.matrix_world.translation = object_location - cursor_location + obj_location
+            else:
+                obj_name = bpy.data.scenes[bpy.context.scene.name_full].object_position.name_full
+                obj_marx = bpy.data.objects[obj_name].matrix_world
 
-            bpy.context.active_object.matrix_world = obj_marx @ mat_cur
-
+                bpy.context.active_object.matrix_world = obj_marx @ mat_cur
 
         bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True)
