@@ -24,95 +24,10 @@ def check(self):
 
 # def recalculate(self):
 
-
-class SetAngle_Plus(bpy.types.Operator):
-    """Tooltip"""
-    bl_idname = "mesh.change_angle_plus"
-    bl_label = "Plus Angle"
-    bl_description = 'Add/plus the angle to the selected angle\
-    \n\
-    \nYou can also assign shortcut\
-    \nHow to do it: > right-click on this button > Assign Shortcut'
-    bl_options = {'REGISTER', 'UNDO'}
-
-    @classmethod
-    def poll(cls, context):
-        return context.active_object is not None
-
-    def execute(self, context):
-
-        # The script crashes due to the fact that "self.report"
-        # as I understand does not work  it in the case of embedding one operator in another
-
-        try:
-            bpy.ops.mesh.change_angle(Clear_angle_globally = 1)
-        except RuntimeError:
-            text = "You need to select from 1 to 4 vertices"
-            war = "ERROR"
-            self.report({war}, text)
-
-        return {"FINISHED"}
-
-class SetAngle_Minus(bpy.types.Operator):
-    """Tooltip"""
-    bl_idname = "mesh.change_angle_minus"
-    bl_label = "Minus Angle"
-    bl_description = 'Reduce/Minus the angle of the selected angle\
-    \n\
-    \nYou can also assign shortcut\
-    \nHow to do it: > right-click on this button > Assign Shortcut'
-    bl_options = {'REGISTER', 'UNDO'}
-
-    @classmethod
-    def poll(cls, context):
-        return context.active_object is not None
-
-    def execute(self, context):
-
-        # The script crashes due to the fact that "self.report"
-        # as I understand does not work  it in the case of embedding one operator in another
-
-        try:
-            bpy.ops.mesh.change_angle(Clear_angle_globally = -1)
-        except RuntimeError:
-            text = "You need to select from 1 to 4 vertices"
-            war = "ERROR"
-            self.report({war}, text)
-
-        return {"FINISHED"}
-
-class SetAngle_Copy(bpy.types.Operator):
-    """Tooltip"""
-    bl_idname = "mesh.change_angle_copy"
-    bl_label = "Set Angle"
-    bl_description = "Set Angle\
-    \n  You can also assign shortcut\
-    \n  How to do it: > right-click on this button > Assign Shortcut"
-    bl_options = {'REGISTER', 'UNDO'}
-
-    @classmethod
-    def poll(cls, context):
-        return context.active_object is not None
-
-    def execute(self, context):
-
-        # The script crashes due to the fact that "self.report"
-        # as I understand does not work  it in the case of embedding one operator in another
-
-        try:
-            bpy.ops.mesh.change_angle(Clear_angle_globally = 0)
-        except RuntimeError:
-            text = "You need to select from 1 to 4 vertices"
-            war = "ERROR"
-            self.report({war}, text)
-
-        return {"FINISHED"}
-
-
 class SetAngle(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_angle"
-    bl_label = "Set Angle Original"
+    bl_label = "Set Angle"
     bl_description = "Set Angle \n You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     bl_options = {'REGISTER', 'UNDO'}
 
