@@ -32,6 +32,7 @@ from .SetAngle import *
 from .SetLength import *
 from .Set_Mesh_Position import *
 from .Presets import *
+from .Presets_Object import *
 
 
 from bpy import types
@@ -1497,6 +1498,7 @@ blender_classes = [
 
 """Classes of Presets"""
 classes = (
+    #"""Presets for Scene""",
     PRESETS_OT_Length_actions,
     PRESETS_OT_Length_clearList,
     PRESETS_OT_Length_actions_add,
@@ -1520,8 +1522,34 @@ classes = (
     PRESETS_UL_items_Length,
     PRESETS_PT_presets_List_Length,
 
+    #"""Presets for Object""",
+
+    PRESETS_OT_Angle_Object_actions,
+    PRESETS_OT_Angle_Object_actions_add,
+    PRESETS_OT_Angle_Object_actions_refresh,
+    PRESETS_OT_Angle_Object_actions_import,
+    PRESETS_OT_Angle_Object_Rename,
+    PRESETS_OT_Angle_Object_clearList,
+
+    PRESETS_UL_items_Angle_Object,
+    PRESETS_PT_presets_List_Angle_Object,
+
+
+    PRESETS_OT_Length_Object_actions,
+    PRESETS_OT_Length_Object_actions_add,
+    PRESETS_OT_Length_Object_actions_refresh,
+    PRESETS_OT_Length_Object_actions_import,
+    PRESETS_OT_Length_Object_Rename,
+    PRESETS_OT_Length_Object_clearList,
+
+    PRESETS_UL_items_Length_Object,
+    PRESETS_PT_presets_List_Length_Object,
+
+
+    #====================================
     PRESETS_presets_angle_Collection,
     PRESETS_presets_length_Collection,
+
 )
 
 def register():
@@ -1578,11 +1606,21 @@ def register():
     for cls in classes:
         register_class(cls)
 
+    """Presets for Scene"""
+    bpy.types.Scene.presets_angle = CollectionProperty(type=PRESETS_presets_angle_Collection)
+    bpy.types.Scene.presets_angle_index = IntProperty()
+
     bpy.types.Scene.presets_length = CollectionProperty(type=PRESETS_presets_length_Collection)
     bpy.types.Scene.presets_length_index = IntProperty()
 
-    bpy.types.Scene.presets_angle = CollectionProperty(type=PRESETS_presets_angle_Collection)
-    bpy.types.Scene.presets_angle_index = IntProperty()
+
+    """Presets for Objetcs"""
+    bpy.types.Object.presets_angle = CollectionProperty(type=PRESETS_presets_angle_Collection)
+    bpy.types.Object.presets_angle_index = IntProperty()
+
+    bpy.types.Object.presets_length = CollectionProperty(type=PRESETS_presets_length_Collection)
+    bpy.types.Object.presets_length_index = IntProperty()
+
 
 def unregister():
 
@@ -1611,11 +1649,20 @@ def unregister():
     for cls in reversed(classes):
         unregister_class(cls)
 
+    """Presets for Scene"""
+    del bpy.types.Scene.presets_angle
+    del bpy.types.Scene.presets_angle_index
+
     del bpy.types.Scene.presets_length
     del bpy.types.Scene.presets_length_index
 
-    del bpy.types.Scene.presets_angle
-    del bpy.types.Scene.presets_angle_index
+    """Presets for Object"""
+    del bpy.types.Object.presets_angle
+    del bpy.types.Object.presets_angle_index
+
+    del bpy.types.Object.presets_length
+    del bpy.types.Object.presets_length_index
+
 
 if __name__ == "__main__":
     register()
