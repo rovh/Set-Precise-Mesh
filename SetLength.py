@@ -511,6 +511,11 @@ class SetLength(bpy.types.Operator):
        
         # Length of the edge
         lengthtrue =lv.length
+
+        if self.plus_length == 2:
+            bpy.context.window_manager.setprecisemesh.length = lengthtrue
+            return {"FINISHED"}
+            
         
         # Center of the edge
         mv = (v1+v2)/2

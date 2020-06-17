@@ -1100,9 +1100,12 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             if script_input_2:   
                 col_top.prop(w_m, "data_block_2", text = "") 
 
+            
+
            
             split = col_top.split(factor = 0.835, align = 0)
             split.prop(w_m, "lengthbool")
+            split.operator("mesh.change_length",icon="EYEDROPPER", text = "").plus_length = 2
             split.operator("wm.header_length_simulation_setprecisemesh", text=" Distance Simulation", icon = "CON_TRACKTO")
 
 
