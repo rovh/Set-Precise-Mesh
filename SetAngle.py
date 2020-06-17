@@ -31,7 +31,8 @@ class SetAngle(bpy.types.Operator):
     bl_description = "Set Angle \n You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     bl_options = {'UNDO'}
 
-    Clear_angle_globally: bpy.props.IntProperty()
+    Clear_angle_globally: bpy.props.IntProperty(options={'SKIP_SAVE'})
+    eyedropper: bpy.props.BoolProperty(options={'SKIP_SAVE'})
 
     @classmethod
     def poll(cls, context):
@@ -461,6 +462,13 @@ class SetAngle(bpy.types.Operator):
             v1ch=v1-v2
             v3ch=v3-v2
             angle = v3ch.angle(v1ch, 0.0)
+
+        if self.eyedropper == True:
+            bpy.context.window_manager.setprecisemesh.angle = angle
+            print("\n")
+            print(angle)
+            print(11111111111111111111111111)
+            return {"FINISHED"}
         
         bmesh.update_edit_mesh(me, True, True)
 

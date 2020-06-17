@@ -1039,7 +1039,15 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             col_top = box.column(align = True)
 
             row = col_top.row(align = True)
-            row.prop(w_m, "angle")
+            row.prop(w_m, "angle", text = "")
+
+            sub_row = row.row(align = 1)
+            sub_row.label(icon="BLANK1")
+            sub_row.scale_x = 0.1
+            
+            sub_row = row.row(align = 1)
+            sub_row.operator("mesh.change_angle",icon="EYEDROPPER", text = "").eyedropper = True
+            sub_row.scale_x = 1.3
 
             row = row.row(align = False)
             row.scale_x = 1.2
@@ -1050,10 +1058,13 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
                 col_top.prop(w_m, "data_block", text = "")
 
 
-            split = col_top.split(factor = 0.835, align = 0)
-            split.prop(w_m, "anglebool" )
-            split.operator("wm.header_angle_simulation_setprecisemesh", text=" Angle Simulation", icon = "MOD_SIMPLIFY")
+            # split = col_top.split(factor = 0.835, align = 0)
+            split = col_top.row(align = 0)
 
+            split.prop(w_m, "anglebool" )
+            row = split.row(align = 0)
+            row.operator("wm.header_angle_simulation_setprecisemesh", text=" Angle Simulation", icon = "MOD_SIMPLIFY")
+            row.scale_x = 0.15
 
         #  sub = row.row(align = 1)
         # sub.scale_x = 0.6
@@ -1090,7 +1101,16 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             # col_top.prop(w_m, "length") 
 
             row = col_top.row(align = True)
-            row.prop(w_m, "length")
+            row.prop(w_m, "length", text = "")
+
+            sub_row = row.row(align = 1)
+            sub_row.label(icon="BLANK1")
+            sub_row.scale_x = 0.1
+            
+            sub_row = row.row(align = 1)
+            sub_row.operator("mesh.change_length",icon="EYEDROPPER", text = "").plus_length = 2
+            sub_row.scale_x = 1.3
+
 
             row = row.row(align = False)
             row.scale_x = 1.2
@@ -1103,10 +1123,14 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             
 
            
-            split = col_top.split(factor = 0.835, align = 0)
+            # split = col_top.split(factor = 0.835, align = 0)
+            split = col_top.row(align = 0)
+            
             split.prop(w_m, "lengthbool")
-            split.operator("mesh.change_length",icon="EYEDROPPER", text = "").plus_length = 2
-            split.operator("wm.header_length_simulation_setprecisemesh", text=" Distance Simulation", icon = "CON_TRACKTO")
+
+            row = split.row(align = 0)
+            row.operator("wm.header_length_simulation_setprecisemesh", text=" Distance Simulation", icon = "CON_TRACKTO")
+            row.scale_x = 0.15
 
 
                  
