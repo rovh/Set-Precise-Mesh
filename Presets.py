@@ -967,7 +967,7 @@ class PRESETS_FOR_PRESETS_LENGTH_OT_Rename(Operator):
 class PRESETS_FOR_PRESETS_LENGTH_OT_Refresh(Operator):
     """Clear all items of the list"""
     bl_idname = "presets_for_presets_length.refresh"
-    bl_label = ""
+    bl_label = "Overwrite"
     bl_description = "Overwrite item"
     # bl_options = {'UNDO'}
 
@@ -1061,7 +1061,7 @@ class PRESETS_FOR_PRESETS_ANGLE_OT_Rename(Operator):
 class PRESETS_FOR_PRESETS_ANGLE_OT_Refresh(Operator):
     """Clear all items of the list"""
     bl_idname = "presets_for_presets.refresh"
-    bl_label = ""
+    bl_label = "Overwrite"
     bl_description = "Overwrite item"
     # bl_options = {'UNDO'}
 
