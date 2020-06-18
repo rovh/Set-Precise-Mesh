@@ -1482,7 +1482,8 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
     )
     position_location: bpy.props.BoolProperty(
         name="Move Location",
-        description="Apply the object's rotation transformation to its data",
+        description=" Only Move object \
+        \n(Set the mesh position not in accordance with the normal of the selected part of the mesh)",
         default = False,
     )
 
@@ -1584,7 +1585,7 @@ classes = (
     PRESETS_FOR_PRESETS_LENGTH_OT_AddPreset,
     PRESETS_FOR_PRESETS_LENGTH_OT_Rename,
     PRESETS_FOR_PRESETS_LENGTH_OT_Refresh,
-    
+
     PRESETS_FOR_PRESETS_PT_panel,
 
     PRESETS_UL_items_Angle,

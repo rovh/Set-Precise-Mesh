@@ -913,6 +913,7 @@ class PRESETS_FOR_PRESETS_LENGTH_OT_AddPreset(AddPresetBase, Operator):
     bl_idname = "scene.presets_for_presets_length_add"
     bl_label = "Add Preset"
     preset_menu = "PRESETS_FOR_PRESETS_LENGTH_MT_DisplayPresets"
+    bl_description = "Add or remove preset"
 
     preset_defines = ["scene = bpy.context.scene"]
 
@@ -999,6 +1000,7 @@ class PRESETS_FOR_PRESETS_ANGLE_OT_AddPreset(AddPresetBase, Operator):
     bl_idname = "scene.presets_for_presets_add"
     bl_label = "Add Preset"
     preset_menu = "PRESETS_FOR_PRESETS_ANGLE_MT_DisplayPresets"
+    bl_description = "Add or remove preset"
 
     preset_defines = ["scene = bpy.context.scene"]
 
@@ -1076,7 +1078,9 @@ class PRESETS_FOR_PRESETS_PT_panel(Panel):
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
     bl_context = "scene"
-    bl_label = "Library Presets"
+    bl_label = "Library Presets (Angle / Length)"
+    bl_options = {'DEFAULT_CLOSED'}
+
 
     @classmethod
     def poll(cls, context):
