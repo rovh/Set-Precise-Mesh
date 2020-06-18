@@ -989,16 +989,16 @@ class PRESETS_FOR_PRESETS_LENGTH_OT_Refresh(Operator):
 
 PRESET_SUBDIR = "Angle"
 
-class PRESETS_FOR_PRESETS_MT_DisplayPresets(Menu):
+class PRESETS_FOR_PRESETS_ANGLE_MT_DisplayPresets(Menu):
     bl_label = "Units Presets"
     preset_subdir = PRESET_SUBDIR
     preset_operator = "script.execute_preset"
     draw = Menu.draw_preset
 
-class PRESETS_FOR_PRESETS_OT_AddPreset(AddPresetBase, Operator):
+class PRESETS_FOR_PRESETS_ANGLE_OT_AddPreset(AddPresetBase, Operator):
     bl_idname = "scene.presets_for_presets_add"
     bl_label = "Add Preset"
-    preset_menu = "PRESETS_FOR_PRESETS_MT_DisplayPresets"
+    preset_menu = "PRESETS_FOR_PRESETS_ANGLE_MT_DisplayPresets"
 
     preset_defines = ["scene = bpy.context.scene"]
 
@@ -1009,7 +1009,7 @@ class PRESETS_FOR_PRESETS_OT_AddPreset(AddPresetBase, Operator):
 
     preset_subdir = PRESET_SUBDIR
 
-class PRESETS_FOR_PRESETS_OT_Rename(Operator):
+class PRESETS_FOR_PRESETS_ANGLE_OT_Rename(Operator):
     """Clear all items of the list"""
     bl_idname = "presets_for_presets.rename"
     bl_label = "Rename"
@@ -1025,7 +1025,7 @@ class PRESETS_FOR_PRESETS_OT_Rename(Operator):
 
     def invoke(self, context, event):
 
-        self.name_input = bpy.types.PRESETS_FOR_PRESETS_MT_DisplayPresets.bl_label
+        self.name_input = bpy.types.PRESETS_FOR_PRESETS_ANGLE_MT_DisplayPresets.bl_label
 
         return context.window_manager.invoke_props_dialog(self)
         # return context.window_manager.invoke_popup(self)
@@ -1035,12 +1035,12 @@ class PRESETS_FOR_PRESETS_OT_Rename(Operator):
     def execute(self, context):
 
         # bpy.ops.scene.presets_for_presets_add(name=self.name_input, remove_name=1, remove_active=0)
-        bpy.types.PRESETS_FOR_PRESETS_MT_DisplayPresets.bl_label = self.name_input
+        bpy.types.PRESETS_FOR_PRESETS_ANGLE_MT_DisplayPresets.bl_label = self.name_input
         # bpy.ops.eeveepresets.preset_add(name=self.name_input, remove_name=0, remove_active=False)
 
         return {"FINISHED"}
 
-class PRESETS_FOR_PRESETS_OT_Refresh(Operator):
+class PRESETS_FOR_PRESETS_ANGLE_OT_Refresh(Operator):
     """Clear all items of the list"""
     bl_idname = "presets_for_presets.refresh"
     bl_label = "You can rename it"
@@ -1055,7 +1055,7 @@ class PRESETS_FOR_PRESETS_OT_Refresh(Operator):
         layout.prop(self, "name_input", text = "Name")
 
     def invoke(self, context, event):
-        self.name_input =  bpy.types.PRESETS_FOR_PRESETS_MT_DisplayPresets.bl_label
+        self.name_input =  bpy.types.PRESETS_FOR_PRESETS_ANGLE_MT_DisplayPresets.bl_label
 
         return context.window_manager.invoke_props_dialog(self)
         # return context.window_manager.invoke_popup(self)
@@ -1072,12 +1072,11 @@ class PRESETS_FOR_PRESETS_OT_Refresh(Operator):
 
 
 
-
 class PRESETS_FOR_PRESETS_PT_panel(Panel):
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
     bl_context = "scene"
-    bl_label = "Presets"
+    bl_label = "Library Presets"
 
     @classmethod
     def poll(cls, context):
@@ -1094,33 +1093,39 @@ class PRESETS_FOR_PRESETS_PT_panel(Panel):
 
         row = col.row(align=True)
         row.scale_y = 1.1
-        row.scale_x = 1.4
+        row.scale_x = 1.35
 
         sub_row = row.row(align = 1)
-        sub_row.scale_x = 0.95
-        sub_row.label(icon = "DRIVER_ROTATIONAL_DIFFERENCE")
+        sub_row.alignment = "LEFT"
+        sub_row.ui_units_x = 2.4
+        sub_row.label(icon = "DRIVER_ROTATIONAL_DIFFERENCE", text = "Angle")
 
-        row.menu(PRESETS_FOR_PRESETS_MT_DisplayPresets.__name__,
-                 text=PRESETS_FOR_PRESETS_MT_DisplayPresets.bl_label)
 
-        row.operator(PRESETS_FOR_PRESETS_OT_AddPreset.bl_idname,
+        row.menu(PRESETS_FOR_PRESETS_ANGLE_MT_DisplayPresets.__name__,
+                 text=PRESETS_FOR_PRESETS_ANGLE_MT_DisplayPresets.bl_label)
+
+        row.operator(PRESETS_FOR_PRESETS_ANGLE_OT_AddPreset.bl_idname,
                      text="", icon='ADD')
 
-        row.operator(PRESETS_FOR_PRESETS_OT_AddPreset.bl_idname,
+        row.operator(PRESETS_FOR_PRESETS_ANGLE_OT_AddPreset.bl_idname,
                      text="", icon='REMOVE').remove_active = True
 
         row.operator("presets_for_presets.refresh", icon = "FILE_REFRESH", text = "")
 
         # row.operator("presets_for_presets.rename", icon = "SORTALPHA")
-        col.separator(factor = 0.3)
+
+
+        col.separator(factor = 0.35)
+
 
         row = col.row(align=True)
         row.scale_y = 1.1
-        row.scale_x = 1.4
+        row.scale_x = 1.35
 
         sub_row = row.row(align = 1)
-        sub_row.scale_x = 0.95
-        sub_row.label(icon = "DRIVER_DISTANCE")
+        sub_row.alignment = "LEFT"
+        sub_row.ui_units_x = 2.4
+        sub_row.label(icon = "DRIVER_DISTANCE", text = "Length")
 
         row.menu(PRESETS_FOR_PRESETS_LENGTH_MT_DisplayPresets.__name__,
                  text=PRESETS_FOR_PRESETS_LENGTH_MT_DisplayPresets.bl_label)
