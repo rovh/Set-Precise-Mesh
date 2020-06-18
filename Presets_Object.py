@@ -647,6 +647,7 @@ class PRESETS_OT_Length_Object_clearList(Operator):
         return{'FINISHED'}
 
 
+
        
 class PRESETS_UL_items_Angle_Object(UIList):
 
@@ -689,7 +690,7 @@ class PRESETS_PT_presets_List_Angle_Object(Panel):
             layout = self.layout
             scn = bpy.context.active_object
 
-            rows = 4
+            rows = 5
             row = layout.row()
             row.template_list("PRESETS_UL_items_Angle_Object", "", scn, "presets_angle", scn, "presets_angle_index", rows=rows)
 
@@ -701,15 +702,16 @@ class PRESETS_PT_presets_List_Angle_Object(Panel):
             col.operator("presets_angle_object.list_action_add", icon='ADD', text="")
             col.operator("presets_angle_object.list_action", icon='REMOVE', text="").action = 'REMOVE'
             
-            col.separator()
+            col.separator(factor = 0.4)
 
             col.operator("presets_angle_object.list_action", icon='TRIA_UP', text="").action = 'UP'
             col.operator("presets_angle_object.list_action", icon='TRIA_DOWN', text="").action = 'DOWN'
 
-            row = layout.row()
-            col = row.column(align=True)
-            row = col.row(align=True)
-            row.operator("presets_angle_object.clear_list", icon="TRASH")
+            col.separator(factor = 0.4)
+            # row = layout.row()
+            # col = row.column(align=True)
+            # row = col.row(align=True)
+            col.operator("presets_angle_object.clear_list", icon="TRASH", text = "")
             # row.operator("presets_angle.remove_duplicates", icon="GHOST_ENABLED")
 
 
@@ -754,9 +756,9 @@ class PRESETS_PT_presets_List_Length_Object(Panel):
             # scn = bpy.context.scene
             scn =  bpy.context.active_object
 
-            rows = 4
+            rows = 5
             row = layout.row()
-            row.template_list("PRESETS_UL_items_Length_Object", "", scn, "presets_length", scn, "presets_length_index", rows=rows)
+            row.template_list("PRESETS_UL_items_Length_Object", "", scn, "presets_length", scn, "presets_length_index", rows = rows)
 
             col = row.column(align=True)
             col.scale_x = 1.1
@@ -766,15 +768,16 @@ class PRESETS_PT_presets_List_Length_Object(Panel):
             col.operator("presets_length_object.list_action_add", icon='ADD', text="")
             col.operator("presets_length_object.list_action", icon='REMOVE', text="").action = 'REMOVE'
             
-            col.separator()
+            col.separator(factor = 0.4)
 
             col.operator("presets_length_object.list_action", icon='TRIA_UP', text="").action = 'UP'
             col.operator("presets_length_object.list_action", icon='TRIA_DOWN', text="").action = 'DOWN'
 
-            row = layout.row()
-            col = row.column(align=True)
-            row = col.row(align=True)
-            row.operator("presets_length_object.clear_list", icon="TRASH")
+            col.separator(factor = 0.4)
+            # row = layout.row()
+            # col = row.column(align=True)
+            # row = col.row(align=True)
+            col.operator("presets_length_object.clear_list", icon="TRASH", text = "")
             # row.operator("presets_length.remove_duplicates", icon="GHOST_ENABLED")
 
 

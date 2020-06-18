@@ -465,9 +465,6 @@ class SetAngle(bpy.types.Operator):
 
         if self.eyedropper == True:
             bpy.context.window_manager.setprecisemesh.angle = angle
-            print("\n")
-            print(angle)
-            print(11111111111111111111111111)
             return {"FINISHED"}
         
         bmesh.update_edit_mesh(me, True, True)

@@ -34,7 +34,8 @@ class SetLength(bpy.types.Operator):
     # bl_options = {'REGISTER', 'UNDO'}
     bl_options = {'UNDO'}
 
-    plus_length: bpy.props.IntProperty() 
+    plus_length: bpy.props.IntProperty(options = {"SKIP_SAVE"}) 
+    eyedropper: bpy.props.BoolProperty(options = {"SKIP_SAVE"})
     
     @classmethod
     def poll(cls, context):
@@ -512,7 +513,7 @@ class SetLength(bpy.types.Operator):
         # Length of the edge
         lengthtrue =lv.length
 
-        if self.plus_length == 2:
+        if self.eyedropper == True:
             bpy.context.window_manager.setprecisemesh.length = lengthtrue
             return {"FINISHED"}
             
