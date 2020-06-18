@@ -767,35 +767,35 @@ class PRESETS_PT_presets_List_Angle(Panel):
         layout.label(icon = "DRIVER_ROTATIONAL_DIFFERENCE")
 
     def draw(self, context):
-
-        if bpy.context.active_object.mode in {'EDIT'}:
-        
-            layout = self.layout
-            scn = bpy.context.scene
-
-            rows = 5
-            row = layout.row()
-            row.template_list("PRESETS_UL_items_Angle", "", scn, "presets_angle", scn, "presets_angle_index", rows=rows)
-
-            col = row.column(align=True)
-            col.scale_x = 1.1
-            col.scale_y = 1.2
-
-            # col.operator("presets_angle.list_action", icon='ADD', text="").action = 'ADD'
-            col.operator("presets_angle.list_action_add", icon='ADD', text="")
-            col.operator("presets_angle.list_action", icon='REMOVE', text="").action = 'REMOVE'
+        if bpy.context.active_object != None:
+            if bpy.context.active_object.mode in {'EDIT'}:
             
-            col.separator(factor = 0.4)
+                layout = self.layout
+                scn = bpy.context.scene
 
-            col.operator("presets_angle.list_action", icon='TRIA_UP', text="").action = 'UP'
-            col.operator("presets_angle.list_action", icon='TRIA_DOWN', text="").action = 'DOWN'
+                rows = 5
+                row = layout.row()
+                row.template_list("PRESETS_UL_items_Angle", "", scn, "presets_angle", scn, "presets_angle_index", rows=rows)
 
-            col.separator(factor = 0.4)
-            # row = layout.row()
-            # col = row.column(align=True)
-            # row = col.row(align=True)
-            col.operator("presets_angle.clear_list", icon="TRASH", text = "")
-            # row.operator("presets_angle.remove_duplicates", icon="GHOST_ENABLED")
+                col = row.column(align=True)
+                col.scale_x = 1.1
+                col.scale_y = 1.2
+
+                # col.operator("presets_angle.list_action", icon='ADD', text="").action = 'ADD'
+                col.operator("presets_angle.list_action_add", icon='ADD', text="")
+                col.operator("presets_angle.list_action", icon='REMOVE', text="").action = 'REMOVE'
+                
+                col.separator(factor = 0.4)
+
+                col.operator("presets_angle.list_action", icon='TRIA_UP', text="").action = 'UP'
+                col.operator("presets_angle.list_action", icon='TRIA_DOWN', text="").action = 'DOWN'
+
+                col.separator(factor = 0.4)
+                # row = layout.row()
+                # col = row.column(align=True)
+                # row = col.row(align=True)
+                col.operator("presets_angle.clear_list", icon="TRASH", text = "")
+                # row.operator("presets_angle.remove_duplicates", icon="GHOST_ENABLED")
 
 
 
@@ -871,36 +871,35 @@ class PRESETS_PT_presets_List_Length(Panel):
 
     def draw(self, context):
 
-
-        # if bpy.context.active_object.mode in {'EDIT'} and bpy.context.active_object != None:
-        if bpy.context.active_object.mode in {'EDIT'}:
-        
-            layout = self.layout
-            scn = bpy.context.scene
-
-            rows = 5
-            row = layout.row()
-            row.template_list("PRESETS_UL_items_Length", "", scn, "presets_length", scn, "presets_length_index", rows=rows)
-
-            col = row.column(align=True)
-            col.scale_x = 1.1
-            col.scale_y = 1.2
-
-            # col.operator("presets_length.list_action", icon='ADD', text="").action = 'ADD'
-            col.operator("presets_length.list_action_add", icon='ADD', text="")
-            col.operator("presets_length.list_action", icon='REMOVE', text="").action = 'REMOVE'
+        if bpy.context.active_object != None:
+            if bpy.context.active_object.mode in {'EDIT'}:
             
-            col.separator(factor = 0.4)
+                layout = self.layout
+                scn = bpy.context.scene
 
-            col.operator("presets_length.list_action", icon='TRIA_UP', text="").action = 'UP'
-            col.operator("presets_length.list_action", icon='TRIA_DOWN', text="").action = 'DOWN'
+                rows = 5
+                row = layout.row()
+                row.template_list("PRESETS_UL_items_Length", "", scn, "presets_length", scn, "presets_length_index", rows=rows)
 
-            col.separator(factor = 0.4)
-            # row = layout.row()
-            # col = row.column(align=True)
-            # row = col.row(align=True)
-            col.operator("presets_length.clear_list", icon="TRASH", text = "")
-            # row.operator("presets_length.remove_duplicates", icon="GHOST_ENABLED")
+                col = row.column(align=True)
+                col.scale_x = 1.1
+                col.scale_y = 1.2
+
+                # col.operator("presets_length.list_action", icon='ADD', text="").action = 'ADD'
+                col.operator("presets_length.list_action_add", icon='ADD', text="")
+                col.operator("presets_length.list_action", icon='REMOVE', text="").action = 'REMOVE'
+                
+                col.separator(factor = 0.4)
+
+                col.operator("presets_length.list_action", icon='TRIA_UP', text="").action = 'UP'
+                col.operator("presets_length.list_action", icon='TRIA_DOWN', text="").action = 'DOWN'
+
+                col.separator(factor = 0.4)
+                # row = layout.row()
+                # col = row.column(align=True)
+                # row = col.row(align=True)
+                col.operator("presets_length.clear_list", icon="TRASH", text = "")
+                # row.operator("presets_length.remove_duplicates", icon="GHOST_ENABLED")
 
 
 PRESET_SUBDIR = "Length"
