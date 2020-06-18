@@ -871,11 +871,9 @@ class PRESETS_PT_presets_List_Length(Panel):
 
     def draw(self, context):
 
-        try:
-            if bpy.context.active_object.mode in {'EDIT'}:
-        except AttributeError:
-            pass
-        else:
+
+        # if bpy.context.active_object.mode in {'EDIT'} and bpy.context.active_object != None:
+        if bpy.context.active_object.mode in {'EDIT'}:
         
             layout = self.layout
             scn = bpy.context.scene
