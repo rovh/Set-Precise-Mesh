@@ -21,13 +21,12 @@ def check(self):
     if obj.scale != Vector((1.0, 1.0, 1.0)) or obj.delta_scale != Vector((1.0, 1.0, 1.0)):
         bpy.ops.object.dialog_warning_operator('INVOKE_DEFAULT') 
 
-
 # def recalculate(self):
 
 class SetAngle(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_angle"
-    bl_label = "Set Angle"
+    bl_label = ""
     bl_description = "Set Angle \n You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     bl_options = {'UNDO'}
 
@@ -38,7 +37,18 @@ class SetAngle(bpy.types.Operator):
     def poll(cls, context):
         return context.active_object is not None
 
-        
+    @classmethod
+    def description(cls, context, properties):
+        if properties.Clear_angle_globally == 1:
+            return "Plus Angle"
+        elif properties.Clear_angle_globally == -1:
+            return "Minus Angle"
+        elif properties.eyedropper == True:
+            return "Get Angle"
+        else:
+            pass
+
+
     def execute(self, context):
         
         check(self)

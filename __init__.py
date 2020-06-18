@@ -433,20 +433,22 @@ def   header_draw   (self, context):
         object_mode = bpy.context.active_object.mode
     except AttributeError:
         pass
+    except UnboundLocalError:
+        pass
+    else:
+        if object_mode in {'EDIT'}:
+            
+            row = layout.row(align=1)
 
-    if object_mode in {'EDIT'}:
-        
-        row = layout.row(align=1)
-
-        sub = row.row(align = 0)
-        sub.scale_x = 1.5
-        sub = sub.operator("mesh.set_cursor", text="", icon = "ORIENTATION_CURSOR")
-        
-        # sub = row.row(align = 1)
-        # sub.scale_x = 0.6
-        # split = sub.split(align = 1, factor = 0.5)
-        # split.operator("wm.header_angle_simulation_setprecisemesh", text="Angle Simulation", icon = "MOD_SIMPLIFY")
-        # split.operator("wm.header_length_simulation_setprecisemesh", text="Distance Simulation", icon = "CON_TRACKTO")
+            sub = row.row(align = 0)
+            sub.scale_x = 1.5
+            sub = sub.operator("mesh.set_cursor", text="", icon = "ORIENTATION_CURSOR")
+            
+            # sub = row.row(align = 1)
+            # sub.scale_x = 0.6
+            # split = sub.split(align = 1, factor = 0.5)
+            # split.operator("wm.header_angle_simulation_setprecisemesh", text="Angle Simulation", icon = "MOD_SIMPLIFY")
+            # split.operator("wm.header_length_simulation_setprecisemesh", text="Distance Simulation", icon = "CON_TRACKTO")
  
 def   draw_VIEW3D_MT_transform(self, context):
     layout = self.layout
@@ -1030,7 +1032,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
         split_left = col.split(factor=0.55, align=True)
         split_left.scale_y = 1.2
         
-        split_left.operator("mesh.change_angle", icon="DRIVER_ROTATIONAL_DIFFERENCE").Clear_angle_globally = 0
+        split_left.operator("mesh.change_angle", icon="DRIVER_ROTATIONAL_DIFFERENCE", text = "Set Angle").Clear_angle_globally = 0
 
         split_center = split_left.split(factor=0.43, align=True)
 
@@ -1107,7 +1109,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
         split_left = col.split(factor=0.55, align=True)
         split_left.scale_y = 1.2
         
-        split_left.operator("mesh.change_length",icon="DRIVER_DISTANCE").plus_length = 0
+        split_left.operator("mesh.change_length",icon="DRIVER_DISTANCE", text = "Set Length / Distance").plus_length = 0
 
         split_center = split_left.split(factor=0.43, align=True)
 
@@ -1473,7 +1475,7 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
     position_origin: bpy.props.BoolProperty(
         name="Set Origin Location",
         description='Set Origin location of the active mesh',
-        default = True,
+        default = False,
     )
     position_origin_clear_matrix: bpy.props.BoolProperty(
         name="Clear Rotation",

@@ -904,16 +904,25 @@ class PRESETS_PT_presets_List_Length(Panel):
 PRESET_SUBDIR = "Length"
 
 class PRESETS_FOR_PRESETS_LENGTH_MT_DisplayPresets(Menu):
-    bl_label = "Units Presets"
+    bl_label = "Preset"
     preset_subdir = PRESET_SUBDIR
     preset_operator = "script.execute_preset"
     draw = Menu.draw_preset
 
 class PRESETS_FOR_PRESETS_LENGTH_OT_AddPreset(AddPresetBase, Operator):
     bl_idname = "scene.presets_for_presets_length_add"
-    bl_label = "Add Preset"
+    bl_label = ""
     preset_menu = "PRESETS_FOR_PRESETS_LENGTH_MT_DisplayPresets"
     bl_description = "Add or remove preset"
+
+    @classmethod
+    def description(cls, context, properties):
+        if properties.remove_active == False:
+            return "Add Preset"
+        elif properties.remove_active == True:
+            return "Delete Preset"
+        else:
+            pass
 
     preset_defines = ["scene = bpy.context.scene"]
 
@@ -958,8 +967,8 @@ class PRESETS_FOR_PRESETS_LENGTH_OT_Rename(Operator):
 class PRESETS_FOR_PRESETS_LENGTH_OT_Refresh(Operator):
     """Clear all items of the list"""
     bl_idname = "presets_for_presets_length.refresh"
-    bl_label = "You can rename it"
-    bl_description = "Refresh item"
+    bl_label = ""
+    bl_description = "Overwrite item"
     # bl_options = {'UNDO'}
 
     name_input: StringProperty()
@@ -985,22 +994,29 @@ class PRESETS_FOR_PRESETS_LENGTH_OT_Refresh(Operator):
 
 
 
-
-
-
 PRESET_SUBDIR = "Angle"
 
 class PRESETS_FOR_PRESETS_ANGLE_MT_DisplayPresets(Menu):
-    bl_label = "Units Presets"
+    bl_label = "Preset"
     preset_subdir = PRESET_SUBDIR
     preset_operator = "script.execute_preset"
     draw = Menu.draw_preset
 
 class PRESETS_FOR_PRESETS_ANGLE_OT_AddPreset(AddPresetBase, Operator):
     bl_idname = "scene.presets_for_presets_add"
-    bl_label = "Add Preset"
+    bl_label = ""
     preset_menu = "PRESETS_FOR_PRESETS_ANGLE_MT_DisplayPresets"
     bl_description = "Add or remove preset"
+
+    @classmethod
+    def description(cls, context, properties):
+        if properties.remove_active == False:
+            return "Add Preset"
+        elif properties.remove_active == True:
+            return "Delete Preset"
+        else:
+            pass
+
 
     preset_defines = ["scene = bpy.context.scene"]
 
@@ -1045,8 +1061,8 @@ class PRESETS_FOR_PRESETS_ANGLE_OT_Rename(Operator):
 class PRESETS_FOR_PRESETS_ANGLE_OT_Refresh(Operator):
     """Clear all items of the list"""
     bl_idname = "presets_for_presets.refresh"
-    bl_label = "You can rename it"
-    bl_description = "Refresh item"
+    bl_label = ""
+    bl_description = "Overwrite item"
     # bl_options = {'UNDO'}
 
     name_input: StringProperty()
@@ -1069,8 +1085,6 @@ class PRESETS_FOR_PRESETS_ANGLE_OT_Refresh(Operator):
         bpy.ops.scene.presets_for_presets_add(name=self.name_input, remove_name=0, remove_active=False)
 
         return {"FINISHED"}
-
-
 
 
 
