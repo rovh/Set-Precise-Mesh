@@ -74,9 +74,10 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
         
 
         col_right_right.prop( w_m, "position_origin", icon = "CON_PIVOT", text = "")
+        col_right_right.prop( w_m, "position_location", icon = "EMPTY_ARROWS", text = "")
         col_right_right.prop( w_m, "position_origin_clear_matrix", icon = "FILE_REFRESH", text = "")
         col_right_right.scale_x = 1
-        col_right_right.scale_y = 2
+        col_right_right.scale_y = 1.85
         # col_left.scale_y = 0.8
         # col_right.scale_x = 5.0
 
@@ -109,7 +110,7 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
 
         # Matrix menu
         sub_col = col_right.column(align = 1)
-        sub_col.operator("mesh.set_mesh_position_global", text="Globally", icon = "VIEW_PERSPECTIVE")
+        sub_col.operator("mesh.set_mesh_position", text="Globally", icon = "VIEW_PERSPECTIVE").position = "global"
         sub_col.scale_y = 1.2
 
 
@@ -120,7 +121,7 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
 
         # Cursor menu
         sub_col = col_right.column(align = 1)
-        sub_col.operator("mesh.set_mesh_position_local", text="Locally " , icon = "GRID")
+        sub_col.operator("mesh.set_mesh_position", text="Locally " , icon = "GRID").position = "local"
         sub_col.scale_y = 1.2
         # space
         # sub_col = col_right.column(align = 0)
@@ -139,7 +140,7 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
 
         # Object menu
         sub_col = col_right.column(align = 1)
-        sub_col.operator("mesh.set_mesh_position_cursor", text="To the Cursor", icon = "PIVOT_CURSOR")
+        sub_col.operator("mesh.set_mesh_position", text="To the Cursor", icon = "PIVOT_CURSOR").position = "cursor"
         sub_col.scale_y = 1.2
 
 
@@ -160,7 +161,7 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
             sub_col.scale_y = 1.2
         else:
 
-            sub_col.operator("mesh.set_mesh_position_object", text="To the Object", icon='OBJECT_DATA')
+            sub_col.operator("mesh.set_mesh_position", text="To the Object", icon='OBJECT_DATA').position = "object"
             sub_col.prop(context.scene, "object_position", text = "")
             sub_col.scale_y = 1.2
 
@@ -175,81 +176,13 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
     def execute(self, context):
         return {"FINISHED"}
 
-
-
-class Set_Mesh_Position_Global (bpy.types.Operator):
-    """Tooltip"""
-    bl_idname = "mesh.set_mesh_position_global"
-    bl_label = "Set Mesh Position Globally"
-    bl_description = "Set the mesh position to the World Matrix\
-        \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
-    bl_options = {'REGISTER', 'UNDO'}
-
-    @classmethod
-    def poll(cls, context):
-        return context.active_object is not None
-    
-    def execute(self, context):
-        bpy.ops.mesh.set_mesh_position(position = "global")
-        return {"FINISHED"}
-
-class Set_Mesh_Position_Local (bpy.types.Operator):
-    """Tooltip"""
-    bl_idname = "mesh.set_mesh_position_local"
-    bl_label = "Set Mesh Position Locally"
-    bl_description = "Set the mesh position to the Matrix of the Active Object\
-        \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
-    bl_options = {'REGISTER', 'UNDO'}
-
-    @classmethod
-    def poll(cls, context):
-        return context.active_object is not None
-    
-    def execute(self, context):
-        bpy.ops.mesh.set_mesh_position(position = "local")
-        return {"FINISHED"}
-
-class Set_Mesh_Position_Cursor (bpy.types.Operator):
-    """Tooltip"""
-    bl_idname = "mesh.set_mesh_position_cursor"
-    bl_label = "Set Mesh Position to the Cursor"
-    bl_description = "Set the mesh to the Matrix of the Cursor\
-        \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
-    bl_options = {'REGISTER', 'UNDO'}
-
-    @classmethod
-    def poll(cls, context):
-        return context.active_object is not None
-    
-    def execute(self, context):
-        bpy.ops.mesh.set_mesh_position(position = "cursor")
-        return {"FINISHED"}
-
-class Set_Mesh_Position_Object (bpy.types.Operator):
-    """Tooltip"""
-    bl_idname = "mesh.set_mesh_position_object"
-    bl_label = "Set Mesh Position to the Object"
-    bl_description = "Set the mesh position to the Matrix of the Custom Object \
-        \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
-    bl_options = {'REGISTER', 'UNDO'}
-
-    @classmethod
-    def poll(cls, context):
-        return context.active_object is not None
-    
-    def execute(self, context):
-        bpy.ops.mesh.set_mesh_position(position = "object")
-        return {"FINISHED"}
-
-
-
 class Set_Mesh_Position (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.set_mesh_position"
     bl_label = "Set Mesh Position"
     bl_description = "Set the mesh location and rotation according to the normal of the selected part of the mesh (vertex/edge/face)\
         \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
-    bl_options = {'REGISTER', 'UNDO'}
+    bl_options = {'UNDO'}
 
     position: bpy.props.StringProperty(
         default = "global"
@@ -289,103 +222,138 @@ class Set_Mesh_Position (bpy.types.Operator):
         wm_inverted = wm.inverted()
 
         cursor_matrix_old = bpy.context.scene.cursor.matrix.copy()
-        cursor_location_old = bpy.context.scene.cursor.location
-
-        bpy.ops.mesh.set_cursor()
+        cursor_location_old = bpy.context.scene.cursor.location.copy()
 
 
-        # if len(selected_verts) == 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
+        """bpy.ops.mesh.set_cursor()"""
+        # bpy.ops.mesh.set_cursor()
 
-        #     text = "You need to select one vertex/edge/face"
-        #     war = "ERROR"
-        #     self.report({war}, text)
-        #     return{"FINISHED"}
+        obj = bpy.context.edit_object
+        me = obj.data
+        bm = bmesh.from_edit_mesh(me)
 
-        # if len(selected_verts) != 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+        bpy.context.object.update_from_editmode()
+        bmesh.update_edit_mesh(me, True)
 
-        #     if len(selected_verts) > 1:
-        #         text = "You need to select only one vertex"
-        #         war = "ERROR"
-        #         self.report({war}, text)
-        #         return{"FINISHED"}
+        selected_verts = [verts for verts in bm.verts if verts.select]
+        selected_edges = [edge for edge in bm.edges if edge.select]
+        selected_faces = [face for face in bm.faces if face.select]
 
-            
-        #     bpy.context.scene.cursor.location = wm @ selected_verts[0].co
+        wm = bpy.context.active_object.matrix_world.copy()
+        wm_inverted = wm.inverted()
 
-        #     normal = selected_verts[0].normal @ wm_inverted
+        if len(selected_verts) == 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
 
-        #     obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
-        #     direction = normal
-        #     # point the cameras '-Z' and use its 'Y' as up
-        #     rot_quat = direction.to_track_quat('-Z', 'Y')
-        #     obj_camera.rotation_euler = rot_quat.to_euler()
-        #     rot_quat =  rot_quat.to_euler()
+            text = "You need to select one vertex/edge/face"
+            war = "ERROR"
+            self.report({war}, text)
+            return{"FINISHED"}
 
-        # if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) == 0:
+        if len(selected_verts) != 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
 
-        #     if len(selected_edges) > 1:
-        #         text = "You need to select only one edge"
-        #         war = "ERROR"
-        #         self.report({war}, text)
-        #         return{"FINISHED"}
+            if len(selected_verts) > 1:
+                text = "You need to select only one vertex"
+                war = "ERROR"
+                self.report({war}, text)
+                return{"FINISHED"}
 
             
-        #     edge_verts = selected_edges[0].verts
+            bpy.context.scene.cursor.location = wm @ selected_verts[0].co
 
-        #     location_of_edge = ((wm @ edge_verts[0].co) + (wm @ edge_verts[1].co)) /2
-        #     bpy.context.scene.cursor.location = location_of_edge
+            normal = selected_verts[0].normal @ wm_inverted
 
-        #     faces_of_edge = selected_edges[0].link_faces
+            obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
+            direction = normal
+            # point the cameras '-Z' and use its 'Y' as up
+            rot_quat = direction.to_track_quat('-Z', 'Y')
+            obj_camera.rotation_euler = rot_quat.to_euler()
+            rot_quat =  rot_quat.to_euler()
 
-        #     normals_of_the_faces = []
+        if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) == 0:
 
-        #     # normal_from_face = 
+            if len(selected_edges) > 1:
+                text = "You need to select only one edge"
+                war = "ERROR"
+                self.report({war}, text)
+                return{"FINISHED"}
 
-        #     for f in range(0, len(faces_of_edge)):
-        #         # print(faces_of_edge[f])
-        #         normals_of_the_faces.append(faces_of_edge[f].normal @ wm_inverted) 
+            
+            edge_verts = selected_edges[0].verts
 
+            location_of_edge = ((wm @ edge_verts[0].co) + (wm @ edge_verts[1].co)) /2
+            bpy.context.scene.cursor.location = location_of_edge
 
-        #     normal_from_face = ((normals_of_the_faces[0]) + (normals_of_the_faces[1])) /2
-        #     normal_from_face = (normal_from_face) + (location_of_edge) 
-        #     normal_projection_from_face = mathutils.geometry.intersect_point_line(normal_from_face, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
-        #     normal_projection_from_face = normal_projection_from_face[0]
-        #     # normal_from_face = normal_projection_from_face
-        #     normal_from_face = (normal_from_face - normal_projection_from_face)
-        #     normal = normal_from_face
+            faces_of_edge = selected_edges[0].link_faces
 
+            normals_of_the_faces = []
 
-        #     obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
-        #     direction = normal
-        #     # point the cameras '-Z' and use its 'Y' as up
-        #     rot_quat = direction.to_track_quat('-Z', 'Y')
-        #     obj_camera.rotation_euler = rot_quat.to_euler()
-        #     rot_quat =  rot_quat.to_euler()
+            # normal_from_face = 
 
-        # if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) != 0:
-
-        #     if len(selected_faces) > 1:
-        #         text = "You need to select only one face"
-        #         war = "ERROR"
-        #         self.report({war}, text)
-        #         return{"FINISHED"}
+            for f in range(0, len(faces_of_edge)):
+                # print(faces_of_edge[f])
+                normals_of_the_faces.append(faces_of_edge[f].normal @ wm_inverted) 
 
 
-        #     my_location = wm @ selected_faces[0].calc_center_median()
-        #     normalgl = selected_faces[0].normal @ wm_inverted
+            normal_from_face = ((normals_of_the_faces[0]) + (normals_of_the_faces[1])) /2
+            normal_from_face = (normal_from_face) + (location_of_edge) 
+            normal_projection_from_face = mathutils.geometry.intersect_point_line(normal_from_face, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
+            normal_projection_from_face = normal_projection_from_face[0]
+            # normal_from_face = normal_projection_from_face
+            normal_from_face = (normal_from_face - normal_projection_from_face)
+            normal = normal_from_face
+
+
+
+            # print(normals_of_the_faces[0])
+
+
+            # normal = ((edge_verts[0].normal) + (edge_verts[1].normal))
+            # normal = (location_of_edge) + normal
+            # normal_projection = mathutils.geometry.intersect_point_line(normal, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
+            # normal_projection = normal_projection[0]
+            # normal = (normal - normal_projection)
+
+            # normal = normal_from_face + normal
+
+            
+
+            obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
+            direction = normal
+            # point the cameras '-Z' and use its 'Y' as up
+            rot_quat = direction.to_track_quat('-Z', 'Y')
+            obj_camera.rotation_euler = rot_quat.to_euler()
+            rot_quat =  rot_quat.to_euler()
+
+        if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) != 0:
+
+            if len(selected_faces) > 1:
+                text = "You need to select only one face"
+                war = "ERROR"
+                self.report({war}, text)
+                return{"FINISHED"}
+
+
+            my_location = wm @ selected_faces[0].calc_center_median()
+            normalgl = selected_faces[0].normal @ wm_inverted
 
                         
-        #     bpy.context.scene.cursor.location = my_location
+            bpy.context.scene.cursor.location = my_location
 
-        #     # Set cursor direction
-        #     obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
-        #     direction = normalgl
-        #     # point the cameras '-Z' and use its 'Y' as up
-        #     rot_quat = direction.to_track_quat('-Z', 'Y')
-        #     obj_camera.rotation_euler = rot_quat.to_euler()
-        #     rot_quat =  rot_quat.to_euler()
+            # Set cursor direction
+            obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
+            direction = normalgl
+            # point the cameras '-Z' and use its 'Y' as up
+            rot_quat = direction.to_track_quat('-Z', 'Y')
+            obj_camera.rotation_euler = rot_quat.to_euler()
+            rot_quat =  rot_quat.to_euler()
+
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+        """   End    bpy.ops.mesh.set_cursor()""" 
 
         
+
+
         bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True)
 
@@ -399,35 +367,56 @@ class Set_Mesh_Position (bpy.types.Operator):
 
         cursor_matrix = bpy.context.scene.cursor.matrix.copy()
         cursor_matrix_inverted = cursor_matrix.inverted()
+        cursor_location =  bpy.context.scene.cursor.location.copy()
 
         mat_cur   =  cursor_matrix_inverted @ obj_matrix
 
         # mat_cur_2 =  obj_matrix @ cursor_matrix_inverted
 
-
         position = self.position
+        position_location = context.window_manager.setprecisemesh.position_location
+        object_location = bpy.context.active_object.matrix_world.translation.copy()
+        object_location =  bpy.context.active_object.location.copy()
+
 
         if position == "global":
-            bpy.context.active_object.matrix_world = mat_cur
+            if position_location == True:
+                bpy.context.active_object.matrix_world.translation = object_location - cursor_location
+            else:
+                bpy.context.active_object.matrix_world = mat_cur
 
         elif position == "local":
-            bpy.context.active_object.matrix_world = obj_matrix @ mat_cur
+            if position_location == True:
+                bpy.context.active_object.matrix_world.translation = object_location + object_location - cursor_location
+            else:
+                bpy.context.active_object.matrix_world = obj_matrix @ mat_cur
 
-            # bpy.context.active_object.matrix_world = mat_cur @ obj_matrix
+                # bpy.context.active_object.matrix_world = mat_cur @ obj_matrix
 
-            bpy.context.object.scale[0] = scale_remember_1
-            bpy.context.object.scale[1] = scale_remember_2
-            bpy.context.object.scale[2] = scale_remember_3
+                # bpy.context.object.scale[0] = scale_remember_1
+                # bpy.context.object.scale[1] = scale_remember_2
+                # bpy.context.object.scale[2] = scale_remember_3
 
         elif position == "cursor":
-            bpy.context.active_object.matrix_world = cursor_matrix_old @ mat_cur
+            if position_location == True:
+                bpy.context.active_object.matrix_world.translation = object_location - cursor_location + cursor_location_old
+            else:
+                bpy.context.active_object.matrix_world = cursor_matrix_old @ mat_cur
 
         elif position == "object":
-            obj_name = bpy.data.scenes[bpy.context.scene.name_full].object_position.name_full
-            obj_marx = bpy.data.objects[obj_name].matrix_world
+            if position_location == True:
+                obj_name = bpy.data.scenes[bpy.context.scene.name_full].object_position.name_full
+                obj_location = bpy.data.objects[obj_name].matrix_world.translation.copy()
+                bpy.context.active_object.matrix_world.translation = object_location - cursor_location + obj_location
+            else:
+                obj_name = bpy.data.scenes[bpy.context.scene.name_full].object_position.name_full
+                obj_marx = bpy.data.objects[obj_name].matrix_world
 
-            bpy.context.active_object.matrix_world = obj_marx @ mat_cur
+                bpy.context.active_object.matrix_world = obj_marx @ mat_cur
 
+        bpy.context.object.scale[0] = scale_remember_1
+        bpy.context.object.scale[1] = scale_remember_2
+        bpy.context.object.scale[2] = scale_remember_3
 
         bpy.context.object.update_from_editmode()
         bmesh.update_edit_mesh(me, True)

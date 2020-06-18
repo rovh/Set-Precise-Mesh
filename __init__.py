@@ -16,7 +16,7 @@ bl_info = {
     "author" : "Rovh",
     "description" : "This addon allows you to set exact values for the mesh",
     "blender" : (2, 83, 0),
-    "version" : (1,2,0),
+    "version" : (1,2,1),
     "location" : "View3D > Sidebar in Edit Mode > Item Tab, View Tab and Edit Tab",
     "warning" : "",
     "wiki_url": "https://github.com/rovh/Set-Precise-Mesh",
@@ -30,8 +30,9 @@ import bpy
 
 from .SetAngle import *
 from .SetLength import *
-from .Operators import *
+from .Set_Mesh_Position import *
 from .Presets import *
+from .Presets_Object import *
 
 
 from bpy import types
@@ -427,21 +428,27 @@ class Length_Simulation_SetPreciseMesh (bpy.types.Operator):
 
 def   header_draw   (self, context):
     layout = self.layout
-    object_mode = bpy.context.active_object.mode
 
-    if object_mode in {'EDIT'}:
-        
-        row = layout.row(align=1)
+    try:
+        object_mode = bpy.context.active_object.mode
+    except AttributeError:
+        pass
+    except UnboundLocalError:
+        pass
+    else:
+        if object_mode in {'EDIT'}:
+            
+            row = layout.row(align=1)
 
-        sub = row.row(align = 0)
-        sub.scale_x = 1.5
-        sub = sub.operator("mesh.set_cursor", text="", icon = "ORIENTATION_CURSOR")
-        
-        # sub = row.row(align = 1)
-        # sub.scale_x = 0.6
-        # split = sub.split(align = 1, factor = 0.5)
-        # split.operator("wm.header_angle_simulation_setprecisemesh", text="Angle Simulation", icon = "MOD_SIMPLIFY")
-        # split.operator("wm.header_length_simulation_setprecisemesh", text="Distance Simulation", icon = "CON_TRACKTO")
+            sub = row.row(align = 0)
+            sub.scale_x = 1.5
+            sub = sub.operator("mesh.set_cursor", text="", icon = "ORIENTATION_CURSOR")
+            
+            # sub = row.row(align = 1)
+            # sub.scale_x = 0.6
+            # split = sub.split(align = 1, factor = 0.5)
+            # split.operator("wm.header_angle_simulation_setprecisemesh", text="Angle Simulation", icon = "MOD_SIMPLIFY")
+            # split.operator("wm.header_length_simulation_setprecisemesh", text="Distance Simulation", icon = "CON_TRACKTO")
  
 def   draw_VIEW3D_MT_transform(self, context):
     layout = self.layout
@@ -522,75 +529,77 @@ class Popup_Menu_SetPreciseMesh_SetAngle (bpy.types.Operator):
         return inv
 
     def draw(self, context):
+
+        bpy.types.VIEW3D_PT_edit_mesh_set_precise_mesh1.draw_angle(self, context)
         
-        layout = self.layout
+        # layout = self.layout
 
-        scene = context.scene
-        sc = scene
-        ob = context.object
+        # scene = context.scene
+        # sc = scene
+        # ob = context.object
 
-        w_m = context.window_manager.setprecisemesh
+        # w_m = context.window_manager.setprecisemesh
 
-        # Get values
-        bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
-        bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
+        # # Get values
+        # bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
+        # bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
 
-        script_input = bpy.data.scenes[bpy.context.scene.name_full].script_input
-        script_input_2 = bpy.data.scenes[bpy.context.scene.name_full].script_input_2
+        # script_input = bpy.data.scenes[bpy.context.scene.name_full].script_input
+        # script_input_2 = bpy.data.scenes[bpy.context.scene.name_full].script_input_2
 
-        col = layout.column(align=True)
+        # col = layout.column(align=True)
 
-        split = col.split(factor=0.65, align=True)
-        split.scale_y =1.2      
+        # split = col.split(factor=0.65, align=True)
+        # split.scale_y =1.2      
 
-        # split.operator("mesh.change_angle_copy", icon="DRIVER_ROTATIONAL_DIFFERENCE")
+        # # split.operator("mesh.change_angle_copy", icon="DRIVER_ROTATIONAL_DIFFERENCE")
 
-        # split = split.split(factor=0.8, align=True)
+        # # split = split.split(factor=0.8, align=True)
 
-        # split.operator("mesh.change_angle_plus", icon="ADD", text = "")
+        # # split.operator("mesh.change_angle_plus", icon="ADD", text = "")
 
-        split_left = col.split(factor=0.55, align=True)
-        split_left.scale_y = 1.2
+        # split_left = col.split(factor=0.55, align=True)
+        # split_left.scale_y = 1.2
         
-        split_left.operator("mesh.change_angle_copy", icon="DRIVER_ROTATIONAL_DIFFERENCE")
+        # split_left.operator("mesh.change_angle", icon="DRIVER_ROTATIONAL_DIFFERENCE").Clear_angle_globally = 0
 
-        split_center = split_left.split(factor=0.43, align=True)
+        # split_center = split_left.split(factor=0.43, align=True)
 
-        split_center.operator("mesh.change_angle_plus", icon="ADD", text = "")
-            # 
-        split_right = split_center.split(factor=0.8, align=True)
+        # split_center.operator("mesh.change_angle", icon="ADD", text = "").Clear_angle_globally = 1
+        #     # 
+        # split_right = split_center.split(factor=0.8, align=True)
 
-        split_right.operator("mesh.change_angle_minus", icon="REMOVE", text = "")
+        # split_right.operator("mesh.change_angle", icon="REMOVE", text = "").Clear_angle_globally = -1
         
 
-        # split = split.split(factor=1, align=True)
+        # # split = split.split(factor=1, align=True)
 
-        if sc.bool_panel_arrow:
-            split_right.prop(sc, "bool_panel_arrow", text="", icon='DOWNARROW_HLT')
-        else:
-            split_right.prop(sc, "bool_panel_arrow", text="", icon='RIGHTARROW')
+        # if sc.bool_panel_arrow:
+        #     split_right.prop(sc, "bool_panel_arrow", text="", icon='DOWNARROW_HLT')
+        # else:
+        #     split_right.prop(sc, "bool_panel_arrow", text="", icon='RIGHTARROW')
 
-        if sc.bool_panel_arrow:
+        # if sc.bool_panel_arrow:
             
-            box = col.column(align=True).box().column()
+        #     box = col.column(align=True).box().column()
 
-            col_top = box.column(align = True)
+        #     col_top = box.column(align = True)
 
-            row = col_top.row(align = True)
-            row.prop(w_m, "angle")
+        #     row = col_top.row(align = True)
+        #     row.prop(w_m, "angle")
 
-            row = row.row(align = False)
-            row.scale_x = 1.2
-            row.prop(sc, "script_input", text = "", icon = "FILE_SCRIPT")
-
-
-            if script_input:
-                col_top.prop(w_m, "data_block", text = "")
+        #     row = row.row(align = False)
+        #     row.scale_x = 1.2
+        #     row.prop(sc, "script_input", text = "", icon = "FILE_SCRIPT")
 
 
-            split = col_top.split(factor = 0.835, align = 0)
-            split.prop(w_m, "anglebool" )
-            split.operator("wm.header_angle_simulation_setprecisemesh", text=" Angle Simulation", icon = "MOD_SIMPLIFY")
+        #     if script_input:
+        #         col_top.prop(w_m, "data_block", text = "")
+
+
+        #     split = col_top.split(factor = 0.835, align = 0)
+        #     split.prop(w_m, "anglebool" )
+        #     split.operator("wm.header_angle_simulation_setprecisemesh", text=" Angle Simulation", icon = "MOD_SIMPLIFY")
 
 class Popup_Menu_SetPreciseMesh_SetLength (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_setlength"
@@ -622,65 +631,67 @@ class Popup_Menu_SetPreciseMesh_SetLength (bpy.types.Operator):
 
     def draw(self, context):
 
-        layout = self.layout
+        bpy.types.VIEW3D_PT_edit_mesh_set_precise_mesh1.draw_length(self, context)
 
-        scene = context.scene
-        sc = scene
-        ob = context.object
+        # layout = self.layout
 
-        w_m = context.window_manager.setprecisemesh
+        # scene = context.scene
+        # sc = scene
+        # ob = context.object
 
-        # Get values
-        bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
-        bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
+        # w_m = context.window_manager.setprecisemesh
 
-        script_input = bpy.data.scenes[bpy.context.scene.name_full].script_input
-        script_input_2 = bpy.data.scenes[bpy.context.scene.name_full].script_input_2
+        # # Get values
+        # bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
+        # bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
+
+        # script_input = bpy.data.scenes[bpy.context.scene.name_full].script_input
+        # script_input_2 = bpy.data.scenes[bpy.context.scene.name_full].script_input_2
         
-        col = layout.column(align= True )
+        # col = layout.column(align= True )
         
-        split_left = col.split(factor=0.55, align=True)
-        split_left.scale_y = 1.2
+        # split_left = col.split(factor=0.55, align=True)
+        # split_left.scale_y = 1.2
         
-        split_left.operator("mesh.change_length",icon="DRIVER_DISTANCE").plus_length = 0
+        # split_left.operator("mesh.change_length",icon="DRIVER_DISTANCE").plus_length = 0
 
-        split_center = split_left.split(factor=0.43, align=True)
+        # split_center = split_left.split(factor=0.43, align=True)
 
-        split_center.operator("mesh.change_length",icon="ADD", text = "").plus_length = 1
+        # split_center.operator("mesh.change_length",icon="ADD", text = "").plus_length = 1
         
-        split_right = split_center.split(factor=0.8, align=True)
+        # split_right = split_center.split(factor=0.8, align=True)
 
-        split_right.operator("mesh.change_length", icon="REMOVE", text = "").plus_length = -1
+        # split_right.operator("mesh.change_length", icon="REMOVE", text = "").plus_length = -1
 
-        # split_right = split_center.split(factor=0.9, align=True)
+        # # split_right = split_center.split(factor=0.9, align=True)
 
-        if sc.bool_panel_arrow2:
-            split_right.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
-        else:
-            split_right.prop(sc, "bool_panel_arrow2", text="", icon='RIGHTARROW')
+        # if sc.bool_panel_arrow2:
+        #     split_right.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
+        # else:
+        #     split_right.prop(sc, "bool_panel_arrow2", text="", icon='RIGHTARROW')
 
-        if sc.bool_panel_arrow2:            
-            box = col.column(align=True).box().column()            
-            col_top = box.column(align=True)
-
-
-            # col_top.prop(w_m, "length") 
-
-            row = col_top.row(align = True)
-            row.prop(w_m, "length")
-
-            row = row.row(align = False)
-            row.scale_x = 1.2
-            row.prop(sc, "script_input_2", text = "", icon = "FILE_SCRIPT")
+        # if sc.bool_panel_arrow2:            
+        #     box = col.column(align=True).box().column()            
+        #     col_top = box.column(align=True)
 
 
-            if script_input_2:   
-                col_top.prop(w_m, "data_block_2", text = "") 
+        #     # col_top.prop(w_m, "length") 
+
+        #     row = col_top.row(align = True)
+        #     row.prop(w_m, "length")
+
+        #     row = row.row(align = False)
+        #     row.scale_x = 1.2
+        #     row.prop(sc, "script_input_2", text = "", icon = "FILE_SCRIPT")
+
+
+        #     if script_input_2:   
+        #         col_top.prop(w_m, "data_block_2", text = "") 
 
            
-            split = col_top.split(factor = 0.835, align = 0)
-            split.prop(w_m, "lengthbool")
-            split.operator("wm.header_length_simulation_setprecisemesh", text=" Distance Simulation", icon = "CON_TRACKTO")
+        #     split = col_top.split(factor = 0.835, align = 0)
+        #     split.prop(w_m, "lengthbool")
+        #     split.operator("wm.header_length_simulation_setprecisemesh", text=" Distance Simulation", icon = "CON_TRACKTO")
 
 """Operators"""
 class Set_Cursor_To_Normal (bpy.types.Operator):
@@ -982,7 +993,14 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
     bl_options = {'DEFAULT_CLOSED'}
     bl_label = "Set Precise Mesh / CAD"
 
+    # def draw(self, context):   
+    # 
     def draw(self, context):
+        
+        self.draw_angle(context)
+        self.draw_length(context)    
+       
+    def draw_angle(self, context):
 
         layout = self.layout
 
@@ -998,7 +1016,8 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
 
         script_input = bpy.data.scenes[bpy.context.scene.name_full].script_input
         script_input_2 = bpy.data.scenes[bpy.context.scene.name_full].script_input_2
-
+    
+    
         col = layout.column(align=True)
 
         split = col.split(factor=0.65, align=True)
@@ -1013,15 +1032,15 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
         split_left = col.split(factor=0.55, align=True)
         split_left.scale_y = 1.2
         
-        split_left.operator("mesh.change_angle_copy", icon="DRIVER_ROTATIONAL_DIFFERENCE")
+        split_left.operator("mesh.change_angle", icon="DRIVER_ROTATIONAL_DIFFERENCE", text = "Set Angle").Clear_angle_globally = 0
 
         split_center = split_left.split(factor=0.43, align=True)
 
-        split_center.operator("mesh.change_angle_plus", icon="ADD", text = "")
+        split_center.operator("mesh.change_angle", icon="ADD", text = "").Clear_angle_globally = 1
             # 
         split_right = split_center.split(factor=0.8, align=True)
 
-        split_right.operator("mesh.change_angle_minus", icon="REMOVE", text = "")
+        split_right.operator("mesh.change_angle", icon="REMOVE", text = "").Clear_angle_globally = -1
         
 
         # split = split.split(factor=1, align=True)
@@ -1038,7 +1057,15 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             col_top = box.column(align = True)
 
             row = col_top.row(align = True)
-            row.prop(w_m, "angle")
+            row.prop(w_m, "angle", text = "")
+
+            sub_row = row.row(align = 1)
+            sub_row.label(icon="BLANK1")
+            sub_row.scale_x = 0.1
+            
+            sub_row = row.row(align = 1)
+            sub_row.operator("mesh.change_angle",icon="EYEDROPPER", text = "").eyedropper = True
+            sub_row.scale_x = 1.3
 
             row = row.row(align = False)
             row.scale_x = 1.2
@@ -1049,22 +1076,40 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
                 col_top.prop(w_m, "data_block", text = "")
 
 
-            split = col_top.split(factor = 0.835, align = 0)
-            split.prop(w_m, "anglebool" )
-            split.operator("wm.header_angle_simulation_setprecisemesh", text=" Angle Simulation", icon = "MOD_SIMPLIFY")
+            # split = col_top.split(factor = 0.835, align = 0)
+            split = col_top.row(align = 0)
 
+            split.prop(w_m, "anglebool" )
+            row = split.row(align = 0)
+            row.operator("wm.header_angle_simulation_setprecisemesh", text=" Angle Simulation", icon = "MOD_SIMPLIFY")
+            row.scale_x = 0.14
 
         #  sub = row.row(align = 1)
         # sub.scale_x = 0.6
         # split = sub.split(align = 1, factor = 0.5)
 
+    def draw_length(self, context):
+        layout = self.layout
+
+        scene = context.scene
+        sc = scene
+        ob = context.object
+
+        w_m = context.window_manager.setprecisemesh
+
+        # Get values
+        bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
+        bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
+
+        script_input = bpy.data.scenes[bpy.context.scene.name_full].script_input
+        script_input_2 = bpy.data.scenes[bpy.context.scene.name_full].script_input_2
 
         col = layout.column(align= True )
         
         split_left = col.split(factor=0.55, align=True)
         split_left.scale_y = 1.2
         
-        split_left.operator("mesh.change_length",icon="DRIVER_DISTANCE").plus_length = 0
+        split_left.operator("mesh.change_length",icon="DRIVER_DISTANCE", text = "Set Length / Distance").plus_length = 0
 
         split_center = split_left.split(factor=0.43, align=True)
 
@@ -1089,7 +1134,16 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             # col_top.prop(w_m, "length") 
 
             row = col_top.row(align = True)
-            row.prop(w_m, "length")
+            row.prop(w_m, "length", text = "")
+
+            sub_row = row.row(align = 1)
+            sub_row.label(icon="BLANK1")
+            sub_row.scale_x = 0.1
+            
+            sub_row = row.row(align = 1)
+            sub_row.operator("mesh.change_length",icon="EYEDROPPER", text = "").eyedropper = True
+            sub_row.scale_x = 1.3
+
 
             row = row.row(align = False)
             row.scale_x = 1.2
@@ -1099,10 +1153,19 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             if script_input_2:   
                 col_top.prop(w_m, "data_block_2", text = "") 
 
+            
+
            
-            split = col_top.split(factor = 0.835, align = 0)
+            # split = col_top.split(factor = 0.835, align = 0)
+            split = col_top.row(align = 0)
+            
             split.prop(w_m, "lengthbool")
-            split.operator("wm.header_length_simulation_setprecisemesh", text=" Distance Simulation", icon = "CON_TRACKTO")
+
+            row = split.row(align = 0)
+            row.operator("wm.header_length_simulation_setprecisemesh", text=" Distance Simulation", icon = "CON_TRACKTO")
+            row.scale_x = 0.14
+
+    
 
 
                  
@@ -1412,11 +1475,17 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
     position_origin: bpy.props.BoolProperty(
         name="Set Origin Location",
         description='Set Origin location of the active mesh',
-        default = True,
+        default = False,
     )
     position_origin_clear_matrix: bpy.props.BoolProperty(
         name="Clear Rotation",
         description="Apply the object's rotation transformation to its data",
+        default = False,
+    )
+    position_location: bpy.props.BoolProperty(
+        name="Move Location",
+        description=" Only Move object \
+        \n(Set the mesh position not in accordance with the normal of the selected part of the mesh)",
         default = False,
     )
 
@@ -1458,11 +1527,7 @@ blender_classes = [
     Dupli3,
     # SetPresiceMesh_Panel,
 
-
     SetAngle,
-    SetAngle_Copy,
-    SetAngle_Plus,
-    SetAngle_Minus,
 
     SetLength,
 
@@ -1485,10 +1550,6 @@ blender_classes = [
     Browser_Link,
 
     Pop_Up_Set_Mesh_Position,
-    Set_Mesh_Position_Global,
-    Set_Mesh_Position_Local,
-    Set_Mesh_Position_Cursor,
-    Set_Mesh_Position_Object,
     Set_Mesh_Position,
 
     
@@ -1500,6 +1561,7 @@ blender_classes = [
 
 """Classes of Presets"""
 classes = (
+    #"""Presets for Scene""",
     PRESETS_OT_Length_actions,
     PRESETS_OT_Length_clearList,
     PRESETS_OT_Length_actions_add,
@@ -1516,6 +1578,17 @@ classes = (
     PRESETS_OT_Angle_Rename,
     PRESETS_OT_Angle_clearList,
 
+    PRESETS_FOR_PRESETS_ANGLE_MT_DisplayPresets,
+    PRESETS_FOR_PRESETS_ANGLE_OT_AddPreset,
+    PRESETS_FOR_PRESETS_ANGLE_OT_Rename,
+    PRESETS_FOR_PRESETS_ANGLE_OT_Refresh,
+
+    PRESETS_FOR_PRESETS_LENGTH_MT_DisplayPresets,
+    PRESETS_FOR_PRESETS_LENGTH_OT_AddPreset,
+    PRESETS_FOR_PRESETS_LENGTH_OT_Rename,
+    PRESETS_FOR_PRESETS_LENGTH_OT_Refresh,
+
+    PRESETS_FOR_PRESETS_PT_panel,
 
     PRESETS_UL_items_Angle,
     PRESETS_PT_presets_List_Angle,
@@ -1523,8 +1596,37 @@ classes = (
     PRESETS_UL_items_Length,
     PRESETS_PT_presets_List_Length,
 
+
+    #"""Presets for Object""",
+
+    PRESETS_OT_Angle_Object_actions,
+    PRESETS_OT_Angle_Object_actions_add,
+    PRESETS_OT_Angle_Object_actions_refresh,
+    PRESETS_OT_Angle_Object_actions_import,
+    PRESETS_OT_Angle_Object_Rename,
+    PRESETS_OT_Angle_Object_clearList,
+
+    PRESETS_UL_items_Angle_Object,
+    PRESETS_PT_presets_List_Angle_Object,
+
+
+    PRESETS_OT_Length_Object_actions,
+    PRESETS_OT_Length_Object_actions_add,
+    PRESETS_OT_Length_Object_actions_refresh,
+    PRESETS_OT_Length_Object_actions_import,
+    PRESETS_OT_Length_Object_Rename,
+    PRESETS_OT_Length_Object_clearList,
+
+    PRESETS_UL_items_Length_Object,
+    PRESETS_PT_presets_List_Length_Object,
+
+
+    #====================================
     PRESETS_presets_angle_Collection,
     PRESETS_presets_length_Collection,
+    #====================================
+
+
 )
 
 def register():
@@ -1581,11 +1683,21 @@ def register():
     for cls in classes:
         register_class(cls)
 
+    """Presets for Scene"""
+    bpy.types.Scene.presets_angle = CollectionProperty(type=PRESETS_presets_angle_Collection)
+    bpy.types.Scene.presets_angle_index = IntProperty()
+
     bpy.types.Scene.presets_length = CollectionProperty(type=PRESETS_presets_length_Collection)
     bpy.types.Scene.presets_length_index = IntProperty()
 
-    bpy.types.Scene.presets_angle = CollectionProperty(type=PRESETS_presets_angle_Collection)
-    bpy.types.Scene.presets_angle_index = IntProperty()
+
+    """Presets for Objetcs"""
+    bpy.types.Object.presets_angle = CollectionProperty(type=PRESETS_presets_angle_Collection)
+    bpy.types.Object.presets_angle_index = IntProperty()
+
+    bpy.types.Object.presets_length = CollectionProperty(type=PRESETS_presets_length_Collection)
+    bpy.types.Object.presets_length_index = IntProperty()
+
 
 def unregister():
 
@@ -1614,11 +1726,20 @@ def unregister():
     for cls in reversed(classes):
         unregister_class(cls)
 
+    """Presets for Scene"""
+    del bpy.types.Scene.presets_angle
+    del bpy.types.Scene.presets_angle_index
+
     del bpy.types.Scene.presets_length
     del bpy.types.Scene.presets_length_index
 
-    del bpy.types.Scene.presets_angle
-    del bpy.types.Scene.presets_angle_index
+    """Presets for Object"""
+    del bpy.types.Object.presets_angle
+    del bpy.types.Object.presets_angle_index
+
+    del bpy.types.Object.presets_length
+    del bpy.types.Object.presets_length_index
+
 
 if __name__ == "__main__":
     register()

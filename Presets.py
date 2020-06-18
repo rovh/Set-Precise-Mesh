@@ -1,5 +1,7 @@
 import bpy
 
+from bl_operators.presets import AddPresetBase
+
 from bpy.props import (IntProperty,
                        BoolProperty,
                        StringProperty,
@@ -10,13 +12,13 @@ from bpy.props import (IntProperty,
 from bpy.types import (Operator,
                        Panel,
                        PropertyGroup,
-                       UIList)
+                       UIList,
+                       Menu,
+                       )
 
 # -------------------------------------------------------------------
 #   Operators
 # -------------------------------------------------------------------
-    
-
 
 class PRESETS_OT_Length_actions(Operator):
     """Move items up and down, add and remove"""
@@ -771,7 +773,7 @@ class PRESETS_PT_presets_List_Angle(Panel):
             layout = self.layout
             scn = bpy.context.scene
 
-            rows = 4
+            rows = 5
             row = layout.row()
             row.template_list("PRESETS_UL_items_Angle", "", scn, "presets_angle", scn, "presets_angle_index", rows=rows)
 
@@ -783,15 +785,16 @@ class PRESETS_PT_presets_List_Angle(Panel):
             col.operator("presets_angle.list_action_add", icon='ADD', text="")
             col.operator("presets_angle.list_action", icon='REMOVE', text="").action = 'REMOVE'
             
-            col.separator()
+            col.separator(factor = 0.4)
 
             col.operator("presets_angle.list_action", icon='TRIA_UP', text="").action = 'UP'
             col.operator("presets_angle.list_action", icon='TRIA_DOWN', text="").action = 'DOWN'
 
-            row = layout.row()
-            col = row.column(align=True)
-            row = col.row(align=True)
-            row.operator("presets_angle.clear_list", icon="TRASH")
+            col.separator(factor = 0.4)
+            # row = layout.row()
+            # col = row.column(align=True)
+            # row = col.row(align=True)
+            col.operator("presets_angle.clear_list", icon="TRASH", text = "")
             # row.operator("presets_angle.remove_duplicates", icon="GHOST_ENABLED")
 
 
@@ -877,7 +880,7 @@ class PRESETS_PT_presets_List_Length(Panel):
             layout = self.layout
             scn = bpy.context.scene
 
-            rows = 4
+            rows = 5
             row = layout.row()
             row.template_list("PRESETS_UL_items_Length", "", scn, "presets_length", scn, "presets_length_index", rows=rows)
 
@@ -889,16 +892,279 @@ class PRESETS_PT_presets_List_Length(Panel):
             col.operator("presets_length.list_action_add", icon='ADD', text="")
             col.operator("presets_length.list_action", icon='REMOVE', text="").action = 'REMOVE'
             
-            col.separator()
+            col.separator(factor = 0.4)
 
             col.operator("presets_length.list_action", icon='TRIA_UP', text="").action = 'UP'
             col.operator("presets_length.list_action", icon='TRIA_DOWN', text="").action = 'DOWN'
 
-            row = layout.row()
-            col = row.column(align=True)
-            row = col.row(align=True)
-            row.operator("presets_length.clear_list", icon="TRASH")
+            col.separator(factor = 0.4)
+            # row = layout.row()
+            # col = row.column(align=True)
+            # row = col.row(align=True)
+            col.operator("presets_length.clear_list", icon="TRASH", text = "")
             # row.operator("presets_length.remove_duplicates", icon="GHOST_ENABLED")
+
+
+PRESET_SUBDIR = "Length"
+
+class PRESETS_FOR_PRESETS_LENGTH_MT_DisplayPresets(Menu):
+    bl_label = "Preset"
+    preset_subdir = PRESET_SUBDIR
+    preset_operator = "script.execute_preset"
+    draw = Menu.draw_preset
+
+class PRESETS_FOR_PRESETS_LENGTH_OT_AddPreset(AddPresetBase, Operator):
+    bl_idname = "scene.presets_for_presets_length_add"
+    bl_label = ""
+    preset_menu = "PRESETS_FOR_PRESETS_LENGTH_MT_DisplayPresets"
+    bl_description = "Add or remove preset"
+
+    @classmethod
+    def description(cls, context, properties):
+        if properties.remove_active == False:
+            return "Add Preset"
+        elif properties.remove_active == True:
+            return "Delete Preset"
+        else:
+            pass
+
+    preset_defines = ["scene = bpy.context.scene"]
+
+    preset_values = [
+        "scene.presets_length",
+        "scene.presets_length_index",
+    ]
+
+    preset_subdir = PRESET_SUBDIR
+
+class PRESETS_FOR_PRESETS_LENGTH_OT_Rename(Operator):
+    """Clear all items of the list"""
+    bl_idname = "presets_for_presets_length.rename"
+    bl_label = "Rename"
+    bl_description = "Rename item"
+    # bl_options = {'UNDO'}
+
+    name_input: StringProperty()
+
+    # def draw(self, context):
+    def draw(self, context):
+        layout = self.layout
+        layout.prop(self, "name_input", text = "Name")
+
+    def invoke(self, context, event):
+
+        self.name_input = bpy.types.PRESETS_FOR_PRESETS_LENGTH_MT_DisplayPresets.bl_label
+
+        return context.window_manager.invoke_props_dialog(self)
+        # return context.window_manager.invoke_popup(self)
+        # return context.window_manager.invoke_confirm(self, event)
+
+
+    def execute(self, context):
+
+        # bpy.ops.scene.presets_for_presets_add(name=self.name_input, remove_name=1, remove_active=0)
+        bpy.types.PRESETS_FOR_PRESETS_LENGTH_MT_DisplayPresets.bl_label = self.name_input
+        # bpy.ops.eeveepresets.preset_add(name=self.name_input, remove_name=0, remove_active=False)
+
+        return {"FINISHED"}
+
+class PRESETS_FOR_PRESETS_LENGTH_OT_Refresh(Operator):
+    """Clear all items of the list"""
+    bl_idname = "presets_for_presets_length.refresh"
+    bl_label = "Overwrite"
+    bl_description = "Overwrite item"
+    # bl_options = {'UNDO'}
+
+    name_input: StringProperty()
+
+    # def draw(self, context):
+    def draw(self, context):
+        layout = self.layout
+        layout.prop(self, "name_input", text = "Name")
+
+    def invoke(self, context, event):
+        self.name_input =  bpy.types.PRESETS_FOR_PRESETS_LENGTH_MT_DisplayPresets.bl_label
+
+        return context.window_manager.invoke_props_dialog(self)
+        # return context.window_manager.invoke_popup(self)
+        # return context.window_manager.invoke_confirm(self, event)
+
+    def execute(self, context):
+
+        bpy.ops.scene.presets_for_presets_length_add(name=self.name_input, remove_name=0, remove_active=1)
+        bpy.ops.scene.presets_for_presets_length_add(name=self.name_input, remove_name=0, remove_active=False)
+
+        return {"FINISHED"}
+
+
+
+PRESET_SUBDIR = "Angle"
+
+class PRESETS_FOR_PRESETS_ANGLE_MT_DisplayPresets(Menu):
+    bl_label = "Preset"
+    preset_subdir = PRESET_SUBDIR
+    preset_operator = "script.execute_preset"
+    draw = Menu.draw_preset
+
+class PRESETS_FOR_PRESETS_ANGLE_OT_AddPreset(AddPresetBase, Operator):
+    bl_idname = "scene.presets_for_presets_add"
+    bl_label = ""
+    preset_menu = "PRESETS_FOR_PRESETS_ANGLE_MT_DisplayPresets"
+    bl_description = "Add or remove preset"
+
+    @classmethod
+    def description(cls, context, properties):
+        if properties.remove_active == False:
+            return "Add Preset"
+        elif properties.remove_active == True:
+            return "Delete Preset"
+        else:
+            pass
+
+
+    preset_defines = ["scene = bpy.context.scene"]
+
+    preset_values = [
+        "scene.presets_angle",
+        "scene.presets_angle_index",
+    ]
+
+    preset_subdir = PRESET_SUBDIR
+
+class PRESETS_FOR_PRESETS_ANGLE_OT_Rename(Operator):
+    """Clear all items of the list"""
+    bl_idname = "presets_for_presets.rename"
+    bl_label = "Rename"
+    bl_description = "Rename item"
+    # bl_options = {'UNDO'}
+
+    name_input: StringProperty()
+
+    # def draw(self, context):
+    def draw(self, context):
+        layout = self.layout
+        layout.prop(self, "name_input", text = "Name")
+
+    def invoke(self, context, event):
+
+        self.name_input = bpy.types.PRESETS_FOR_PRESETS_ANGLE_MT_DisplayPresets.bl_label
+
+        return context.window_manager.invoke_props_dialog(self)
+        # return context.window_manager.invoke_popup(self)
+        # return context.window_manager.invoke_confirm(self, event)
+
+
+    def execute(self, context):
+
+        # bpy.ops.scene.presets_for_presets_add(name=self.name_input, remove_name=1, remove_active=0)
+        bpy.types.PRESETS_FOR_PRESETS_ANGLE_MT_DisplayPresets.bl_label = self.name_input
+        # bpy.ops.eeveepresets.preset_add(name=self.name_input, remove_name=0, remove_active=False)
+
+        return {"FINISHED"}
+
+class PRESETS_FOR_PRESETS_ANGLE_OT_Refresh(Operator):
+    """Clear all items of the list"""
+    bl_idname = "presets_for_presets.refresh"
+    bl_label = "Overwrite"
+    bl_description = "Overwrite item"
+    # bl_options = {'UNDO'}
+
+    name_input: StringProperty()
+
+    # def draw(self, context):
+    def draw(self, context):
+        layout = self.layout
+        layout.prop(self, "name_input", text = "Name")
+
+    def invoke(self, context, event):
+        self.name_input =  bpy.types.PRESETS_FOR_PRESETS_ANGLE_MT_DisplayPresets.bl_label
+
+        return context.window_manager.invoke_props_dialog(self)
+        # return context.window_manager.invoke_popup(self)
+        # return context.window_manager.invoke_confirm(self, event)
+
+    def execute(self, context):
+
+        bpy.ops.scene.presets_for_presets_add(name=self.name_input, remove_name=0, remove_active=1)
+        bpy.ops.scene.presets_for_presets_add(name=self.name_input, remove_name=0, remove_active=False)
+
+        return {"FINISHED"}
+
+
+
+class PRESETS_FOR_PRESETS_PT_panel(Panel):
+    bl_space_type = 'PROPERTIES'
+    bl_region_type = 'WINDOW'
+    bl_context = "scene"
+    bl_label = "Library Presets (Angle / Length)"
+    bl_options = {'DEFAULT_CLOSED'}
+
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def draw_header(self, context):
+        layout = self.layout
+        layout.label(icon = "OUTLINER_OB_GROUP_INSTANCE")
+
+    def draw(self, context):
+        layout = self.layout
+
+        col = layout.column()
+
+        row = col.row(align=True)
+        row.scale_y = 1.1
+        row.scale_x = 1.35
+
+        sub_row = row.row(align = 1)
+        sub_row.alignment = "LEFT"
+        sub_row.ui_units_x = 2.4
+        sub_row.label(icon = "DRIVER_ROTATIONAL_DIFFERENCE", text = "Angle")
+
+
+        row.menu(PRESETS_FOR_PRESETS_ANGLE_MT_DisplayPresets.__name__,
+                 text=PRESETS_FOR_PRESETS_ANGLE_MT_DisplayPresets.bl_label)
+
+        row.operator(PRESETS_FOR_PRESETS_ANGLE_OT_AddPreset.bl_idname,
+                     text="", icon='ADD')
+
+        row.operator(PRESETS_FOR_PRESETS_ANGLE_OT_AddPreset.bl_idname,
+                     text="", icon='REMOVE').remove_active = True
+
+        row.operator("presets_for_presets.refresh", icon = "FILE_REFRESH", text = "")
+
+        # row.operator("presets_for_presets.rename", icon = "SORTALPHA")
+
+
+        col.separator(factor = 0.35)
+
+
+        row = col.row(align=True)
+        row.scale_y = 1.1
+        row.scale_x = 1.35
+
+        sub_row = row.row(align = 1)
+        sub_row.alignment = "LEFT"
+        sub_row.ui_units_x = 2.4
+        sub_row.label(icon = "DRIVER_DISTANCE", text = "Length")
+
+        row.menu(PRESETS_FOR_PRESETS_LENGTH_MT_DisplayPresets.__name__,
+                 text=PRESETS_FOR_PRESETS_LENGTH_MT_DisplayPresets.bl_label)
+
+        row.operator(PRESETS_FOR_PRESETS_LENGTH_OT_AddPreset.bl_idname,
+                     text="", icon='ADD')
+
+        row.operator(PRESETS_FOR_PRESETS_LENGTH_OT_AddPreset.bl_idname,
+                     text="", icon='REMOVE').remove_active = True
+
+        row.operator("presets_for_presets_length.refresh", icon = "FILE_REFRESH", text = "")
+
+        # row.operator("presets_for_presets_length.rename", icon = "SORTALPHA")
+
+
+
+
 
 
 # -------------------------------------------------------------------
@@ -958,6 +1224,7 @@ class PRESETS_presets_angle_Collection(PropertyGroup):
 #             pass
 
 #     # bpy.app.handlers.depsgraph_update_pre.remove(my_handler)
+
 
 if __name__ == "__main__":
     register()

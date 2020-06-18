@@ -29,16 +29,28 @@ def check(self):
 class SetLength(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_length"
-    bl_label = "Set Length / Distance"
-    bl_description = 'Set Length / Distance \n You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut'
+    bl_label = ""
+    bl_description = 'You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut'
     # bl_options = {'REGISTER', 'UNDO'}
     bl_options = {'UNDO'}
 
-    plus_length: bpy.props.IntProperty() 
+    plus_length: bpy.props.IntProperty(options = {"SKIP_SAVE"}) 
+    eyedropper: bpy.props.BoolProperty(options = {"SKIP_SAVE"})
     
     @classmethod
     def poll(cls, context):
         return context.active_object is not None
+
+    @classmethod
+    def description(cls, context, properties):
+        if properties.plus_length == 1:
+            return "Plus Length / Distance"
+        elif properties.plus_length == -1:
+            return "Minus Length / Distance"
+        elif properties.eyedropper == True:
+            return "Get Length / Distance"
+        else:
+            pass
 
     def execute(self, context):
         
@@ -511,6 +523,11 @@ class SetLength(bpy.types.Operator):
        
         # Length of the edge
         lengthtrue =lv.length
+
+        if self.eyedropper == True:
+            bpy.context.window_manager.setprecisemesh.length = lengthtrue
+            return {"FINISHED"}
+            
         
         # Center of the edge
         mv = (v1+v2)/2
