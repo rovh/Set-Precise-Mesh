@@ -1568,6 +1568,7 @@ classes = (
     PRESETS_OT_Length_actions_refresh,
     PRESETS_OT_Length_Rename,
     PRESETS_OT_Length_actions_import,
+    PRESETS_OT_Length_Change_unit,
     # PRESETS_OT_removeDuplicates,
 
 
@@ -1585,7 +1586,6 @@ classes = (
 
     PRESETS_FOR_PRESETS_LENGTH_MT_DisplayPresets,
     PRESETS_FOR_PRESETS_LENGTH_OT_AddPreset,
-    PRESETS_FOR_PRESETS_LENGTH_OT_AddPreset_Copy,
     PRESETS_FOR_PRESETS_LENGTH_OT_Rename,
     PRESETS_FOR_PRESETS_LENGTH_OT_Refresh,
 

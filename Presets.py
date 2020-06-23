@@ -59,6 +59,8 @@ class PRESETS_OT_Length_actions(Operator):
                 scn.presets_length_index -= 1
                 scn.presets_length.remove(idx)
 
+            # bpy.context.scene.presets_length_save = 1
+
         # if self.action == 'ADD':
         #     if context.object:
 
@@ -83,6 +85,7 @@ class PRESETS_OT_Length_actions(Operator):
         #         scn.presets_length_index = len(scn.presets_length)-1
         #     else:
         #         self.report({'INFO'}, "Nothing selected in the Viewport")
+
 
         return {"FINISHED"}
 
@@ -147,6 +150,8 @@ class PRESETS_OT_Length_actions_add(Operator):
 
             # item.obj_id = len(scn.presets_length)
             scn.presets_length_index = len(scn.presets_length) - 1
+
+            # bpy.context.scene.presets_length_save = 1
         else:
             self.report({'INFO'}, "Nothing selected in the Viewport")
 
@@ -296,6 +301,62 @@ class PRESETS_OT_Length_Rename(Operator):
         except IndexError:
             pass
 
+        if bpy.context.active_object:
+
+            for i in range(-1, len(scn.presets_length) - 1):
+                if scn.presets_length[i].name == self.name_input and i != self.my_index:
+                    text = "A preset with this name already exists"
+                    war = "WARNING"
+                    self.report({war}, text)
+                    break
+            
+            item.name = self.name_input
+
+            # bpy.context.scene.presets_length_save = 1
+        else:
+            self.report({'INFO'}, "Nothing selected in the Viewport")
+
+
+
+        return {"FINISHED"}
+
+class PRESETS_OT_Length_Change_unit(Operator):
+    """Clear all items of the list"""
+    bl_idname = "presets_length.change_unit"
+    bl_label = "Change unit"
+    bl_description = "Rename item"
+    bl_options = {'INTERNAL'}
+
+    name_input: StringProperty()
+    my_index: IntProperty()
+
+    def draw(self, context):
+        layout = self.layout
+        layout.prop(self, "name_input", text = "Name")
+
+    def invoke(self, context, event):
+
+        scn = context.scene
+
+        try:
+            item = scn.presets_length[self.my_index]
+        except IndexError:
+            pass
+
+        self.name_input = item.name
+
+        return context.window_manager.invoke_props_dialog(self)
+        # return context.window_manager.invoke_popup(self)
+        # return context.window_manager.invoke_confirm(self, event)
+
+    def execute(self, context):
+
+        scn = context.scene
+
+        try:
+            item = scn.presets_length[self.my_index]
+        except IndexError:
+            pass
 
         if bpy.context.active_object:
 
@@ -307,8 +368,11 @@ class PRESETS_OT_Length_Rename(Operator):
                     break
             
             item.name = self.name_input
+
+            # bpy.context.scene.presets_length_save = 1
         else:
             self.report({'INFO'}, "Nothing selected in the Viewport")
+
 
 
         return {"FINISHED"}
@@ -331,6 +395,7 @@ class PRESETS_OT_Length_clearList(Operator):
         if bool(context.scene.presets_length):
             context.scene.presets_length.clear()
             self.report({'INFO'}, "All items removed")
+            # bpy.context.scene.presets_length_save = 1
         else:
             self.report({'INFO'}, "Nothing to remove")
         return{'FINISHED'}
@@ -829,8 +894,10 @@ class PRESETS_UL_items_Length(UIList):
         row.scale_y = 1.1
 
         row.operator("presets_length.list_action_refresh", text = item.name, emboss = 0, depress=0).my_index = index
+        # row.operator("presets_length.change_unit", text = str(item.unit), emboss = 0, depress=0).my_index = index
         # row.prop(item, "name", emboss=False, text = "")
-        row.prop(item, "unit", emboss=0, text = "", expand = 1)
+        row.prop(item, "unit", emboss=0, text = "", expand = 0,  icon_only= 1 )
+        # row.label(text = str(item.unit) )
 
         row.operator("presets_length.list_action_import", text = "", icon = "IMPORT", emboss = 0).my_index = index
         row.operator("presets_length.rename", text = "", icon = "SORTALPHA", emboss = 0).my_index = index
@@ -965,22 +1032,6 @@ class PRESETS_FOR_PRESETS_LENGTH_OT_AddPreset(AddPresetBase, Operator):
 
     preset_subdir = PRESET_SUBDIR
 
-class PRESETS_FOR_PRESETS_LENGTH_OT_AddPreset_Copy(Operator):
-    """Clear all items of the list"""
-    bl_idname = "presets_for_presets_length.add"
-    bl_label = "Add"
-    bl_description = "Overwrite item"
-    # bl_options = {'UNDO'}
-
-
-    def execute(self, context):
-
-        bpy.ops.scene.presets_for_presets_length_add(name=self.name_input, remove_name=0, remove_active=False)
-
-        # bpy.context.scene.presets_length_save = 0
-
-        return {"FINISHED"}
-
 class PRESETS_FOR_PRESETS_LENGTH_OT_Rename(Operator):
     """Clear all items of the list"""
     bl_idname = "presets_for_presets_length.rename"
@@ -1015,7 +1066,7 @@ class PRESETS_FOR_PRESETS_LENGTH_OT_Rename(Operator):
 class PRESETS_FOR_PRESETS_LENGTH_OT_Refresh(Operator):
     """Clear all items of the list"""
     bl_idname = "presets_for_presets_length.refresh"
-    bl_label = "Overwrite"
+    bl_label = "Save"
     bl_description = "Overwrite item"
     # bl_options = {'UNDO'}
 
@@ -1111,7 +1162,7 @@ class PRESETS_FOR_PRESETS_ANGLE_OT_Rename(Operator):
 class PRESETS_FOR_PRESETS_ANGLE_OT_Refresh(Operator):
     """Clear all items of the list"""
     bl_idname = "presets_for_presets.refresh"
-    bl_label = "Overwrite"
+    bl_label = "Save"
     bl_description = "Overwrite item"
     # bl_options = {'UNDO'}
 
@@ -1152,7 +1203,8 @@ class PRESETS_FOR_PRESETS_PT_panel(Panel):
 
     def draw_header(self, context):
         layout = self.layout
-        layout.label(icon = "OUTLINER_OB_GROUP_INSTANCE")
+        # layout.label(icon = "OUTLINER_OB_GROUP_INSTANCE")
+        layout.label(icon = "ASSET_MANAGER")
 
     def draw(self, context):
         layout = self.layout
@@ -1178,7 +1230,7 @@ class PRESETS_FOR_PRESETS_PT_panel(Panel):
         row.operator(PRESETS_FOR_PRESETS_ANGLE_OT_AddPreset.bl_idname,
                      text="", icon='REMOVE').remove_active = True
 
-        row.operator("presets_for_presets.refresh", icon = "FILE_REFRESH", text = "")
+        row.operator("presets_for_presets.refresh", icon = "DISK_DRIVE", text = "")
 
         # row.operator("presets_for_presets.rename", icon = "SORTALPHA")
 
@@ -1204,10 +1256,12 @@ class PRESETS_FOR_PRESETS_PT_panel(Panel):
         row.operator(PRESETS_FOR_PRESETS_LENGTH_OT_AddPreset.bl_idname,
                      text="", icon='REMOVE').remove_active = True
 
-        row.operator("presets_for_presets_length.refresh", icon = "FILE_REFRESH", text = "")
+        row.operator("presets_for_presets_length.refresh", icon = "DISK_DRIVE", text = "")
 
-        if bpy.context.scene.presets_length_save != 0:
-            row.label(icon = "ERROR")
+        # if bpy.context.scene.presets_length_save != 0:
+        #     row = row.row(align = 1)
+        #     row.alignment = "RIGHT"
+        #     row.label(icon = "ERROR")
 
         # row.operator("presets_for_presets_length.rename", icon = "SORTALPHA")
 

@@ -219,6 +219,11 @@ class SetLength(bpy.types.Operator):
                 self.report({war}, text)
                 return{"FINISHED"}
 
+            # if isinstance(elem_list[0], bmesh.types.BMVert):
+            #     # print("BMVert")
+            #     ind.append(elem_list[0].index)
+            #     vec.append(elem_list[0].co)
+
             v2 = elem_list[0].co
 
             offset = False 
