@@ -902,6 +902,37 @@ class PRESETS_PT_presets_List_Length(Panel):
                 # row.operator("presets_length.remove_duplicates", icon="GHOST_ENABLED")
 
 
+
+class PRESETS_presets_length_Collection(PropertyGroup):
+
+    unit: FloatProperty(
+        name="Length",
+        description="Length of the edge",
+        step = 100.0,
+        unit='LENGTH',
+        precision = 6,)
+    name: StringProperty()
+
+class PRESETS_presets_angle_Collection(PropertyGroup):
+
+    unit: FloatProperty(
+        name="Angle",
+        description="Angle",
+        min=-360.0, max=360.0,
+        default=0.0,
+        step = 100.0,
+        unit="ROTATION",
+        precision = 6,)
+    name: StringProperty()
+
+
+    # remember_index = IntProperty()
+    # obj_type: StringProperty()
+    # obj_id: IntProperty()
+
+
+
+
 PRESET_SUBDIR = "Length"
 
 class PRESETS_FOR_PRESETS_LENGTH_MT_DisplayPresets(Menu):
@@ -933,6 +964,22 @@ class PRESETS_FOR_PRESETS_LENGTH_OT_AddPreset(AddPresetBase, Operator):
     ]
 
     preset_subdir = PRESET_SUBDIR
+
+class PRESETS_FOR_PRESETS_LENGTH_OT_AddPreset_Copy(Operator):
+    """Clear all items of the list"""
+    bl_idname = "presets_for_presets_length.add"
+    bl_label = "Add"
+    bl_description = "Overwrite item"
+    # bl_options = {'UNDO'}
+
+
+    def execute(self, context):
+
+        bpy.ops.scene.presets_for_presets_length_add(name=self.name_input, remove_name=0, remove_active=False)
+
+        # bpy.context.scene.presets_length_save = 0
+
+        return {"FINISHED"}
 
 class PRESETS_FOR_PRESETS_LENGTH_OT_Rename(Operator):
     """Clear all items of the list"""
@@ -990,6 +1037,8 @@ class PRESETS_FOR_PRESETS_LENGTH_OT_Refresh(Operator):
 
         bpy.ops.scene.presets_for_presets_length_add(name=self.name_input, remove_name=0, remove_active=1)
         bpy.ops.scene.presets_for_presets_length_add(name=self.name_input, remove_name=0, remove_active=False)
+
+        # bpy.context.scene.presets_length_save = 0
 
         return {"FINISHED"}
 
@@ -1157,6 +1206,9 @@ class PRESETS_FOR_PRESETS_PT_panel(Panel):
 
         row.operator("presets_for_presets_length.refresh", icon = "FILE_REFRESH", text = "")
 
+        if bpy.context.scene.presets_length_save != 0:
+            row.label(icon = "ERROR")
+
         # row.operator("presets_for_presets_length.rename", icon = "SORTALPHA")
 
 
@@ -1167,34 +1219,6 @@ class PRESETS_FOR_PRESETS_PT_panel(Panel):
 # -------------------------------------------------------------------
 #   Collection
 # -------------------------------------------------------------------
-
-class PRESETS_presets_length_Collection(PropertyGroup):
-
-    unit: FloatProperty(
-        name="Length",
-        description="Length of the edge",
-        step = 100.0,
-        unit='LENGTH',
-        precision = 6,)
-    name: StringProperty()
-
-class PRESETS_presets_angle_Collection(PropertyGroup):
-
-    unit: FloatProperty(
-        name="Angle",
-        description="Angle",
-        min=-360.0, max=360.0,
-        default=0.0,
-        step = 100.0,
-        unit="ROTATION",
-        precision = 6,)
-    name: StringProperty()
-
-
-    # remember_index = IntProperty()
-    # obj_type: StringProperty()
-    # obj_id: IntProperty()
-
 
 # @call_once(bpy.app.handlers.depsgraph_update_pre)
 # def my_handler(scene):

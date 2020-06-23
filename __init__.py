@@ -1585,6 +1585,7 @@ classes = (
 
     PRESETS_FOR_PRESETS_LENGTH_MT_DisplayPresets,
     PRESETS_FOR_PRESETS_LENGTH_OT_AddPreset,
+    PRESETS_FOR_PRESETS_LENGTH_OT_AddPreset_Copy,
     PRESETS_FOR_PRESETS_LENGTH_OT_Rename,
     PRESETS_FOR_PRESETS_LENGTH_OT_Refresh,
 
@@ -1686,9 +1687,12 @@ def register():
     """Presets for Scene"""
     bpy.types.Scene.presets_angle = CollectionProperty(type=PRESETS_presets_angle_Collection)
     bpy.types.Scene.presets_angle_index = IntProperty()
+    bpy.types.Scene.presets_angle_save = IntProperty()
+
 
     bpy.types.Scene.presets_length = CollectionProperty(type=PRESETS_presets_length_Collection)
     bpy.types.Scene.presets_length_index = IntProperty()
+    bpy.types.Scene.presets_length_save = IntProperty()
 
 
     """Presets for Objetcs"""
