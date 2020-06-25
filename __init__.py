@@ -842,12 +842,13 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
             # normal_from_face = 
 
-            # for f in range(0, len(faces_of_edge)):
-            for f in range(-1, len(faces_of_edge) - 1):
-                # print(faces_of_edge[f])
+            for f in range(0, len(faces_of_edge)):
+            # for f in range(-1, len(faces_of_edge) - 1):
                 normals_of_the_faces.append(faces_of_edge[f].normal @ wm_inverted) 
 
-            if normals_of_the_faces == 2:
+            # print(len(faces_of_edge))
+
+            if len(normals_of_the_faces) == 2:
 
                 normal_from_face = ((normals_of_the_faces[0]) + (normals_of_the_faces[1])) /2
                 normal_from_face = (normal_from_face) + (location_of_edge) 
