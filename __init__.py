@@ -33,6 +33,7 @@ from .SetLength import *
 from .Set_Mesh_Position import *
 from .Presets import *
 from .Presets_Object import *
+# from .Set_Cursor_To_Normal import *
 
 
 from bpy import types
@@ -841,18 +842,30 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
             # normal_from_face = 
 
-            for f in range(0, len(faces_of_edge)):
+            # for f in range(0, len(faces_of_edge)):
+            for f in range(-1, len(faces_of_edge) - 1):
                 # print(faces_of_edge[f])
                 normals_of_the_faces.append(faces_of_edge[f].normal @ wm_inverted) 
 
+            if normals_of_the_faces == 2:
 
-            normal_from_face = ((normals_of_the_faces[0]) + (normals_of_the_faces[1])) /2
-            normal_from_face = (normal_from_face) + (location_of_edge) 
-            normal_projection_from_face = mathutils.geometry.intersect_point_line(normal_from_face, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
-            normal_projection_from_face = normal_projection_from_face[0]
-            # normal_from_face = normal_projection_from_face
-            normal_from_face = (normal_from_face - normal_projection_from_face)
-            normal = normal_from_face
+                normal_from_face = ((normals_of_the_faces[0]) + (normals_of_the_faces[1])) /2
+                normal_from_face = (normal_from_face) + (location_of_edge) 
+                normal_projection_from_face = mathutils.geometry.intersect_point_line(normal_from_face, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
+                normal_projection_from_face = normal_projection_from_face[0]
+                # normal_from_face = normal_projection_from_face
+                normal_from_face = (normal_from_face - normal_projection_from_face)
+                normal = normal_from_face
+
+            else:
+
+                normal_from_face = normals_of_the_faces[0]
+                normal_from_face = (normal_from_face) + (location_of_edge) 
+                normal_projection_from_face = mathutils.geometry.intersect_point_line(normal_from_face, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
+                normal_projection_from_face = normal_projection_from_face[0]
+                # normal_from_face = normal_projection_from_face
+                normal_from_face = (normal_from_face - normal_projection_from_face)
+                normal = normal_from_face
 
 
 
