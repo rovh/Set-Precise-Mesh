@@ -370,7 +370,6 @@ class Set_Mesh_Position (bpy.types.Operator):
         cursor_location =  bpy.context.scene.cursor.location.copy()
 
         mat_cur   =  cursor_matrix_inverted @ obj_matrix
-
         # mat_cur_2 =  obj_matrix @ cursor_matrix_inverted
 
         position = self.position
@@ -378,11 +377,24 @@ class Set_Mesh_Position (bpy.types.Operator):
         object_location = bpy.context.active_object.matrix_world.translation.copy()
         object_location =  bpy.context.active_object.location.copy()
 
+        x = 0
+        y = 0
+        z = 1
+
+        orientation = mathutils.Vector((x,y,z))
+
+        cursor_location[0] = cursor_location[0] * x
+        cursor_location[1] = cursor_location[1] * y
+        cursor_location[2] = cursor_location[2] * z
 
         if position == "global":
             if position_location == True:
                 bpy.context.active_object.matrix_world.translation = object_location - cursor_location
             else:
+                mat_cur.translation[0] = obj_matrix.translation[0] if mat_cur.translation[0] * x == 0 else mat_cur.translation[0]
+                mat_cur.translation[1] = obj_matrix.translation[1] if mat_cur.translation[1] * y == 0 else mat_cur.translation[1]
+                mat_cur.translation[2] = obj_matrix.translation[2] if mat_cur.translation[2] * z == 0 else mat_cur.translation[2]
+                
                 bpy.context.active_object.matrix_world = mat_cur
 
         elif position == "local":
@@ -401,7 +413,15 @@ class Set_Mesh_Position (bpy.types.Operator):
             if position_location == True:
                 bpy.context.active_object.matrix_world.translation = object_location - cursor_location + cursor_location_old
             else:
-                bpy.context.active_object.matrix_world = cursor_matrix_old @ mat_cur
+                mat_cur = cursor_matrix_old @ mat_cur
+                obj_matrix = mat_cur
+
+                mat_cur.translation[0] = obj_matrix.translation[0] if mat_cur.translation[0] * x == 0 else mat_cur.translation[0]
+                mat_cur.translation[1] = obj_matrix.translation[1] if mat_cur.translation[1] * y == 0 else mat_cur.translation[1]
+                mat_cur.translation[2] = obj_matrix.translation[2] if mat_cur.translation[2] * z == 0 else mat_cur.translation[2]
+
+                # bpy.context.active_object.matrix_world = cursor_matrix_old @ mat_cur
+                bpy.context.active_object.matrix_world = mat_cur
 
         elif position == "object":
             if position_location == True:
