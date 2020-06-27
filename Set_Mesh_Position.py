@@ -422,13 +422,13 @@ class Set_Mesh_Position (bpy.types.Operator):
 
         elif position == "cursor":
             if position_location == True:
-                cursor_location[0] = cursor_location[0] * x
-                cursor_location[1] = cursor_location[1] * y
-                cursor_location[2] = cursor_location[2] * z
+                cursor_location[0] = cursor_location[0] * 1 if x == 0 else cursor_location[0]
+                cursor_location[1] = cursor_location[1] * 1 if y == 0 else cursor_location[1]
+                cursor_location[2] = cursor_location[2] * 1 if z == 0 else cursor_location[2]
 
-                cursor_location_old[0] = cursor_location_old[0] * x
-                cursor_location_old[1] = cursor_location_old[1] * y
-                cursor_location_old[2] = cursor_location_old[2] * z
+                # cursor_location_old[0] = cursor_location_old[0] * 0 if x == 0 else cursor_location_old[0]
+                # cursor_location_old[1] = cursor_location_old[1] * 0 if y == 0 else cursor_location_old[1]
+                # cursor_location_old[2] = cursor_location_old[2] * 0 if z == 0 else cursor_location_old[2]
 
                 bpy.context.active_object.matrix_world.translation = object_location - cursor_location + cursor_location_old
             else:
