@@ -413,12 +413,20 @@ class Set_Mesh_Position (bpy.types.Operator):
             if position_location == True:
                 bpy.context.active_object.matrix_world.translation = object_location - cursor_location + cursor_location_old
             else:
-                mat_cur = cursor_matrix_old @ mat_cur
-                obj_matrix = mat_cur
+                # obj_matrix = obj_matrix.copy() @ cursor_matrix_old.inverted()
 
-                mat_cur.translation[0] = obj_matrix.translation[0] if mat_cur.translation[0] * x == 0 else mat_cur.translation[0]
-                mat_cur.translation[1] = obj_matrix.translation[1] if mat_cur.translation[1] * y == 0 else mat_cur.translation[1]
-                mat_cur.translation[2] = obj_matrix.translation[2] if mat_cur.translation[2] * z == 0 else mat_cur.translation[2]
+                # print(obj_matrix.translation[0])
+                # print(obj_matrix.translation[1])
+                # print(obj_matrix.translation[2])
+
+                mat_cur = cursor_matrix_old @ mat_cur
+                mat_cur_inverted = obj_matrix @ cursor_matrix_old.inverted()
+
+                mat_cur.translation[0] = mat_cur_inverted.translation[0] if x == 0 else mat_cur.translation[0]
+                mat_cur.translation[1] = mat_cur_inverted.translation[1] if y == 0 else mat_cur.translation[1]
+                mat_cur.translation[2] = mat_cur_inverted.translation[2] if z == 0 else mat_cur.translation[2]
+
+                
 
                 # bpy.context.active_object.matrix_world = cursor_matrix_old @ mat_cur
                 bpy.context.active_object.matrix_world = mat_cur
