@@ -71,6 +71,7 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
         col_left = row.column(align=0)
         col_right = row.column(align=0)
         col_right_right = row.column(align = 1)
+        col_right_right_rigth = row.column(align = 1)
         
 
         col_right_right.prop( w_m, "position_origin", icon = "CON_PIVOT", text = "")
@@ -78,6 +79,14 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
         col_right_right.prop( w_m, "position_origin_clear_matrix", icon = "FILE_REFRESH", text = "")
         col_right_right.scale_x = 1
         col_right_right.scale_y = 1.85
+
+        col_right_right_rigth.prop( w_m, "x", text = "X", toggle=True)
+        col_right_right_rigth.prop( w_m, "y", text = "Y", toggle=True)
+        col_right_right_rigth.prop( w_m, "z", text = "Z", toggle=True)
+        col_right_right_rigth.scale_x = 0.1
+        col_right_right_rigth.scale_y = 1.85
+
+
         # col_left.scale_y = 0.8
         # col_right.scale_x = 5.0
 
@@ -377,18 +386,18 @@ class Set_Mesh_Position (bpy.types.Operator):
         object_location = bpy.context.active_object.matrix_world.translation.copy()
         object_location =  bpy.context.active_object.location.copy()
 
-        x = 0
-        y = 0
-        z = 1
+        x = bpy.context.window_manager.setprecisemesh.x
+        y = bpy.context.window_manager.setprecisemesh.y
+        z = bpy.context.window_manager.setprecisemesh.z
 
         orientation = mathutils.Vector((x,y,z))
 
-        cursor_location[0] = cursor_location[0] * x
-        cursor_location[1] = cursor_location[1] * y
-        cursor_location[2] = cursor_location[2] * z
-
         if position == "global":
             if position_location == True:
+                cursor_location[0] = cursor_location[0] * x
+                cursor_location[1] = cursor_location[1] * y
+                cursor_location[2] = cursor_location[2] * z
+
                 bpy.context.active_object.matrix_world.translation = object_location - cursor_location
             else:
                 mat_cur.translation[0] = obj_matrix.translation[0] if mat_cur.translation[0] * x == 0 else mat_cur.translation[0]
@@ -413,6 +422,14 @@ class Set_Mesh_Position (bpy.types.Operator):
 
         elif position == "cursor":
             if position_location == True:
+                cursor_location[0] = cursor_location[0] * x
+                cursor_location[1] = cursor_location[1] * y
+                cursor_location[2] = cursor_location[2] * z
+
+                cursor_location_old[0] = cursor_location_old[0] * x
+                cursor_location_old[1] = cursor_location_old[1] * y
+                cursor_location_old[2] = cursor_location_old[2] * z
+
                 bpy.context.active_object.matrix_world.translation = object_location - cursor_location + cursor_location_old
             else:
                 axis = cursor_matrix_old.inverted() @ obj_matrix
@@ -434,6 +451,12 @@ class Set_Mesh_Position (bpy.types.Operator):
             else:
                 obj_name = bpy.data.scenes[bpy.context.scene.name_full].object_position.name_full
                 obj_marx = bpy.data.objects[obj_name].matrix_world
+
+                axis = obj_marx.inverted() @ obj_matrix
+
+                mat_cur.translation[0] = axis.translation[0] if x == 0 else mat_cur.translation[0]
+                mat_cur.translation[1] = axis.translation[1] if y == 0 else mat_cur.translation[1]
+                mat_cur.translation[2] = axis.translation[2] if z == 0 else mat_cur.translation[2]
 
                 bpy.context.active_object.matrix_world = obj_marx @ mat_cur
 
