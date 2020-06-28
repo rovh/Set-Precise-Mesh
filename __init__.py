@@ -1505,9 +1505,9 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         \n(Set the mesh position not in accordance with the normal of the selected part of the mesh)",
         default = False,
     )
-    # x: bpy.props.BoolProperty(default = 1)
-    # y: bpy.props.BoolProperty(default = 1)
-    # z: bpy.props.BoolProperty(default = 1)
+    x: bpy.props.BoolProperty(default = 1)
+    y: bpy.props.BoolProperty(default = 1)
+    z: bpy.props.BoolProperty(default = 1)
 
 """Duplications of the Main panel"""
 class Dupli (SetPresiceMesh_Panel):

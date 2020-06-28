@@ -29,34 +29,32 @@ class Pop_Up_Set_Cursor_To_Normal (bpy.types.Operator):
 
         selected_verts = [verts for verts in bm.verts if verts.select]
         selected_edges = [edge for edge in bm.edges if edge.select]
-        selected_faces = [face for face in bm.faces if face.select]
-
+        selected_faces = [face for face in bm.faces if face.select]            
 
         if len(selected_verts) != 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
             if len(selected_verts) == 1:
+
+                # text = "Cursor was moved"
+                # war = "INFO"
+                # self.report({war}, text)
+
                 bpy.ops.mesh.set_cursor(get_from_verts = True)
-
-                text = "Cursor was moved"
-                war = "INFO"
-                self.report({war}, text)
-
 
         if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) == 0:
             if len(selected_edges) == 1:
                 bpy.ops.mesh.set_cursor(get_from_edges = True)
 
-                text = "Cursor was moved"
-                war = "INFO"
-                self.report({war}, text)
+                # text = "Cursor was moved"
+                # war = "INFO"
+                # self.report({war}, text)
                 
-
         if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) != 0:
             if len(selected_faces) == 1:
                 bpy.ops.mesh.set_cursor(get_from_faces = True)
 
-                text = "Cursor was moved"
-                war = "INFO"
-                self.report({war}, text)
+                # text = "Cursor was moved"
+                # war = "INFO"
+                # self.report({war}, text)
                 
 
         # x = event.mouse_x
@@ -69,7 +67,10 @@ class Pop_Up_Set_Cursor_To_Normal (bpy.types.Operator):
         # # context.window_manager.invoke_popup(self, width = 200)
         # return context.window_manager.invoke_props_dialog(self)
         # return context.window_manager.invoke_popup(self, width=600, height=500)
-        return context.window_manager.invoke_popup(self, width = 200)
+        if len(selected_verts) == 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
+            return context.window_manager.invoke_popup(self)
+        else:
+            return context.window_manager.invoke_popup(self, width = 100)
 
         # inv = context.window_manager.invoke_popup(self, width = 200)
 
@@ -78,18 +79,38 @@ class Pop_Up_Set_Cursor_To_Normal (bpy.types.Operator):
         # return inv
 
     def draw(self, context):
-        layout=self.layout
+
+        obj = bpy.context.edit_object
+        me = obj.data
+        bm = bmesh.from_edit_mesh(me)
+
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+        bpy.context.object.update_from_editmode()
+        bmesh.update_edit_mesh(me, True)
+
+        selected_verts = [verts for verts in bm.verts if verts.select]
+        selected_edges = [edge for edge in bm.edges if edge.select]
+        selected_faces = [face for face in bm.faces if face.select]
 
         # w_m = context.window_manager.setprecisemesh
 
-        col = layout.column(align = 1)
+        layout=self.layout
 
-        col.operator("mesh.set_cursor", text="Verts", icon = "VERTEXSEL").get_from_verts = True
-        col.operator("mesh.set_cursor", text="Edges", icon = "EDGESEL").get_from_edges = True
-        col.operator("mesh.set_cursor", text="Faces", icon = "FACESEL").get_from_faces = True
+        col = layout.column(align = 1)
+        col.scale_y = 1.2
         
-        # col_top.scale_y = 10
-        # col_top.scale_x = 2
+
+        if len(selected_verts) == 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
+            col.label(icon = "ERROR")
+            col.label(text = "You need to select one element (vertex/edge/face)")
+        if len(selected_verts) > 1:
+            col.operator("mesh.set_cursor", text="Verts", icon = "VERTEXSEL").get_from_verts = True
+        if len(selected_edges) != 0:
+            col.operator("mesh.set_cursor", text="Edges", icon = "EDGESEL").get_from_edges = True
+        if len(selected_faces) != 0:
+            col.operator("mesh.set_cursor", text="Faces", icon = "FACESEL").get_from_faces = True
+        
+        
 
 
 class Set_Cursor_To_Normal (bpy.types.Operator):
