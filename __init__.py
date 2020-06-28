@@ -446,7 +446,7 @@ def   header_draw   (self, context):
             # sub = sub.operator("mesh.set_cursor", text="", icon = "ORIENTATION_CURSOR")
             sub = sub.operator("mesh.set_cursor_to_normal_pop_up", text="", icon = "ORIENTATION_CURSOR")
             
-            
+
             # sub = row.row(align = 1)
             # sub.scale_x = 0.6
             # split = sub.split(align = 1, factor = 0.5)

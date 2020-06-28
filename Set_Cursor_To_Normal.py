@@ -19,6 +19,46 @@ class Pop_Up_Set_Cursor_To_Normal (bpy.types.Operator):
 
     def invoke(self, context, event):
 
+        obj = bpy.context.edit_object
+        me = obj.data
+        bm = bmesh.from_edit_mesh(me)
+
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+        bpy.context.object.update_from_editmode()
+        bmesh.update_edit_mesh(me, True)
+
+        selected_verts = [verts for verts in bm.verts if verts.select]
+        selected_edges = [edge for edge in bm.edges if edge.select]
+        selected_faces = [face for face in bm.faces if face.select]
+
+
+        if len(selected_verts) != 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
+            if len(selected_verts) == 1:
+                bpy.ops.mesh.set_cursor(get_from_verts = True)
+
+                text = "Cursor was moved"
+                war = "INFO"
+                self.report({war}, text)
+
+
+        if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) == 0:
+            if len(selected_edges) == 1:
+                bpy.ops.mesh.set_cursor(get_from_edges = True)
+
+                text = "Cursor was moved"
+                war = "INFO"
+                self.report({war}, text)
+                
+
+        if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) != 0:
+            if len(selected_faces) == 1:
+                bpy.ops.mesh.set_cursor(get_from_faces = True)
+
+                text = "Cursor was moved"
+                war = "INFO"
+                self.report({war}, text)
+                
+
         # x = event.mouse_x
         # y = event.mouse_y 
 
@@ -241,14 +281,6 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
             location = location / len(selected_faces)
             
-        if normal[0] == 0 and normal[1] == 0 and normal[2] == 0:
-            text = "Normal = 0"
-            war = "ERROR"
-            self.report({war}, text)
-            return{"FINISHED"}
-        print(normal)
-            
-
         bpy.context.scene.cursor.location = location
         # Set cursor direction
         obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
