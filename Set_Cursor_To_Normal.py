@@ -182,15 +182,6 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
             location = location / len(selected_verts)
 
-            bpy.context.scene.cursor.location = location
-
-            obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
-            direction = normal
-            # point the cameras '-Z' and use its 'Y' as up
-            rot_quat = direction.to_track_quat('-Z', 'Y')
-            obj_camera.rotation_euler = rot_quat.to_euler()
-            rot_quat =  rot_quat.to_euler()
-
         if self.get_from_edges == True:
 
             if len(selected_edges) == 0:
@@ -234,38 +225,40 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
                     normal = normal + normal_from_face
             
             location = location / len(selected_edges)
-            bpy.context.scene.cursor.location = location
-            
-
-            obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
-            direction = normal
-            # point the cameras '-Z' and use its 'Y' as up
-            rot_quat = direction.to_track_quat('-Z', 'Y')
-            obj_camera.rotation_euler = rot_quat.to_euler()
-            rot_quat =  rot_quat.to_euler()
 
         if self.get_from_faces == True:
 
-                if len(selected_faces) == 0:
-                    text = "You need to select face"
-                    war = "ERROR"
-                    self.report({war}, text)
-                    return{"FINISHED"}
+            if len(selected_faces) == 0:
+                text = "You need to select face"
+                war = "ERROR"
+                self.report({war}, text)
+                return{"FINISHED"}
 
-                for i in range (-1, len(selected_faces)-1):
+            for i in range (-1, len(selected_faces)-1):
 
-                    location = (wm @ selected_faces[i].calc_center_median()) + location
-                    normal = (selected_faces[i].normal @ wm_inverted) + normal
-                            
-                bpy.context.scene.cursor.location = location
+                location = (wm @ selected_faces[i].calc_center_median()) + location
+                normal = (selected_faces[i].normal @ wm_inverted) + normal
 
-                # Set cursor direction
-                obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
-                direction = normal
-                # point the cameras '-Z' and use its 'Y' as up
-                rot_quat = direction.to_track_quat('-Z', 'Y')
-                obj_camera.rotation_euler = rot_quat.to_euler()
-                rot_quat =  rot_quat.to_euler()
+            location = location / len(selected_faces)
+            
+        if normal[0] == 0 and normal[1] == 0 and normal[2] == 0:
+            text = "Normal = 0"
+            war = "ERROR"
+            self.report({war}, text)
+            return{"FINISHED"}
+        print(normal)
+            
+
+        bpy.context.scene.cursor.location = location
+        # Set cursor direction
+        obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
+        direction = normal
+        # point the cameras '-Z' and use its 'Y' as up
+        rot_quat = direction.to_track_quat('-Z', 'Y')
+        obj_camera.rotation_euler = rot_quat.to_euler()
+        rot_quat =  rot_quat.to_euler()
+
+
 
         bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
         bpy.context.object.update_from_editmode()
