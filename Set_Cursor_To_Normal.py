@@ -4,6 +4,53 @@ import bmesh
 from bpy import types
 import mathutils
 
+class Pop_Up_Set_Cursor_To_Normal (bpy.types.Operator):
+    """Tooltip"""
+    bl_idname = "mesh.set_cursor_to_normal_pop_up"
+    bl_label = "Set Mesh Position Pop up menu"
+    bl_description = "Set the mesh position according to the normal of the selected part of the mesh (vertex/edge/face)\
+        \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
+    # bl_options = {'REGISTER', 'UNDO'}
+    bl_options = {'UNDO'}
+
+    def execute(self, context):
+        # context.window_manager.invoke_popup(self, width = 200)
+        return {'FINISHED'}
+
+    def invoke(self, context, event):
+
+        # x = event.mouse_x
+        # y = event.mouse_y 
+
+        # move_x = -20
+        # move_y = 25
+
+        # bpy.context.window.cursor_warp(x + move_x, y + move_y)
+        # # context.window_manager.invoke_popup(self, width = 200)
+        # return context.window_manager.invoke_props_dialog(self)
+        # return context.window_manager.invoke_popup(self, width=600, height=500)
+        return context.window_manager.invoke_popup(self, width = 200)
+
+        # inv = context.window_manager.invoke_popup(self, width = 200)
+
+        # bpy.context.window.cursor_warp(x, y)
+
+        # return inv
+
+    def draw(self, context):
+        layout=self.layout
+
+        # w_m = context.window_manager.setprecisemesh
+
+        col = layout.column(align = 1)
+
+        col.operator("mesh.set_cursor", text="Verts", icon = "VERTEXSEL").get_from_verts = True
+        col.operator("mesh.set_cursor", text="Edges", icon = "EDGESEL").get_from_edges = True
+        col.operator("mesh.set_cursor", text="Faces", icon = "FACESEL").get_from_faces = True
+        
+        # col_top.scale_y = 10
+        # col_top.scale_x = 2
+
 
 class Set_Cursor_To_Normal (bpy.types.Operator):
     """Tooltip"""
@@ -11,7 +58,12 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
     bl_label = "Set the Cursor to the normal"
     bl_description = "Set the cursor location to the selected vertex/edge/face and set the cursor direction along its normal\
         \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
-    bl_options = {'REGISTER', 'UNDO'}
+    # bl_options = {'REGISTER', 'UNDO'}
+    bl_options = {'UNDO'}
+
+    get_from_verts: bpy.props.BoolProperty(options={'SKIP_SAVE'}, default = 0)
+    get_from_edges: bpy.props.BoolProperty(options={'SKIP_SAVE'}, default = 0)
+    get_from_faces: bpy.props.BoolProperty(options={'SKIP_SAVE'}, default = 0)
 
     @classmethod
     def poll(cls, context):
@@ -37,16 +89,15 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
         # edge_list = []
         # vec_list  = []
 
-        elem_list = []
-        for g in bm.select_history:
-            elem_list.append(g)
 
         selected_verts = [verts for verts in bm.verts if verts.select]
         selected_edges = [edge for edge in bm.edges if edge.select]
         selected_faces = [face for face in bm.faces if face.select]
 
         wm = bpy.context.active_object.matrix_world.copy()
-        wm_inverted = wm.inverted()      
+        wm_inverted = wm.inverted()
+
+        # print("\n")        
 
 
         """Maybe it will be need"""
@@ -104,68 +155,117 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
         # print(vec_ind,  "vec_ind")
         # print(edge_ind, "edge_ind")
-        # print(face_ind, "face_ind").
+        # print(face_ind, "face_ind")
+
 
         if len(selected_verts) == 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
-            text = "You need to select one vertex/edge/face"
+
+            text = "You need to select vertex/edge/face"
             war = "ERROR"
             self.report({war}, text)
             return{"FINISHED"}
 
-        my_location = mathutils.Vector((0,0,0))
         normal = mathutils.Vector((0,0,0))
+        location = mathutils.Vector((0,0,0))
 
-        print(elem_list)
+        if self.get_from_verts == True:
 
-        for i in range(-1, len(elem_list) - 1):
+            if len(selected_verts) == 0:
+                text = "You need to select vertex"
+                war = "ERROR"
+                self.report({war}, text)
+                return{"FINISHED"}
+    
+            for i in range (-1, len(selected_verts)-1):
+                normal = (selected_verts[i].normal @ wm_inverted) + normal
+                location = (wm @ selected_verts[i].co) + location
 
-            if isinstance(elem_list[i], bmesh.types.BMVert) == True:
+            location = location / len(selected_verts)
 
-                my_location = elem_list[i].co + my_location
+            bpy.context.scene.cursor.location = location
 
-                normal = (elem_list[i].normal @ wm_inverted) + normal
+            obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
+            direction = normal
+            # point the cameras '-Z' and use its 'Y' as up
+            rot_quat = direction.to_track_quat('-Z', 'Y')
+            obj_camera.rotation_euler = rot_quat.to_euler()
+            rot_quat =  rot_quat.to_euler()
 
-            if isinstance(elem_list[i], bmesh.types.BMEdge) == True:
+        if self.get_from_edges == True:
 
-                edge_verts = elem_list[i].verts
+            if len(selected_edges) == 0:
+                text = "You need to select edge"
+                war = "ERROR"
+                self.report({war}, text)
+                return{"FINISHED"}
+
+            for i in range (-1, len(selected_edges)-1):
+                edge_verts = selected_edges[i].verts
 
                 location_of_edge = ((wm @ edge_verts[0].co) + (wm @ edge_verts[1].co)) /2
-                my_location = location_of_edge + my_location
+                location = location_of_edge + location
 
-                faces_of_edge = elem_list[i].link_faces
+                faces_of_edge = selected_edges[i].link_faces
 
                 normals_of_the_faces = []
 
-                for f in range(-1, len(faces_of_edge) - 1):
+                for f in range(0, len(faces_of_edge)):
+                # for f in range(-1, len(faces_of_edge) - 1):
                     normals_of_the_faces.append(faces_of_edge[f].normal @ wm_inverted) 
 
+                if len(normals_of_the_faces) == 2:
 
-                normal_from_face = ((normals_of_the_faces[0]) + (normals_of_the_faces[1])) /2
-                normal_from_face = (normal_from_face) + (location_of_edge)
-                normal_projection_from_face = mathutils.geometry.intersect_point_line(normal_from_face, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
-                normal_projection_from_face = normal_projection_from_face[0]
-                # normal_from_face = normal_projection_from_face
-                normal_from_face = (normal_from_face - normal_projection_from_face)
+                    normal_from_face = ((normals_of_the_faces[0]) + (normals_of_the_faces[1])) /2
+                    normal_from_face = (normal_from_face) + (location_of_edge) 
+                    normal_projection_from_face = mathutils.geometry.intersect_point_line(normal_from_face, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
+                    normal_projection_from_face = normal_projection_from_face[0]
+                    # normal_from_face = normal_projection_from_face
+                    normal_from_face = (normal_from_face - normal_projection_from_face)
+                    normal = normal + normal_from_face
 
-                normal = normal_from_face + normal
+                else:
 
-            if isinstance(elem_list[i], bmesh.types.BMFace) == True:
-
-                my_location = (elem_list[i].calc_center_median()) + my_location
-
-                normal = (elem_list[i].normal @ wm_inverted) + normal
-
+                    normal_from_face = normals_of_the_faces[0]
+                    normal_from_face = (normal_from_face) + (location_of_edge) 
+                    normal_projection_from_face = mathutils.geometry.intersect_point_line(normal_from_face, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
+                    normal_projection_from_face = normal_projection_from_face[0]
+                    # normal_from_face = normal_projection_from_face
+                    normal_from_face = (normal_from_face - normal_projection_from_face)
+                    normal = normal + normal_from_face
             
-        my_location = my_location / len(elem_list)
-        bpy.context.scene.cursor.location = wm @ my_location
+            location = location / len(selected_edges)
+            bpy.context.scene.cursor.location = location
+            
 
-        obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
-        direction = normal
-        # point the cameras '-Z' and use its 'Y' as up
-        rot_quat = direction.to_track_quat('-Z', 'Y')
-        obj_camera.rotation_euler = rot_quat.to_euler()
-        rot_quat =  rot_quat.to_euler()
+            obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
+            direction = normal
+            # point the cameras '-Z' and use its 'Y' as up
+            rot_quat = direction.to_track_quat('-Z', 'Y')
+            obj_camera.rotation_euler = rot_quat.to_euler()
+            rot_quat =  rot_quat.to_euler()
 
+        if self.get_from_faces == True:
+
+                if len(selected_faces) == 0:
+                    text = "You need to select face"
+                    war = "ERROR"
+                    self.report({war}, text)
+                    return{"FINISHED"}
+
+                for i in range (-1, len(selected_faces)-1):
+
+                    location = (wm @ selected_faces[i].calc_center_median()) + location
+                    normal = (selected_faces[i].normal @ wm_inverted) + normal
+                            
+                bpy.context.scene.cursor.location = location
+
+                # Set cursor direction
+                obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
+                direction = normal
+                # point the cameras '-Z' and use its 'Y' as up
+                rot_quat = direction.to_track_quat('-Z', 'Y')
+                obj_camera.rotation_euler = rot_quat.to_euler()
+                rot_quat =  rot_quat.to_euler()
 
         bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
         bpy.context.object.update_from_editmode()
