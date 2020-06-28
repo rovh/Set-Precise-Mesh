@@ -409,9 +409,9 @@ class Set_Mesh_Position (bpy.types.Operator):
 
                 # cursor_location = wm @ cursor_location
 
-                translation[0] = object_location[0] + (object_location[0] - object_location_old[0]) if x == 0 else translation[0]
-                translation[1] = object_location[1] + (object_location[1] - object_location_old[1]) if y == 0 else translation[1]
-                translation[2] = object_location[2] + (object_location[2] - object_location_old[2]) if z == 0 else translation[2]
+                translation[0] = object_location_old[0] + (-object_location[0] + object_location_old[0]) if x == 0 else translation[0]
+                translation[1] = object_location_old[1] + (-object_location[1] + object_location_old[1]) if y == 0 else translation[1]
+                translation[2] = object_location_old[2] + (-object_location[2] + object_location_old[2]) if z == 0 else translation[2]
 
                 
                 
