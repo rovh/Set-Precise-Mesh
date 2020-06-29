@@ -4,6 +4,7 @@ import bmesh
 
 import math
 from math import *
+import re
 # from math import radians
 # from math import pi
 
@@ -66,6 +67,9 @@ class SetLength(bpy.types.Operator):
         data_block_2 = data_block_2.replace(':', '/')
         data_block_2 = data_block_2.replace('unit', str(length))
         data_block_2 = data_block_2.replace('u', str(length))
+        # print(   re.search(r"\((\w+)\)", data_block_2)   )
+
+        # data_block_2 = data_block_2.replace( 'psqrt(r(A-Za-z0-9)' , 'sqrt(r(A-Za-z0-9_])')
 
 
         script_input_2 = bpy.context.scene.script_input_2
