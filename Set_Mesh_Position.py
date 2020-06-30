@@ -479,8 +479,10 @@ class Set_Mesh_Position (bpy.types.Operator):
 
                 bpy.context.active_object.matrix_world.translation = object_location - cursor_location + obj_location
             else:
-                # obj_name = bpy.data.scenes[bpy.context.scene.name_full].object_position.name_full
-                # obj_marx = bpy.data.objects[obj_name].matrix_world
+                obj_name = bpy.data.scenes[bpy.context.scene.name_full].object_position.name_full
+                obj_marx = bpy.data.objects[obj_name].matrix_world.copy()
+                obj_marx = bpy.data.objects[obj_name].location
+                print(obj_marx)
 
                 # axis = obj_marx.inverted() @ cursor_location
                 
@@ -495,9 +497,6 @@ class Set_Mesh_Position (bpy.types.Operator):
 
                 # mat_cur = obj_marx @ mat_cur
                 # bpy.context.active_object.matrix_world = mat_cur
-
-                obj_name = bpy.data.scenes[bpy.context.scene.name_full].object_position.name_full
-                obj_marx = bpy.data.objects[obj_name].matrix_world.copy()
 
                 bpy.context.active_object.matrix_world = obj_marx @ mat_cur
 
