@@ -432,48 +432,43 @@ class Set_Mesh_Position (bpy.types.Operator):
 
         elif position == "cursor":
             if position_location == True:
-                cursor_location[0] = cursor_location[0] * 1 if x == 0 else cursor_location[0]
-                cursor_location[1] = cursor_location[1] * 1 if y == 0 else cursor_location[1]
-                cursor_location[2] = cursor_location[2] * 1 if z == 0 else cursor_location[2]
+                # cursor_location_old[0] = cursor_location[0] * 1 if x == 0 else cursor_location[0]
+                # cursor_location_old[1] = cursor_location[1] * 1 if y == 0 else cursor_location[1]
+                # cursor_location_old[2] = cursor_location[2] * 1 if z == 0 else cursor_location[2]
 
-                # cursor_location_old[0] = cursor_location_old[0] * 0 if x == 0 else cursor_location_old[0]
-                # cursor_location_old[1] = cursor_location_old[1] * 0 if y == 0 else cursor_location_old[1]
-                # cursor_location_old[2] = cursor_location_old[2] * 0 if z == 0 else cursor_location_old[2]
-
-                bpy.context.active_object.matrix_world.translation = object_location - cursor_location + cursor_location_old
-            else:
-                print("\n")
-                # print(axis)
+                # bpy.context.active_object.matrix_world.translation = object_location - cursor_location + cursor_location_old
 
                 axis = cursor_matrix_old.inverted() @ cursor_location
                 
-                print(axis)
-
-                axis[2] = 0
-
-                # axis[0] = 0 if x == 1 else cursor_location[0]
-                # axis[1] = 0 if y == 1 else cursor_location[1]
-                # axis[2] = 0 if z == 1 else cursor_location[2]
+                axis[0] = 0 if x == 1 else axis[0]
+                axis[1] = 0 if y == 1 else axis[1]
+                axis[2] = 0 if z == 1 else axis[2]
 
                 axis = cursor_matrix_old @ axis
-                # axis = axis
 
-                print(axis)
 
-                # axis = cursor_matrix_old.inverted() @ obj_matrix
+
                 cursor_matrix_old_copy = cursor_matrix_old.copy()
-
                 cursor_matrix_old_copy.translation = axis
 
                 mat_cur = cursor_matrix_old_copy @ mat_cur
-
-                print(mat_cur.translation)
-
-                # mat_cur.translation[0] = axis[0] if x == 0 else mat_cur.translation[0]
-                # mat_cur.translation[1] = axis[1] if y == 0 else mat_cur.translation[1]
-                # mat_cur.translation[2] = axis[2] if z == 0 else mat_cur.translation[2]
+                bpy.context.active_object.matrix_world.translation = mat_cur.translation
                 
-                # bpy.context.active_object.matrix_world = cursor_matrix_old @ mat_cur
+            else:
+                axis = cursor_matrix_old.inverted() @ cursor_location
+                
+                axis[0] = 0 if x == 1 else axis[0]
+                axis[1] = 0 if y == 1 else axis[1]
+                axis[2] = 0 if z == 1 else axis[2]
+
+                axis = cursor_matrix_old @ axis
+
+
+
+                cursor_matrix_old_copy = cursor_matrix_old.copy()
+                cursor_matrix_old_copy.translation = axis
+
+                mat_cur = cursor_matrix_old_copy @ mat_cur
                 bpy.context.active_object.matrix_world = mat_cur
 
         elif position == "object":
