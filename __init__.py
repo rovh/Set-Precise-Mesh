@@ -1396,11 +1396,13 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
     )
     data_block: bpy.props.StringProperty(
         name = "Number input",
-        description = "" ,
+        description="\n u = Angle\
+                     \n unit = Angle" ,
     )
     data_block_2: bpy.props.StringProperty(
         name = "Number input",
-        description = "",
+        description="\n u = Length\
+                     \n unit = Length" ,
     )
     description_projection_type = [
         #description_0
