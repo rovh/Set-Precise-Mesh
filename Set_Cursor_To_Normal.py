@@ -106,7 +106,7 @@ class Pop_Up_Set_Cursor_To_Normal (bpy.types.Operator):
             col.operator("mesh.set_cursor", text="Edges", icon = "EDGESEL").get_from_edges = True
         if len(selected_faces) != 0:
             col.operator("mesh.set_cursor", text="Faces", icon = "FACESEL").get_from_faces = True
-        
+
 class Set_Cursor_To_Normal (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.set_cursor"
@@ -119,6 +119,17 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
     get_from_verts: bpy.props.BoolProperty(options={'SKIP_SAVE'}, default = 0)
     get_from_edges: bpy.props.BoolProperty(options={'SKIP_SAVE'}, default = 0)
     get_from_faces: bpy.props.BoolProperty(options={'SKIP_SAVE'}, default = 0)
+
+    @classmethod
+    def description(cls, context, properties):
+        if properties.get_from_verts == True:
+            return "Calculate normal from verts"
+        elif properties.get_from_edges == True:
+            return "Calculate normal from edges"
+        elif properties.get_from_faces == True:
+            return "Calculate normal from faces"
+        else:
+            pass
 
     @classmethod
     def poll(cls, context):
