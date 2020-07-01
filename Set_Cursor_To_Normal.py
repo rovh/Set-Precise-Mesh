@@ -101,7 +101,7 @@ class Pop_Up_Set_Cursor_To_Normal (bpy.types.Operator):
             col.label(icon = "ERROR")
             col.label(text = "You need to select one element (vertex/edge/face)")
         if len(selected_verts) > 1:
-            col.operator("mesh.set_cursor", text="Verts", icon = "VERTEXSEL").get_from_verts = True
+            col.operator("mesh.set_cursor", text="Vertices", icon = "VERTEXSEL").get_from_verts = True
         if len(selected_edges) != 0:
             col.operator("mesh.set_cursor", text="Edges", icon = "EDGESEL").get_from_edges = True
         if len(selected_faces) != 0:
@@ -123,11 +123,11 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
     @classmethod
     def description(cls, context, properties):
         if properties.get_from_verts == True:
-            return "Calculate normal from verts"
+            return "Calculate normal(direction) from selected vertices"
         elif properties.get_from_edges == True:
-            return "Calculate normal from edges"
+            return "Calculate normal(direction) from selected edges"
         elif properties.get_from_faces == True:
-            return "Calculate normal from faces"
+            return "Calculate normal(direction) from selected faces"
         else:
             pass
 

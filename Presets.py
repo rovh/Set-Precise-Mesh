@@ -1230,7 +1230,7 @@ class PRESETS_FOR_PRESETS_PT_panel(Panel):
         row.operator(PRESETS_FOR_PRESETS_ANGLE_OT_AddPreset.bl_idname,
                      text="", icon='REMOVE').remove_active = True
 
-        row.operator("presets_for_presets.refresh", icon = "DISK_DRIVE", text = "")
+        row.operator("presets_for_presets.refresh", icon = "FOLDER_REDIRECT", text = "")
 
         # row.operator("presets_for_presets.rename", icon = "SORTALPHA")
 
@@ -1256,7 +1256,7 @@ class PRESETS_FOR_PRESETS_PT_panel(Panel):
         row.operator(PRESETS_FOR_PRESETS_LENGTH_OT_AddPreset.bl_idname,
                      text="", icon='REMOVE').remove_active = True
 
-        row.operator("presets_for_presets_length.refresh", icon = "DISK_DRIVE", text = "")
+        row.operator("presets_for_presets_length.refresh", icon = "FOLDER_REDIRECT", text = "")
 
         # if bpy.context.scene.presets_length_save != 0:
         #     row = row.row(align = 1)

@@ -1505,9 +1505,9 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         \n(Set the mesh position not in accordance with the normal of the selected part of the mesh)",
         default = False,
     )
-    x: bpy.props.BoolProperty(default = 1, description = "Use X axis")
-    y: bpy.props.BoolProperty(default = 1, description = "Use Y axis")
-    z: bpy.props.BoolProperty(default = 1, description = "Use Z axis")
+    x: bpy.props.BoolProperty(default = 1, name = "Use X axis", description = "Move the object along the X axis")
+    y: bpy.props.BoolProperty(default = 1, name = "Use Y axis", description = "Move the object along the Y axis")
+    z: bpy.props.BoolProperty(default = 1, name = "Use Z axis", description = "Move the object along the Z axis")
 
 """Duplications of the Main panel"""
 class Dupli (SetPresiceMesh_Panel):
