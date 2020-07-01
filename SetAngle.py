@@ -111,8 +111,16 @@ class SetAngle(bpy.types.Operator):
         #Append to lists
         for g in bm.select_history:
             # if len(vec)<3:
+            if isinstance(g, bmesh.types.BMVert) == False:
+                text = '"Set Angle" works only with vertices'
+                war = "ERROR"
+                self.report({war}, text)
+                return{"FINISHED"}
+                break
+
             vec.append(bm.verts[g.index].co)
             ind.append(g.index)
+
 
 
         # Check number

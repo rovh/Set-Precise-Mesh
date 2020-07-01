@@ -4,6 +4,7 @@ import bmesh
 
 import math
 from math import *
+import re
 # from math import radians
 # from math import pi
 
@@ -57,12 +58,18 @@ class SetLength(bpy.types.Operator):
         check(self)
 
         # Set values
+        length = bpy.context.window_manager.setprecisemesh.length
         data_block_2 = bpy.context.window_manager.setprecisemesh.data_block_2
         
         """Replace syntax"""
         data_block_2 = data_block_2.replace(',', '.')
         data_block_2 = data_block_2.replace('^', '**')
         data_block_2 = data_block_2.replace(':', '/')
+        data_block_2 = data_block_2.replace('unit', str(length))
+        data_block_2 = data_block_2.replace('u', str(length))
+        # print(   re.search(r"\((\w+)\)", data_block_2)   )
+
+        # data_block_2 = data_block_2.replace( 'psqrt(r(A-Za-z0-9)' , 'sqrt(r(A-Za-z0-9_])')
 
 
         script_input_2 = bpy.context.scene.script_input_2
@@ -218,6 +225,11 @@ class SetLength(bpy.types.Operator):
                 war = "ERROR"
                 self.report({war}, text)
                 return{"FINISHED"}
+
+            # if isinstance(elem_list[0], bmesh.types.BMVert):
+            #     # print("BMVert")
+            #     ind.append(elem_list[0].index)
+            #     vec.append(elem_list[0].co)
 
             v2 = elem_list[0].co
 
