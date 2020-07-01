@@ -9,8 +9,8 @@ import mathutils
 class Pop_Up_Set_Cursor_To_Normal (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.set_cursor_to_normal_pop_up"
-    bl_label = "Set Mesh Position Pop up menu"
-    bl_description = "Set the mesh position according to the normal of the selected part of the mesh (vertex/edge/face)\
+    bl_label = "Set the Cursor to the normal"
+    bl_description = "Set the cursor location to the selected vertex/edge/face and set the cursor direction along its normal\
         \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     # bl_options = {'REGISTER', 'UNDO'}
     bl_options = {'UNDO'}
