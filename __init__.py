@@ -1568,6 +1568,7 @@ blender_classes = [
 
     Set_Cursor_To_Normal,
     Pop_Up_Set_Cursor_To_Normal,
+
     Browser_Link,
 
     Pop_Up_Set_Mesh_Position,

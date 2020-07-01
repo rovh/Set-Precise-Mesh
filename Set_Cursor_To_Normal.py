@@ -4,6 +4,8 @@ import bmesh
 from bpy import types
 import mathutils
 
+
+
 class Pop_Up_Set_Cursor_To_Normal (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.set_cursor_to_normal_pop_up"
@@ -14,7 +16,6 @@ class Pop_Up_Set_Cursor_To_Normal (bpy.types.Operator):
     bl_options = {'UNDO'}
 
     def execute(self, context):
-        # context.window_manager.invoke_popup(self, width = 200)
         return {'FINISHED'}
 
     def invoke(self, context, event):
@@ -34,43 +35,39 @@ class Pop_Up_Set_Cursor_To_Normal (bpy.types.Operator):
         if len(selected_verts) != 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
             if len(selected_verts) == 1:
 
-                # text = "Cursor was moved"
-                # war = "INFO"
-                # self.report({war}, text)
-
                 bpy.ops.mesh.set_cursor(get_from_verts = True)
+
+                text = "Cursor was moved"
+                war = "INFO"
+                self.report({war}, text)
 
         if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) == 0:
             if len(selected_edges) == 1:
                 bpy.ops.mesh.set_cursor(get_from_edges = True)
 
-                # text = "Cursor was moved"
-                # war = "INFO"
-                # self.report({war}, text)
+                text = "Cursor was moved"
+                war = "INFO"
+                self.report({war}, text)
                 
         if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) != 0:
             if len(selected_faces) == 1:
                 bpy.ops.mesh.set_cursor(get_from_faces = True)
 
-                # text = "Cursor was moved"
-                # war = "INFO"
-                # self.report({war}, text)
+                text = "Cursor was moved"
+                war = "INFO"
+                self.report({war}, text)
                 
 
-        # x = event.mouse_x
-        # y = event.mouse_y 
-
-        # move_x = -20
-        # move_y = 25
-
-        # bpy.context.window.cursor_warp(x + move_x, y + move_y)
         # # context.window_manager.invoke_popup(self, width = 200)
         # return context.window_manager.invoke_props_dialog(self)
         # return context.window_manager.invoke_popup(self, width=600, height=500)
         if len(selected_verts) == 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
             return context.window_manager.invoke_popup(self)
+            # return {"FINISHED"}
         else:
             return context.window_manager.invoke_popup(self, width = 100)
+            # return {"FINISHED"}
+
 
         # inv = context.window_manager.invoke_popup(self, width = 200)
 
@@ -110,9 +107,6 @@ class Pop_Up_Set_Cursor_To_Normal (bpy.types.Operator):
         if len(selected_faces) != 0:
             col.operator("mesh.set_cursor", text="Faces", icon = "FACESEL").get_from_faces = True
         
-        
-
-
 class Set_Cursor_To_Normal (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.set_cursor"

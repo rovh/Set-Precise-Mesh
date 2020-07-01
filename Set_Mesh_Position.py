@@ -385,13 +385,10 @@ class Set_Mesh_Position (bpy.types.Operator):
         position_location = context.window_manager.setprecisemesh.position_location
         object_location = bpy.context.active_object.matrix_world.translation.copy()
         object_location =  bpy.context.active_object.location.copy()
-        object_location_old = bpy.context.active_object.location.copy()
 
         x = bpy.context.window_manager.setprecisemesh.x
         y = bpy.context.window_manager.setprecisemesh.y
         z = bpy.context.window_manager.setprecisemesh.z
-
-        orientation = mathutils.Vector((x,y,z))
 
         if position == "global":
             if position_location == True:
@@ -415,17 +412,31 @@ class Set_Mesh_Position (bpy.types.Operator):
                 
         elif position == "local":
             if position_location == True:
-                bpy.context.active_object.matrix_world.translation = object_location + object_location - cursor_location
+
+                axis = obj_matrix.inverted() @ cursor_location
+                
+                axis[0] = 0 if x == 1 else axis[0]
+                axis[1] = 0 if y == 1 else axis[1]
+                axis[2] = 0 if z == 1 else axis[2]
+
+                axis =  obj_matrix @ axis
+
+
+                object_location_copy = axis
+                bpy.context.active_object.matrix_world.translation = object_location + object_location_copy - cursor_location
             else:
-                axis = obj_matrix.inverted() @ obj_matrix
+                axis = obj_matrix.inverted() @ cursor_location
+                
+                axis[0] = 0 if x == 1 else axis[0]
+                axis[1] = 0 if y == 1 else axis[1]
+                axis[2] = 0 if z == 1 else axis[2]
 
-                mat_cur.translation[0] = axis.translation[0] if x == 0 else mat_cur.translation[0]
-                mat_cur.translation[1] = axis.translation[1] if y == 0 else mat_cur.translation[1]
-                mat_cur.translation[2] = axis.translation[2] if z == 0 else mat_cur.translation[2]
+                axis =  obj_matrix @ axis
 
-                bpy.context.active_object.matrix_world = obj_matrix @ mat_cur
+                obj_matrix_copy = obj_matrix.copy()
+                obj_matrix_copy.translation = axis
 
-                # bpy.context.active_object.matrix_world = mat_cur @ obj_matrix
+                bpy.context.active_object.matrix_world = obj_matrix_copy @ mat_cur
 
         elif position == "cursor":
             if position_location == True:
@@ -478,6 +489,7 @@ class Set_Mesh_Position (bpy.types.Operator):
                 obj_location = axis
 
                 bpy.context.active_object.matrix_world.translation = object_location - cursor_location + obj_location
+            
             else:
                 obj_name = bpy.data.scenes[bpy.context.scene.name_full].object_position.name_full
                 obj_marx = bpy.data.objects[obj_name].matrix_world.copy()
