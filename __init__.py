@@ -501,7 +501,8 @@ class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
         # return context.window_manager.invoke_props_popup(self, event)
         # return context.window_manager.invoke_confirm(self, event)
     def draw(self, context):
-        bpy.types.VIEW3D_PT_edit_mesh_set_precise_mesh1.draw(self, context)
+        bpy.types.VIEW3D_PT_edit_mesh_set_precise_mesh1.draw_angle(self, context)
+        bpy.types.VIEW3D_PT_edit_mesh_set_precise_mesh1.draw_length(self, context)
 
 class Popup_Menu_SetPreciseMesh_SetAngle (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_setangle"
@@ -1015,7 +1016,8 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
     def draw(self, context):
         
         self.draw_angle(context)
-        self.draw_length(context)    
+        self.draw_length(context)   
+
        
     def draw_angle(self, context):
 
