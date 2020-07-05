@@ -34,6 +34,7 @@ from .Set_Mesh_Position import *
 from .Presets import *
 from .Presets_Object import *
 from .Set_Cursor_To_Normal import *
+from .Draw import *
 
 
 from bpy import types
@@ -1353,7 +1354,8 @@ blender_classes = [
     Pop_Up_Set_Mesh_Position,
     Set_Mesh_Position,
 
-    
+    ModalDrawOperator,
+
     # ChooseItemOperator,
     # NewItemOperator,
     # ClearItemOperator,
