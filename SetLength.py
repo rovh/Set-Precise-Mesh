@@ -40,7 +40,9 @@ class SetLength(bpy.types.Operator):
     
     @classmethod
     def poll(cls, context):
-        return context.active_object is not None and context.active_object.mode in {'EDIT'}
+        return context.active_object is not None\
+            and context.active_object.mode in {'EDIT'}\
+            and context.active_object.type == "MESH"
 
     @classmethod
     def description(cls, context, properties):
