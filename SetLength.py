@@ -40,7 +40,7 @@ class SetLength(bpy.types.Operator):
     
     @classmethod
     def poll(cls, context):
-        return context.active_object is not None
+        return context.active_object is not None and context.active_object.mode in {'EDIT'}
 
     @classmethod
     def description(cls, context, properties):
