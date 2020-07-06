@@ -33,7 +33,7 @@ class ModalDrawOperator(bpy.types.Operator):
         except AttributeError:
             pass
 
-        if event.type == 'MOUSEMOVE':
+        if event.type == 'MOUSEMOVE' or event.value == 'ANY':
             try:
                 self.remember = False
                 bpy.ops.mesh.change_length(draw = 1)

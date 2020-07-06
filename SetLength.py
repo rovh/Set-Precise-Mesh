@@ -212,7 +212,7 @@ class SetLength(bpy.types.Operator):
         for g in bm.select_history:
             elem_list.append(g)
         
-        if invert_direction == True:
+        if invert_direction == True:    
             elem_list[0], elem_list[1] = elem_list[len(elem_list)-1], elem_list[len(elem_list)-2]
 
         # Check number
