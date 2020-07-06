@@ -15,6 +15,7 @@ from mathutils import geometry
 from mathutils import Matrix
 from mathutils import Vector, Matrix, Quaternion, Euler
 
+
 # import pickle
 
 from . import __name__
@@ -37,6 +38,7 @@ class SetLength(bpy.types.Operator):
 
     plus_length: bpy.props.IntProperty(options = {"SKIP_SAVE"}) 
     eyedropper: bpy.props.BoolProperty(options = {"SKIP_SAVE"})
+    draw:       bpy.props.BoolProperty(options = {"SKIP_SAVE"})
     
     @classmethod
     def poll(cls, context):
@@ -54,12 +56,6 @@ class SetLength(bpy.types.Operator):
             return "Get Length / Distance"
         else:
             pass
-
-    def modal(self, context, event):
-        if event.type in {'RIGHTMOUSE', 'ESC'}:
-            wm = context.window_manager
-            wm.event_timer_remove(self._timer)
-            return {'CANCELLED'}
 
     def execute(self, context):
         
@@ -547,6 +543,10 @@ class SetLength(bpy.types.Operator):
         if self.eyedropper == True:
             bpy.context.window_manager.setprecisemesh.length = lengthtrue
             return {"FINISHED"}
+
+        if self.draw == True:
+            bpy.context.window_manager.setprecisemesh.measure = lengthtrue
+            return {"FINISHED"}
             
         
         # Center of the edge
@@ -578,7 +578,7 @@ class SetLength(bpy.types.Operator):
         if bool== True:
             if prog != "cursor_matrix" and prog != "cursor_location":
                 bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world  @ mv
-            pp = mv
+            pp = mv     
         
         else:
             if prog != "cursor_matrix" and prog != "cursor_location":

@@ -6,49 +6,49 @@ from gpu_extras.batch import batch_for_shader
 
 
 def draw_callback_px(self, context):
-    print("mouse points", len(self.mouse_path))
+
+    measure = bpy.context.window_manager.setprecisemesh.measure
 
     font_id = 0  # XXX, need to find out how best to get this.
 
-    # draw some text
-    blf.position(font_id, 15, 30, 0)
+    blf.position(font_id, 75, 30, 0)
     blf.size(font_id, 20, 72)
-    blf.draw(font_id, "Hello Word " + str(len(self.mouse_path)))
 
-    # 50% alpha, 2 pixel width line
-    # shader = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
-    # bgl.glEnable(bgl.GL_BLEND)
-    # bgl.glLineWidth(2)
-    # batch = batch_for_shader(shader, 'LINE_STRIP', {"pos": self.mouse_path})
-    # shader.bind()
-    # shader.uniform_float("color", (0.0, 0.0, 0.0, 0.5))
-    # batch.draw(shader)
-
-    # # restore opengl defaults
-    # bgl.glLineWidth(1)
-    # bgl.glDisable(bgl.GL_BLEND)
-
+    if self.remember == False:
+        blf.draw(font_id, "Length:  " + str(measure))
+    else:
+        blf.draw(font_id, "Length:  " + str("No"))
 
 class ModalDrawOperator(bpy.types.Operator):
     """Draw a line with the mouse"""
     bl_idname = "view3d.modal_operator"
     bl_label = "Simple Modal View3D Operator"
 
+    remember: bpy.props.BoolProperty(options = {"SKIP_SAVE"})
+
+
     def modal(self, context, event):
-        context.area.tag_redraw()
+        try:
+            context.area.tag_redraw()
+        except AttributeError:
+            pass
 
         if event.type == 'MOUSEMOVE':
-            self.mouse_path.append((event.mouse_region_x, event.mouse_region_y))
+            try:
+                self.remember = False
+                bpy.ops.mesh.change_length(draw = 1)
+            except RuntimeError:
+                self.remember = True
+                pass
+            except ReferenceError:
+                self.remember = True
+                pass
 
-        elif event.type == 'LEFTMOUSE':
+        elif event.type in {'ESC', 'BACKSPACE'}:
             bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
             return {'FINISHED'}
 
-        elif event.type in {'RIGHTMOUSE', 'ESC'}:
-            bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
-            return {'CANCELLED'}
-
-        return {'RUNNING_MODAL'}
+        return {'PASS_THROUGH'}
 
     def invoke(self, context, event):
         if context.area.type == 'VIEW_3D':
@@ -57,8 +57,6 @@ class ModalDrawOperator(bpy.types.Operator):
             # Add the region OpenGL drawing callback
             # draw in view space with 'POST_VIEW' and 'PRE_VIEW'
             self._handle = bpy.types.SpaceView3D.draw_handler_add(draw_callback_px, args, 'WINDOW', 'POST_PIXEL')
-
-            self.mouse_path = []
 
             context.window_manager.modal_handler_add(self)
             return {'RUNNING_MODAL'}
