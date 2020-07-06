@@ -55,6 +55,12 @@ class SetLength(bpy.types.Operator):
         else:
             pass
 
+    def modal(self, context, event):
+        if event.type in {'RIGHTMOUSE', 'ESC'}:
+            wm = context.window_manager
+            wm.event_timer_remove(self._timer)
+            return {'CANCELLED'}
+
     def execute(self, context):
         
         check(self)
