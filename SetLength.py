@@ -59,7 +59,8 @@ class SetLength(bpy.types.Operator):
 
     def execute(self, context):
         
-        check(self)
+        if self.draw == False:
+            check(self) 
 
         # Set values
         length = bpy.context.window_manager.setprecisemesh.length
