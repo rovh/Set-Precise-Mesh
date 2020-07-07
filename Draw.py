@@ -79,6 +79,12 @@ class ModalDrawOperator_Set_Precise_Mesh_Length(bpy.types.Operator):
     def modal(self, context, event):
 
         remember = bpy.context.window_manager.setprecisemesh.remember 
+        draw_length_is_turn_ON = bpy.context.window_manager.setprecisemesh.draw_length_is_turn_ON
+
+        # if draw_length_is_turn_ON == False:
+        #     bpy.types.SpaceView3D.draw_handler_remove(self._handle_2, 'WINDOW')
+        #     bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
+        #     return {'FINISHED'}
 
         try:
             context.area.tag_redraw()
@@ -101,20 +107,31 @@ class ModalDrawOperator_Set_Precise_Mesh_Length(bpy.types.Operator):
             bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
             return {'FINISHED'}
 
+        
         return {'PASS_THROUGH'}
 
     def invoke(self, context, event):
-        if context.area.type == 'VIEW_3D':  
-            args = (self, context)
+        draw_length_is_turn_ON = bpy.context.window_manager.setprecisemesh.draw_length_is_turn_ON
+        # draw_length_is_turn_ON = True
 
-            self._handle = bpy.types.SpaceView3D.draw_handler_add(draw_callback_px, args, 'WINDOW', 'POST_PIXEL')
-            self._handle_2 = bpy.types.SpaceView3D.draw_handler_add(draw, (), 'WINDOW', 'POST_VIEW')
+        print(draw_length_is_turn_ON)
 
-            context.window_manager.modal_handler_add(self)
+        if draw_length_is_turn_ON == True:
+            draw_length_is_turn_ON = False
             return {'RUNNING_MODAL'}
         else:
-            self.report({'WARNING'}, "View3D not found, cannot run operator")
-            return {'CANCELLED'}
+            draw_length_is_turn_ON = True
+
+            if context.area.type == 'VIEW_3D':  
+                args = (self, context)
+                self._handle = bpy.types.SpaceView3D.draw_handler_add(draw_callback_px, args, 'WINDOW', 'POST_PIXEL')
+                self._handle_2 = bpy.types.SpaceView3D.draw_handler_add(draw, (), 'WINDOW', 'POST_VIEW')
+                context.window_manager.modal_handler_add(self)
+                return {'RUNNING_MODAL'}
+            else:
+                self.report({'WARNING'}, "View3D not found, cannot run operator")
+                return {'CANCELLED'}
+
 
 
 

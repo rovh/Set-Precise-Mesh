@@ -1296,6 +1296,7 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
     vertex_for_measure_1: bpy.props.FloatVectorProperty(options = {"SKIP_SAVE"})
     vertex_for_measure_2: bpy.props.FloatVectorProperty(options = {"SKIP_SAVE"})
     remember: bpy.props.BoolProperty(options = {"SKIP_SAVE"})
+    draw_length_is_turn_ON: bpy.props.BoolProperty()
 
     x: bpy.props.BoolProperty(default = 1, name = "Use X axis", description = "Move the object along the X axis")
     y: bpy.props.BoolProperty(default = 1, name = "Use Y axis", description = "Move the object along the Y axis")
