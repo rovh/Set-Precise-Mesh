@@ -963,11 +963,9 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
 
 
 
+            depress = bpy.context.window_manager.setprecisemesh.draw_length_line
             row_center = row.row(align = 0)
-            if bpy.context.window_manager.setprecisemesh.draw_length_line == True:
-                row_center.operator("view3d.modal_operator_setprecisemesh_draw_length", text="", icon = "RESTRICT_VIEW_OFF", depress=True)
-            else:
-                row_center.operator("view3d.modal_operator_setprecisemesh_draw_length", text="", icon = "RESTRICT_VIEW_OFF")
+            row_center.operator("view3d.modal_operator_setprecisemesh_draw_length", text="", icon = "RESTRICT_VIEW_OFF", depress=depress)
             row_center.scale_x = 1.3
 
 

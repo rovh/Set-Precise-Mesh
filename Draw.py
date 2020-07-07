@@ -78,6 +78,7 @@ class ModalDrawOperator_Set_Precise_Mesh_Length(bpy.types.Operator):
     """Draw a line with the mouse"""
     bl_idname = "view3d.modal_operator_setprecisemesh_draw_length"
     bl_label = "Display Length"
+    bl_description = "Display Length between two selected elements in left buttom corner"
 
     def modal(self, context, event):
 
