@@ -964,7 +964,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
 
 
             row_center = row.row(align = 0)
-            if bpy.context.window_manager.setprecisemesh.draw_length_is_turn_ON == True:
+            if bpy.context.window_manager.setprecisemesh.draw_length_line == True:
                 row_center.operator("view3d.modal_operator_setprecisemesh_draw_length", text="", icon = "RESTRICT_VIEW_OFF", depress=True)
             else:
                 row_center.operator("view3d.modal_operator_setprecisemesh_draw_length", text="", icon = "RESTRICT_VIEW_OFF")
@@ -1301,11 +1301,11 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         \n(Set the mesh position not in accordance with the normal of the selected part of the mesh)",
         default = False,
     )
-    measure: bpy.props.FloatProperty(options = {"SKIP_SAVE"})
-    vertex_for_measure_1: bpy.props.FloatVectorProperty(options = {"SKIP_SAVE"})
-    vertex_for_measure_2: bpy.props.FloatVectorProperty(options = {"SKIP_SAVE"})
-    remember: bpy.props.BoolProperty(options = {"SKIP_SAVE"})
-    draw_length_is_turn_ON: bpy.props.BoolProperty()
+    length_display_number:         bpy.props.FloatProperty      (options = {"SKIP_SAVE"})
+    length_display_stop:           bpy.props.BoolProperty       (options = {"SKIP_SAVE"})
+    draw_length_line:                   bpy.props.BoolProperty      ()
+    length_display_coordinate_1:   bpy.props.FloatVectorProperty(options = {"SKIP_SAVE"})
+    length_display_coordinate_2:   bpy.props.FloatVectorProperty(options = {"SKIP_SAVE"})
 
     x: bpy.props.BoolProperty(default = 1, name = "Use X axis", description = "Move the object along the X axis")
     y: bpy.props.BoolProperty(default = 1, name = "Use Y axis", description = "Move the object along the Y axis")

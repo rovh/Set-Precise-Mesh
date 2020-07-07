@@ -218,7 +218,7 @@ class SetLength(bpy.types.Operator):
         # Check number
         if len(elem_list) < 1 and bool == False:
             if self.draw == True:
-                bpy.context.window_manager.setprecisemesh.remember = True
+                bpy.context.window_manager.setprecisemesh.length_display_stop = True
             else:
                 text = "You need to select from 1 vertices"
                 war = "ERROR"
@@ -228,7 +228,7 @@ class SetLength(bpy.types.Operator):
         elif len(elem_list) == 1 and bool == False:
 
             if self.draw == True:
-                bpy.context.window_manager.setprecisemesh.remember = True
+                bpy.context.window_manager.setprecisemesh.length_display_stop = True
             else:
                 if isinstance(elem_list[0], bmesh.types.BMVert) == False:
                     text = '"Distance Simulation" supports only vertices'
@@ -531,7 +531,7 @@ class SetLength(bpy.types.Operator):
         
         else:
             if self.draw == True:
-                bpy.context.window_manager.setprecisemesh.remember = True
+                bpy.context.window_manager.setprecisemesh.length_display_stop = True
             else:
                 text = 'In "Use two directions" mode You need to select only 2 elements (vertex, edge, face)'
                 war = "ERROR"
@@ -556,10 +556,10 @@ class SetLength(bpy.types.Operator):
             return {"FINISHED"}
 
         if self.draw == True:
-            bpy.context.window_manager.setprecisemesh.remember = False
-            bpy.context.window_manager.setprecisemesh.measure = lengthtrue
-            bpy.context.window_manager.setprecisemesh.vertex_for_measure_1 = norv1
-            bpy.context.window_manager.setprecisemesh.vertex_for_measure_2 = norv2
+            bpy.context.window_manager.setprecisemesh.length_display_stop = False
+            bpy.context.window_manager.setprecisemesh.length_display_number = lengthtrue
+            bpy.context.window_manager.setprecisemesh.length_display_coordinate_1 = norv1
+            bpy.context.window_manager.setprecisemesh.length_display_coordinate_2 = norv2
 
             return {"FINISHED"}
             

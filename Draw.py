@@ -40,11 +40,11 @@ from gpu_extras.batch import batch_for_shader
 
 
 def draw():
-    v1 = bpy.context.window_manager.setprecisemesh.vertex_for_measure_1
-    v2 = bpy.context.window_manager.setprecisemesh.vertex_for_measure_2
-    remember = bpy.context.window_manager.setprecisemesh.remember 
+    v1 = bpy.context.window_manager.setprecisemesh.length_display_coordinate_1
+    v2 = bpy.context.window_manager.setprecisemesh.length_display_coordinate_2
+    length_display_stop = bpy.context.window_manager.setprecisemesh.length_display_stop 
 
-    if remember == False and bpy.context.active_object.mode in {'EDIT'}:
+    if length_display_stop == False and bpy.context.active_object.mode in {'EDIT'}:
         coords = [ (v1[0], v1[1], v1[2]), (v2[0], v2[1], v2[2])]
         shader = gpu.shader.from_builtin('3D_UNIFORM_COLOR')
         batch = batch_for_shader(shader, 'LINES', {"pos": coords})
@@ -58,8 +58,8 @@ def draw():
 
 def draw_callback_px(self, context):
 
-    measure = bpy.context.window_manager.setprecisemesh.measure
-    remember = bpy.context.window_manager.setprecisemesh.remember 
+    length_display_number = bpy.context.window_manager.setprecisemesh.length_display_number
+    length_display_stop = bpy.context.window_manager.setprecisemesh.length_display_stop 
 
     font_id = 0  # XXX, need to find out how best to get this.
 
@@ -67,8 +67,8 @@ def draw_callback_px(self, context):
     blf.size(font_id, 20, 72)
 
     if context.active_object.mode in {'EDIT'}:
-        if remember == False:
-            blf.draw(font_id, "Length:  " + str(measure))
+        if length_display_stop == False:
+            blf.draw(font_id, "Length:  " + str(length_display_number))
         else:
             blf.draw(font_id, "Length:  " + str("No"))
     else:
@@ -81,10 +81,10 @@ class ModalDrawOperator_Set_Precise_Mesh_Length(bpy.types.Operator):
 
     def modal(self, context, event):
 
-        remember = bpy.context.window_manager.setprecisemesh.remember 
-        draw_length_is_turn_ON = bpy.context.window_manager.setprecisemesh.draw_length_is_turn_ON
+        length_display_stop = bpy.context.window_manager.setprecisemesh.length_display_stop 
+        draw_length_line = bpy.context.window_manager.setprecisemesh.draw_length_line
 
-        if draw_length_is_turn_ON == False:
+        if draw_length_line == False:
             bpy.types.SpaceView3D.draw_handler_remove(self._handle_2, 'WINDOW')
             bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
             try:
@@ -101,13 +101,13 @@ class ModalDrawOperator_Set_Precise_Mesh_Length(bpy.types.Operator):
 
             if event.type == 'MOUSEMOVE' or event.value == 'ANY':
                 try:
-                    remember = False
+                    length_display_stop = False
                     bpy.ops.mesh.change_length(draw = 1)
                 except RuntimeError:
-                    remember = True
+                    length_display_stop = True
                     pass
                 except ReferenceError:      
-                    remember = True
+                    length_display_stop = True
                     pass
 
         # elif event.type in {'ESC', 'SPACE'}:
@@ -118,13 +118,13 @@ class ModalDrawOperator_Set_Precise_Mesh_Length(bpy.types.Operator):
         return {'PASS_THROUGH'}
 
     def invoke(self, context, event):
-        draw_length_is_turn_ON = bpy.context.window_manager.setprecisemesh.draw_length_is_turn_ON
+        draw_length_line = bpy.context.window_manager.setprecisemesh.draw_length_line
 
-        if draw_length_is_turn_ON == True:
-            bpy.context.window_manager.setprecisemesh.draw_length_is_turn_ON = False
+        if draw_length_line == True:
+            bpy.context.window_manager.setprecisemesh.draw_length_line = False
             return {'RUNNING_MODAL'}
         else:
-            bpy.context.window_manager.setprecisemesh.draw_length_is_turn_ON = True
+            bpy.context.window_manager.setprecisemesh.draw_length_line = True
 
             if context.area.type == 'VIEW_3D': 
                 args = (self, context)
