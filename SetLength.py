@@ -217,18 +217,24 @@ class SetLength(bpy.types.Operator):
 
         # Check number
         if len(elem_list) < 1 and bool == False:
-            text = "You need to select from 1 vertices"
-            war = "ERROR"
-            self.report({war}, text)
+            if self.draw == True:
+                bpy.context.window_manager.setprecisemesh.remember = True
+            else:
+                text = "You need to select from 1 vertices"
+                war = "ERROR"
+                self.report({war}, text)
             return{"FINISHED"}
 
         elif len(elem_list) == 1 and bool == False:
 
-            if isinstance(elem_list[0], bmesh.types.BMVert) == False:
-                text = '"Distance Simulation" supports only vertices'
-                war = "ERROR"
-                self.report({war}, text)
-                return{"FINISHED"}
+            if self.draw == True:
+                bpy.context.window_manager.setprecisemesh.remember = True
+            else:
+                if isinstance(elem_list[0], bmesh.types.BMVert) == False:
+                    text = '"Distance Simulation" supports only vertices'
+                    war = "ERROR"
+                    self.report({war}, text)
+                    return{"FINISHED"}
 
             # if isinstance(elem_list[0], bmesh.types.BMVert):
             #     # print("BMVert")
@@ -524,12 +530,17 @@ class SetLength(bpy.types.Operator):
             # lv=v2-v1
         
         else:
-            text = 'In "Use two directions" mode You need to select only 2 elements (vertex, edge, face)'
-            war = "ERROR"
-            self.report({war}, text)
+            if self.draw == True:
+                bpy.context.window_manager.setprecisemesh.remember = True
+            else:
+                text = 'In "Use two directions" mode You need to select only 2 elements (vertex, edge, face)'
+                war = "ERROR"
+                self.report({war}, text)
             return{"FINISHED"}
 
+
         lv=v2-v1
+
 
         # Get global normal 
         norv1 = bpy.context.active_object.matrix_world  @ v1
@@ -545,9 +556,11 @@ class SetLength(bpy.types.Operator):
             return {"FINISHED"}
 
         if self.draw == True:
+            bpy.context.window_manager.setprecisemesh.remember = False
             bpy.context.window_manager.setprecisemesh.measure = lengthtrue
             bpy.context.window_manager.setprecisemesh.vertex_for_measure_1 = v1
             bpy.context.window_manager.setprecisemesh.vertex_for_measure_2 = v2
+
             return {"FINISHED"}
             
         

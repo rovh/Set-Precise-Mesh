@@ -948,17 +948,24 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             if script_input_2:   
                 col_top.prop(w_m, "data_block_2", text = "") 
 
-            
 
-           
             # split = col_top.split(factor = 0.835, align = 0)
-            split = col_top.row(align = 0)
-            
-            split.prop(w_m, "lengthbool")
+            row = col_top.row(align = 0)
 
-            row = split.row(align = 0)
-            row.operator("wm.header_length_simulation_setprecisemesh", text=" Distance Simulation", icon = "CON_TRACKTO")
-            row.scale_x = 0.14
+            row_left = row.row(align = 0)
+            row_left.prop(w_m, "lengthbool")
+            row_left.alignment = 'LEFT'
+            row_left.scale_x = 6
+
+            row_median = row.row(align = 0)
+            row_median.operator("view3d.modal_operator_setprecisemesh_draw_length", text="", icon = "RESTRICT_VIEW_OFF")
+            row_median.scale_x = 1.3
+            row_median.alignment = 'RIGHT'
+
+            row_right = row.row(align = 0)
+            row_right.operator("wm.header_length_simulation_setprecisemesh", text=" Distance Simulation", icon = "CON_TRACKTO")
+            # row_right.alignment = 'RIGHT'
+            row_right.scale_x = 0.14
 
     
 
@@ -1359,7 +1366,7 @@ blender_classes = [
     Pop_Up_Set_Mesh_Position,
     Set_Mesh_Position,
 
-    ModalDrawOperator,
+    ModalDrawOperator_Set_Precise_Mesh_Length,
 
     # ChooseItemOperator,
     # NewItemOperator,
