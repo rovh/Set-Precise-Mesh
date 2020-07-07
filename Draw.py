@@ -44,7 +44,7 @@ def draw():
     v2 = bpy.context.window_manager.setprecisemesh.vertex_for_measure_2
     remember = bpy.context.window_manager.setprecisemesh.remember 
 
-    if remember == False:
+    if remember == False and context.active_object.mode in {'EDIT'}:
         coords = [ (v1[0], v1[1], v1[2]), (v2[0], v2[1], v2[2])]
         shader = gpu.shader.from_builtin('3D_UNIFORM_COLOR')
         batch = batch_for_shader(shader, 'LINES', {"pos": coords})
@@ -66,10 +66,13 @@ def draw_callback_px(self, context):
     blf.position(font_id, 75, 30, 0)
     blf.size(font_id, 20, 72)
 
-    if remember == False:
-        blf.draw(font_id, "Length:  " + str(measure))
+    if context.active_object.mode in {'EDIT'}:
+        if remember == False:
+            blf.draw(font_id, "Length:  " + str(measure))
+        else:
+            blf.draw(font_id, "Length:  " + str("No"))
     else:
-        blf.draw(font_id, "Length:  " + str("No"))
+        pass
 
 class ModalDrawOperator_Set_Precise_Mesh_Length(bpy.types.Operator):
     """Draw a line with the mouse"""
@@ -81,48 +84,49 @@ class ModalDrawOperator_Set_Precise_Mesh_Length(bpy.types.Operator):
         remember = bpy.context.window_manager.setprecisemesh.remember 
         draw_length_is_turn_ON = bpy.context.window_manager.setprecisemesh.draw_length_is_turn_ON
 
-        # if draw_length_is_turn_ON == False:
+        if draw_length_is_turn_ON == False:
+            bpy.types.SpaceView3D.draw_handler_remove(self._handle_2, 'WINDOW')
+            bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
+            try:
+                context.area.tag_redraw()
+            except AttributeError:
+                pass
+            return {'FINISHED'}
+        
+        else:
+            try:
+                context.area.tag_redraw()
+            except AttributeError:
+                pass
+
+            if event.type == 'MOUSEMOVE' or event.value == 'ANY':
+                try:
+                    remember = False
+                    bpy.ops.mesh.change_length(draw = 1)
+                except RuntimeError:
+                    remember = True
+                    pass
+                except ReferenceError:      
+                    remember = True
+                    pass
+
+        # elif event.type in {'ESC', 'SPACE'}:
         #     bpy.types.SpaceView3D.draw_handler_remove(self._handle_2, 'WINDOW')
         #     bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
         #     return {'FINISHED'}
 
-        try:
-            context.area.tag_redraw()
-        except AttributeError:
-            pass
-
-        if event.type == 'MOUSEMOVE' or event.value == 'ANY':
-            try:
-                remember = False
-                bpy.ops.mesh.change_length(draw = 1)
-            except RuntimeError:
-                remember = True
-                pass
-            except ReferenceError:      
-                remember = True
-                pass
-
-        elif event.type in {'ESC', 'SPACE'}:
-            bpy.types.SpaceView3D.draw_handler_remove(self._handle_2, 'WINDOW')
-            bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
-            return {'FINISHED'}
-
-        
         return {'PASS_THROUGH'}
 
     def invoke(self, context, event):
         draw_length_is_turn_ON = bpy.context.window_manager.setprecisemesh.draw_length_is_turn_ON
-        # draw_length_is_turn_ON = True
-
-        print(draw_length_is_turn_ON)
 
         if draw_length_is_turn_ON == True:
-            draw_length_is_turn_ON = False
+            bpy.context.window_manager.setprecisemesh.draw_length_is_turn_ON = False
             return {'RUNNING_MODAL'}
         else:
-            draw_length_is_turn_ON = True
+            bpy.context.window_manager.setprecisemesh.draw_length_is_turn_ON = True
 
-            if context.area.type == 'VIEW_3D':  
+            if context.area.type == 'VIEW_3D': 
                 args = (self, context)
                 self._handle = bpy.types.SpaceView3D.draw_handler_add(draw_callback_px, args, 'WINDOW', 'POST_PIXEL')
                 self._handle_2 = bpy.types.SpaceView3D.draw_handler_add(draw, (), 'WINDOW', 'POST_VIEW')
