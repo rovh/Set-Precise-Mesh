@@ -1285,8 +1285,11 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         \n(Set the mesh position not in accordance with the normal of the selected part of the mesh)",
         default = False,
     )
-    measure: bpy.props.FloatProperty(
-    )
+    measure: bpy.props.FloatProperty(options = {"SKIP_SAVE"})
+    vertex_for_measure_1: bpy.props.FloatVectorProperty(options = {"SKIP_SAVE"})
+    vertex_for_measure_2: bpy.props.FloatVectorProperty(options = {"SKIP_SAVE"})
+    remember: bpy.props.BoolProperty(options = {"SKIP_SAVE"})
+
     x: bpy.props.BoolProperty(default = 1, name = "Use X axis", description = "Move the object along the X axis")
     y: bpy.props.BoolProperty(default = 1, name = "Use Y axis", description = "Move the object along the Y axis")
     z: bpy.props.BoolProperty(default = 1, name = "Use Z axis", description = "Move the object along the Z axis")
