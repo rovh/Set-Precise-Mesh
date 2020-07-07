@@ -944,30 +944,36 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             row.scale_x = 1.2
             row.prop(sc, "script_input_2", text = "", icon = "FILE_SCRIPT")
 
-
             if script_input_2:   
                 col_top.prop(w_m, "data_block_2", text = "") 
 
 
-            # split = col_top.split(factor = 0.835, align = 0)
-            row = col_top.row(align = 0)
+
+            space = col_top.row(align = 1)
+            space.label(icon="BLANK1")
+            space.scale_y = 0.1
+
+
+
+            row = col_top.row(align = 1)
 
             row_left = row.row(align = 0)
             row_left.prop(w_m, "lengthbool")
-            row_left.alignment = 'LEFT'
-            row_left.scale_x = 6
+            row_left.scale_x = 1.2
 
-            row_median = row.row(align = 0)
+
+
+            row_center = row.row(align = 0)
             if bpy.context.window_manager.setprecisemesh.draw_length_is_turn_ON == True:
-                row_median.operator("view3d.modal_operator_setprecisemesh_draw_length", text="", icon = "RESTRICT_VIEW_OFF", depress=True)
+                row_center.operator("view3d.modal_operator_setprecisemesh_draw_length", text="", icon = "RESTRICT_VIEW_OFF", depress=True)
             else:
-                row_median.operator("view3d.modal_operator_setprecisemesh_draw_length", text="", icon = "RESTRICT_VIEW_OFF")
-            row_median.scale_x = 1.3
-            row_median.alignment = 'RIGHT'
+                row_center.operator("view3d.modal_operator_setprecisemesh_draw_length", text="", icon = "RESTRICT_VIEW_OFF")
+            row_center.scale_x = 1.3
+
+
 
             row_right = row.row(align = 0)
             row_right.operator("wm.header_length_simulation_setprecisemesh", text=" Distance Simulation", icon = "CON_TRACKTO")
-            # row_right.alignment = 'RIGHT'
             row_right.scale_x = 0.14
 
     

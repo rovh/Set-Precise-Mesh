@@ -44,7 +44,7 @@ def draw():
     v2 = bpy.context.window_manager.setprecisemesh.vertex_for_measure_2
     remember = bpy.context.window_manager.setprecisemesh.remember 
 
-    if remember == False and context.active_object.mode in {'EDIT'}:
+    if remember == False and bpy.context.active_object.mode in {'EDIT'}:
         coords = [ (v1[0], v1[1], v1[2]), (v2[0], v2[1], v2[2])]
         shader = gpu.shader.from_builtin('3D_UNIFORM_COLOR')
         batch = batch_for_shader(shader, 'LINES', {"pos": coords})

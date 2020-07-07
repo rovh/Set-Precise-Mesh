@@ -558,8 +558,8 @@ class SetLength(bpy.types.Operator):
         if self.draw == True:
             bpy.context.window_manager.setprecisemesh.remember = False
             bpy.context.window_manager.setprecisemesh.measure = lengthtrue
-            bpy.context.window_manager.setprecisemesh.vertex_for_measure_1 = v1
-            bpy.context.window_manager.setprecisemesh.vertex_for_measure_2 = v2
+            bpy.context.window_manager.setprecisemesh.vertex_for_measure_1 = norv1
+            bpy.context.window_manager.setprecisemesh.vertex_for_measure_2 = norv2
 
             return {"FINISHED"}
             
