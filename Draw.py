@@ -50,7 +50,7 @@ def draw():
         batch = batch_for_shader(shader, 'LINES', {"pos": coords})
 
         shader.bind()
-        shader.uniform_float("color", (1, 1, 0, 1))
+        shader.uniform_float("color", (1, 1, 0, 0))
         batch.draw(shader)
     else:
         pass
