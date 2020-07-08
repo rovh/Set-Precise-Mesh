@@ -44,7 +44,7 @@ def draw():
     v2 = bpy.context.window_manager.setprecisemesh.length_display_coordinate_2
     length_display_stop = bpy.context.window_manager.setprecisemesh.length_display_stop 
 
-    if length_display_stop == False and context.active_object is not None:
+    if length_display_stop == False and bpy.context.active_object is not None:
         if bpy.context.active_object.mode in {'EDIT'}:
 
             coords = [ (v1[0], v1[1], v1[2]), (v2[0], v2[1], v2[2])]
