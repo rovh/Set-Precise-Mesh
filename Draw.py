@@ -65,14 +65,15 @@ def draw_callback_px(self, context):
 
     blf.position(font_id, 75, 30, 0)
     blf.size(font_id, 20, 72)
-
-    if context.active_object.mode in {'EDIT'}:
-        if length_display_stop == False:
-            blf.draw(font_id, "Length:  " + str(length_display_number))
+    
+    if context.active_object is not None:
+        if context.active_object.mode in {'EDIT'}:
+            if length_display_stop == False:
+                blf.draw(font_id, "Length:  " + str(length_display_number))
+            else:
+                blf.draw(font_id, "Length:  " + str("No"))
         else:
-            blf.draw(font_id, "Length:  " + str("No"))
-    else:
-        pass
+            pass
 
 class ModalDrawOperator_Set_Precise_Mesh_Length(bpy.types.Operator):
     """Draw a line with the mouse"""
