@@ -57,45 +57,6 @@ class SetLength(bpy.types.Operator):
         else:
             pass
 
-    def modal(self, context, event):
-        seconds = bpy.context.window_manager.setprecisemesh.seconds
-
-        print(event.type)
-        print(event.value)
-
-        if event.type == 'TIMER':
-            bpy.context.window_manager.setprecisemesh.seconds += 1
-            print(seconds)
-        
-        if seconds >= 10:
-            wm = context.window_manager
-            wm.event_timer_remove(self._timer)
-            bpy.context.window_manager.setprecisemesh.seconds = 0
-            return {'FINISHED'}
-
-        return {'PASS_THROUGH'}
-        # return {'RUNNING_MODAL'}
-
-    def invoke(self, context, event):
-        seconds = bpy.context.window_manager.setprecisemesh.seconds
-
-        if event.value == 'RELEASE' and seconds != 0:
-            bpy.context.window_manager.setprecisemesh.seconds = 9
-            print('qwqwqwqwqwqwqwqwqwqwqwqw')
-            return {'FINISHED'}
-
-        if seconds == 0:
-            wm = context.window_manager
-            self._timer = wm.event_timer_add(0.1, window=context.window)
-            wm.modal_handler_add(self)
-        return {'RUNNING_MODAL'}
-
-        
-
-        # return {'FINISHED'}
-        # return {'RUNNING_MODAL'}
-        # return {'PASS_THROUGH'}
-        
     def execute(self, context):
 
         print('wwwwwwwwwwwwwwwwwoooooooooooooooorrrrrrrrrrrrkkkkkkkkkkkkkssssssssss')
@@ -766,6 +727,45 @@ class SetLength(bpy.types.Operator):
 
         return {'FINISHED'}
 
+    def invoke(self, context, event):
+        seconds = bpy.context.window_manager.setprecisemesh.seconds
+
+        if event.value == 'RELEASE' and seconds != 0:
+            bpy.context.window_manager.setprecisemesh.seconds = 9
+            print('qwqwqwqwqwqwqwqwqwqwqwqw')
+            # return {'FINISHED'}
+            return {'CANCELLED'}
+
+        if seconds == 0:
+            wm = context.window_manager
+            self._timer = wm.event_timer_add(0.1, window=context.window)
+            wm.modal_handler_add(self)
+        return {'RUNNING_MODAL'}
+
+        # return {'CANCELLED'}
+        # return {'FINISHED'}
+        # return {'RUNNING_MODAL'}
+        # return {'PASS_THROUGH'}
+    
+    def modal(self, context, event):
+        seconds = bpy.context.window_manager.setprecisemesh.seconds
+
+        print(event.type)
+        print(event.value)
+
+        if event.type == 'TIMER':
+            bpy.context.window_manager.setprecisemesh.seconds += 1
+            print(seconds)
+        
+        if seconds >= 10:
+            wm = context.window_manager
+            wm.event_timer_remove(self._timer)
+            bpy.context.window_manager.setprecisemesh.seconds = 0
+            return {'FINISHED'}
+
+        return {'PASS_THROUGH'}
+        # return {'RUNNING_MODAL'}
+   
 if __name__ == "__main__":
     register()
 
