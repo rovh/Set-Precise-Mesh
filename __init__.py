@@ -1453,7 +1453,15 @@ classes = (
 
 )
 
+kc = bpy.context.window_manager.keyconfigs.addon  
+    
 def register():
+
+    # if kc:
+    #     km = kc.keymaps.new(name="3D View", space_type="VIEW_3D")
+    #     kmi = km.keymap_items.new('mesh.change_length', 'LEFTMOUSE', 'DOUBLE_CLICK', shift=False)
+        # Could pass settings to operator properties here
+        #kmi.properties.mode = (False, True, False)
 
     # bpy.app.handlers.depsgraph_update_post.append(my_handler)
     # bpy.app.handlers.on_scene_update_pre.append(my_handler)
@@ -1527,6 +1535,14 @@ def register():
 
 
 def unregister():
+
+    # if kc:
+    #     km = kc.keymaps["3D View"]
+    #     for kmi in km.keymap_items:
+    #         if kmi.idname == 'mesh.change_length':
+    #             km.keymap_items.remove(kmi)
+    #             break
+
 
     # if my_handler in bpy.app.handlers.depsgraph_update_pre:
     #     bpy.app.handlers.depsgraph_update_pre.remove(my_handler)
