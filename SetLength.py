@@ -67,7 +67,7 @@ class SetLength(bpy.types.Operator):
             bpy.context.window_manager.setprecisemesh.seconds += 1
             print(seconds)
         
-        if seconds == 50:
+        if seconds >= 10:
             wm = context.window_manager
             wm.event_timer_remove(self._timer)
             bpy.context.window_manager.setprecisemesh.seconds = 0
@@ -79,23 +79,29 @@ class SetLength(bpy.types.Operator):
     def invoke(self, context, event):
         seconds = bpy.context.window_manager.setprecisemesh.seconds
 
+        if event.value == 'RELEASE' and seconds != 0:
+            bpy.context.window_manager.setprecisemesh.seconds = 9
+            print('qwqwqwqwqwqwqwqwqwqwqwqw')
+            return {'FINISHED'}
+
         if seconds == 0:
             wm = context.window_manager
             self._timer = wm.event_timer_add(0.1, window=context.window)
             wm.modal_handler_add(self)
+        return {'RUNNING_MODAL'}
 
-        if event.value == 'RELEASE' and seconds != 0:
-            print('qwqwqwqwqwqwqwqwqwqwqwqw')
+        
 
         # return {'FINISHED'}
-        return {'RUNNING_MODAL'}
+        # return {'RUNNING_MODAL'}
         # return {'PASS_THROUGH'}
         
     def execute(self, context):
+
+        print('wwwwwwwwwwwwwwwwwoooooooooooooooorrrrrrrrrrrrkkkkkkkkkkkkkssssssssss')
         
         if self.draw == False:
             check(self) 
-
 
         # Set values
         length = bpy.context.window_manager.setprecisemesh.length
