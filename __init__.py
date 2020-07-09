@@ -1309,6 +1309,8 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
     y: bpy.props.BoolProperty(default = 1, name = "Use Y axis", description = "Move the object along the Y axis")
     z: bpy.props.BoolProperty(default = 1, name = "Use Z axis", description = "Move the object along the Z axis")
 
+    seconds: bpy.props.IntProperty()
+
 """Duplications of the Main panel"""
 class Dupli (SetPresiceMesh_Panel):
     bl_label = "Set Presice Mesh1"
@@ -1451,9 +1453,7 @@ classes = (
     #====================================
 
 
-)
-
-kc = bpy.context.window_manager.keyconfigs.addon  
+) 
     
 def register():
 
@@ -1535,17 +1535,6 @@ def register():
 
 
 def unregister():
-
-    # if kc:
-    #     km = kc.keymaps["3D View"]
-    #     for kmi in km.keymap_items:
-    #         if kmi.idname == 'mesh.change_length':
-    #             km.keymap_items.remove(kmi)
-    #             break
-
-
-    # if my_handler in bpy.app.handlers.depsgraph_update_pre:
-    #     bpy.app.handlers.depsgraph_update_pre.remove(my_handler)
 
     for blender_class in blender_classes:
         bpy.utils.unregister_class(blender_class)

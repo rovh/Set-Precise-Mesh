@@ -39,7 +39,7 @@ class SetLength(bpy.types.Operator):
     plus_length: bpy.props.IntProperty(options = {"SKIP_SAVE"}) 
     eyedropper: bpy.props.BoolProperty(options = {"SKIP_SAVE"})
     draw:       bpy.props.BoolProperty(options = {"SKIP_SAVE"})
-    
+    lengthbool_SKIP_SAVE: bpy.props.BoolProperty(options = {"SKIP_SAVE"})
     @classmethod
     def poll(cls, context):
         return context.active_object is not None\
@@ -58,47 +58,44 @@ class SetLength(bpy.types.Operator):
             pass
 
     def modal(self, context, event):
+        seconds = bpy.context.window_manager.setprecisemesh.seconds
+
+        print(event.type)
+        print(event.value)
 
         if event.type == 'TIMER':
-            self.seconds += 1
-            print(self.seconds)
+            bpy.context.window_manager.setprecisemesh.seconds += 1
+            print(seconds)
         
-        if self.seconds == 300:
+        if seconds == 50:
             wm = context.window_manager
             wm.event_timer_remove(self._timer)
-            self.seconds = 0
+            bpy.context.window_manager.setprecisemesh.seconds = 0
             return {'FINISHED'}
-
-        if event.type == 'RELEASE' and self.seconds != 0:
-            print('qwqwqwqwqwqw')
 
         return {'PASS_THROUGH'}
         # return {'RUNNING_MODAL'}
 
     def invoke(self, context, event):
+        seconds = bpy.context.window_manager.setprecisemesh.seconds
 
-        try:
-            if self.seconds == 0:
-                self.seconds = 0
-                wm = context.window_manager
-                self._timer = wm.event_timer_add(0.1, window=context.window)
-                wm.modal_handler_add(self)
-        except AttributeError:
-            print(1212121212)
-            if self.seconds == 0:
-                self.seconds = 0
-                wm = context.window_manager
-                self._timer = wm.event_timer_add(0.1, window=context.window)
-                wm.modal_handler_add(self)
+        if seconds == 0:
+            wm = context.window_manager
+            self._timer = wm.event_timer_add(0.1, window=context.window)
+            wm.modal_handler_add(self)
+
+        if event.value == 'RELEASE' and seconds != 0:
+            print('qwqwqwqwqwqwqwqwqwqwqwqw')
 
         # return {'FINISHED'}
         return {'RUNNING_MODAL'}
         # return {'PASS_THROUGH'}
-# 
+        
     def execute(self, context):
         
         if self.draw == False:
             check(self) 
+
 
         # Set values
         length = bpy.context.window_manager.setprecisemesh.length
@@ -682,9 +679,7 @@ class SetLength(bpy.types.Operator):
 
             translate_vector = lv.normalized() * l
 
-
-
-            if bool== 1 and len(elem_list) != 1:
+            if (bool== 1 or self.lengthbool_SKIP_SAVE == True) and len(elem_list) != 1:
 
                     elem_list[0].select = 0
 
