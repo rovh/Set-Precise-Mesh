@@ -1452,16 +1452,15 @@ classes = (
     PRESETS_presets_length_Collection,
     #====================================
 
-
 ) 
-    
+# kc = bpy.context.window_manager.keyconfigs.addon
 def register():
 
-    # if kc:
-    #     km = kc.keymaps.new(name="3D View", space_type="VIEW_3D")
-    #     kmi = km.keymap_items.new('mesh.change_length', 'LEFTMOUSE', 'DOUBLE_CLICK', shift=False)
+#     if kc:
+#         km = kc.keymaps.new(name="3D View", space_type="VIEW_3D")
+#         kmi = km.keymap_items.new('mesh.change_length', 'LEFTMOUSE', 'CLICK', shift=True)
         # Could pass settings to operator properties here
-        #kmi.properties.mode = (False, True, False)
+        # kmi.properties.mode = (False, True, False)
 
     # bpy.app.handlers.depsgraph_update_post.append(my_handler)
     # bpy.app.handlers.on_scene_update_pre.append(my_handler)
@@ -1536,6 +1535,14 @@ def register():
 
 def unregister():
 
+    # kc = bpy.context.window_manager.keyconfigs.addon
+    # if kc:
+    #     km = kc.keymaps["3D View"]
+    #     for kmi in km.keymap_items:
+    #         if kmi.idname == 'mesh.change_length':
+    #             km.keymap_items.remove(kmi)
+    #             break
+
     for blender_class in blender_classes:
         bpy.utils.unregister_class(blender_class)
 
@@ -1555,6 +1562,7 @@ def unregister():
 
     """Unregister Presets"""
     from bpy.utils import unregister_class
+
     for cls in reversed(classes):
         unregister_class(cls)
 

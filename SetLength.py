@@ -147,6 +147,7 @@ class SetLength(bpy.types.Operator):
 
         bool = bpy.context.window_manager.setprecisemesh.lengthbool
         bool2 = bpy.context.window_manager.setprecisemesh.lengthinput
+        bool = True if self.lengthbool_SKIP_SAVE == True else bool
 
         # Get values
         prog = context.window_manager.setprecisemesh.projection_type_2
@@ -728,43 +729,44 @@ class SetLength(bpy.types.Operator):
         return {'FINISHED'}
 
     def invoke(self, context, event):
-        seconds = bpy.context.window_manager.setprecisemesh.seconds
+        if event.shift == True:
+            self.lengthbool_SKIP_SAVE = True
+            return self.execute(context)
 
-        if event.value == 'RELEASE' and seconds != 0:
-            bpy.context.window_manager.setprecisemesh.seconds = 9
-            print('qwqwqwqwqwqwqwqwqwqwqwqw')
-            # return {'FINISHED'}
-            return {'CANCELLED'}
+        return self.execute(context)
 
-        if seconds == 0:
-            wm = context.window_manager
-            self._timer = wm.event_timer_add(0.1, window=context.window)
-            wm.modal_handler_add(self)
-        return {'RUNNING_MODAL'}
+    #     seconds = bpy.context.window_manager.setprecisemesh.seconds
 
-        # return {'CANCELLED'}
-        # return {'FINISHED'}
-        # return {'RUNNING_MODAL'}
-        # return {'PASS_THROUGH'}
+
+    #     if event.value == 'RELEASE' and seconds != 0:
+    #         bpy.context.window_manager.setprecisemesh.seconds = 9
+    #         self.lengthbool_SKIP_SAVE = True
+    #         print('qwqwqwqwqwqwqwqwqwqwqwqw')
+    #         return self.execute(context)
+
+    #     if seconds == 0:
+    #         wm = context.window_manager
+    #         self._timer = wm.event_timer_add(0.1, window=context.window)
+    #         wm.modal_handler_add(self)
+
+    #         return {'RUNNING_MODAL'}
+
+    #     return {'PASS_THROUGH'}
     
-    def modal(self, context, event):
-        seconds = bpy.context.window_manager.setprecisemesh.seconds
+    # def modal(self, context, event):
+    #     seconds = bpy.context.window_manager.setprecisemesh.seconds
 
-        print(event.type)
-        print(event.value)
-
-        if event.type == 'TIMER':
-            bpy.context.window_manager.setprecisemesh.seconds += 1
-            print(seconds)
+    #     if event.type == 'TIMER':
+    #         bpy.context.window_manager.setprecisemesh.seconds += 1
+    #         print(seconds)
         
-        if seconds >= 10:
-            wm = context.window_manager
-            wm.event_timer_remove(self._timer)
-            bpy.context.window_manager.setprecisemesh.seconds = 0
-            return {'FINISHED'}
+    #     if seconds >= 1:
+    #         wm = context.window_manager
+    #         wm.event_timer_remove(self._timer)
+    #         bpy.context.window_manager.setprecisemesh.seconds = 0
+    #         return self.execute(context)
 
-        return {'PASS_THROUGH'}
-        # return {'RUNNING_MODAL'}
+    #     return {'PASS_THROUGH'}
    
 if __name__ == "__main__":
     register()
