@@ -1086,11 +1086,20 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
             description="Change direction",
             default=False,
             )
+
     bool_warning_global: BoolProperty(
             name="bool",
             description="Globally",
             default=True,
             )
+    
+    round_precision: IntProperty(
+        default = 2,
+        name="bool",
+        description="Globally",
+    )
+    
+    
     # location_in_UI_1: BoolProperty(
     #         name="location_in_UI",
     #         description="location_in_UI",
@@ -1116,10 +1125,22 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
         box.label(icon="PREFERENCES", text = "Preferences")
         row = box.row()
         col = row.column(align = False)
-        row = col.row(align = 1)
+
+
+        row = col.row(align = True)
         row.label(icon = "ARROW_LEFTRIGHT" )
         row.prop(self, "direction_of_length", text='Invert / Reverse "Set Length" direction')
         
+        row = col.row(align = True)
+        row.alignment = 'LEFT'
+        row.label(icon = "TRACKER")
+        row.prop(self, "round_precision", text='"Draw Length" precision  =', emboss = False)
+        # row.prop(self, "round_precision", text='', emboss = False)
+        # row.label(text = '"Draw Length" precision')
+        row.scale_x = .8
+
+
+
         row = col.row(align = False)
         row.operator("wm.menu_setprecisemesh_setangle",icon="DRIVER_ROTATIONAL_DIFFERENCE", text="Pop-up Menu (Hover cursor on it for more information)")
         row.operator("wm.menu_setprecisemesh_setlength",icon="DRIVER_DISTANCE", text="Pop-up Menu (Hover cursor on it for more information)")

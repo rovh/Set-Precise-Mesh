@@ -31,7 +31,7 @@ def check(self):
 class SetLength(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_length"
-    bl_label = ""
+    bl_label = "Set Length"
     bl_description = 'You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut'
     # bl_options = {'REGISTER', 'UNDO'}
     bl_options = {'UNDO'}
@@ -729,44 +729,55 @@ class SetLength(bpy.types.Operator):
         return {'FINISHED'}
 
     def invoke(self, context, event):
-        if event.shift == True:
+        # if event.shift == True:
+        #     self.lengthbool_SKIP_SAVE = True
+        #     return self.execute(context)
+
+        # return self.execute(context)
+
+
+        seconds = bpy.context.window_manager.setprecisemesh.seconds
+
+        if event.value == 'RELEASE' and seconds != 0:
+            bpy.context.window_manager.setprecisemesh.seconds = 9
+
+            # bpy.ops.ed.undo_history(item=0)
+            # bpy.ops.ed.undo()
+            bpy.ops.ed.undo_push(message="Add an undo step *function may be moved*")
             self.lengthbool_SKIP_SAVE = True
-            return self.execute(context)
+            # bpy.ops.ed.undo_redo()
 
-        return self.execute(context)
+            print('qwqwqwqwqwqwqwqwqwqwqwqw')
+            self.execute(context)
+            return {'FINISHED'}
 
-    #     seconds = bpy.context.window_manager.setprecisemesh.seconds
+        if seconds == 0:
 
+            self.lengthbool_SKIP_SAVE = False
+            self.execute(context)
 
-    #     if event.value == 'RELEASE' and seconds != 0:
-    #         bpy.context.window_manager.setprecisemesh.seconds = 9
-    #         self.lengthbool_SKIP_SAVE = True
-    #         print('qwqwqwqwqwqwqwqwqwqwqwqw')
-    #         return self.execute(context)
+            wm = context.window_manager
+            self._timer = wm.event_timer_add(0.1, window=context.window)
+            wm.modal_handler_add(self)
+            return {'RUNNING_MODAL'}
 
-    #     if seconds == 0:
-    #         wm = context.window_manager
-    #         self._timer = wm.event_timer_add(0.1, window=context.window)
-    #         wm.modal_handler_add(self)
-
-    #         return {'RUNNING_MODAL'}
-
-    #     return {'PASS_THROUGH'}
+        return {'PASS_THROUGH'}
     
-    # def modal(self, context, event):
-    #     seconds = bpy.context.window_manager.setprecisemesh.seconds
+    def modal(self, context, event):
+        seconds = bpy.context.window_manager.setprecisemesh.seconds
 
-    #     if event.type == 'TIMER':
-    #         bpy.context.window_manager.setprecisemesh.seconds += 1
-    #         print(seconds)
+        if event.type == 'TIMER':
+            bpy.context.window_manager.setprecisemesh.seconds += 1
+            print(seconds)
         
-    #     if seconds >= 1:
-    #         wm = context.window_manager
-    #         wm.event_timer_remove(self._timer)
-    #         bpy.context.window_manager.setprecisemesh.seconds = 0
-    #         return self.execute(context)
+        if seconds >= 5:
+            wm = context.window_manager
+            wm.event_timer_remove(self._timer)
+            bpy.context.window_manager.setprecisemesh.seconds = 0
 
-    #     return {'PASS_THROUGH'}
+            # return self.execute(context)
+
+        return {'PASS_THROUGH'}
    
 if __name__ == "__main__":
     register()

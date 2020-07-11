@@ -4,6 +4,8 @@ import blf
 import gpu
 from gpu_extras.batch import batch_for_shader
 
+from . import __name__
+
 # class Pop_Up_Set_Cursor_To_Normal (bpy.types.Operator):
 #     """Tooltip"""
 #     bl_idname = "mesh.set_cursor_to_normal_pop_up"
@@ -59,7 +61,6 @@ def draw():
     else:
         pass
 
-
 def draw_callback_px(self, context):
 
     length_display_number = bpy.context.window_manager.setprecisemesh.length_display_number
@@ -73,9 +74,58 @@ def draw_callback_px(self, context):
     if context.active_object is not None:
         if context.active_object.mode in {'EDIT'}:
             if length_display_stop == False:
-                blf.draw(font_id, "Length:  " + str(length_display_number))
+
+                length_unit = bpy.context.scene.unit_settings.length_unit
+
+                if  bpy.context.scene.unit_settings.system == 'METRIC' and length_unit == 'ADAPTIVE':
+                    unit_index = ""
+                
+                elif length_unit == "MICROMETERS":
+                    unit_index = "um"
+                    length_display_number = length_display_number * 1000000
+                
+                elif length_unit == "MILLIMETERS":
+                    unit_index = "mm"
+                    length_display_number = length_display_number * 1000
+                
+                elif length_unit == "CENTIMETERS":
+                    unit_index = "cm"
+                    length_display_number = length_display_number * 100
+                
+                elif length_unit == "METERS":
+                    unit_index = "m"
+                
+                elif length_unit == "KILOMETERS":
+                    unit_index = "km"
+                    length_display_number = length_display_number / 1000
+                
+
+                if bpy.context.scene.unit_settings.system == 'IMPERIAL'and length_unit == 'ADAPTIVE':
+                    unit_index = ""
+                    length_display_number = length_display_number * 3.2808398950131
+
+                elif length_unit == 'MILES':
+                    unit_index = "mi"
+                    length_display_number = length_display_number * 0.00062137119223733
+                
+                elif length_unit == 'FEET':
+                    unit_index = "'"
+                    length_display_number = length_display_number * 3.2808398950131
+                
+                elif length_unit == 'INCHES':
+                    unit_index = "''"
+                    length_display_number = length_display_number * 39.370078740157
+                
+                elif length_unit == 'THOU':
+                    unit_index = "thou"
+                    length_display_number = length_display_number * 39.370078740157 * 1000
+
+                length_display_number = round(length_display_number, self.round_precision)
+                length_display_number = str(length_display_number)
+
+                blf.draw(font_id, "Length:  " + length_display_number + " " + unit_index)
             else:
-                blf.draw(font_id, "Length:  " + str("No"))
+                blf.draw(font_id, "Length:  " + "No")
         else:
             pass
 
@@ -125,6 +175,8 @@ class ModalDrawOperator_Set_Precise_Mesh_Length(bpy.types.Operator):
 
     def invoke(self, context, event):
         draw_length_line = bpy.context.window_manager.setprecisemesh.draw_length_line
+        settings = bpy.context.preferences.addons[__name__].preferences
+        self.round_precision = settings.round_precision
 
         if draw_length_line == True:
             bpy.context.window_manager.setprecisemesh.draw_length_line = False
