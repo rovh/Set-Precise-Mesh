@@ -176,6 +176,7 @@ class ModalDrawOperator_Set_Precise_Mesh_Length(bpy.types.Operator):
     def invoke(self, context, event):
         draw_length_line = bpy.context.window_manager.setprecisemesh.draw_length_line
         settings = bpy.context.preferences.addons[__name__].preferences
+        self.scale_length = bpy.context.scene.unit_settings.scale_length
         self.round_precision = settings.round_precision
 
         if draw_length_line == True:
@@ -193,9 +194,6 @@ class ModalDrawOperator_Set_Precise_Mesh_Length(bpy.types.Operator):
             else:
                 self.report({'WARNING'}, "View3D not found, cannot run operator")
                 return {'CANCELLED'}
-
-
-
 
 if __name__ == "__main__":
     register()

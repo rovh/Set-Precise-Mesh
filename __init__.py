@@ -1095,8 +1095,8 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
     
     round_precision: IntProperty(
         default = 2,
-        name="bool",
-        description="Globally",
+        name="Round",
+        description="Round",
     )
     
     
@@ -1133,11 +1133,16 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
         
         row = col.row(align = True)
         row.alignment = 'LEFT'
-        row.label(icon = "TRACKER")
-        row.prop(self, "round_precision", text='"Draw Length" precision  =', emboss = False)
-        # row.prop(self, "round_precision", text='', emboss = False)
-        # row.label(text = '"Draw Length" precision')
-        row.scale_x = .8
+        # row.label(icon = "TRACKER")
+        # row.label(text = '"Draw Length" precision =')
+        row.label(icon = "TRACKER", text = '"Draw Length" precision =')
+
+        row_2 = row.row(align = True)
+        row_2.prop(self, "round_precision", text='', emboss = True)
+        row_2.alignment = 'LEFT'
+        # row_2.prop(self, "round_precision", text='"Draw Length" precision  =', emboss = True)
+        # row_2.prop(self, "round_precision", text='', emboss = False)
+        row_2.scale_x = .28
 
 
 
