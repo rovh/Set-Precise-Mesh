@@ -120,6 +120,7 @@ def draw_callback_px(self, context):
                     unit_index = "thou"
                     length_display_number = length_display_number * 39.370078740157 * 1000
 
+                length_display_number = self.scale_length * length_display_number
                 length_display_number = round(length_display_number, self.round_precision)
                 length_display_number = str(length_display_number)
 

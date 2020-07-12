@@ -58,8 +58,6 @@ class SetLength(bpy.types.Operator):
             pass
 
     def execute(self, context):
-
-        print('wwwwwwwwwwwwwwwwwoooooooooooooooorrrrrrrrrrrrkkkkkkkkkkkkkssssssssss')
         
         if self.draw == False:
             check(self) 
@@ -742,19 +740,21 @@ class SetLength(bpy.types.Operator):
             bpy.context.window_manager.setprecisemesh.seconds = 9
 
             # bpy.ops.ed.undo_history(item=0)
-            # bpy.ops.ed.undo()
-            bpy.ops.ed.undo_push(message="Add an undo step *function may be moved*")
+            bpy.ops.ed.undo()
+            # bpy.ops.ed.undo_push(message="Add an undo step *function may be moved*")
             self.lengthbool_SKIP_SAVE = True
             # bpy.ops.ed.undo_redo()
 
             print('qwqwqwqwqwqwqwqwqwqwqwqw')
             self.execute(context)
+            # return {'RUNNING_MODAL'}
             return {'FINISHED'}
 
         if seconds == 0:
 
             self.lengthbool_SKIP_SAVE = False
             self.execute(context)
+            print(1232312312312)
 
             wm = context.window_manager
             self._timer = wm.event_timer_add(0.1, window=context.window)

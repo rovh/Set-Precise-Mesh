@@ -11,12 +11,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+name = "(Set Precise Mesh)"
 bl_info = {
-    "name" : "Set Presice Mesh /CAD",
+    "name" : "Set Precise Mesh /CAD",
     "author" : "Rovh",
     "description" : "This addon allows you to set exact values for the mesh",
     "blender" : (2, 83, 0),
-    "version" : (1,2,2),
+    "version" : (1,2,3),
     "location" : "View3D > Sidebar in Edit Mode > Item Tab, View Tab and Edit Tab",
     "warning" : "",
     "wiki_url": "https://github.com/rovh/Set-Precise-Mesh",
@@ -465,7 +466,7 @@ def   draw_VIEW3D_MT_transform(self, context):
 
 class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_operator"
-    bl_label = "Pop-up Menu"
+    bl_label = "Pop-up Menu All " + name
     bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
          ( For exaple Ctrl + Alt + Wheel Down )\n \
         How to do it: > right-click on this button > Assign Shortcut"
@@ -507,7 +508,7 @@ class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
 
 class Popup_Menu_SetPreciseMesh_SetAngle (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_setangle"
-    bl_label = "Pop-up Menu Set Angle"
+    bl_label = "Pop-up Menu Set Angle " + name 
     bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
          ( For exaple Ctrl + Alt + Wheel Down )\n \
         How to do it: > right-click on this button > Assign Shortcut"
@@ -608,7 +609,7 @@ class Popup_Menu_SetPreciseMesh_SetAngle (bpy.types.Operator):
 
 class Popup_Menu_SetPreciseMesh_SetLength (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_setlength"
-    bl_label = "Pop-up Menu Set Length"
+    bl_label = "Pop-up Menu Set Length " + name
     bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
          ( For exaple Ctrl + Alt + Wheel Up )\n \
         How to do it: > right-click on this button > Assign Shortcut"
