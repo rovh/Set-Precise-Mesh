@@ -743,12 +743,13 @@ class SetLength(bpy.types.Operator):
             bpy.ops.ed.undo()
             # bpy.ops.ed.undo_push(message="Add an undo step *function may be moved*")
             self.lengthbool_SKIP_SAVE = True
+            self.SKIP_INIT = True
             # bpy.ops.ed.undo_redo()
 
             print('qwqwqwqwqwqwqwqwqwqwqwqw')
             self.execute(context)
-            # return {'RUNNING_MODAL'}
-            return {'FINISHED'}
+            return {'RUNNING_MODAL'}
+            # return {'FINISHED'}
 
         if seconds == 0:
 
