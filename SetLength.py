@@ -14,6 +14,7 @@ import mathutils
 from mathutils import geometry
 from mathutils import Matrix
 from mathutils import Vector, Matrix, Quaternion, Euler
+from . import name
 
 
 # import pickle
@@ -31,7 +32,7 @@ def check(self):
 class SetLength(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_length"
-    bl_label = "Set Length"
+    bl_label = "Set Length " + name
     bl_description = 'You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut'
     # bl_options = {'REGISTER', 'UNDO'}
     bl_options = {'UNDO'}

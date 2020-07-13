@@ -508,7 +508,7 @@ class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
 
 class Popup_Menu_SetPreciseMesh_SetAngle (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_setangle"
-    bl_label = "Pop-up Menu Set Angle " + name 
+    bl_label = "Pop-up Menu Set Angle   " + name 
     bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
          ( For exaple Ctrl + Alt + Wheel Down )\n \
         How to do it: > right-click on this button > Assign Shortcut"
@@ -704,8 +704,8 @@ class Popup_Menu_SetPreciseMesh_SetLength (bpy.types.Operator):
 class Browser_Link (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "wm.setprecisemesh_link"
-    bl_label = "Change version"
-    bl_description = "Link"
+    bl_label = "Change version " + name
+    bl_description = "Link" 
     bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod
@@ -939,6 +939,9 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             sub_row = row.row(align = 1)
             sub_row.operator("mesh.change_length",icon="EYEDROPPER", text = "").eyedropper = True
             sub_row.scale_x = 1.3
+            # sub_row.scale_x = .13
+            # sub_row.ui_units_x = 1.3
+            
 
 
             row = row.row(align = False)
@@ -1408,7 +1411,6 @@ blender_classes = [
     # ChooseItemOperator,
     # NewItemOperator,
     # ClearItemOperator,
-
 ]
 
 """Classes of Presets"""
@@ -1478,8 +1480,8 @@ classes = (
     PRESETS_presets_angle_Collection,
     PRESETS_presets_length_Collection,
     #====================================
-
 ) 
+
 # kc = bpy.context.window_manager.keyconfigs.addon
 def register():
 
