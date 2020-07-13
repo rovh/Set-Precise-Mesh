@@ -4,6 +4,7 @@ import bpy
 import mathutils
 # from bpy import types
 import bmesh
+from . import name
 
 # from bpy import types
 # from bpy.props import (
@@ -17,7 +18,7 @@ import bmesh
 class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.set_mesh_position_pop_up"
-    bl_label = "Set Mesh Position Pop up menu"
+    bl_label = "Set Mesh Position " + name
     bl_description = "Set the mesh position according to the normal of the selected part of the mesh (vertex/edge/face)\
         \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     bl_options = {'REGISTER', 'UNDO'}
@@ -188,7 +189,7 @@ class Pop_Up_Set_Mesh_Position (bpy.types.Operator):
 class Set_Mesh_Position (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.set_mesh_position"
-    bl_label = "Set Mesh Position"
+    bl_label = ""
     bl_description = "Set the mesh location and rotation according to the normal of the selected part of the mesh (vertex/edge/face)\
         \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     bl_options = {'UNDO'}

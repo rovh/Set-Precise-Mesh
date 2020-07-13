@@ -9,6 +9,7 @@ from math import pi
 import mathutils
 from mathutils import geometry
 from mathutils import Vector, Matrix, Quaternion, Euler
+from . import name
 
 
 # from pynput.keyboard import Key, Controller
@@ -26,7 +27,7 @@ def check(self):
 class SetAngle(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_angle"
-    bl_label = ""
+    bl_label = "Set Angle   " + name
     bl_description = "Set Angle \n You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     bl_options = {'UNDO'}
 
@@ -35,7 +36,9 @@ class SetAngle(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return context.active_object is not None
+        return context.active_object is not None\
+            and context.active_object.mode in {'EDIT'}\
+            and context.active_object.type == "MESH"
 
     @classmethod
     def description(cls, context, properties):

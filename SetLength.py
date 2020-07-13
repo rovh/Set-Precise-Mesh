@@ -14,6 +14,8 @@ import mathutils
 from mathutils import geometry
 from mathutils import Matrix
 from mathutils import Vector, Matrix, Quaternion, Euler
+from . import name
+
 
 # import pickle
 
@@ -30,17 +32,20 @@ def check(self):
 class SetLength(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_length"
-    bl_label = ""
+    bl_label = "Set Length " + name
     bl_description = 'You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut'
     # bl_options = {'REGISTER', 'UNDO'}
     bl_options = {'UNDO'}
 
     plus_length: bpy.props.IntProperty(options = {"SKIP_SAVE"}) 
     eyedropper: bpy.props.BoolProperty(options = {"SKIP_SAVE"})
-    
+    draw:       bpy.props.BoolProperty(options = {"SKIP_SAVE"})
+    lengthbool_SKIP_SAVE: bpy.props.BoolProperty(options = {"SKIP_SAVE"})
     @classmethod
     def poll(cls, context):
-        return context.active_object is not None
+        return context.active_object is not None\
+            and context.active_object.mode in {'EDIT'}\
+            and context.active_object.type == "MESH"
 
     @classmethod
     def description(cls, context, properties):
@@ -55,7 +60,8 @@ class SetLength(bpy.types.Operator):
 
     def execute(self, context):
         
-        check(self)
+        if self.draw == False:
+            check(self) 
 
         # Set values
         length = bpy.context.window_manager.setprecisemesh.length
@@ -140,6 +146,7 @@ class SetLength(bpy.types.Operator):
 
         bool = bpy.context.window_manager.setprecisemesh.lengthbool
         bool2 = bpy.context.window_manager.setprecisemesh.lengthinput
+        bool = True if self.lengthbool_SKIP_SAVE == True else bool
 
         # Get values
         prog = context.window_manager.setprecisemesh.projection_type_2
@@ -208,23 +215,29 @@ class SetLength(bpy.types.Operator):
         for g in bm.select_history:
             elem_list.append(g)
         
-        if invert_direction == True:
+        if invert_direction == True:    
             elem_list[0], elem_list[1] = elem_list[len(elem_list)-1], elem_list[len(elem_list)-2]
 
         # Check number
         if len(elem_list) < 1 and bool == False:
-            text = "You need to select from 1 vertices"
-            war = "ERROR"
-            self.report({war}, text)
+            if self.draw == True:
+                bpy.context.window_manager.setprecisemesh.length_display_stop = True
+            else:
+                text = "You need to select from 1 vertices"
+                war = "ERROR"
+                self.report({war}, text)
             return{"FINISHED"}
 
         elif len(elem_list) == 1 and bool == False:
 
-            if isinstance(elem_list[0], bmesh.types.BMVert) == False:
-                text = '"Distance Simulation" supports only vertices'
-                war = "ERROR"
-                self.report({war}, text)
-                return{"FINISHED"}
+            if self.draw == True:
+                bpy.context.window_manager.setprecisemesh.length_display_stop = True
+            else:
+                if isinstance(elem_list[0], bmesh.types.BMVert) == False:
+                    text = '"Distance Simulation" supports only vertices'
+                    war = "ERROR"
+                    self.report({war}, text)
+                    return{"FINISHED"}
 
             # if isinstance(elem_list[0], bmesh.types.BMVert):
             #     # print("BMVert")
@@ -520,12 +533,17 @@ class SetLength(bpy.types.Operator):
             # lv=v2-v1
         
         else:
-            text = 'In "Use two directions" mode You need to select only 2 elements (vertex, edge, face)'
-            war = "ERROR"
-            self.report({war}, text)
+            if self.draw == True:
+                bpy.context.window_manager.setprecisemesh.length_display_stop = True
+            else:
+                text = 'In "Use two directions" mode You need to select only 2 elements (vertex, edge, face)'
+                war = "ERROR"
+                self.report({war}, text)
             return{"FINISHED"}
 
+
         lv=v2-v1
+
 
         # Get global normal 
         norv1 = bpy.context.active_object.matrix_world  @ v1
@@ -538,6 +556,14 @@ class SetLength(bpy.types.Operator):
 
         if self.eyedropper == True:
             bpy.context.window_manager.setprecisemesh.length = lengthtrue
+            return {"FINISHED"}
+
+        if self.draw == True:
+            bpy.context.window_manager.setprecisemesh.length_display_stop = False
+            bpy.context.window_manager.setprecisemesh.length_display_number = lengthtrue
+            bpy.context.window_manager.setprecisemesh.length_display_coordinate_1 = norv1
+            bpy.context.window_manager.setprecisemesh.length_display_coordinate_2 = norv2
+
             return {"FINISHED"}
             
         
@@ -570,7 +596,7 @@ class SetLength(bpy.types.Operator):
         if bool== True:
             if prog != "cursor_matrix" and prog != "cursor_location":
                 bpy.context.scene.cursor.location = bpy.context.active_object.matrix_world  @ mv
-            pp = mv
+            pp = mv     
         
         else:
             if prog != "cursor_matrix" and prog != "cursor_location":
@@ -620,9 +646,7 @@ class SetLength(bpy.types.Operator):
 
             translate_vector = lv.normalized() * l
 
-
-
-            if bool== 1 and len(elem_list) != 1:
+            if (bool== 1 or self.lengthbool_SKIP_SAVE == True) and len(elem_list) != 1:
 
                     elem_list[0].select = 0
 
@@ -703,7 +727,60 @@ class SetLength(bpy.types.Operator):
 
         return {'FINISHED'}
 
+    # def invoke(self, context, event):
+    #     # if event.shift == True:
+    #     #     self.lengthbool_SKIP_SAVE = True
+    #     #     return self.execute(context)
 
+    #     # return self.execute(context)
+
+
+    #     seconds = bpy.context.window_manager.setprecisemesh.seconds
+
+    #     if event.value == 'RELEASE' and seconds != 0:
+    #         bpy.context.window_manager.setprecisemesh.seconds = 9
+
+    #         # bpy.ops.ed.undo_history(item=0)
+    #         bpy.ops.ed.undo()
+    #         # bpy.ops.ed.undo_push(message="Add an undo step *function may be moved*")
+    #         self.lengthbool_SKIP_SAVE = True
+    #         self.SKIP_INIT = True
+    #         # bpy.ops.ed.undo_redo()
+
+    #         print('qwqwqwqwqwqwqwqwqwqwqwqw')
+    #         self.execute(context)
+    #         return {'RUNNING_MODAL'}
+    #         # return {'FINISHED'}
+
+    #     if seconds == 0:
+
+    #         self.lengthbool_SKIP_SAVE = False
+    #         self.execute(context)
+    #         print(1232312312312)
+
+    #         wm = context.window_manager
+    #         self._timer = wm.event_timer_add(0.1, window=context.window)
+    #         wm.modal_handler_add(self)
+    #         return {'RUNNING_MODAL'}
+
+    #     return {'PASS_THROUGH'}
+    
+    # def modal(self, context, event):
+    #     seconds = bpy.context.window_manager.setprecisemesh.seconds
+
+    #     if event.type == 'TIMER':
+    #         bpy.context.window_manager.setprecisemesh.seconds += 1
+    #         print(seconds)
+        
+    #     if seconds >= 5:
+    #         wm = context.window_manager
+    #         wm.event_timer_remove(self._timer)
+    #         bpy.context.window_manager.setprecisemesh.seconds = 0
+
+    #         # return self.execute(context)
+
+    #     return {'PASS_THROUGH'}
+   
 if __name__ == "__main__":
     register()
 

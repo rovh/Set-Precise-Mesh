@@ -827,6 +827,12 @@ class PRESETS_PT_presets_List_Angle(Panel):
     bl_context = "scene"
     # bl_context = "mesh_edit"
 
+    @classmethod
+    def poll(cls, context):
+        return bpy.context.active_object != None\
+            and bpy.context.active_object.mode in {'EDIT'}
+
+
     def draw_header(self, context):
         layout = self.layout
         layout.label(icon = "DRIVER_ROTATIONAL_DIFFERENCE")
@@ -931,6 +937,11 @@ class PRESETS_PT_presets_List_Length(Panel):
     bl_region_type = 'WINDOW'
     bl_context = "scene"
     # bl_context = "mesh_edit"
+
+    @classmethod
+    def poll(cls, context):
+        return bpy.context.active_object != None\
+            and bpy.context.active_object.mode in {'EDIT'}
 
     def draw_header(self, context):
         layout = self.layout
@@ -1199,7 +1210,8 @@ class PRESETS_FOR_PRESETS_PT_panel(Panel):
 
     @classmethod
     def poll(cls, context):
-        return True
+        return bpy.context.active_object != None\
+            and bpy.context.active_object.mode in {'EDIT'}
 
     def draw_header(self, context):
         layout = self.layout

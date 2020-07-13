@@ -11,12 +11,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+name = "(Set Precise Mesh)"
 bl_info = {
-    "name" : "Set Presice Mesh /CAD",
+    "name" : "Set Precise Mesh /CAD",
     "author" : "Rovh",
     "description" : "This addon allows you to set exact values for the mesh",
     "blender" : (2, 83, 0),
-    "version" : (1,2,2),
+    "version" : (1,2,3),
     "location" : "View3D > Sidebar in Edit Mode > Item Tab, View Tab and Edit Tab",
     "warning" : "",
     "wiki_url": "https://github.com/rovh/Set-Precise-Mesh",
@@ -34,6 +35,7 @@ from .Set_Mesh_Position import *
 from .Presets import *
 from .Presets_Object import *
 from .Set_Cursor_To_Normal import *
+from .Draw import *
 
 
 from bpy import types
@@ -464,7 +466,7 @@ def   draw_VIEW3D_MT_transform(self, context):
 
 class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_operator"
-    bl_label = "Pop-up Menu"
+    bl_label = "Pop-up Menu | All " + name
     bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
          ( For exaple Ctrl + Alt + Wheel Down )\n \
         How to do it: > right-click on this button > Assign Shortcut"
@@ -506,7 +508,7 @@ class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
 
 class Popup_Menu_SetPreciseMesh_SetAngle (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_setangle"
-    bl_label = "Pop-up Menu Set Angle"
+    bl_label = "Pop-up Menu | Set Angle   " + name 
     bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
          ( For exaple Ctrl + Alt + Wheel Down )\n \
         How to do it: > right-click on this button > Assign Shortcut"
@@ -607,7 +609,7 @@ class Popup_Menu_SetPreciseMesh_SetAngle (bpy.types.Operator):
 
 class Popup_Menu_SetPreciseMesh_SetLength (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_setlength"
-    bl_label = "Pop-up Menu Set Length"
+    bl_label = "Pop-up Menu | Set Length " + name
     bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
          ( For exaple Ctrl + Alt + Wheel Up )\n \
         How to do it: > right-click on this button > Assign Shortcut"
@@ -699,236 +701,11 @@ class Popup_Menu_SetPreciseMesh_SetLength (bpy.types.Operator):
 
 """Operators"""
 
-# class Set_Cursor_To_Normal (bpy.types.Operator):
-#     """Tooltip"""
-#     bl_idname = "mesh.set_cursor"
-#     bl_label = "Set the Cursor to the normal"
-#     bl_description = "Set the cursor location to the selected vertex/edge/face and set the cursor direction along its normal\
-#         \nYou can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
-#     bl_options = {'REGISTER', 'UNDO'}
-
-#     @classmethod
-#     def poll(cls, context):
-#         return context.active_object is not None
-
-#     def execute(self, context):
-
-#         obj = bpy.context.edit_object
-#         me = obj.data
-#         bm = bmesh.from_edit_mesh(me)
-
-#         bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
-#         bpy.context.object.update_from_editmode()
-#         bmesh.update_edit_mesh(me, True)
-
-        
-#         #Create lists
-#         # face_ind = []
-#         # edge_ind = []
-#         # vec_ind  = []
-
-#         # face_list = []
-#         # edge_list = []
-#         # vec_list  = []
-
-
-#         selected_verts = [verts for verts in bm.verts if verts.select]
-#         selected_edges = [edge for edge in bm.edges if edge.select]
-#         selected_faces = [face for face in bm.faces if face.select]
-
-#         wm = bpy.context.active_object.matrix_world.copy()
-#         wm_inverted = wm.inverted()
-
-#         # print("\n")        
-
-
-#         """Maybe it will be need"""
-#         # if len(selected_verts) != 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
-#         #     print(bm.select_history)
-#         #     for v in bm.select_history:
-#         #         if v.select:
-#         #             # vec_list.append(bm.verts[v.index].co)
-#         #             vec_list.append(v)
-#         #             vec_ind.append(v.index)
-
-#         # if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) == 0:
-
-#         #     for e in bm.select_history:
-#         #         if e.select:
-#         #             # edge_list.append(bm.edges[e.index])
-#         #             edge_list.append(e)
-#         #             edge_ind.append(e.index)
-
-#         # if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) != 0:
-
-#         #     for f in bm.select_history:
-#         #         if f.select:
-#         #             # face_list.append(bm.faces[f.index])
-#         #             face_list.append(f)
-#         #             # try:
-#         #             #     # list_2 = list(set(selected_faces) & set(lst2))
-#         #             #     # if bm.faces[f.index] == selected_faces[:]:
-#         #             #     face_list.append(selected_faces[f.index])
-#         #             # except IndexError:
-#         #             #     pass
-#         #             # else:
-#         #             #     face_list.append(selected_faces[f.index])
-#         #             face_ind.append(f.index)
-    
-
-
-
-#         # for geom in bm.select_history:
-#         #     if isinstance(geom, bmesh.types.BMFace):
-#         #         print(geom.index, "geom.index")
-        
-#         # print(f.select)
-#         # print(len(vec_ind))
-#         # print(len(edge_ind))
-#         # print(len(face_ind))
-
-#         # print(selected_faces, "selected_faces")
-#         # print(selected_edges, "selected_edges")
-#         # print(selected_verts, "selected_verts")
-
-#         # print(vec_list,  "vec_list")
-#         # print(edge_list, "edge_list")
-#         # print(face_list, "face_list")
-
-#         # print(vec_ind,  "vec_ind")
-#         # print(edge_ind, "edge_ind")
-#         # print(face_ind, "face_ind")
-
-#         if len(selected_verts) == 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
-
-#             text = "You need to select one vertex/edge/face"
-#             war = "ERROR"
-#             self.report({war}, text)
-#             return{"FINISHED"}
-
-#         if len(selected_verts) != 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
-
-#             if len(selected_verts) > 1:
-#                 text = "You need to select only one vertex"
-#                 war = "ERROR"
-#                 self.report({war}, text)
-#                 return{"FINISHED"}
-
-            
-#             bpy.context.scene.cursor.location = wm @ selected_verts[0].co
-
-#             normal = selected_verts[0].normal @ wm_inverted
-
-#             obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
-#             direction = normal
-#             # point the cameras '-Z' and use its 'Y' as up
-#             rot_quat = direction.to_track_quat('-Z', 'Y')
-#             obj_camera.rotation_euler = rot_quat.to_euler()
-#             rot_quat =  rot_quat.to_euler()
-
-#         if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) == 0:
-
-#             if len(selected_edges) > 1:
-#                 text = "You need to select only one edge"
-#                 war = "ERROR"
-#                 self.report({war}, text)
-#                 return{"FINISHED"}
-
-            
-#             edge_verts = selected_edges[0].verts
-
-#             location_of_edge = ((wm @ edge_verts[0].co) + (wm @ edge_verts[1].co)) /2
-#             bpy.context.scene.cursor.location = location_of_edge
-
-#             faces_of_edge = selected_edges[0].link_faces
-
-#             normals_of_the_faces = []
-
-#             # normal_from_face = 
-
-#             for f in range(0, len(faces_of_edge)):
-#             # for f in range(-1, len(faces_of_edge) - 1):
-#                 normals_of_the_faces.append(faces_of_edge[f].normal @ wm_inverted) 
-
-#             # print(len(faces_of_edge))
-
-#             if len(normals_of_the_faces) == 2:
-
-#                 normal_from_face = ((normals_of_the_faces[0]) + (normals_of_the_faces[1])) /2
-#                 normal_from_face = (normal_from_face) + (location_of_edge) 
-#                 normal_projection_from_face = mathutils.geometry.intersect_point_line(normal_from_face, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
-#                 normal_projection_from_face = normal_projection_from_face[0]
-#                 # normal_from_face = normal_projection_from_face
-#                 normal_from_face = (normal_from_face - normal_projection_from_face)
-#                 normal = normal_from_face
-
-#             else:
-
-#                 normal_from_face = normals_of_the_faces[0]
-#                 normal_from_face = (normal_from_face) + (location_of_edge) 
-#                 normal_projection_from_face = mathutils.geometry.intersect_point_line(normal_from_face, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
-#                 normal_projection_from_face = normal_projection_from_face[0]
-#                 # normal_from_face = normal_projection_from_face
-#                 normal_from_face = (normal_from_face - normal_projection_from_face)
-#                 normal = normal_from_face
-
-
-
-#             # print(normals_of_the_faces[0])
-
-
-#             # normal = ((edge_verts[0].normal) + (edge_verts[1].normal))
-#             # normal = (location_of_edge) + normal
-#             # normal_projection = mathutils.geometry.intersect_point_line(normal, (wm @ edge_verts[0].co), (wm @ edge_verts[1].co))
-#             # normal_projection = normal_projection[0]
-#             # normal = (normal - normal_projection)
-
-#             # normal = normal_from_face + normal
-
-            
-
-#             obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
-#             direction = normal
-#             # point the cameras '-Z' and use its 'Y' as up
-#             rot_quat = direction.to_track_quat('-Z', 'Y')
-#             obj_camera.rotation_euler = rot_quat.to_euler()
-#             rot_quat =  rot_quat.to_euler()
-
-#         if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) != 0:
-
-#             if len(selected_faces) > 1:
-#                 text = "You need to select only one face"
-#                 war = "ERROR"
-#                 self.report({war}, text)
-#                 return{"FINISHED"}
-
-
-#             my_location = wm @ selected_faces[0].calc_center_median()
-#             normalgl = selected_faces[0].normal @ wm_inverted
-
-                        
-#             bpy.context.scene.cursor.location = my_location
-
-#             # Set cursor direction
-#             obj_camera = bpy.data.scenes[bpy.context.scene.name_full].cursor       
-#             direction = normalgl
-#             # point the cameras '-Z' and use its 'Y' as up
-#             rot_quat = direction.to_track_quat('-Z', 'Y')
-#             obj_camera.rotation_euler = rot_quat.to_euler()
-#             rot_quat =  rot_quat.to_euler()
-
-#         bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
-#         bpy.context.object.update_from_editmode()
-#         bmesh.update_edit_mesh(me, True)
-
-
-#         return {'FINISHED'}
-
 class Browser_Link (bpy.types.Operator):
     """Tooltip"""
     bl_idname = "wm.setprecisemesh_link"
-    bl_label = "Change version"
-    bl_description = "Link"
+    bl_label = "Change version " + name
+    bl_description = "Link" 
     bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod
@@ -1162,27 +939,44 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             sub_row = row.row(align = 1)
             sub_row.operator("mesh.change_length",icon="EYEDROPPER", text = "").eyedropper = True
             sub_row.scale_x = 1.3
+            # sub_row.scale_x = .13
+            # sub_row.ui_units_x = 1.3
+            
 
 
             row = row.row(align = False)
             row.scale_x = 1.2
             row.prop(sc, "script_input_2", text = "", icon = "FILE_SCRIPT")
 
-
             if script_input_2:   
                 col_top.prop(w_m, "data_block_2", text = "") 
 
-            
 
-           
-            # split = col_top.split(factor = 0.835, align = 0)
-            split = col_top.row(align = 0)
-            
-            split.prop(w_m, "lengthbool")
 
-            row = split.row(align = 0)
-            row.operator("wm.header_length_simulation_setprecisemesh", text=" Distance Simulation", icon = "CON_TRACKTO")
-            row.scale_x = 0.14
+            space = col_top.row(align = 1)
+            space.label(icon="BLANK1")
+            space.scale_y = 0.1
+
+
+
+            row = col_top.row(align = 1)
+
+            row_left = row.row(align = 0)
+            row_left.prop(w_m, "lengthbool")
+            row_left.scale_x = 1.2
+
+
+
+            depress = bpy.context.window_manager.setprecisemesh.draw_length_line
+            row_center = row.row(align = 0)
+            row_center.operator("view3d.modal_operator_setprecisemesh_draw_length", text="", icon = "RESTRICT_VIEW_OFF", depress=depress)
+            row_center.scale_x = 1.3
+
+
+
+            row_right = row.row(align = 0)
+            row_right.operator("wm.header_length_simulation_setprecisemesh", text=" Distance Simulation", icon = "CON_TRACKTO")
+            row_right.scale_x = 0.14
 
     
 
@@ -1296,11 +1090,20 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
             description="Change direction",
             default=False,
             )
+
     bool_warning_global: BoolProperty(
             name="bool",
             description="Globally",
             default=True,
             )
+    
+    round_precision: IntProperty(
+        default = 2,
+        name="Round",
+        description="Round",
+    )
+    
+    
     # location_in_UI_1: BoolProperty(
     #         name="location_in_UI",
     #         description="location_in_UI",
@@ -1326,10 +1129,27 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
         box.label(icon="PREFERENCES", text = "Preferences")
         row = box.row()
         col = row.column(align = False)
-        row = col.row(align = 1)
+
+
+        row = col.row(align = True)
         row.label(icon = "ARROW_LEFTRIGHT" )
         row.prop(self, "direction_of_length", text='Invert / Reverse "Set Length" direction')
         
+        row = col.row(align = True)
+        row.alignment = 'LEFT'
+        # row.label(icon = "TRACKER")
+        # row.label(text = '"Draw Length" precision =')
+        row.label(icon = "TRACKER", text = '"Draw Length" precision =')
+
+        row_2 = row.row(align = True)
+        row_2.prop(self, "round_precision", text='', emboss = True)
+        row_2.alignment = 'LEFT'
+        # row_2.prop(self, "round_precision", text='"Draw Length" precision  =', emboss = True)
+        # row_2.prop(self, "round_precision", text='', emboss = False)
+        row_2.scale_x = .28
+
+
+
         row = col.row(align = False)
         row.operator("wm.menu_setprecisemesh_setangle",icon="DRIVER_ROTATIONAL_DIFFERENCE", text="Pop-up Menu (Hover cursor on it for more information)")
         row.operator("wm.menu_setprecisemesh_setlength",icon="DRIVER_DISTANCE", text="Pop-up Menu (Hover cursor on it for more information)")
@@ -1509,9 +1329,17 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         \n(Set the mesh position not in accordance with the normal of the selected part of the mesh)",
         default = False,
     )
+    length_display_number:         bpy.props.FloatProperty      (options = {"SKIP_SAVE"})
+    length_display_stop:           bpy.props.BoolProperty       (options = {"SKIP_SAVE"})
+    draw_length_line:                   bpy.props.BoolProperty      ()
+    length_display_coordinate_1:   bpy.props.FloatVectorProperty(options = {"SKIP_SAVE"})
+    length_display_coordinate_2:   bpy.props.FloatVectorProperty(options = {"SKIP_SAVE"})
+
     x: bpy.props.BoolProperty(default = 1, name = "Use X axis", description = "Move the object along the X axis")
     y: bpy.props.BoolProperty(default = 1, name = "Use Y axis", description = "Move the object along the Y axis")
     z: bpy.props.BoolProperty(default = 1, name = "Use Z axis", description = "Move the object along the Z axis")
+
+    seconds: bpy.props.IntProperty()
 
 """Duplications of the Main panel"""
 class Dupli (SetPresiceMesh_Panel):
@@ -1578,11 +1406,11 @@ blender_classes = [
     Pop_Up_Set_Mesh_Position,
     Set_Mesh_Position,
 
-    
+    ModalDrawOperator_Set_Precise_Mesh_Length,
+
     # ChooseItemOperator,
     # NewItemOperator,
     # ClearItemOperator,
-
 ]
 
 """Classes of Presets"""
@@ -1652,11 +1480,16 @@ classes = (
     PRESETS_presets_angle_Collection,
     PRESETS_presets_length_Collection,
     #====================================
+) 
 
-
-)
-
+# kc = bpy.context.window_manager.keyconfigs.addon
 def register():
+
+#     if kc:
+#         km = kc.keymaps.new(name="3D View", space_type="VIEW_3D")
+#         kmi = km.keymap_items.new('mesh.change_length', 'LEFTMOUSE', 'CLICK', shift=True)
+        # Could pass settings to operator properties here
+        # kmi.properties.mode = (False, True, False)
 
     # bpy.app.handlers.depsgraph_update_post.append(my_handler)
     # bpy.app.handlers.on_scene_update_pre.append(my_handler)
@@ -1731,8 +1564,13 @@ def register():
 
 def unregister():
 
-    # if my_handler in bpy.app.handlers.depsgraph_update_pre:
-    #     bpy.app.handlers.depsgraph_update_pre.remove(my_handler)
+    # kc = bpy.context.window_manager.keyconfigs.addon
+    # if kc:
+    #     km = kc.keymaps["3D View"]
+    #     for kmi in km.keymap_items:
+    #         if kmi.idname == 'mesh.change_length':
+    #             km.keymap_items.remove(kmi)
+    #             break
 
     for blender_class in blender_classes:
         bpy.utils.unregister_class(blender_class)
@@ -1753,6 +1591,7 @@ def unregister():
 
     """Unregister Presets"""
     from bpy.utils import unregister_class
+
     for cls in reversed(classes):
         unregister_class(cls)
 
