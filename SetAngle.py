@@ -27,7 +27,7 @@ def check(self):
 class SetAngle(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_angle"
-    bl_label = "Set Angle " + name
+    bl_label = "Set Angle   " + name
     bl_description = "Set Angle \n You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut"
     bl_options = {'UNDO'}
 

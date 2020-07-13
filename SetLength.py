@@ -727,59 +727,59 @@ class SetLength(bpy.types.Operator):
 
         return {'FINISHED'}
 
-    def invoke(self, context, event):
-        # if event.shift == True:
-        #     self.lengthbool_SKIP_SAVE = True
-        #     return self.execute(context)
+    # def invoke(self, context, event):
+    #     # if event.shift == True:
+    #     #     self.lengthbool_SKIP_SAVE = True
+    #     #     return self.execute(context)
 
-        # return self.execute(context)
+    #     # return self.execute(context)
 
 
-        seconds = bpy.context.window_manager.setprecisemesh.seconds
+    #     seconds = bpy.context.window_manager.setprecisemesh.seconds
 
-        if event.value == 'RELEASE' and seconds != 0:
-            bpy.context.window_manager.setprecisemesh.seconds = 9
+    #     if event.value == 'RELEASE' and seconds != 0:
+    #         bpy.context.window_manager.setprecisemesh.seconds = 9
 
-            # bpy.ops.ed.undo_history(item=0)
-            bpy.ops.ed.undo()
-            # bpy.ops.ed.undo_push(message="Add an undo step *function may be moved*")
-            self.lengthbool_SKIP_SAVE = True
-            self.SKIP_INIT = True
-            # bpy.ops.ed.undo_redo()
+    #         # bpy.ops.ed.undo_history(item=0)
+    #         bpy.ops.ed.undo()
+    #         # bpy.ops.ed.undo_push(message="Add an undo step *function may be moved*")
+    #         self.lengthbool_SKIP_SAVE = True
+    #         self.SKIP_INIT = True
+    #         # bpy.ops.ed.undo_redo()
 
-            print('qwqwqwqwqwqwqwqwqwqwqwqw')
-            self.execute(context)
-            return {'RUNNING_MODAL'}
-            # return {'FINISHED'}
+    #         print('qwqwqwqwqwqwqwqwqwqwqwqw')
+    #         self.execute(context)
+    #         return {'RUNNING_MODAL'}
+    #         # return {'FINISHED'}
 
-        if seconds == 0:
+    #     if seconds == 0:
 
-            self.lengthbool_SKIP_SAVE = False
-            self.execute(context)
-            print(1232312312312)
+    #         self.lengthbool_SKIP_SAVE = False
+    #         self.execute(context)
+    #         print(1232312312312)
 
-            wm = context.window_manager
-            self._timer = wm.event_timer_add(0.1, window=context.window)
-            wm.modal_handler_add(self)
-            return {'RUNNING_MODAL'}
+    #         wm = context.window_manager
+    #         self._timer = wm.event_timer_add(0.1, window=context.window)
+    #         wm.modal_handler_add(self)
+    #         return {'RUNNING_MODAL'}
 
-        return {'PASS_THROUGH'}
+    #     return {'PASS_THROUGH'}
     
-    def modal(self, context, event):
-        seconds = bpy.context.window_manager.setprecisemesh.seconds
+    # def modal(self, context, event):
+    #     seconds = bpy.context.window_manager.setprecisemesh.seconds
 
-        if event.type == 'TIMER':
-            bpy.context.window_manager.setprecisemesh.seconds += 1
-            print(seconds)
+    #     if event.type == 'TIMER':
+    #         bpy.context.window_manager.setprecisemesh.seconds += 1
+    #         print(seconds)
         
-        if seconds >= 5:
-            wm = context.window_manager
-            wm.event_timer_remove(self._timer)
-            bpy.context.window_manager.setprecisemesh.seconds = 0
+    #     if seconds >= 5:
+    #         wm = context.window_manager
+    #         wm.event_timer_remove(self._timer)
+    #         bpy.context.window_manager.setprecisemesh.seconds = 0
 
-            # return self.execute(context)
+    #         # return self.execute(context)
 
-        return {'PASS_THROUGH'}
+    #     return {'PASS_THROUGH'}
    
 if __name__ == "__main__":
     register()

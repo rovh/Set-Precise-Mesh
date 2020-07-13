@@ -466,7 +466,7 @@ def   draw_VIEW3D_MT_transform(self, context):
 
 class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_operator"
-    bl_label = "Pop-up Menu All " + name
+    bl_label = "Pop-up Menu | All " + name
     bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
          ( For exaple Ctrl + Alt + Wheel Down )\n \
         How to do it: > right-click on this button > Assign Shortcut"
@@ -508,7 +508,7 @@ class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
 
 class Popup_Menu_SetPreciseMesh_SetAngle (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_setangle"
-    bl_label = "Pop-up Menu Set Angle   " + name 
+    bl_label = "Pop-up Menu | Set Angle   " + name 
     bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
          ( For exaple Ctrl + Alt + Wheel Down )\n \
         How to do it: > right-click on this button > Assign Shortcut"
@@ -609,7 +609,7 @@ class Popup_Menu_SetPreciseMesh_SetAngle (bpy.types.Operator):
 
 class Popup_Menu_SetPreciseMesh_SetLength (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_setlength"
-    bl_label = "Pop-up Menu Set Length " + name
+    bl_label = "Pop-up Menu | Set Length " + name
     bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
          ( For exaple Ctrl + Alt + Wheel Up )\n \
         How to do it: > right-click on this button > Assign Shortcut"
