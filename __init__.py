@@ -36,6 +36,7 @@ from .Presets import *
 from .Presets_Object import *
 from .Set_Cursor_To_Normal import *
 from .Draw import *
+from .SetArea import *
 
 
 from bpy import types
@@ -1382,6 +1383,8 @@ blender_classes = [
     SetAngle,
 
     SetLength,
+
+    SetArea,
 
     Dialog_Warning_Operator,
     Dialog_Warning_Operator_2,
