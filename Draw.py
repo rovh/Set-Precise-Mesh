@@ -156,7 +156,7 @@ class ModalDrawOperator_Set_Precise_Mesh_Length(bpy.types.Operator):
             except AttributeError:
                 pass
 
-            if event.type == 'MOUSEMOVE' or event.value == 'ANY':
+            if event.type == 'MOUSEMOVE' or event.value == 'RELEASE' or event.value == 'PRESS':
                 try:
                     length_display_stop = False
                     bpy.ops.mesh.change_length(draw = 1)
