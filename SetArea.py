@@ -20,6 +20,7 @@ class SetArea(bpy.types.Operator):
     eyedropper: bpy.props.BoolProperty(options = {"SKIP_SAVE"})
     draw:       bpy.props.BoolProperty(options = {"SKIP_SAVE"})
     lengthbool_SKIP_SAVE: bpy.props.BoolProperty(options = {"SKIP_SAVE"})
+    
     @classmethod
     def poll(cls, context):
         return context.active_object is not None\
@@ -27,6 +28,8 @@ class SetArea(bpy.types.Operator):
             and context.active_object.type == "MESH"
 
     def execute(self, context):
+
+        area = context.window_manager.setprecisemesh.area
 
         obj = bpy.context.edit_object
         me = obj.data
@@ -52,7 +55,7 @@ class SetArea(bpy.types.Operator):
                 return{"FINISHED"}
             else:
                 
-                selected_edges_faces_info = {}
+                # selected_edges_faces_info = {}
                 linked_faces = {}
                 linked_faces_all = []
                 for i in range(0, len(selected_edges) ):
@@ -67,6 +70,12 @@ class SetArea(bpy.types.Operator):
 
                         if linked_faces_all[i].index == linked_faces_all[j].index:
                             needed_face = linked_faces_all[i]
+
+                            # selected_elements_remember = [verts for verts in bm.verts if verts.select]
+                            # selected_elements_remember.extend([edge for edge in bm.edges if edge.select])
+                            # selected_elements_remember.extend([face for face in bm.faces if face.select])
+
+                            needed_face.select = True
 
                             # needed_face = needed_face.calc_area()
                             # needed_face = needed_face.calc_center_median()
@@ -102,32 +111,46 @@ class SetArea(bpy.types.Operator):
             else:
                 needed_face = selected_faces[0]
 
-        area = needed_face.calc_area()
+
+        area_true = needed_face.calc_area()
+        if self.eyedropper == True:
+            context.window_manager.setprecisemesh.area = area_true
+            return{"FINISHED"}
+            
         center_median = bpy.context.active_object.matrix_world @ needed_face.calc_center_median()
-                
-        print(area)
-        print(center_median)
+
+
 
         # Create Matrix
         mat_loc =  mathutils.Matrix.Translation(( 0.0 ,  0.0 ,  0.0 ))        
         # mat_loc =  mathutils.Matrix.Translation(( center_median))        
         mat_sca =  mathutils.Matrix.Scale( 1.0 ,  4 ,  ( 0.0 ,  0.0 ,  1.0 ))
         mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
-
         mat_out =  mat_loc @  mat_rot @  mat_sca
-
         S = mat_out
-
         S.translation -= center_median
+
+        scale_factor_area = area / area_true
+        scale_factor_area = math.sqrt(scale_factor_area)
 
         bmesh.ops.scale(
             bm,
-            vec = mathutils.Vector( (2,2,2) ),
+            vec = mathutils.Vector( (scale_factor_area, scale_factor_area, scale_factor_area) ),
             verts=[v for v in bm.verts if v.select],
             space=S
             )
-
         bmesh.update_edit_mesh(me, True)
+
+
+        needed_face.select = False
+        for i in range(0, len(selected_verts)):
+            bm.verts[selected_verts[i].index].select = True
+
+        for i in range(0, len(selected_edges)):
+            bm.edges[selected_edges[i].index].select = True
+
+        for i in range(0, len(selected_faces)):
+            bm.faces[selected_faces[i].index].select = True
 
         return {"FINISHED"}
 

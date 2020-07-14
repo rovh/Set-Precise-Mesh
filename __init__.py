@@ -506,6 +506,7 @@ class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
     def draw(self, context):
         bpy.types.VIEW3D_PT_edit_mesh_set_precise_mesh1.draw_angle(self, context)
         bpy.types.VIEW3D_PT_edit_mesh_set_precise_mesh1.draw_length(self, context)
+        bpy.types.VIEW3D_PT_edit_mesh_set_precise_mesh1.draw_area(self, context)
 
 class Popup_Menu_SetPreciseMesh_SetAngle (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_setangle"
@@ -700,6 +701,38 @@ class Popup_Menu_SetPreciseMesh_SetLength (bpy.types.Operator):
         #     split.prop(w_m, "lengthbool")
         #     split.operator("wm.header_length_simulation_setprecisemesh", text=" Distance Simulation", icon = "CON_TRACKTO")
 
+class Popup_Menu_SetPreciseMesh_SetArea (bpy.types.Operator):
+    bl_idname = "wm.menu_setprecisemesh_setarea"
+    bl_label = "Pop-up Menu | Set Area " + name
+    bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
+         ( For exaple Ctrl + Alt + Wheel Up )\n \
+        How to do it: > right-click on this button > Assign Shortcut"
+        
+    def execute(self, context):
+        return {'FINISHED'}
+
+    def invoke(self, context, event):
+        x = event.mouse_x
+        y = event.mouse_y 
+
+        move_x = 0
+        move_y = 10
+
+        bpy.context.window.cursor_warp(x + move_x, y + move_y)
+        # context.window_manager.invoke_popup(self, width = 200)
+        # return context.window_manager.invoke_props_dialog(self)
+        # return context.window_manager.invoke_popup(self, width=600, height=500)
+        # return context.window_manager.invoke_popup(self)
+        inv = context.window_manager.invoke_popup(self, width = 200)
+        
+        bpy.context.window.cursor_warp(x, y)
+
+        return inv
+
+    def draw(self, context):
+
+        bpy.types.VIEW3D_PT_edit_mesh_set_precise_mesh1.draw_area(self, context)
+
 """Operators"""
 
 class Browser_Link (bpy.types.Operator):
@@ -797,7 +830,6 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
         self.draw_length(context)
         self.draw_area(context)
 
-       
     def draw_angle(self, context):
 
         layout = self.layout
@@ -1097,15 +1129,15 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
         split_left = col.split(factor=0.55, align=True)
         split_left.scale_y = 1.2
         
-        split_left.operator("mesh.change_length",icon="FULLSCREEN_ENTER", text = "Set Area").plus_length = 0
+        split_left.operator("mesh.change_area",icon="FULLSCREEN_ENTER", text = "Set Area").plus_length = 0
 
         split_center = split_left.split(factor=0.43, align=True)
 
-        split_center.operator("mesh.change_length",icon="ADD", text = "").plus_length = 1
-            # 
+        split_center.operator("mesh.change_area",icon="ADD", text = "").plus_length = 1
+            
         split_right = split_center.split(factor=0.8, align=True)
 
-        split_right.operator("mesh.change_length", icon="REMOVE", text = "").plus_length = -1
+        split_right.operator("mesh.change_area", icon="REMOVE", text = "").plus_length = -1
 
         # split_right = split_center.split(factor=0.9, align=True)
 
@@ -1122,14 +1154,14 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             # col_top.prop(w_m, "length") 
 
             row = col_top.row(align = True)
-            row.prop(w_m, "length", text = "")
+            row.prop(w_m, "area", text = "")
 
             sub_row = row.row(align = 1)
             sub_row.label(icon="BLANK1")
             sub_row.scale_x = 0.1
             
             sub_row = row.row(align = 1)
-            sub_row.operator("mesh.change_length",icon="EYEDROPPER", text = "").eyedropper = True
+            sub_row.operator("mesh.change_area",icon="EYEDROPPER", text = "").eyedropper = True
             sub_row.scale_x = 1.3
             # sub_row.scale_x = .13
             # sub_row.ui_units_x = 1.3
@@ -1248,8 +1280,9 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
 
 
         row = col.row(align = False)
-        row.operator("wm.menu_setprecisemesh_setangle",icon="DRIVER_ROTATIONAL_DIFFERENCE", text="Pop-up Menu (Hover cursor on it for more information)")
+        row.operator("wm.menu_setprecisemesh_setangle" ,icon="DRIVER_ROTATIONAL_DIFFERENCE", text="Pop-up Menu (Hover cursor on it for more information)")
         row.operator("wm.menu_setprecisemesh_setlength",icon="DRIVER_DISTANCE", text="Pop-up Menu (Hover cursor on it for more information)")
+        row.operator("wm.menu_setprecisemesh_setarea"  ,icon="FULLSCREEN_ENTER", text="Pop-up Menu (Hover cursor on it for more information)")
 
         row = col.row()
         row.label(text = "")
@@ -1295,6 +1328,7 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         description="",
         default=False,
     )
+
     length: bpy.props.FloatProperty(
         name="Length",
         description="Length of the edge",
@@ -1313,6 +1347,16 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         description='User Mode',
         default=False,
     )
+
+    area: bpy.props.FloatProperty(
+        name="Area",
+        description="Area of the face",
+        default=1.0,
+        step = 100.0,
+        unit='LENGTH',
+        precision = 6,
+    )
+
     data_block: bpy.props.StringProperty(
         name = "Number input",
         description="\n u = Angle\
@@ -1493,6 +1537,7 @@ blender_classes = [
     Popup_Menu_SetPreciseMesh_Operator,
     Popup_Menu_SetPreciseMesh_SetAngle,
     Popup_Menu_SetPreciseMesh_SetLength,
+    Popup_Menu_SetPreciseMesh_SetArea,
     Angle_Simulation_SetPreciseMesh,
     Length_Simulation_SetPreciseMesh,
 
@@ -1582,11 +1627,12 @@ classes = (
 ) 
 
 # kc = bpy.context.window_manager.keyconfigs.addon
+
 def register():
 
-#     if kc:
-#         km = kc.keymaps.new(name="3D View", space_type="VIEW_3D")
-#         kmi = km.keymap_items.new('mesh.change_length', 'LEFTMOUSE', 'CLICK', shift=True)
+    # if kc:
+    #     km = kc.keymaps.new(name="3D View", space_type="VIEW_3D")
+    #     kmi = km.keymap_items.new('mesh.change_length', 'LEFTMOUSE', 'CLICK', shift=True)
         # Could pass settings to operator properties here
         # kmi.properties.mode = (False, True, False)
 
@@ -1659,7 +1705,6 @@ def register():
 
     bpy.types.Object.presets_length = CollectionProperty(type=PRESETS_presets_length_Collection)
     bpy.types.Object.presets_length_index = IntProperty()
-
 
 def unregister():
 
