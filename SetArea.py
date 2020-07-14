@@ -30,6 +30,79 @@ class SetArea(bpy.types.Operator):
     def execute(self, context):
 
         area = context.window_manager.setprecisemesh.area
+        data_block_3 = bpy.context.window_manager.setprecisemesh.data_block_3
+        script_input_3 = bpy.context.scene.script_input_3
+        length_unit = bpy.context.scene.unit_settings.length_unit
+
+        if script_input_3 == 1:
+
+            """Replace syntax"""
+            data_block_3 = data_block_3.replace(',', '.')
+            data_block_3 = data_block_3.replace('^', '**')
+            data_block_3 = data_block_3.replace(':', '/')
+            data_block_3 = data_block_3.replace('unit', str(area))
+            data_block_3 = data_block_3.replace('u', str(area))
+            # print(   re.search(r"\((\w+)\)", data_block_2)   )
+
+            # data_block_2 = data_block_2.replace( 'psqrt(r(A-Za-z0-9)' , 'sqrt(r(A-Za-z0-9_])')
+
+            try:
+                eval(data_block_3)
+            except SyntaxError:
+                area = bpy.context.window_manager.setprecisemesh.area
+            else:
+                area = eval(data_block_3)
+                area = area / bpy.context.scene.unit_settings.scale_length
+
+                """Units Synchronization"""
+                if  bpy.context.scene.unit_settings.system == 'METRIC' and length_unit == 'ADAPTIVE':
+                    unit = area
+                    bpy.context.window_manager.setprecisemesh.area =  unit
+                    area = unit
+                elif length_unit == "MICROMETERS":
+                    unit = area / 1000000
+                    bpy.context.window_manager.setprecisemesh.area =  unit
+                    area = unit
+                elif length_unit == "MILLIMETERS":
+                    unit = area / 1000
+                    bpy.context.window_manager.setprecisemesh.area =  unit
+                    area = unit
+                elif length_unit == "CENTIMETERS":
+                    unit = area / 100
+                    bpy.context.window_manager.setprecisemesh.area =  unit
+                    area = unit
+                elif length_unit == "METERS":
+                    unit = area
+                    bpy.context.window_manager.setprecisemesh.area =  unit
+                    area = unit
+                elif length_unit == "KILOMETERS":
+                    unit = area * 1000
+                    bpy.context.window_manager.setprecisemesh.area =  unit
+                    area = unit
+                
+
+                if bpy.context.scene.unit_settings.system == 'IMPERIAL'and length_unit == 'ADAPTIVE':
+                    unit = area / 3.2808398950131
+                    bpy.context.window_manager.setprecisemesh.area =  unit
+                    area = unit
+                if length_unit == 'MILES':
+                    unit = area  / 0.00062137119223733
+                    bpy.context.window_manager.setprecisemesh.area =  unit
+                    area = unit
+                elif length_unit == 'FEET':
+                    unit = area / 3.2808398950131
+                    bpy.context.window_manager.setprecisemesh.area =  unit
+                    area = unit
+                elif length_unit == 'INCHES':
+                    unit = area / 39.370078740157
+                    bpy.context.window_manager.setprecisemesh.area =  unit
+                    area = unit
+                elif length_unit == 'THOU':
+                    unit = area / 39.370078740157 / 1000
+                    bpy.context.window_manager.setprecisemesh.area =  unit
+                    area = unit
+        else:
+            area = bpy.context.window_manager.setprecisemesh.area
 
         obj = bpy.context.edit_object
         me = obj.data
