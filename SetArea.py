@@ -51,61 +51,83 @@ class SetArea(bpy.types.Operator):
                 self.report({war}, text)
                 return{"FINISHED"}
             else:
-                print("\n")
-                print("\n")
+                
                 selected_edges_faces_info = {}
                 linked_faces = {}
+                linked_faces_all = []
                 for i in range(0, len(selected_edges) ):
-                    # print(i)
+                    linked_faces[i] = []
                     for k in range(0, len(selected_edges[i].link_faces) ):
-                        linked_faces[i] = []
-                        # linked_faces[i].append( selected_edges[i].link_faces[k] )
                         linked_faces[i].append( selected_edges[i].link_faces[k] )
+                        linked_faces_all.append( selected_edges[i].link_faces[k] )
 
-                    print(linked_faces[i])
-                    # print(selected_edges[i].link_faces[0])
-                    # print(selected_edges[i].link_faces[1])
-                    # selected_edges_faces_info[i] = selected_edges[i].link_faces
+                for i in range(0, len(linked_faces_all) -1):
 
-                    # print(len(selected_edges_faces_info[i]))
-                    # print(selected_edges_faces_info[i])
-                    # print(selected_edges)
+                    for j in range(i+1, len(linked_faces_all) ):
 
-                    # print(selected_edges_faces_info[i][k], '123123123', k)
+                        if linked_faces_all[i].index == linked_faces_all[j].index:
+                            needed_face = linked_faces_all[i]
+
+                            # needed_face = needed_face.calc_area()
+                            # needed_face = needed_face.calc_center_median()
+
+                            # print(needed_face, "need")
+                            # print("Yes")
+                            break
 
 
-                # for i in range(-1, len(selected_edges) - 2):
-
-                #     linked_faces[i+1] = list( set(linked_faces[i]) & set(linked_faces[i+1]) )
-
-                #     print(linked_faces[i])
-
-                # for i in range(-1, len(linked_faces) - 2):
-                #     for k in range (i-1, len(linked_faces) - 2):
-                #         if linked_faces[i].index == linked_faces[i+1].index:
-                #             print("Yes")
-
-                # print(array[len(selected_edges)-1])
+                # print(edges_of_needed_face)
 
                 
-                    
+
+
+                # for j in range(0, len(linked_faces) - 1):
+                #     for i in range(0, len(linked_faces[j]) ):
+                #         for l in range (0, len(linked_faces[j+1]) ):
+                #             for k in range (0, len(linked_faces[l]) ):
+                                # print("\n")
+                                # print(linked_faces[j][i])
+                                # print(linked_faces[j+1][k])
 
 
             pass
 
         if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) != 0:
 
-            pass
+            if len(selected_faces)>1:
+                text = "You need to select vertex/edge/face"
+                war = "ERROR"
+                self.report({war}, text)
+                return{"FINISHED"}
+            else:
+                needed_face = selected_faces[0]
 
-        
+        area = needed_face.calc_area()
+        center_median = bpy.context.active_object.matrix_world @ needed_face.calc_center_median()
+                
+        print(area)
+        print(center_median)
 
+        # Create Matrix
+        mat_loc =  mathutils.Matrix.Translation(( 0.0 ,  0.0 ,  0.0 ))        
+        # mat_loc =  mathutils.Matrix.Translation(( center_median))        
+        mat_sca =  mathutils.Matrix.Scale( 1.0 ,  4 ,  ( 0.0 ,  0.0 ,  1.0 ))
+        mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
 
-        # bmesh.ops.scale(
-        #     bm,
-        #     vec = mathutils.Vector( ( 1, 1, 1/length )),
-        #     verts=[v for v in bm.verts if v.select],
-        #     space=S
-        #     )
+        mat_out =  mat_loc @  mat_rot @  mat_sca
+
+        S = mat_out
+
+        S.translation -= center_median
+
+        bmesh.ops.scale(
+            bm,
+            vec = mathutils.Vector( (2,2,2) ),
+            verts=[v for v in bm.verts if v.select],
+            space=S
+            )
+
+        bmesh.update_edit_mesh(me, True)
 
         return {"FINISHED"}
 

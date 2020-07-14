@@ -794,7 +794,8 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
     def draw(self, context):
         
         self.draw_angle(context)
-        self.draw_length(context)   
+        self.draw_length(context)
+        self.draw_area(context)
 
        
     def draw_angle(self, context):
@@ -1073,6 +1074,101 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             # col_top.prop(ob, "lengthinput")
             # col_top.operator(bpy.ops.ui.eyedropper_id.idname())
             # col_top.operator(bpy.ops.wm.url_open(url = "https://github.com/rovh/Set-Precise-Mesh"))
+
+    def draw_area(self, context):
+        
+        layout = self.layout
+
+        scene = context.scene
+        sc = scene
+        ob = context.object
+
+        w_m = context.window_manager.setprecisemesh
+
+        # Get values
+        bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
+        bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
+
+        script_input = bpy.data.scenes[bpy.context.scene.name_full].script_input
+        script_input_2 = bpy.data.scenes[bpy.context.scene.name_full].script_input_2
+
+        col = layout.column(align= True )
+        
+        split_left = col.split(factor=0.55, align=True)
+        split_left.scale_y = 1.2
+        
+        split_left.operator("mesh.change_length",icon="FULLSCREEN_ENTER", text = "Set Area").plus_length = 0
+
+        split_center = split_left.split(factor=0.43, align=True)
+
+        split_center.operator("mesh.change_length",icon="ADD", text = "").plus_length = 1
+            # 
+        split_right = split_center.split(factor=0.8, align=True)
+
+        split_right.operator("mesh.change_length", icon="REMOVE", text = "").plus_length = -1
+
+        # split_right = split_center.split(factor=0.9, align=True)
+
+        if sc.bool_panel_arrow2:
+            split_right.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
+        else:
+            split_right.prop(sc, "bool_panel_arrow2", text="", icon='RIGHTARROW')
+
+        if sc.bool_panel_arrow2:            
+            box = col.column(align=True).box().column()            
+            col_top = box.column(align=True)
+
+
+            # col_top.prop(w_m, "length") 
+
+            row = col_top.row(align = True)
+            row.prop(w_m, "length", text = "")
+
+            sub_row = row.row(align = 1)
+            sub_row.label(icon="BLANK1")
+            sub_row.scale_x = 0.1
+            
+            sub_row = row.row(align = 1)
+            sub_row.operator("mesh.change_length",icon="EYEDROPPER", text = "").eyedropper = True
+            sub_row.scale_x = 1.3
+            # sub_row.scale_x = .13
+            # sub_row.ui_units_x = 1.3
+            
+
+
+            row = row.row(align = False)
+            row.scale_x = 1.2
+            row.prop(sc, "script_input_2", text = "", icon = "FILE_SCRIPT")
+
+            if script_input_2:   
+                col_top.prop(w_m, "data_block_2", text = "") 
+
+
+
+            space = col_top.row(align = 1)
+            space.label(icon="BLANK1")
+            space.scale_y = 0.1
+
+
+
+            # row = col_top.row(align = 1)
+
+            # row_left = row.row(align = 0)
+            # row_left.prop(w_m, "lengthbool")
+            # row_left.scale_x = 1.2
+
+
+
+            # depress = bpy.context.window_manager.setprecisemesh.draw_length_line
+            # row_center = row.row(align = 0)
+            # row_center.operator("view3d.modal_operator_setprecisemesh_draw_length", text="", icon = "RESTRICT_VIEW_OFF", depress=depress)
+            # row_center.scale_x = 1.3
+
+
+
+            # row_right = row.row(align = 0)
+            # row_right.operator("wm.header_length_simulation_setprecisemesh", text=" Distance Simulation", icon = "CON_TRACKTO")
+            # row_right.scale_x = 0.14
 
 """Preferences Panel and Props"""
 class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
