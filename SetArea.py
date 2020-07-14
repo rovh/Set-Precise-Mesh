@@ -16,7 +16,7 @@ class SetArea(bpy.types.Operator):
     # bl_options = {'REGISTER', 'UNDO'}
     bl_options = {'UNDO'}
 
-    plus_length: bpy.props.IntProperty(options = {"SKIP_SAVE"}) 
+    plus_area: bpy.props.IntProperty(options = {"SKIP_SAVE"}) 
     eyedropper: bpy.props.BoolProperty(options = {"SKIP_SAVE"})
     draw:       bpy.props.BoolProperty(options = {"SKIP_SAVE"})
     lengthbool_SKIP_SAVE: bpy.props.BoolProperty(options = {"SKIP_SAVE"})
@@ -116,7 +116,7 @@ class SetArea(bpy.types.Operator):
         if self.eyedropper == True:
             context.window_manager.setprecisemesh.area = area_true
             return{"FINISHED"}
-            
+
         center_median = bpy.context.active_object.matrix_world @ needed_face.calc_center_median()
 
 
@@ -130,8 +130,15 @@ class SetArea(bpy.types.Operator):
         S = mat_out
         S.translation -= center_median
 
-        scale_factor_area = area / area_true
+        if self.plus_area == 0:
+            scale_factor_area = area / area_true
+        elif self.plus_area == 1:
+            scale_factor_area = (area + area_true) / area_true
+        elif self.plus_area == -1:
+            scale_factor_area = (area_true - area)  / area_true
+
         scale_factor_area = math.sqrt(scale_factor_area)
+
 
         bmesh.ops.scale(
             bm,

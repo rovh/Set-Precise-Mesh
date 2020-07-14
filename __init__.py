@@ -1120,33 +1120,35 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
         # Get values
         bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
         bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
+        bool_panel_arrow3 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow3
 
         script_input = bpy.data.scenes[bpy.context.scene.name_full].script_input
         script_input_2 = bpy.data.scenes[bpy.context.scene.name_full].script_input_2
+        script_input_3 = bpy.data.scenes[bpy.context.scene.name_full].script_input_3
 
         col = layout.column(align= True )
         
         split_left = col.split(factor=0.55, align=True)
         split_left.scale_y = 1.2
         
-        split_left.operator("mesh.change_area",icon="FULLSCREEN_ENTER", text = "Set Area").plus_length = 0
+        split_left.operator("mesh.change_area",icon="FULLSCREEN_ENTER", text = "Set Area").plus_area = 0
 
         split_center = split_left.split(factor=0.43, align=True)
 
-        split_center.operator("mesh.change_area",icon="ADD", text = "").plus_length = 1
+        split_center.operator("mesh.change_area",icon="ADD", text = "").plus_area = 1
             
         split_right = split_center.split(factor=0.8, align=True)
 
-        split_right.operator("mesh.change_area", icon="REMOVE", text = "").plus_length = -1
+        split_right.operator("mesh.change_area", icon="REMOVE", text = "").plus_area = -1
 
-        # split_right = split_center.split(factor=0.9, align=True)
 
-        if sc.bool_panel_arrow2:
-            split_right.prop(sc, "bool_panel_arrow2", text="", icon='DOWNARROW_HLT')
+
+        if sc.bool_panel_arrow3:
+            split_right.prop(sc, "bool_panel_arrow3", text="", icon='DOWNARROW_HLT')
         else:
-            split_right.prop(sc, "bool_panel_arrow2", text="", icon='RIGHTARROW')
+            split_right.prop(sc, "bool_panel_arrow3", text="", icon='RIGHTARROW')
 
-        if sc.bool_panel_arrow2:            
+        if sc.bool_panel_arrow3:            
             box = col.column(align=True).box().column()            
             col_top = box.column(align=True)
 
@@ -1170,10 +1172,10 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
 
             row = row.row(align = False)
             row.scale_x = 1.2
-            row.prop(sc, "script_input_2", text = "", icon = "FILE_SCRIPT")
+            row.prop(sc, "script_input_3", text = "", icon = "FILE_SCRIPT")
 
-            if script_input_2:   
-                col_top.prop(w_m, "data_block_2", text = "") 
+            if script_input_3:   
+                col_top.prop(w_m, "data_block_3", text = "") 
 
 
 
@@ -1181,26 +1183,6 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             space.label(icon="BLANK1")
             space.scale_y = 0.1
 
-
-
-            # row = col_top.row(align = 1)
-
-            # row_left = row.row(align = 0)
-            # row_left.prop(w_m, "lengthbool")
-            # row_left.scale_x = 1.2
-
-
-
-            # depress = bpy.context.window_manager.setprecisemesh.draw_length_line
-            # row_center = row.row(align = 0)
-            # row_center.operator("view3d.modal_operator_setprecisemesh_draw_length", text="", icon = "RESTRICT_VIEW_OFF", depress=depress)
-            # row_center.scale_x = 1.3
-
-
-
-            # row_right = row.row(align = 0)
-            # row_right.operator("wm.header_length_simulation_setprecisemesh", text=" Distance Simulation", icon = "CON_TRACKTO")
-            # row_right.scale_x = 0.14
 
 """Preferences Panel and Props"""
 class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
@@ -1348,6 +1330,7 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         default=False,
     )
 
+
     area: bpy.props.FloatProperty(
         name="Area",
         description="Area of the face",
@@ -1356,6 +1339,7 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         unit='LENGTH',
         precision = 6,
     )
+
 
     data_block: bpy.props.StringProperty(
         name = "Number input",
@@ -1367,6 +1351,13 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         description="\n u = Length\
                      \n unit = Length" ,
     )
+    data_block_3: bpy.props.StringProperty(
+        name = "Number input",
+        description="\n u = Area\
+                     \n unit = Area",
+    )
+
+
     description_projection_type = [
         #description_0
         "Local Matrix. It uses the matrix of the editing object and projects the selected vertices onto it" ,
@@ -1661,12 +1652,22 @@ def register():
         description="",
         default=True,
     )
+    bpy.types.Scene.bool_panel_arrow3 = bpy.props.BoolProperty(
+        name="bool_panel_arrow3",
+        description="",
+        default=True,
+    )
     bpy.types.Scene.script_input = bpy.props.BoolProperty(
             name="Advanced input",
             description="",
             default=False,
     )
     bpy.types.Scene.script_input_2 = bpy.props.BoolProperty(
+            name="Advanced input",
+            description="",
+            default=False,
+    )
+    bpy.types.Scene.script_input_3 = bpy.props.BoolProperty(
             name="Advanced input",
             description="",
             default=False,
@@ -1723,8 +1724,10 @@ def unregister():
 
     del bpy.types.Scene.bool_panel_arrow
     del bpy.types.Scene.bool_panel_arrow2
+    del bpy.types.Scene.bool_panel_arrow3
     del bpy.types.Scene.script_input
     del bpy.types.Scene.script_input_2
+    del bpy.types.Scene.script_input_3
     del bpy.types.Scene.bool_warning
     del bpy.types.Scene.remember_length
 
