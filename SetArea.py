@@ -28,21 +28,61 @@ class SetArea(bpy.types.Operator):
 
     def execute(self, context):
 
-        selected_verts = [verts for verts in bm.verts if verts.select]
-        selected_edges = [edge for edge in bm.edges if edge.select]
-        selected_faces = [face for face in bm.faces if face.select]
-
         obj = bpy.context.edit_object
         me = obj.data
         bm = bmesh.from_edit_mesh(me)
 
+        selected_verts = [verts for verts in bm.verts if verts.select]
+        selected_edges = [edge for edge in bm.edges if edge.select]
+        selected_faces = [face for face in bm.faces if face.select]
 
-        bmesh.ops.scale(
-            bm,
-            vec = mathutils.Vector( ( 1, 1, 1/length )),
-            verts=[v for v in bm.verts if v.select],
-            space=S
-            )
+        if len(selected_verts) == 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
+
+            text = "You need to select vertex/edge/face"
+            war = "ERROR"
+            self.report({war}, text)
+            return{"FINISHED"}
+
+        if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) == 0:
+
+            if len(selected_edges) <2:
+                text = "You need to select vertex/edge/face"
+                war = "ERROR"
+                self.report({war}, text)
+                return{"FINISHED"}
+            else:
+                array = {}
+                for i in range(-1, len(selected_edges) - 1):
+
+                    array[i] = selected_edges[i].link_faces
+
+                for i in range(-1, len(selected_edges) - 2):
+
+                    array[i+1] = list( set(array[i]) & set(array[i+1]) )
+
+                    print(i)
+
+                print(array[len(selected_edges)-1])
+
+                
+                    
+
+
+            pass
+
+        if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) != 0:
+
+            pass
+
+        
+
+
+        # bmesh.ops.scale(
+        #     bm,
+        #     vec = mathutils.Vector( ( 1, 1, 1/length )),
+        #     verts=[v for v in bm.verts if v.select],
+        #     space=S
+        #     )
 
         return {"FINISHED"}
 
