@@ -51,18 +51,41 @@ class SetArea(bpy.types.Operator):
                 self.report({war}, text)
                 return{"FINISHED"}
             else:
-                array = {}
-                for i in range(-1, len(selected_edges) - 1):
+                print("\n")
+                print("\n")
+                selected_edges_faces_info = {}
+                linked_faces = {}
+                for i in range(0, len(selected_edges) ):
+                    # print(i)
+                    for k in range(0, len(selected_edges[i].link_faces) ):
+                        linked_faces[i] = []
+                        # linked_faces[i].append( selected_edges[i].link_faces[k] )
+                        linked_faces[i].append( selected_edges[i].link_faces[k] )
 
-                    array[i] = selected_edges[i].link_faces
+                    print(linked_faces[i])
+                    # print(selected_edges[i].link_faces[0])
+                    # print(selected_edges[i].link_faces[1])
+                    # selected_edges_faces_info[i] = selected_edges[i].link_faces
 
-                for i in range(-1, len(selected_edges) - 2):
+                    # print(len(selected_edges_faces_info[i]))
+                    # print(selected_edges_faces_info[i])
+                    # print(selected_edges)
 
-                    array[i+1] = list( set(array[i]) & set(array[i+1]) )
+                    # print(selected_edges_faces_info[i][k], '123123123', k)
 
-                    print(i)
 
-                print(array[len(selected_edges)-1])
+                # for i in range(-1, len(selected_edges) - 2):
+
+                #     linked_faces[i+1] = list( set(linked_faces[i]) & set(linked_faces[i+1]) )
+
+                #     print(linked_faces[i])
+
+                # for i in range(-1, len(linked_faces) - 2):
+                #     for k in range (i-1, len(linked_faces) - 2):
+                #         if linked_faces[i].index == linked_faces[i+1].index:
+                #             print("Yes")
+
+                # print(array[len(selected_edges)-1])
 
                 
                     
