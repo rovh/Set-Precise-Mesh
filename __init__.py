@@ -1341,6 +1341,7 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
     )
 
 
+
     data_block: bpy.props.StringProperty(
         name = "Number input",
         description="\n u = Angle\
@@ -1463,7 +1464,7 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
     )
     length_display_number:         bpy.props.FloatProperty      (options = {"SKIP_SAVE"})
     length_display_stop:           bpy.props.BoolProperty       (options = {"SKIP_SAVE"})
-    draw_length_line:                   bpy.props.BoolProperty      ()
+    draw_length_line:              bpy.props.BoolProperty       ()
     length_display_coordinate_1:   bpy.props.FloatVectorProperty(options = {"SKIP_SAVE"})
     length_display_coordinate_2:   bpy.props.FloatVectorProperty(options = {"SKIP_SAVE"})
 
@@ -1483,7 +1484,6 @@ class Dupli (SetPresiceMesh_Panel):
     bl_label = "Set Precise Mesh /CAD"
 
     # bl_order = 1
- 
 class Dupli2 (SetPresiceMesh_Panel):
     bl_label = "Set Presice Mesh2"
     bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh2"
@@ -1492,7 +1492,6 @@ class Dupli2 (SetPresiceMesh_Panel):
     bl_category = "Item"
     bl_label = "Set Precise Mesh /CAD"
     # bl_order = 1
-    
 class Dupli3 (SetPresiceMesh_Panel):
     bl_label = "Set Presice Mesh2"
     bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh3"
@@ -1525,10 +1524,12 @@ blender_classes = [
 
     SetPreciseMesh_Props,
     SetPreciseMesh_Preferences,
+
     Popup_Menu_SetPreciseMesh_Operator,
     Popup_Menu_SetPreciseMesh_SetAngle,
     Popup_Menu_SetPreciseMesh_SetLength,
     Popup_Menu_SetPreciseMesh_SetArea,
+
     Angle_Simulation_SetPreciseMesh,
     Length_Simulation_SetPreciseMesh,
 
@@ -1588,12 +1589,17 @@ classes = (
     PRESETS_FOR_PRESETS_LENGTH_OT_Rename,
     PRESETS_FOR_PRESETS_LENGTH_OT_Refresh,
 
+    PRESETS_FOR_PRESETS_AREA_MT_DisplayPresets,
+    PRESETS_FOR_PRESETS_AREA_OT_AddPreset,
+    PRESETS_FOR_PRESETS_AREA_OT_Rename,
+    PRESETS_FOR_PRESETS_AREA_OT_Refresh,
+
 
     PRESETS_FOR_PRESETS_PT_panel,
 
 
-    PRESETS_UL_items_Area,
-    PRESETS_PT_presets_List_Area,
+    # PRESETS_UL_items_Area,
+    # PRESETS_PT_presets_List_Area,
     
 
     PRESETS_UL_items_Angle,
@@ -1714,6 +1720,11 @@ def register():
 
 
     bpy.types.Scene.presets_length = CollectionProperty(type=PRESETS_presets_length_Collection)
+    bpy.types.Scene.presets_length_index = IntProperty()
+    bpy.types.Scene.presets_length_save = IntProperty()
+
+    
+    bpy.types.Scene.presets_length = CollectionProperty(type=PRESETS_presets_angle_Collection)
     bpy.types.Scene.presets_length_index = IntProperty()
     bpy.types.Scene.presets_length_save = IntProperty()
 

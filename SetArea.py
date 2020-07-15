@@ -122,12 +122,45 @@ class SetArea(bpy.types.Operator):
         selected_edges = [edge for edge in bm.edges if edge.select]
         selected_faces = [face for face in bm.faces if face.select]
 
+        elem_list = [g for g in bm.select_history]
+
+        # for g in bm.select_history:
+        #     elem_list.append(g)
+
+        # print(elem_list)
+
+        scale_direction = False
+
         if len(selected_verts) == 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
 
             text = "You need to select vertex/edge/face"
             war = "ERROR"
             self.report({war}, text)
             return{"FINISHED"}
+
+        if len(selected_verts) != 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
+            
+            # if len(selected_verts) <1:
+            #     text = "You need to select vertex/edge/face"
+            #     war = "ERROR"
+            #     self.report({war}, text)
+            #     return{"FINISHED"}
+
+            linked_faces_all = []
+
+            for i in range(0, len(selected_verts) ):
+                for k in range(0, len(selected_verts[i].link_faces) ):
+                    linked_faces_all.append( selected_verts[i].link_faces[k] )
+
+                for i in range(0, len(linked_faces_all) -1):
+                    for j in range(i+1, len(linked_faces_all) ):
+                        if linked_faces_all[i].index == linked_faces_all[j].index:
+                            needed_face = linked_faces_all[i]
+                            needed_face.select = True
+                            break
+
+            area_true = needed_face.calc_area()
+            center_median = needed_face.calc_center_median()
 
         if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) == 0:
 
@@ -136,7 +169,7 @@ class SetArea(bpy.types.Operator):
                 war = "ERROR"
                 self.report({war}, text)
                 return{"FINISHED"}
-
+        
             if len(selected_edges) == 1 and len(selected_edges[0].link_faces) == 1:
                 needed_face = selected_edges[0].link_faces[0]
                 needed_face.select = True
@@ -153,6 +186,9 @@ class SetArea(bpy.types.Operator):
                 linked_faces = {}
                 linked_faces_all = []
                 needed_face = None
+                needed_face_list = []
+                area_true = 0
+                center_median = mathutils.Vector((0,0,0))
 
                 for i in range(0, len(selected_edges) ):
                     linked_faces[i] = []
@@ -163,9 +199,15 @@ class SetArea(bpy.types.Operator):
                 for i in range(0, len(linked_faces_all) -1):
                     for j in range(i+1, len(linked_faces_all) ):
                         if linked_faces_all[i].index == linked_faces_all[j].index:
+
                             needed_face = linked_faces_all[i]
+                            needed_face_list.append(linked_faces_all[i])
+                            area_true = needed_face.calc_area() + area_true
+                            center_median = needed_face.calc_center_median() + center_median
+
                             needed_face.select = True
-                            break
+
+                center_median = center_median / len(needed_face_list)
 
                 if needed_face == None:
                     text = "Face has not been found"
@@ -174,8 +216,8 @@ class SetArea(bpy.types.Operator):
                     return{"FINISHED"}
                             
                 # needed_face.select = True
-                area_true = needed_face.calc_area()
-                center_median = needed_face.calc_center_median()
+                # area_true = needed_face.calc_area()
+                # center_median = needed_face.calc_center_median()
 
                 # print(edges_of_needed_face)
 
@@ -208,7 +250,6 @@ class SetArea(bpy.types.Operator):
                 area_true = needed_face.calc_area()
                 center_median = needed_face.calc_center_median()
 
-
         if self.eyedropper == True:
             context.window_manager.setprecisemesh.area = area_true
             return{"FINISHED"}
@@ -223,6 +264,7 @@ class SetArea(bpy.types.Operator):
         S = mat_out
         S.translation -= center_median
 
+
         if self.plus_area == 0:
             scale_factor_area = area / area_true
         elif self.plus_area == 1:
@@ -232,13 +274,76 @@ class SetArea(bpy.types.Operator):
 
         scale_factor_area = math.sqrt(scale_factor_area)
 
-        bmesh.ops.scale(
-            bm,
-            vec = mathutils.Vector( (scale_factor_area, scale_factor_area, scale_factor_area) ),
-            verts=[v for v in bm.verts if v.select],
-            space=S
-            )
-        bmesh.update_edit_mesh(me, True)
+        if scale_direction == True:
+
+            elem_list_verts = []
+
+            for i in range(0, len(elem_list)):
+                for k in range(0, len(elem_list[i].verts)):
+                    elem_list_verts.append(elem_list[i].verts[k])
+
+            edges_of_needed_face_list = []
+            unselected_edges_of_needed_face_list = []
+            selected_edges_of_needed_face_list = []
+            for i in range(0, len(needed_face.edges)):
+                edges_of_needed_face_list.append(needed_face.edges[i])
+                if needed_face.edges[i] in elem_list:
+                    selected_edges_of_needed_face_list.append(needed_face.edges[i])
+                else:
+                    unselected_edges_of_needed_face_list.append(needed_face.edges[i])
+            
+            # print(selected_edges_of_needed_face_list)
+            # print(unselected_edges_of_needed_face_list)
+
+            unselected_edges_of_needed_face_list
+
+            vert_diagonal_1 = elem_list_verts[0]
+
+            for i in range(0, len(elem_list_verts)):
+                if vert_diagonal_1.link_edges in elem_list_verts[i].link_edges:
+                    pass
+                else:
+                    vert_diagonal_2 = elem_list_verts[i]
+
+            verts_tri_1 = []
+            verts_tri_2 = []
+            # verts_tri_1.append(vert_diagonal_1)
+            # verts_tri_2.append(vert_diagonal_2)
+            for i in range(0, len(elem_list_verts)):
+                if vert_diagonal_1.link_edges in elem_list_verts[i].link_edges:
+                    verts_tri_1.append(elem_list_verts[i])
+                if vert_diagonal_2.link_edges in elem_list_verts[i].link_edges:
+                    verts_tri_2.append(elem_list_verts[i])
+
+            print(verts_tri_1)
+            print(verts_tri_2)
+
+
+
+            # print(elem_list_verts)
+            # print(vert_diagonal_2)
+
+
+            needed_face
+
+
+            pass
+
+        else:
+
+            # scale_factor_area_Vector = (x_area, y_area, z_area)
+            scale_factor_area_Vector = (scale_factor_area, scale_factor_area, scale_factor_area)
+            # scale_factor_area_Vector = (1, scale_factor_area **2, 1)
+            # scale_factor_area_Vector = (scale_factor_area **2, 1, 1)
+            # scale_factor_area_Vector = (1,1,scale_factor_area **2)
+
+            bmesh.ops.scale(
+                bm,
+                vec = mathutils.Vector( scale_factor_area_Vector ),
+                verts=[v for v in bm.verts if v.select],
+                space=S
+                )
+            bmesh.update_edit_mesh(me, True)
 
         # if len(selected_faces) == 1:
         #     needed_face.select = False

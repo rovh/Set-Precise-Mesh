@@ -88,7 +88,6 @@ class PRESETS_OT_Length_actions(Operator):
 
 
         return {"FINISHED"}
-
 class PRESETS_OT_Length_actions_add(Operator):
     """Move items up and down, add and remove"""
     bl_idname = "presets_length.list_action_add"
@@ -156,7 +155,6 @@ class PRESETS_OT_Length_actions_add(Operator):
             self.report({'INFO'}, "Nothing selected in the Viewport")
 
         return {"FINISHED"}
-
 class PRESETS_OT_Length_actions_refresh(Operator):
     """Move items up and down, add and remove"""
     bl_idname = "presets_length.list_action_refresh"
@@ -209,7 +207,6 @@ class PRESETS_OT_Length_actions_refresh(Operator):
             self.report({'INFO'}, "Nothing selected in the Viewport")
 
         return {"FINISHED"}
-
 class PRESETS_OT_Length_actions_import(Operator):
     """Move items up and down, add and remove"""
     bl_idname = "presets_length.list_action_import"
@@ -262,7 +259,6 @@ class PRESETS_OT_Length_actions_import(Operator):
             self.report({'INFO'}, "Nothing selected in the Viewport")
 
         return {"FINISHED"}
-
 class PRESETS_OT_Length_Rename(Operator):
     """Clear all items of the list"""
     bl_idname = "presets_length.rename"
@@ -319,7 +315,6 @@ class PRESETS_OT_Length_Rename(Operator):
 
 
         return {"FINISHED"}
-
 class PRESETS_OT_Length_Change_unit(Operator):
     """Clear all items of the list"""
     bl_idname = "presets_length.change_unit"
@@ -376,7 +371,6 @@ class PRESETS_OT_Length_Change_unit(Operator):
 
 
         return {"FINISHED"}
-
 class PRESETS_OT_Length_clearList(Operator):
     """Clear all items of the list"""
     bl_idname = "presets_length.clear_list"
@@ -505,7 +499,6 @@ class PRESETS_OT_Angle_actions(Operator):
         #         self.report({'INFO'}, "Nothing selected in the Viewport")
 
         return {"FINISHED"}
-
 class PRESETS_OT_Angle_actions_add(Operator):
     """Move items up and down, add and remove"""
     bl_idname = "presets_angle.list_action_add"
@@ -572,7 +565,6 @@ class PRESETS_OT_Angle_actions_add(Operator):
             self.report({'INFO'}, "Nothing selected in the Viewport")
 
         return {"FINISHED"}
-
 class PRESETS_OT_Angle_actions_refresh(Operator):
     """Move items up and down, add and remove"""
     bl_idname = "presets_angle.list_action_refresh"
@@ -625,7 +617,6 @@ class PRESETS_OT_Angle_actions_refresh(Operator):
             self.report({'INFO'}, "Nothing selected in the Viewport")
 
         return {"FINISHED"}
-
 class PRESETS_OT_Angle_actions_import(Operator):
     """Move items up and down, add and remove"""
     bl_idname = "presets_angle.list_action_import"
@@ -678,7 +669,6 @@ class PRESETS_OT_Angle_actions_import(Operator):
             self.report({'INFO'}, "Nothing selected in the Viewport")
 
         return {"FINISHED"}
-
 class PRESETS_OT_Angle_Rename(Operator):
     """Clear all items of the list"""
     bl_idname = "presets_angle.rename"
@@ -733,7 +723,6 @@ class PRESETS_OT_Angle_Rename(Operator):
 
 
         return {"FINISHED"}
-
 class PRESETS_OT_Angle_clearList(Operator):
     """Clear all items of the list"""
     bl_idname = "presets_angle.clear_list"
@@ -761,7 +750,7 @@ class PRESETS_OT_Angle_clearList(Operator):
 
 class PRESETS_OT_Area_actions(Operator):
     """Move items up and down, add and remove"""
-    bl_idname = "presets_length.list_action"
+    bl_idname = "presets_area.list_action"
     bl_label = "Actions"
     bl_description = "Move items up and down or remove"
     bl_options = {'REGISTER'}
@@ -777,28 +766,28 @@ class PRESETS_OT_Area_actions(Operator):
 
     def invoke(self, context, event):
         scn = context.scene
-        idx = scn.presets_length_index
+        idx = scn.presets_area_index
 
         try:
-            item = scn.presets_length[idx]
+            item = scn.presets_area[idx]
         except IndexError:
             pass
         else:
-            if self.action == 'DOWN' and idx < len(scn.presets_length) - 1:
-                # item_next = scn.presets_length[idx+1].name
-                scn.presets_length.move(idx, idx+1)
-                scn.presets_length_index += 1
+            if self.action == 'DOWN' and idx < len(scn.presets_area) - 1:
+                # item_next = scn.presets_area[idx+1].name
+                scn.presets_area.move(idx, idx+1)
+                scn.presets_area_index += 1
 
             elif self.action == 'UP' and idx >= 1:
-                # item_prev = scn.presets_length[idx-1].name
-                scn.presets_length.move(idx, idx-1)
-                scn.presets_length_index -= 1
+                # item_prev = scn.presets_area[idx-1].name
+                scn.presets_area.move(idx, idx-1)
+                scn.presets_area_index -= 1
             elif self.action == 'REMOVE':
-                # info = 'Item "%s" removed from list' % (scn.presets_length[idx].name)
-                scn.presets_length_index -= 1
-                scn.presets_length.remove(idx)
+                # info = 'Item "%s" removed from list' % (scn.presets_area[idx].name)
+                scn.presets_area_index -= 1
+                scn.presets_area.remove(idx)
 
-            # bpy.context.scene.presets_length_save = 1
+            # bpy.context.scene.presets_area_save = 1
 
         # if self.action == 'ADD':
         #     if context.object:
@@ -810,27 +799,26 @@ class PRESETS_OT_Area_actions(Operator):
                 
         #         # def draw(self, context):
 
-        #         # idx = context.scene.presets_length_index
-        #         # scn = bpy.context.scene.presets_length[idx]
+        #         # idx = context.scene.presets_area_index
+        #         # scn = bpy.context.scene.presets_area[idx]
 
-        #         item = scn.presets_length.add()
+        #         item = scn.presets_area.add()
         #         # ret(self)
         #         # bpy.ops.wm.menu_setprecisemesh_operator_2("INVOKE_DEFAULT")
-        #         # item.name = bpy.context.scene.presets_length[idx].name
+        #         # item.name = bpy.context.scene.presets_area[idx].name
         #         item.name = context.object.name
         #         item.obj_type = context.object.type
-        #         item.obj_id = len(scn.presets_length)
-        #         item.unit = bpy.context.window_manager.setprecisemesh.length
-        #         scn.presets_length_index = len(scn.presets_length)-1
+        #         item.obj_id = len(scn.presets_area)
+        #         item.unit = bpy.context.window_manager.setprecisemesh.area
+        #         scn.presets_area_index = len(scn.presets_area)-1
         #     else:
         #         self.report({'INFO'}, "Nothing selected in the Viewport")
 
 
         return {"FINISHED"}
-
 class PRESETS_OT_Area_actions_add(Operator):
     """Move items up and down, add and remove"""
-    bl_idname = "presets_length.list_action_add"
+    bl_idname = "presets_area.list_action_add"
     bl_label = "Add"
     bl_description = "Add item"
     bl_options = {'REGISTER'}
@@ -840,8 +828,8 @@ class PRESETS_OT_Area_actions_add(Operator):
     name_input: StringProperty(
         name = "Name")
     unit_input: FloatProperty(
-        name="Length",
-        description="Length of the edge",
+        name="area",
+        description="area of the edge",
         default=1.0,
         step = 100.0,
         unit='LENGTH',
@@ -859,46 +847,45 @@ class PRESETS_OT_Area_actions_add(Operator):
 
 
     def invoke(self, context, event):
-        self.unit_input = bpy.context.window_manager.setprecisemesh.length
+        self.unit_input = bpy.context.window_manager.setprecisemesh.area
         return context.window_manager.invoke_props_dialog(self)
 
     def execute(self, context):
 
         scn = context.scene
-        idx = scn.presets_length_index
+        idx = scn.presets_area_index
 
         try:
-            item = scn.presets_length[idx]
+            item = scn.presets_area[idx]
         except IndexError:
             pass
             
         if bpy.context.active_object:
 
-            for i in range(-1, len(scn.presets_length) - 1):
-                if scn.presets_length[i].name == self.name_input and i != len(scn.presets_length) - 1:
+            for i in range(-1, len(scn.presets_area) - 1):
+                if scn.presets_area[i].name == self.name_input and i != len(scn.presets_area) - 1:
                     text = "A preset with this name already exists"
                     war = "WARNING"
                     self.report({war}, text)
                     break
 
-            item = scn.presets_length.add()
+            item = scn.presets_area.add()
 
             item.name = self.name_input
             item.unit = self.unit_input
 
 
-            # item.obj_id = len(scn.presets_length)
-            scn.presets_length_index = len(scn.presets_length) - 1
+            # item.obj_id = len(scn.presets_area)
+            scn.presets_area_index = len(scn.presets_area) - 1
 
-            # bpy.context.scene.presets_length_save = 1
+            # bpy.context.scene.presets_area_save = 1
         else:
             self.report({'INFO'}, "Nothing selected in the Viewport")
 
         return {"FINISHED"}
-
 class PRESETS_OT_Area_actions_refresh(Operator):
     """Move items up and down, add and remove"""
-    bl_idname = "presets_length.list_action_refresh"
+    bl_idname = "presets_area.list_action_refresh"
     bl_label = "Export"
     bl_description = "Export item"
     bl_options = {'REGISTER'}
@@ -907,19 +894,19 @@ class PRESETS_OT_Area_actions_refresh(Operator):
 
     def execute(self, context):
 
-        bpy.context.scene.presets_length_index = self.my_index
+        bpy.context.scene.presets_area_index = self.my_index
 
         scn = context.scene
-        idx = scn.presets_length_index
+        idx = scn.presets_area_index
 
         try:
-            item = scn.presets_length[idx]
+            item = scn.presets_area[idx]
         except IndexError:
             pass
             
         if bpy.context.active_object:
     
-            bpy.context.window_manager.setprecisemesh.length = item.unit
+            bpy.context.window_manager.setprecisemesh.area = item.unit
 
             # bpy.context.region.tag_redraw()
             # context.area.tag_redraw()
@@ -948,10 +935,9 @@ class PRESETS_OT_Area_actions_refresh(Operator):
             self.report({'INFO'}, "Nothing selected in the Viewport")
 
         return {"FINISHED"}
-
 class PRESETS_OT_Area_actions_import(Operator):
     """Move items up and down, add and remove"""
-    bl_idname = "presets_length.list_action_import"
+    bl_idname = "presets_area.list_action_import"
     bl_label = "Import"
     bl_description = "Import item"
     bl_options = {'REGISTER'}
@@ -961,16 +947,16 @@ class PRESETS_OT_Area_actions_import(Operator):
     def execute(self, context):
 
         scn = context.scene
-        idx = scn.presets_length_index
+        idx = scn.presets_area_index
 
         try:
-            item = scn.presets_length[self.my_index]
+            item = scn.presets_area[self.my_index]
         except IndexError:
             pass
             
         if bpy.context.active_object:
     
-            item.unit = bpy.context.window_manager.setprecisemesh.length
+            item.unit = bpy.context.window_manager.setprecisemesh.area
 
             # bpy.context.region.tag_redraw()
             # context.area.tag_redraw()
@@ -1001,10 +987,9 @@ class PRESETS_OT_Area_actions_import(Operator):
             self.report({'INFO'}, "Nothing selected in the Viewport")
 
         return {"FINISHED"}
-
 class PRESETS_OT_Area_Rename(Operator):
     """Clear all items of the list"""
-    bl_idname = "presets_length.rename"
+    bl_idname = "presets_area.rename"
     bl_label = "Rename"
     bl_description = "Rename item"
     bl_options = {'INTERNAL'}
@@ -1021,7 +1006,7 @@ class PRESETS_OT_Area_Rename(Operator):
         scn = context.scene
 
         try:
-            item = scn.presets_length[self.my_index]
+            item = scn.presets_area[self.my_index]
         except IndexError:
             pass
 
@@ -1036,14 +1021,14 @@ class PRESETS_OT_Area_Rename(Operator):
         scn = context.scene
 
         try:
-            item = scn.presets_length[self.my_index]
+            item = scn.presets_area[self.my_index]
         except IndexError:
             pass
 
         if bpy.context.active_object:
 
-            for i in range(-1, len(scn.presets_length) - 1):
-                if scn.presets_length[i].name == self.name_input and i != self.my_index:
+            for i in range(-1, len(scn.presets_area) - 1):
+                if scn.presets_area[i].name == self.name_input and i != self.my_index:
                     text = "A preset with this name already exists"
                     war = "WARNING"
                     self.report({war}, text)
@@ -1051,17 +1036,16 @@ class PRESETS_OT_Area_Rename(Operator):
             
             item.name = self.name_input
 
-            # bpy.context.scene.presets_length_save = 1
+            # bpy.context.scene.presets_area_save = 1
         else:
             self.report({'INFO'}, "Nothing selected in the Viewport")
 
 
 
         return {"FINISHED"}
-
 class PRESETS_OT_Area_Change_unit(Operator):
     """Clear all items of the list"""
-    bl_idname = "presets_length.change_unit"
+    bl_idname = "presets_area.change_unit"
     bl_label = "Change unit"
     bl_description = "Rename item"
     bl_options = {'INTERNAL'}
@@ -1078,7 +1062,7 @@ class PRESETS_OT_Area_Change_unit(Operator):
         scn = context.scene
 
         try:
-            item = scn.presets_length[self.my_index]
+            item = scn.presets_area[self.my_index]
         except IndexError:
             pass
 
@@ -1093,14 +1077,14 @@ class PRESETS_OT_Area_Change_unit(Operator):
         scn = context.scene
 
         try:
-            item = scn.presets_length[self.my_index]
+            item = scn.presets_area[self.my_index]
         except IndexError:
             pass
 
         if bpy.context.active_object:
 
-            for i in range(-1, len(scn.presets_length) - 1):
-                if scn.presets_length[i].name == self.name_input and i != self.my_index:
+            for i in range(-1, len(scn.presets_area) - 1):
+                if scn.presets_area[i].name == self.name_input and i != self.my_index:
                     text = "A preset with this name already exists"
                     war = "WARNING"
                     self.report({war}, text)
@@ -1108,33 +1092,32 @@ class PRESETS_OT_Area_Change_unit(Operator):
             
             item.name = self.name_input
 
-            # bpy.context.scene.presets_length_save = 1
+            # bpy.context.scene.presets_area_save = 1
         else:
             self.report({'INFO'}, "Nothing selected in the Viewport")
 
 
 
         return {"FINISHED"}
-
 class PRESETS_OT_Area_clearList(Operator):
     """Clear all items of the list"""
-    bl_idname = "presets_length.clear_list"
+    bl_idname = "presets_area.clear_list"
     bl_label = "Clear List"
     bl_description = "Clear all items of the list"
     bl_options = {'INTERNAL'}
 
     @classmethod
     def poll(cls, context):
-        return bool(context.scene.presets_length)
+        return bool(context.scene.presets_area)
 
     def invoke(self, context, event):
         return context.window_manager.invoke_confirm(self, event)
 
     def execute(self, context):
-        if bool(context.scene.presets_length):
-            context.scene.presets_length.clear()
+        if bool(context.scene.presets_area):
+            context.scene.presets_area.clear()
             self.report({'INFO'}, "All items removed")
-            # bpy.context.scene.presets_length_save = 1
+            # bpy.context.scene.presets_area_save = 1
         else:
             self.report({'INFO'}, "Nothing to remove")
         return{'FINISHED'}
@@ -1468,6 +1451,7 @@ class PRESETS_PT_presets_List_Area(Panel):
 
 
 
+
 class PRESETS_presets_length_Collection(PropertyGroup):
 
     unit: FloatProperty(
@@ -1496,8 +1480,8 @@ class PRESETS_presets_angle_Collection(PropertyGroup):
 class PRESETS_presets_area_Collection(PropertyGroup):
 
     unit: FloatProperty(
-        name="Length",
-        description="Length of the edge",
+        name="area",
+        description="area of the edge",
         step = 100.0,
         unit='LENGTH',
         precision = 6,)
@@ -1506,13 +1490,11 @@ class PRESETS_presets_area_Collection(PropertyGroup):
 
 
 PRESET_SUBDIR = "Length"
-
 class PRESETS_FOR_PRESETS_LENGTH_MT_DisplayPresets(Menu):
     bl_label = "Preset"
     preset_subdir = PRESET_SUBDIR
     preset_operator = "script.execute_preset"
     draw = Menu.draw_preset
-
 class PRESETS_FOR_PRESETS_LENGTH_OT_AddPreset(AddPresetBase, Operator):
     bl_idname = "scene.presets_for_presets_length_add"
     bl_label = ""
@@ -1536,7 +1518,6 @@ class PRESETS_FOR_PRESETS_LENGTH_OT_AddPreset(AddPresetBase, Operator):
     ]
 
     preset_subdir = PRESET_SUBDIR
-
 class PRESETS_FOR_PRESETS_LENGTH_OT_Rename(Operator):
     """Clear all items of the list"""
     bl_idname = "presets_for_presets_length.rename"
@@ -1567,7 +1548,6 @@ class PRESETS_FOR_PRESETS_LENGTH_OT_Rename(Operator):
         # bpy.ops.eeveepresets.preset_add(name=self.name_input, remove_name=0, remove_active=False)
 
         return {"FINISHED"}
-
 class PRESETS_FOR_PRESETS_LENGTH_OT_Refresh(Operator):
     """Clear all items of the list"""
     bl_idname = "presets_for_presets_length.refresh"
@@ -1601,13 +1581,11 @@ class PRESETS_FOR_PRESETS_LENGTH_OT_Refresh(Operator):
 
 
 PRESET_SUBDIR = "Angle"
-
 class PRESETS_FOR_PRESETS_ANGLE_MT_DisplayPresets(Menu):
     bl_label = "Preset"
     preset_subdir = PRESET_SUBDIR
     preset_operator = "script.execute_preset"
     draw = Menu.draw_preset
-
 class PRESETS_FOR_PRESETS_ANGLE_OT_AddPreset(AddPresetBase, Operator):
     bl_idname = "scene.presets_for_presets_add"
     bl_label = ""
@@ -1632,7 +1610,6 @@ class PRESETS_FOR_PRESETS_ANGLE_OT_AddPreset(AddPresetBase, Operator):
     ]
 
     preset_subdir = PRESET_SUBDIR
-
 class PRESETS_FOR_PRESETS_ANGLE_OT_Rename(Operator):
     """Clear all items of the list"""
     bl_idname = "presets_for_presets.rename"
@@ -1663,7 +1640,6 @@ class PRESETS_FOR_PRESETS_ANGLE_OT_Rename(Operator):
         # bpy.ops.eeveepresets.preset_add(name=self.name_input, remove_name=0, remove_active=False)
 
         return {"FINISHED"}
-
 class PRESETS_FOR_PRESETS_ANGLE_OT_Refresh(Operator):
     """Clear all items of the list"""
     bl_idname = "presets_for_presets.refresh"
@@ -1689,6 +1665,96 @@ class PRESETS_FOR_PRESETS_ANGLE_OT_Refresh(Operator):
 
         bpy.ops.scene.presets_for_presets_add(name=self.name_input, remove_name=0, remove_active=1)
         bpy.ops.scene.presets_for_presets_add(name=self.name_input, remove_name=0, remove_active=False)
+
+        return {"FINISHED"}
+
+
+PRESET_SUBDIR = "Area"
+class PRESETS_FOR_PRESETS_AREA_MT_DisplayPresets(Menu):
+    bl_label = "Preset"
+    preset_subdir = PRESET_SUBDIR
+    preset_operator = "script.execute_preset"
+    draw = Menu.draw_preset
+class PRESETS_FOR_PRESETS_AREA_OT_AddPreset(AddPresetBase, Operator):
+    bl_idname = "scene.presets_for_presets_area_add"
+    bl_label = ""
+    preset_menu = "PRESETS_FOR_PRESETS_LENGTH_MT_DisplayPresets"
+    bl_description = "Add or remove preset"
+
+    @classmethod
+    def description(cls, context, properties):
+        if properties.remove_active == False:
+            return "Add Preset"
+        elif properties.remove_active == True:
+            return "Delete Preset"
+        else:
+            pass
+
+    preset_defines = ["scene = bpy.context.scene"]
+
+    preset_values = [
+        "scene.presets_length",
+        "scene.presets_length_index",
+    ]
+
+    preset_subdir = PRESET_SUBDIR
+class PRESETS_FOR_PRESETS_AREA_OT_Rename(Operator):
+    """Clear all items of the list"""
+    bl_idname = "presets_for_presets_area.rename"
+    bl_label = "Rename"
+    bl_description = "Rename item"
+    # bl_options = {'UNDO'}
+
+    name_input: StringProperty()
+
+    # def draw(self, context):
+    def draw(self, context):
+        layout = self.layout
+        layout.prop(self, "name_input", text = "Name")
+
+    def invoke(self, context, event):
+
+        self.name_input = bpy.types.PRESETS_FOR_PRESETS_LENGTH_MT_DisplayPresets.bl_label
+
+        return context.window_manager.invoke_props_dialog(self)
+        # return context.window_manager.invoke_popup(self)
+        # return context.window_manager.invoke_confirm(self, event)
+
+
+    def execute(self, context):
+
+        # bpy.ops.scene.presets_for_presets_add(name=self.name_input, remove_name=1, remove_active=0)
+        bpy.types.PRESETS_FOR_PRESETS_LENGTH_MT_DisplayPresets.bl_label = self.name_input
+        # bpy.ops.eeveepresets.preset_add(name=self.name_input, remove_name=0, remove_active=False)
+
+        return {"FINISHED"}
+class PRESETS_FOR_PRESETS_AREA_OT_Refresh(Operator):
+    """Clear all items of the list"""
+    bl_idname = "presets_for_presets_area.refresh"
+    bl_label = "Save"
+    bl_description = "Overwrite item"
+    # bl_options = {'UNDO'}
+
+    name_input: StringProperty()
+
+    # def draw(self, context):
+    def draw(self, context):
+        layout = self.layout
+        layout.prop(self, "name_input", text = "Name")
+
+    def invoke(self, context, event):
+        self.name_input =  bpy.types.PRESETS_FOR_PRESETS_LENGTH_MT_DisplayPresets.bl_label
+
+        return context.window_manager.invoke_props_dialog(self)
+        # return context.window_manager.invoke_popup(self)
+        # return context.window_manager.invoke_confirm(self, event)
+
+    def execute(self, context):
+
+        bpy.ops.scene.presets_for_presets_length_add(name=self.name_input, remove_name=0, remove_active=1)
+        bpy.ops.scene.presets_for_presets_length_add(name=self.name_input, remove_name=0, remove_active=False)
+
+        # bpy.context.scene.presets_length_save = 0
 
         return {"FINISHED"}
 
