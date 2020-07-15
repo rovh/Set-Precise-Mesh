@@ -1568,6 +1568,16 @@ classes = (
     PRESETS_OT_Angle_Rename,
     PRESETS_OT_Angle_clearList,
 
+
+    PRESETS_OT_Area_actions,
+    PRESETS_OT_Area_actions_add,
+    PRESETS_OT_Area_actions_refresh,
+    PRESETS_OT_Area_actions_import,
+    PRESETS_OT_Area_Rename,
+    PRESETS_OT_Area_Change_unit,
+    PRESETS_OT_Area_clearList,
+
+
     PRESETS_FOR_PRESETS_ANGLE_MT_DisplayPresets,
     PRESETS_FOR_PRESETS_ANGLE_OT_AddPreset,
     PRESETS_FOR_PRESETS_ANGLE_OT_Rename,
@@ -1578,16 +1588,23 @@ classes = (
     PRESETS_FOR_PRESETS_LENGTH_OT_Rename,
     PRESETS_FOR_PRESETS_LENGTH_OT_Refresh,
 
+
     PRESETS_FOR_PRESETS_PT_panel,
+
+
+    PRESETS_UL_items_Area,
+    PRESETS_PT_presets_List_Area,
+    
 
     PRESETS_UL_items_Angle,
     PRESETS_PT_presets_List_Angle,
+
 
     PRESETS_UL_items_Length,
     PRESETS_PT_presets_List_Length,
 
 
-    #"""Presets for Object""",
+    # """Presets for Object""",
 
     PRESETS_OT_Angle_Object_actions,
     PRESETS_OT_Angle_Object_actions_add,
@@ -1614,6 +1631,7 @@ classes = (
     #====================================
     PRESETS_presets_angle_Collection,
     PRESETS_presets_length_Collection,
+    PRESETS_presets_area_Collection,
     #====================================
 ) 
 
