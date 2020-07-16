@@ -129,7 +129,7 @@ class SetArea(bpy.types.Operator):
 
         # print(elem_list)
 
-        scale_direction = False
+        scale_direction = True
 
         if len(selected_verts) == 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
 
@@ -277,46 +277,83 @@ class SetArea(bpy.types.Operator):
         if scale_direction == True:
 
             elem_list_verts = []
+            edges_of_needed_face_list = []
+            unselected_edges_of_needed_face_list = []
+            selected_edges_of_needed_face_list = []
+            verts_tri_1 = []
+            verts_tri_2 = []
 
             for i in range(0, len(elem_list)):
                 for k in range(0, len(elem_list[i].verts)):
                     elem_list_verts.append(elem_list[i].verts[k])
 
-            edges_of_needed_face_list = []
-            unselected_edges_of_needed_face_list = []
-            selected_edges_of_needed_face_list = []
             for i in range(0, len(needed_face.edges)):
                 edges_of_needed_face_list.append(needed_face.edges[i])
                 if needed_face.edges[i] in elem_list:
                     selected_edges_of_needed_face_list.append(needed_face.edges[i])
                 else:
                     unselected_edges_of_needed_face_list.append(needed_face.edges[i])
+
+            verts_tri_1.append(selected_edges_of_needed_face_list[0].verts[0])
+            verts_tri_1.append(selected_edges_of_needed_face_list[0].verts[1])
+            verts_tri_1.append(selected_edges_of_needed_face_list[1].verts[0])
+
+            verts_tri_2.append(selected_edges_of_needed_face_list[0].verts[0])
+            verts_tri_2.append(selected_edges_of_needed_face_list[0].verts[1])
+            verts_tri_2.append(selected_edges_of_needed_face_list[1].verts[1])
+
+            length_tri_1 = []
+            length_tri_2 = []
+
+            for i in range(-1, len(verts_tri_1)-1):
+                length_tri_1.append( (verts_tri_1[i].co - verts_tri_1[i+1].co).length )
+            for i in range(-1, len(verts_tri_2)-1):
+                length_tri_2.append( (verts_tri_2[i].co - verts_tri_2[i+1].co).length )
+
+            p_1 = sum(length_tri_1)/2
+            area_tri_1 = math.sqrt( p_1*(p_1-length_tri_1[0])*(p_1-length_tri_1[1])*(p_1-length_tri_1[2]) )
+
+            p_2 = sum(length_tri_2)/2
+            area_tri_2 = math.sqrt( p_2*(p_2-length_tri_2[0])*(p_2-length_tri_2[1])*(p_2-length_tri_2[2]) )
+
             
-            # print(selected_edges_of_needed_face_list)
+            print(area_true)
+            # print(length_tri_1)
+            print(area_tri_1)
+            print(area_tri_2)
+            # print(p_1)
+            
+
+
+            
+            # print(verts_tri_1)
+            # print(verts_tri_2)
+
+            # unselected_edges_of_needed_face_list
+
+
+            # print(selected_edges_of_needed_face_list)1
             # print(unselected_edges_of_needed_face_list)
 
-            unselected_edges_of_needed_face_list
 
-            vert_diagonal_1 = elem_list_verts[0]
+            # vert_diagonal_1 = elem_list_verts[0]
 
-            for i in range(0, len(elem_list_verts)):
-                if vert_diagonal_1.link_edges in elem_list_verts[i].link_edges:
-                    pass
-                else:
-                    vert_diagonal_2 = elem_list_verts[i]
+            # for i in range(0, len(elem_list_verts)):
+            #     if vert_diagonal_1.link_edges in elem_list_verts[i].link_edges:
+            #         pass
+            #     else:
+            #         vert_diagonal_2 = elem_list_verts[i]
 
-            verts_tri_1 = []
-            verts_tri_2 = []
             # verts_tri_1.append(vert_diagonal_1)
             # verts_tri_2.append(vert_diagonal_2)
-            for i in range(0, len(elem_list_verts)):
-                if vert_diagonal_1.link_edges in elem_list_verts[i].link_edges:
-                    verts_tri_1.append(elem_list_verts[i])
-                if vert_diagonal_2.link_edges in elem_list_verts[i].link_edges:
-                    verts_tri_2.append(elem_list_verts[i])
+            # for i in range(0, len(elem_list_verts)):
+            #     if vert_diagonal_1.link_edges in elem_list_verts[i].link_edges:
+            #         verts_tri_1.append(elem_list_verts[i])
+            #     if vert_diagonal_2.link_edges in elem_list_verts[i].link_edges:
+            #         verts_tri_2.append(elem_list_verts[i])
 
-            print(verts_tri_1)
-            print(verts_tri_2)
+            # print(verts_tri_1)
+            # print(verts_tri_2)
 
 
 
@@ -324,7 +361,7 @@ class SetArea(bpy.types.Operator):
             # print(vert_diagonal_2)
 
 
-            needed_face
+            # needed_face
 
 
             pass
