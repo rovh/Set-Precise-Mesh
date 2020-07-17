@@ -8,6 +8,7 @@ from . import name
 
 
 
+
 class SetArea(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_area"
@@ -28,9 +29,9 @@ class SetArea(bpy.types.Operator):
 
     @classmethod
     def description(cls, context, properties):
-        if properties.plus_length == 1:
+        if properties.plus_area == 1:
             return "Plus Area"
-        elif properties.plus_length == -1:
+        elif properties.plus_area == -1:
             return "Minus Area"
         elif properties.eyedropper == True:
             return "Get Area"
@@ -129,7 +130,7 @@ class SetArea(bpy.types.Operator):
 
         # print(elem_list)
 
-        scale_direction = True
+        scale_direction = False
 
         if len(selected_verts) == 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
 
@@ -262,6 +263,12 @@ class SetArea(bpy.types.Operator):
         mat_rot =  mathutils.Matrix.Rotation(0 ,  4 , "Z" )
         mat_out =  mat_loc @  mat_rot @  mat_sca
         S = mat_out
+
+
+
+        center_median = bpy.context.active_object.matrix_world.inverted() @ bpy.context.scene.cursor.location
+        # center_median = bpy.context.scene.cursor.location
+
         S.translation -= center_median
 
 
@@ -278,8 +285,10 @@ class SetArea(bpy.types.Operator):
 
             elem_list_verts = []
             edges_of_needed_face_list = []
-            unselected_edges_of_needed_face_list = []
             selected_edges_of_needed_face_list = []
+            unselected_edges_of_needed_face_list = []
+            selected_verts_of_needed_face_list = []
+            unselected_verts_of_needed_face_list = []
             verts_tri_1 = []
             verts_tri_2 = []
 
@@ -293,6 +302,15 @@ class SetArea(bpy.types.Operator):
                     selected_edges_of_needed_face_list.append(needed_face.edges[i])
                 else:
                     unselected_edges_of_needed_face_list.append(needed_face.edges[i])
+
+            for i in range(0, len(selected_edges_of_needed_face_list)):
+                for k in range(0, len(selected_edges_of_needed_face_list[i].verts)):
+                    selected_verts_of_needed_face_list.append(selected_edges_of_needed_face_list[i].verts[k])
+
+            for i in range(0, len(unselected_edges_of_needed_face_list)):
+                for k in range(0, len(unselected_edges_of_needed_face_list[i].verts)):
+                    unselected_verts_of_needed_face_list.append(unselected_edges_of_needed_face_list[i].verts[k])
+
 
             verts_tri_1.append(selected_edges_of_needed_face_list[0].verts[0])
             verts_tri_1.append(selected_edges_of_needed_face_list[0].verts[1])
@@ -310,17 +328,35 @@ class SetArea(bpy.types.Operator):
             for i in range(-1, len(verts_tri_2)-1):
                 length_tri_2.append( (verts_tri_2[i].co - verts_tri_2[i+1].co).length )
 
-            p_1 = sum(length_tri_1)/2
-            area_tri_1 = math.sqrt( p_1*(p_1-length_tri_1[0])*(p_1-length_tri_1[1])*(p_1-length_tri_1[2]) )
+            print(unselected_verts_of_needed_face_list)
+            print(selected_verts_of_needed_face_list)
 
-            p_2 = sum(length_tri_2)/2
-            area_tri_2 = math.sqrt( p_2*(p_2-length_tri_2[0])*(p_2-length_tri_2[1])*(p_2-length_tri_2[2]) )
+            # for i in range(0, len(verts_tri_1)):
+            #     if verts_tri_1[i] in 
+                # for k in range(0, len())
+                # if 
+                # verts_tri_1_perpendicular = 
+
+            # p_1 = sum(length_tri_1)/2
+            # area_tri_1 = math.sqrt( p_1*(p_1-length_tri_1[0])*(p_1-length_tri_1[1])*(p_1-length_tri_1[2]) )
+
+            # p_2 = sum(length_tri_2)/2
+            # area_tri_2 = math.sqrt( p_2*(p_2-length_tri_2[0])*(p_2-length_tri_2[1])*(p_2-length_tri_2[2]) )
+
 
             
-            print(area_true)
-            # print(length_tri_1)
-            print(area_tri_1)
-            print(area_tri_2)
+
+            # print(selected_edges_of_needed_face_list)
+            # print(verts_tri_1[0])
+            # print(needed_face.edges, 3434343434)
+
+            # n = needed_face.edges.get(verts_tri_1[0], fallback=None)
+            # print(n, 1212121212)
+
+            # print(length_tri_1[0])
+            # print(area_true)
+            # print(area_tri_1)
+            # print(area_tri_2)
             # print(p_1)
             
 
@@ -368,8 +404,21 @@ class SetArea(bpy.types.Operator):
 
         else:
 
-            # scale_factor_area_Vector = (x_area, y_area, z_area)
+            # x_area = 1
+            # y_area = 0
+            # z_area = 1
+
+
+            # x_area = scale_factor_area if x_area == 1 else 1
+            # y_area = scale_factor_area if y_area == 1 else 1
+            # z_area = scale_factor_area if z_area == 1 else 1
+
+            # if x_area == 1 and y_area == 0 and z_area == 1:
+            #     x_area = x_area**2
+            #     print(123213123)
+
             scale_factor_area_Vector = (scale_factor_area, scale_factor_area, scale_factor_area)
+            # scale_factor_area_Vector = (x_area**2, y_area, z_area)
             # scale_factor_area_Vector = (1, scale_factor_area **2, 1)
             # scale_factor_area_Vector = (scale_factor_area **2, 1, 1)
             # scale_factor_area_Vector = (1,1,scale_factor_area **2)

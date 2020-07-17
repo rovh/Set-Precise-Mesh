@@ -1167,7 +1167,6 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             sub_row.scale_x = 1.3
             # sub_row.scale_x = .13
             # sub_row.ui_units_x = 1.3
-            
 
 
             row = row.row(align = False)
@@ -1178,10 +1177,16 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
                 col_top.prop(w_m, "data_block_3", text = "") 
 
 
-
             space = col_top.row(align = 1)
             space.label(icon="BLANK1")
             space.scale_y = 0.1
+
+            row_right = col_top.row(align = 0)
+            row_right.prop_enum( w_m, "scale_point", "madian_point")
+            row_right.prop_enum( w_m, "scale_point", "cursor_point")
+            # row_right.prop("wm.header_length_simulation_setprecisemesh", text=" Distance Simulation", icon = "CON_TRACKTO")
+            # row_right.operator("wm.header_length_simulation_setprecisemesh", text=" Distance Simulation", icon = "CON_TRACKTO")
+            row_right.scale_x = 0.14
 
 
 """Preferences Panel and Props"""
@@ -1339,6 +1344,12 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         unit='LENGTH',
         precision = 6,
     )
+    scale_point: bpy.props.EnumProperty(
+        name="Scale point",
+        items=(
+            ("madian_point"   , "Median Point" , "" , "PIVOT_MEDIAN" , 0),
+            ("cursor_point"   , "3D Cursor"    , "" , "PIVOT_CURSOR" , 1),
+        ))
 
 
 
@@ -1462,6 +1473,7 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         \n(Set the mesh position not in accordance with the normal of the selected part of the mesh)",
         default = False,
     )
+
     length_display_number:         bpy.props.FloatProperty      (options = {"SKIP_SAVE"})
     length_display_stop:           bpy.props.BoolProperty       (options = {"SKIP_SAVE"})
     draw_length_line:              bpy.props.BoolProperty       ()
