@@ -1184,6 +1184,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             row_right = col_top.row(align = 0)
             row_right.scale_y = .9
             row_right.prop_enum( w_m, "scale_point", "madian_point")
+            row_right.prop_enum( w_m, "scale_point", "auto_point")
             row_right.prop_enum( w_m, "scale_point", "cursor_point")
             # row_right_sub = row_right.row(align = 1)
             # row_right_sub.prop_enum( w_m, "scale_point", "madian_point")
@@ -1353,10 +1354,13 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         precision = 6,
     )
     scale_point: bpy.props.EnumProperty(
-        name="Scale point",
+        name = "Scale point",
+        default = "auto_point",
+        description = "",
         items=(
             ("madian_point"   , "Median Point" , "" , "PIVOT_MEDIAN" , 0),
             ("cursor_point"   , "3D Cursor"    , "" , "PIVOT_CURSOR" , 1),
+            ("auto_point"     , "Calculate"    , "" , "EDITMODE_HLT" , 2),
         ))
 
 

@@ -6,18 +6,30 @@ import mathutils
 
 from . import name
 
+text_description_2 = "Face has not been found"
 
-
+text_description = "Face has not been found\n\
+You need to select:\
+\n  face\
+\n  two edges that connected to the face\
+\n  one edge if there is only one linked face\
+\n  two unlinked vertices connected to the face\
+"
+text_description_2 = "You need to select face\
+ / two edges that connected to the face\
+ / one edge if there is only one linked face\
+ / two unlinked vertices connected to the face\
+"
 
 class SetArea(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_area"
     bl_label = "Set Area " + name
-    bl_description = 'You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut'
+    bl_description = 'Set Area of the face\n' + text_description_2 + '\n You can also assign shortcut \n How to do it: > right-click on this button > Assign Shortcut'
     # bl_options = {'REGISTER', 'UNDO'}
     bl_options = {'UNDO'}
 
-    plus_area: bpy.props.IntProperty(options = {"SKIP_SAVE"}) 
+    plus_area:  bpy.props.IntProperty (options = {"SKIP_SAVE"}) 
     eyedropper: bpy.props.BoolProperty(options = {"SKIP_SAVE"})
     draw:       bpy.props.BoolProperty(options = {"SKIP_SAVE"})
     
@@ -125,27 +137,16 @@ class SetArea(bpy.types.Operator):
 
         elem_list = [g for g in bm.select_history]
 
-        # for g in bm.select_history:
-        #     elem_list.append(g)
-
-        # print(elem_list)
-
         scale_direction = False
 
         if len(selected_verts) == 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
 
-            text = "You need to select vertex/edge/face"
+            text = text_description
             war = "ERROR"
             self.report({war}, text)
             return{"FINISHED"}
 
         if len(selected_verts) != 0 and len(selected_edges) == 0 and len(selected_faces) == 0:
-            
-            # if len(selected_verts) <1:
-            #     text = "You need to select vertex/edge/face"
-            #     war = "ERROR"
-            #     self.report({war}, text)
-            #     return{"FINISHED"}
 
             linked_faces_all = []
 
@@ -153,38 +154,30 @@ class SetArea(bpy.types.Operator):
                 for k in range(0, len(selected_verts[i].link_faces) ):
                     linked_faces_all.append( selected_verts[i].link_faces[k] )
 
-                for i in range(0, len(linked_faces_all) -1):
-                    for j in range(i+1, len(linked_faces_all) ):
-                        if linked_faces_all[i].index == linked_faces_all[j].index:
-                            needed_face = linked_faces_all[i]
-                            needed_face.select = True
-                            break
+            for i in range(0, len(linked_faces_all) -1):
+                for j in range(i+1, len(linked_faces_all) ):
+                    if linked_faces_all[i].index == linked_faces_all[j].index:
+                        needed_face = linked_faces_all[i]
+                        needed_face.select = True
+                        break
 
             area_true = needed_face.calc_area()
             center_median = needed_face.calc_center_median()
 
         if len(selected_verts) != 0 and len(selected_edges) != 0 and len(selected_faces) == 0:
-
-            if len(selected_edges) <1:
-                text = "You need to select vertex/edge/face"
-                war = "ERROR"
-                self.report({war}, text)
-                return{"FINISHED"}
         
             if len(selected_edges) == 1 and len(selected_edges[0].link_faces) == 1:
                 needed_face = selected_edges[0].link_faces[0]
                 needed_face.select = True
                 area_true = needed_face.calc_area()
                 center_median = needed_face.calc_center_median()
-
             elif len(selected_edges) == 1 and len(selected_edges[0].link_faces) != 1:
-                text = "You need to select "
+                text = text_description
                 war = "ERROR"
                 self.report({war}, text)
                 return{"FINISHED"}
-
-            if len(selected_edges) > 1:
-                linked_faces = {}
+            elif len(selected_edges) > 1:
+                # linked_faces = {}
                 linked_faces_all = []
                 needed_face = None
                 needed_face_list = []
@@ -192,7 +185,7 @@ class SetArea(bpy.types.Operator):
                 center_median = mathutils.Vector((0,0,0))
 
                 for i in range(0, len(selected_edges) ):
-                    linked_faces[i] = []
+                    # linked_faces[i] = []
                     for k in range(0, len(selected_edges[i].link_faces) ):
                         # linked_faces[i].append( selected_edges[i].link_faces[k] )
                         linked_faces_all.append( selected_edges[i].link_faces[k] )
@@ -211,7 +204,7 @@ class SetArea(bpy.types.Operator):
                 center_median = center_median / len(needed_face_list)
 
                 if needed_face == None:
-                    text = "Face has not been found"
+                    text = text_description
                     war = "ERROR"
                     self.report({war}, text)
                     return{"FINISHED"}
@@ -255,8 +248,6 @@ class SetArea(bpy.types.Operator):
             context.window_manager.setprecisemesh.area = area_true
             return{"FINISHED"}
         
-        # center_median = bpy.context.active_object.matrix_world @ needed_face.calc_center_median()
-
         # Create Matrix
         mat_loc =  mathutils.Matrix.Translation(( 0.0 ,  0.0 ,  0.0 ))                
         mat_sca =  mathutils.Matrix.Scale( 1.0 ,  4 ,  ( 0.0 ,  0.0 ,  1.0 ))
@@ -270,9 +261,37 @@ class SetArea(bpy.types.Operator):
             pass
         elif scale_point == "cursor_point":
             center_median = bpy.context.active_object.matrix_world.inverted() @ bpy.context.scene.cursor.location
+        elif scale_point == "auto_point":
+    
+            verts_of_the_edge_1 = []
+            verts_of_the_edge_2 = []
+
+            if isinstance(elem_list[0], bmesh.types.BMEdge) and isinstance(elem_list[1], bmesh.types.BMEdge) and len(elem_list) == 2:
+
+                common_vert = None
+
+                for i in range (0, len(elem_list[0].verts)):
+                    verts_of_the_edge_1.append(elem_list[0].verts[i])
+
+                for i in range (0, len(elem_list[1].verts)):
+                    verts_of_the_edge_2.append(elem_list[1].verts[i])
+
+                for i in range(0, len(verts_of_the_edge_1)):
+                    if verts_of_the_edge_1[i] in verts_of_the_edge_2:
+                        common_vert = verts_of_the_edge_1[i].co
+                        break
+
+                if bool(common_vert) == True:
+                    # center_median = bpy.context.active_object.matrix_world.inverted() @ common_vert
+                    center_median = common_vert
+                else:
+                    verts_of_the_edge_1_median = mathutils.Vector((0,0,0))
+                    for i in range (0, len(elem_list[0].verts)):
+                        verts_of_the_edge_1_median = verts_of_the_edge_1_median + elem_list[0].verts[i].co
+
+                    center_median = verts_of_the_edge_1_median/len(verts_of_the_edge_2)
 
         S.translation -= center_median
-
 
         if self.plus_area == 0:
             scale_factor_area = area / area_true
@@ -281,7 +300,10 @@ class SetArea(bpy.types.Operator):
         elif self.plus_area == -1:
             scale_factor_area = (area_true - area)  / area_true
 
-        scale_factor_area = math.sqrt(scale_factor_area)
+        try:
+            scale_factor_area = math.sqrt(scale_factor_area)
+        except ValueError:
+            scale_factor_area = 0
 
         if scale_direction == True:
 
