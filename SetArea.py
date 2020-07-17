@@ -266,7 +266,7 @@ class SetArea(bpy.types.Operator):
             verts_of_the_edge_1 = []
             verts_of_the_edge_2 = []
 
-            if isinstance(elem_list[0], bmesh.types.BMEdge) and isinstance(elem_list[1], bmesh.types.BMEdge) and len(elem_list) == 2:
+            if isinstance(elem_list[0], bmesh.types.BMEdge) and isinstance(elem_list[1], bmesh.types.BMEdge):
 
                 common_vert = None
 
