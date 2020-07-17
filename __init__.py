@@ -1150,7 +1150,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
 
         if sc.bool_panel_arrow3:            
             box = col.column(align=True).box().column()            
-            col_top = box.column(align=True)
+            col_top = box.column(align=0)
 
 
             # col_top.prop(w_m, "length") 
@@ -1179,14 +1179,22 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
 
             space = col_top.row(align = 1)
             space.label(icon="BLANK1")
-            space.scale_y = 0.1
+            space.scale_y = 0.2
 
             row_right = col_top.row(align = 0)
+            row_right.scale_y = .9
             row_right.prop_enum( w_m, "scale_point", "madian_point")
             row_right.prop_enum( w_m, "scale_point", "cursor_point")
+            # row_right_sub = row_right.row(align = 1)
+            # row_right_sub.prop_enum( w_m, "scale_point", "madian_point")
+            # row_right_sub.alignment = "RIGHT"
+            # row_right_sub = row_right.row(align = 1)
+            # row_right_sub.prop_enum( w_m, "scale_point", "cursor_point")
+            # row_right_sub.alignment = "RIGHT"
+            # row_right.alignment = "RIGHT"
             # row_right.prop("wm.header_length_simulation_setprecisemesh", text=" Distance Simulation", icon = "CON_TRACKTO")
             # row_right.operator("wm.header_length_simulation_setprecisemesh", text=" Distance Simulation", icon = "CON_TRACKTO")
-            row_right.scale_x = 0.14
+            # row_right.scale_x = 0.14
 
 
 """Preferences Panel and Props"""

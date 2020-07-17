@@ -264,10 +264,12 @@ class SetArea(bpy.types.Operator):
         mat_out =  mat_loc @  mat_rot @  mat_sca
         S = mat_out
 
+        scale_point = context.window_manager.setprecisemesh.scale_point
 
-
-        center_median = bpy.context.active_object.matrix_world.inverted() @ bpy.context.scene.cursor.location
-        # center_median = bpy.context.scene.cursor.location
+        if scale_point == "median_point":
+            pass
+        elif scale_point == "cursor_point":
+            center_median = bpy.context.active_object.matrix_world.inverted() @ bpy.context.scene.cursor.location
 
         S.translation -= center_median
 
