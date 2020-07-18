@@ -22,6 +22,73 @@ text_description_2 ="\
 \n  * one edge if there is only one linked face\
 \n  * two unlinked vertices connected to the face\
 "
+
+def report(type, self):
+    if type == 'angle':
+        text = "Angle point"
+        # war = "INFO"
+        # self.report({war}, text)
+        bpy.ops.object.dialog_info_operator_set_area('INVOKE_DEFAULT', type = type, text = text)
+    
+    elif type == 'edge':
+        text = "First Edge Median point"
+        # war = "INFO"
+        # self.report({war}, text)
+        bpy.ops.object.dialog_info_operator_set_area('INVOKE_DEFAULT', type = type, text = text)
+    
+    elif type == 'median':
+        text = "Median point"
+        # war = "INFO"
+        # self.report({war}, text)
+        bpy.ops.object.dialog_info_operator_set_area('INVOKE_DEFAULT', type = type, text = text)
+
+class Dialog_Info_Operator_Set_Area (bpy.types.Operator):
+    bl_idname = "object.dialog_info_operator_set_area"
+    bl_label = "INFO Panel Operaror"
+        
+    type: bpy.props.StringProperty()
+    text: bpy.props.StringProperty()
+
+    def execute(self, context):
+        print(self.type)
+        return {'FINISHED'}
+
+    def invoke(self, context, event):
+        x = event.mouse_x
+        y = event.mouse_y 
+
+        move_x = -20
+        move_y = 35
+
+        bpy.context.window.cursor_warp(x + move_x, y + move_y)
+        # context.window_manager.invoke_popup(self, width = 200)
+        # return context.window_manager.invoke_props_dialog(self)
+        # return context.window_manager.invoke_popup(self, width=600, height=500)
+        # return context.window_manager.invoke_popup(self)
+        inv = context.window_manager.invoke_popup(self, width = 200)
+
+        bpy.context.window.cursor_warp(x, y)
+
+        return inv
+
+        # return bpy.context.window_manager.invoke_popup(self)
+        
+    def draw(self, context):
+        layout = self.layout
+        type = self.type
+        text = self.text
+
+        if self.type == 'angle':
+            layout.label(icon = 'SNAP_PERPENDICULAR', text = text)
+        elif self.type == 'edge':
+            layout.label(icon = 'SNAP_MIDPOINT', text = text)
+        elif self.type == 'median':
+            layout.label(icon = 'SNAP_FACE_CENTER', text = text)
+
+        
+
+
+
 class SetArea(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_area"
@@ -172,11 +239,33 @@ class SetArea(bpy.types.Operator):
                 needed_face.select = True
                 area_true = needed_face.calc_area()
                 center_median = needed_face.calc_center_median()
-            # elif len(selected_edges) == 1 and len(selected_edges[0].link_faces) != 1:
-            #     text = text_description
-            #     war = "ERROR"
-            #     self.report({war}, text)
-            #     return{"FINISHED"}
+
+            elif len(selected_edges) == 1 and len(selected_edges[0].link_faces) != 1:
+                # if len(selected_verts)>2:
+                #     linked_faces_all = []
+                #     index_number = 0
+                    
+                #     for i in range(0, len(selected_verts) ):
+                #         for k in range(0, len(selected_verts[i].link_faces) ):
+                #             linked_faces_all.append( selected_verts[i].link_faces[k] )
+
+                #     for i in range(0, len(linked_faces_all) -1):
+                #         for j in range(i+1, len(linked_faces_all) ):
+                #             if linked_faces_all[i].index == linked_faces_all[j].index:
+                #                 index_number += 1
+                #                 needed_face = linked_faces_all[i]
+                #                 needed_face.select = True
+                #                 break
+
+                #     area_true = needed_face.calc_area()
+                #     center_median = needed_face.calc_center_median()
+                    
+                # else:
+                text = text_description
+                war = "ERROR"
+                self.report({war}, text)
+                return{"FINISHED"}
+
             elif len(selected_edges) > 1:
                 # linked_faces = {}
                 linked_faces_all = []
@@ -267,7 +356,7 @@ class SetArea(bpy.types.Operator):
             verts_of_the_edge_1 = []
             verts_of_the_edge_2 = []
 
-            if isinstance(elem_list[0], bmesh.types.BMEdge) and isinstance(elem_list[1], bmesh.types.BMEdge):
+            if   len(elem_list)>1 and isinstance(elem_list[0], bmesh.types.BMEdge) and isinstance(elem_list[1], bmesh.types.BMEdge):
 
                 common_vert = None
 
@@ -285,21 +374,16 @@ class SetArea(bpy.types.Operator):
                 if bool(common_vert) == True:
                     # center_median = bpy.context.active_object.matrix_world.inverted() @ common_vert
                     center_median = common_vert
-                    text = "Angle point"
-                    war = "INFO"
-                    self.report({war}, text)
+                    report('angle', self)
                 else:
                     verts_of_the_edge_1_median = mathutils.Vector((0,0,0))
                     for i in range (0, len(elem_list[0].verts)):
                         verts_of_the_edge_1_median = verts_of_the_edge_1_median + elem_list[0].verts[i].co
 
                     center_median = verts_of_the_edge_1_median/len(verts_of_the_edge_2)
+                    report('edge', self)
 
-                    text = "Center of the first edge"
-                    war = "INFO"
-                    self.report({war}, text)
-
-            elif isinstance(elem_list[0], bmesh.types.BMVert) and isinstance(elem_list[1], bmesh.types.BMVert) and isinstance(elem_list[2], bmesh.types.BMVert):
+            elif len(elem_list)>2 and isinstance(elem_list[0], bmesh.types.BMVert) and isinstance(elem_list[1], bmesh.types.BMVert) and isinstance(elem_list[2], bmesh.types.BMVert):
 
                 linked_edges_of_the_vert_1 = []
                 linked_edges_of_the_vert_2 = []
@@ -319,26 +403,33 @@ class SetArea(bpy.types.Operator):
                     or linked_edges_of_the_vert_1[i] in linked_edges_of_the_vert_3:
                         linked_edges_of_the_vert += 1
 
+                for i in range(0, len(linked_edges_of_the_vert_2)):
                     if linked_edges_of_the_vert_2[i] in linked_edges_of_the_vert_1\
                     or linked_edges_of_the_vert_2[i] in linked_edges_of_the_vert_3:
                         linked_edges_of_the_vert += 1
 
+                for i in range(0, len(linked_edges_of_the_vert_3)):
                     if linked_edges_of_the_vert_3[i] in linked_edges_of_the_vert_1\
                     or linked_edges_of_the_vert_3[i] in linked_edges_of_the_vert_2:
                         linked_edges_of_the_vert += 1
 
                 if linked_edges_of_the_vert == 4:
+                    
                     center_median = elem_list[1].co
+                    report('angle', self)
+
                 elif linked_edges_of_the_vert == 2:
                     center_median = (elem_list[0].co + elem_list[1].co) / 2
+
+                    report('edge', self)
 
                 # print(linked_edges_of_the_vert_1)
                 # print(linked_edges_of_the_vert_2)
                 # print(linked_edges_of_the_vert_3)
 
-                text = "Angle point"
-                war = "INFO"
-                self.report({war}, text)
+            else:
+                report("median", self)
+                
 
         S.translation -= center_median
 

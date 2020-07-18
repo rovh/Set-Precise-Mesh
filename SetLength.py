@@ -717,8 +717,6 @@ class SetLength(bpy.types.Operator):
             #         space=S
             #         )
 
-            
-
             bmesh.update_edit_mesh(me, True)
                   
         bmesh.ops.recalc_face_normals(bm, faces=bm.faces)

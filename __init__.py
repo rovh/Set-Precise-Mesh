@@ -1544,6 +1544,7 @@ blender_classes = [
     Dialog_Warning_Operator_2,
     Dialog_Warning_Operator_3,
     Dialog_Warning_Operator_4,
+    Dialog_Info_Operator_Set_Area,
 
 
     SetPreciseMesh_Props,
