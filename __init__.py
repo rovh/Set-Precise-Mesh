@@ -17,7 +17,7 @@ bl_info = {
     "author" : "Rovh",
     "description" : "This addon allows you to set exact values for the mesh",
     "blender" : (2, 83, 0),
-    "version" : (1,2,3),
+    "version" : (1,3,0),
     "location" : "View3D > Sidebar in Edit Mode > Item Tab, View Tab and Edit Tab",
     "warning" : "",
     "wiki_url": "https://github.com/rovh/Set-Precise-Mesh",
@@ -36,6 +36,7 @@ from .Presets import *
 from .Presets_Object import *
 from .Set_Cursor_To_Normal import *
 from .Draw import *
+from .SetArea import *
 
 
 from bpy import types
@@ -505,6 +506,7 @@ class Popup_Menu_SetPreciseMesh_Operator (bpy.types.Operator):
     def draw(self, context):
         bpy.types.VIEW3D_PT_edit_mesh_set_precise_mesh1.draw_angle(self, context)
         bpy.types.VIEW3D_PT_edit_mesh_set_precise_mesh1.draw_length(self, context)
+        bpy.types.VIEW3D_PT_edit_mesh_set_precise_mesh1.draw_area(self, context)
 
 class Popup_Menu_SetPreciseMesh_SetAngle (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_setangle"
@@ -699,6 +701,38 @@ class Popup_Menu_SetPreciseMesh_SetLength (bpy.types.Operator):
         #     split.prop(w_m, "lengthbool")
         #     split.operator("wm.header_length_simulation_setprecisemesh", text=" Distance Simulation", icon = "CON_TRACKTO")
 
+class Popup_Menu_SetPreciseMesh_SetArea (bpy.types.Operator):
+    bl_idname = "wm.menu_setprecisemesh_setarea"
+    bl_label = "Pop-up Menu | Set Area    " + name
+    bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
+         ( For exaple Ctrl + Alt + Wheel Up )\n \
+        How to do it: > right-click on this button > Assign Shortcut"
+        
+    def execute(self, context):
+        return {'FINISHED'}
+
+    def invoke(self, context, event):
+        x = event.mouse_x
+        y = event.mouse_y 
+
+        move_x = 0
+        move_y = 10
+
+        bpy.context.window.cursor_warp(x + move_x, y + move_y)
+        # context.window_manager.invoke_popup(self, width = 200)
+        # return context.window_manager.invoke_props_dialog(self)
+        # return context.window_manager.invoke_popup(self, width=600, height=500)
+        # return context.window_manager.invoke_popup(self)
+        inv = context.window_manager.invoke_popup(self, width = 200)
+        
+        bpy.context.window.cursor_warp(x, y)
+
+        return inv
+
+    def draw(self, context):
+
+        bpy.types.VIEW3D_PT_edit_mesh_set_precise_mesh1.draw_area(self, context)
+
 """Operators"""
 
 class Browser_Link (bpy.types.Operator):
@@ -793,9 +827,9 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
     def draw(self, context):
         
         self.draw_angle(context)
-        self.draw_length(context)   
+        self.draw_length(context)
+        self.draw_area(context)
 
-       
     def draw_angle(self, context):
 
         layout = self.layout
@@ -863,7 +897,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             sub_row.operator("mesh.change_angle",icon="EYEDROPPER", text = "").eyedropper = True
             sub_row.scale_x = 1.3
 
-            row = row.row(align = False)
+            row = row.row(align = 0)
             row.scale_x = 1.2
             row.prop(sc, "script_input", text = "", icon = "FILE_SCRIPT")
 
@@ -1073,6 +1107,86 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             # col_top.operator(bpy.ops.ui.eyedropper_id.idname())
             # col_top.operator(bpy.ops.wm.url_open(url = "https://github.com/rovh/Set-Precise-Mesh"))
 
+    def draw_area(self, context):
+        
+        layout = self.layout
+
+        scene = context.scene
+        sc = scene
+        ob = context.object
+
+        w_m = context.window_manager.setprecisemesh
+
+        # Get values
+        bool_panel_arrow = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow
+        bool_panel_arrow2 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow2
+        bool_panel_arrow3 = bpy.data.scenes[bpy.context.scene.name_full].bool_panel_arrow3
+
+        script_input = bpy.data.scenes[bpy.context.scene.name_full].script_input
+        script_input_2 = bpy.data.scenes[bpy.context.scene.name_full].script_input_2
+        script_input_3 = bpy.data.scenes[bpy.context.scene.name_full].script_input_3
+
+        col = layout.column(align= True )
+        
+        split_left = col.split(factor=0.55, align=True)
+        split_left.scale_y = 1.2
+        
+        split_left.operator("mesh.change_area",icon="FULLSCREEN_ENTER", text = "Set Area").plus_area = 0
+
+        split_center = split_left.split(factor=0.43, align=True)
+
+        split_center.operator("mesh.change_area",icon="ADD", text = "").plus_area = 1
+            
+        split_right = split_center.split(factor=0.8, align=True)
+
+        split_right.operator("mesh.change_area", icon="REMOVE", text = "").plus_area = -1
+
+
+
+        if sc.bool_panel_arrow3:
+            split_right.prop(sc, "bool_panel_arrow3", text="", icon='DOWNARROW_HLT')
+        else:
+            split_right.prop(sc, "bool_panel_arrow3", text="", icon='RIGHTARROW')
+
+        if sc.bool_panel_arrow3:            
+            box = col.column(align=True).box().column()            
+            col_top = box.column(align=0)
+
+
+            # col_top.prop(w_m, "length") 
+
+            row = col_top.row(align = True)
+            row.prop(w_m, "area", text = "")
+
+            sub_row = row.row(align = 1)
+            sub_row.label(icon="BLANK1")
+            sub_row.scale_x = 0.1
+            
+            sub_row = row.row(align = 1)
+            sub_row.operator("mesh.change_area",icon="EYEDROPPER", text = "").eyedropper = True
+            sub_row.scale_x = 1.3
+            # sub_row.scale_x = .13
+            # sub_row.ui_units_x = 1.3
+
+
+            row = row.row(align = 0)
+            row.scale_x = 1.2
+            row.prop(sc, "script_input_3", text = "", icon = "FILE_SCRIPT")
+
+            if script_input_3:   
+                col_top.prop(w_m, "data_block_3", text = "") 
+
+
+            space = col_top.row(align = 1)
+            space.label(icon="BLANK1")
+            space.scale_y = 0.1
+
+            row_right = col_top.row(align = 1)
+            row_right.scale_y = .9
+            row_right.prop_enum( w_m, "scale_point", "madian_point")
+            row_right.prop_enum( w_m, "scale_point", "auto_point")
+            row_right.prop_enum( w_m, "scale_point", "cursor_point")
+
 """Preferences Panel and Props"""
 class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
     # this must match the addon name, use '__package__'
@@ -1151,8 +1265,9 @@ class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
 
 
         row = col.row(align = False)
-        row.operator("wm.menu_setprecisemesh_setangle",icon="DRIVER_ROTATIONAL_DIFFERENCE", text="Pop-up Menu (Hover cursor on it for more information)")
+        row.operator("wm.menu_setprecisemesh_setangle" ,icon="DRIVER_ROTATIONAL_DIFFERENCE", text="Pop-up Menu (Hover cursor on it for more information)")
         row.operator("wm.menu_setprecisemesh_setlength",icon="DRIVER_DISTANCE", text="Pop-up Menu (Hover cursor on it for more information)")
+        row.operator("wm.menu_setprecisemesh_setarea"  ,icon="FULLSCREEN_ENTER", text="Pop-up Menu (Hover cursor on it for more information)")
 
         row = col.row()
         row.label(text = "")
@@ -1198,6 +1313,7 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         description="",
         default=False,
     )
+
     length: bpy.props.FloatProperty(
         name="Length",
         description="Length of the edge",
@@ -1216,6 +1332,37 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         description='User Mode',
         default=False,
     )
+
+
+    area: bpy.props.FloatProperty(
+        name="Area",
+        description="Area of the face",
+        default=1.0,
+        step = 100.0,
+        unit='LENGTH',
+        precision = 6,
+    )
+    scale_point_description = [
+     "Use calculated median point of detected faces as scale point",
+     "Define scale point:\
+        \n * Angle point --- Two connected edges or three connected vertices(second selected vert will be scale point)\
+        \n * First Edge Center point --- Two not connected edges\
+        \n * Median point --- Face\
+        ",
+     "Use 3D Cursor as scale point",
+    ]
+    scale_point: bpy.props.EnumProperty(
+        name = "Scale point",
+        default = "madian_point",
+        description = "",
+        items=(
+            ("madian_point" , "Median Point" , scale_point_description[0] , "PIVOT_MEDIAN" , 0),
+            ("cursor_point" , "3D Cursor"    , scale_point_description[2] , "PIVOT_CURSOR" , 1),
+            ("auto_point"   , "Define Point"       , scale_point_description[1] , "EDITMODE_HLT" , 2),
+        ))
+
+
+
     data_block: bpy.props.StringProperty(
         name = "Number input",
         description="\n u = Angle\
@@ -1226,6 +1373,13 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         description="\n u = Length\
                      \n unit = Length" ,
     )
+    data_block_3: bpy.props.StringProperty(
+        name = "Number input",
+        description="\n u = Area\
+                     \n unit = Area",
+    )
+
+
     description_projection_type = [
         #description_0
         "Local Matrix. It uses the matrix of the editing object and projects the selected vertices onto it" ,
@@ -1329,9 +1483,10 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         \n(Set the mesh position not in accordance with the normal of the selected part of the mesh)",
         default = False,
     )
+
     length_display_number:         bpy.props.FloatProperty      (options = {"SKIP_SAVE"})
     length_display_stop:           bpy.props.BoolProperty       (options = {"SKIP_SAVE"})
-    draw_length_line:                   bpy.props.BoolProperty      ()
+    draw_length_line:              bpy.props.BoolProperty       ()
     length_display_coordinate_1:   bpy.props.FloatVectorProperty(options = {"SKIP_SAVE"})
     length_display_coordinate_2:   bpy.props.FloatVectorProperty(options = {"SKIP_SAVE"})
 
@@ -1351,7 +1506,6 @@ class Dupli (SetPresiceMesh_Panel):
     bl_label = "Set Precise Mesh /CAD"
 
     # bl_order = 1
- 
 class Dupli2 (SetPresiceMesh_Panel):
     bl_label = "Set Presice Mesh2"
     bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh2"
@@ -1360,7 +1514,6 @@ class Dupli2 (SetPresiceMesh_Panel):
     bl_category = "Item"
     bl_label = "Set Precise Mesh /CAD"
     # bl_order = 1
-    
 class Dupli3 (SetPresiceMesh_Panel):
     bl_label = "Set Presice Mesh2"
     bl_idname = "VIEW3D_PT_edit_mesh_set_precise_mesh3"
@@ -1383,17 +1536,23 @@ blender_classes = [
 
     SetLength,
 
+    SetArea,
+
     Dialog_Warning_Operator,
     Dialog_Warning_Operator_2,
     Dialog_Warning_Operator_3,
     Dialog_Warning_Operator_4,
+    Dialog_Info_Operator_Set_Area,
 
 
     SetPreciseMesh_Props,
     SetPreciseMesh_Preferences,
+
     Popup_Menu_SetPreciseMesh_Operator,
     Popup_Menu_SetPreciseMesh_SetAngle,
     Popup_Menu_SetPreciseMesh_SetLength,
+    Popup_Menu_SetPreciseMesh_SetArea,
+
     Angle_Simulation_SetPreciseMesh,
     Length_Simulation_SetPreciseMesh,
 
@@ -1433,6 +1592,16 @@ classes = (
     PRESETS_OT_Angle_Rename,
     PRESETS_OT_Angle_clearList,
 
+
+    PRESETS_OT_Area_actions,
+    PRESETS_OT_Area_actions_add,
+    PRESETS_OT_Area_actions_refresh,
+    PRESETS_OT_Area_actions_import,
+    PRESETS_OT_Area_Rename,
+    PRESETS_OT_Area_Change_unit,
+    PRESETS_OT_Area_clearList,
+
+
     PRESETS_FOR_PRESETS_ANGLE_MT_DisplayPresets,
     PRESETS_FOR_PRESETS_ANGLE_OT_AddPreset,
     PRESETS_FOR_PRESETS_ANGLE_OT_Rename,
@@ -1443,16 +1612,28 @@ classes = (
     PRESETS_FOR_PRESETS_LENGTH_OT_Rename,
     PRESETS_FOR_PRESETS_LENGTH_OT_Refresh,
 
+    PRESETS_FOR_PRESETS_AREA_MT_DisplayPresets,
+    PRESETS_FOR_PRESETS_AREA_OT_AddPreset,
+    PRESETS_FOR_PRESETS_AREA_OT_Rename,
+    PRESETS_FOR_PRESETS_AREA_OT_Refresh,
+
+
     PRESETS_FOR_PRESETS_PT_panel,
+
+
+    # PRESETS_UL_items_Area,
+    # PRESETS_PT_presets_List_Area,
+    
 
     PRESETS_UL_items_Angle,
     PRESETS_PT_presets_List_Angle,
+
 
     PRESETS_UL_items_Length,
     PRESETS_PT_presets_List_Length,
 
 
-    #"""Presets for Object""",
+    # """Presets for Object""",
 
     PRESETS_OT_Angle_Object_actions,
     PRESETS_OT_Angle_Object_actions_add,
@@ -1479,15 +1660,17 @@ classes = (
     #====================================
     PRESETS_presets_angle_Collection,
     PRESETS_presets_length_Collection,
+    PRESETS_presets_area_Collection,
     #====================================
 ) 
 
 # kc = bpy.context.window_manager.keyconfigs.addon
+
 def register():
 
-#     if kc:
-#         km = kc.keymaps.new(name="3D View", space_type="VIEW_3D")
-#         kmi = km.keymap_items.new('mesh.change_length', 'LEFTMOUSE', 'CLICK', shift=True)
+    # if kc:
+    #     km = kc.keymaps.new(name="3D View", space_type="VIEW_3D")
+    #     kmi = km.keymap_items.new('mesh.change_length', 'LEFTMOUSE', 'CLICK', shift=True)
         # Could pass settings to operator properties here
         # kmi.properties.mode = (False, True, False)
 
@@ -1516,12 +1699,22 @@ def register():
         description="",
         default=True,
     )
+    bpy.types.Scene.bool_panel_arrow3 = bpy.props.BoolProperty(
+        name="bool_panel_arrow3",
+        description="",
+        default=True,
+    )
     bpy.types.Scene.script_input = bpy.props.BoolProperty(
             name="Advanced input",
             description="",
             default=False,
     )
     bpy.types.Scene.script_input_2 = bpy.props.BoolProperty(
+            name="Advanced input",
+            description="",
+            default=False,
+    )
+    bpy.types.Scene.script_input_3 = bpy.props.BoolProperty(
             name="Advanced input",
             description="",
             default=False,
@@ -1553,6 +1746,11 @@ def register():
     bpy.types.Scene.presets_length_index = IntProperty()
     bpy.types.Scene.presets_length_save = IntProperty()
 
+    
+    bpy.types.Scene.presets_length = CollectionProperty(type=PRESETS_presets_angle_Collection)
+    bpy.types.Scene.presets_length_index = IntProperty()
+    bpy.types.Scene.presets_length_save = IntProperty()
+
 
     """Presets for Objetcs"""
     bpy.types.Object.presets_angle = CollectionProperty(type=PRESETS_presets_angle_Collection)
@@ -1560,7 +1758,6 @@ def register():
 
     bpy.types.Object.presets_length = CollectionProperty(type=PRESETS_presets_length_Collection)
     bpy.types.Object.presets_length_index = IntProperty()
-
 
 def unregister():
 
@@ -1579,8 +1776,10 @@ def unregister():
 
     del bpy.types.Scene.bool_panel_arrow
     del bpy.types.Scene.bool_panel_arrow2
+    del bpy.types.Scene.bool_panel_arrow3
     del bpy.types.Scene.script_input
     del bpy.types.Scene.script_input_2
+    del bpy.types.Scene.script_input_3
     del bpy.types.Scene.bool_warning
     del bpy.types.Scene.remember_length
 
