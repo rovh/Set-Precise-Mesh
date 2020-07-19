@@ -17,7 +17,7 @@ bl_info = {
     "author" : "Rovh",
     "description" : "This addon allows you to set exact values for the mesh",
     "blender" : (2, 83, 0),
-    "version" : (1,2,3),
+    "version" : (1,3,0),
     "location" : "View3D > Sidebar in Edit Mode > Item Tab, View Tab and Edit Tab",
     "warning" : "",
     "wiki_url": "https://github.com/rovh/Set-Precise-Mesh",
@@ -897,7 +897,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             sub_row.operator("mesh.change_angle",icon="EYEDROPPER", text = "").eyedropper = True
             sub_row.scale_x = 1.3
 
-            row = row.row(align = False)
+            row = row.row(align = 0)
             row.scale_x = 1.2
             row.prop(sc, "script_input", text = "", icon = "FILE_SCRIPT")
 
@@ -1169,7 +1169,7 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
             # sub_row.ui_units_x = 1.3
 
 
-            row = row.row(align = False)
+            row = row.row(align = 0)
             row.scale_x = 1.2
             row.prop(sc, "script_input_3", text = "", icon = "FILE_SCRIPT")
 
@@ -1179,24 +1179,13 @@ class SetPresiceMesh_Panel (bpy.types.Panel):
 
             space = col_top.row(align = 1)
             space.label(icon="BLANK1")
-            space.scale_y = 0.2
+            space.scale_y = 0.1
 
-            row_right = col_top.row(align = 0)
+            row_right = col_top.row(align = 1)
             row_right.scale_y = .9
             row_right.prop_enum( w_m, "scale_point", "madian_point")
             row_right.prop_enum( w_m, "scale_point", "auto_point")
             row_right.prop_enum( w_m, "scale_point", "cursor_point")
-            # row_right_sub = row_right.row(align = 1)
-            # row_right_sub.prop_enum( w_m, "scale_point", "madian_point")
-            # row_right_sub.alignment = "RIGHT"
-            # row_right_sub = row_right.row(align = 1)
-            # row_right_sub.prop_enum( w_m, "scale_point", "cursor_point")
-            # row_right_sub.alignment = "RIGHT"
-            # row_right.alignment = "RIGHT"
-            # row_right.prop("wm.header_length_simulation_setprecisemesh", text=" Distance Simulation", icon = "CON_TRACKTO")
-            # row_right.operator("wm.header_length_simulation_setprecisemesh", text=" Distance Simulation", icon = "CON_TRACKTO")
-            # row_right.scale_x = 0.14
-
 
 """Preferences Panel and Props"""
 class SetPreciseMesh_Preferences (bpy.types.AddonPreferences):
@@ -1353,14 +1342,23 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
         unit='LENGTH',
         precision = 6,
     )
+    scale_point_description = [
+     "Use calculated median point of detected faces as scale point",
+     "Define scale point:\
+        \n * Angle point --- Two connected edges or three connected vertices(second selected vert will be scale point)\
+        \n * First Edge Center point --- Two not connected edges\
+        \n * Median point --- Face\
+        ",
+     "Use 3D Cursor as scale point",
+    ]
     scale_point: bpy.props.EnumProperty(
         name = "Scale point",
         default = "madian_point",
         description = "",
         items=(
-            ("madian_point"   , "Median Point" , "" , "PIVOT_MEDIAN" , 0),
-            ("cursor_point"   , "3D Cursor"    , "" , "PIVOT_CURSOR" , 1),
-            ("auto_point"     , "Calculate"    , "" , "EDITMODE_HLT" , 2),
+            ("madian_point" , "Median Point" , scale_point_description[0] , "PIVOT_MEDIAN" , 0),
+            ("cursor_point" , "3D Cursor"    , scale_point_description[2] , "PIVOT_CURSOR" , 1),
+            ("auto_point"   , "Define Point"       , scale_point_description[1] , "EDITMODE_HLT" , 2),
         ))
 
 

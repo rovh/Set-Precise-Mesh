@@ -31,7 +31,7 @@ def report(type, self):
         bpy.ops.object.dialog_info_operator_set_area('INVOKE_DEFAULT', type = type, text = text)
     
     elif type == 'edge':
-        text = "First Edge Median point"
+        text = "First Edge Center point"
         # war = "INFO"
         # self.report({war}, text)
         bpy.ops.object.dialog_info_operator_set_area('INVOKE_DEFAULT', type = type, text = text)
@@ -57,8 +57,8 @@ class Dialog_Info_Operator_Set_Area (bpy.types.Operator):
         x = event.mouse_x
         y = event.mouse_y 
 
-        move_x = -20
-        move_y = 35
+        move_x = -30
+        move_y = 50
 
         bpy.context.window.cursor_warp(x + move_x, y + move_y)
         # context.window_manager.invoke_popup(self, width = 200)
@@ -237,52 +237,50 @@ class SetArea(bpy.types.Operator):
                 center_median = needed_face.calc_center_median()
 
             elif len(selected_edges) == 1 and len(selected_edges[0].link_faces) != 1:
-                if len(selected_verts)>2:
-                    linked_faces_all = []
-                    verts_all = []
-                    verts_edge_all = []
-                    needed_face_list = []
-                    area_true = 0
-                    center_median = mathutils.Vector((0,0,0))
-                    # verts_free = []
-                    # needed_face_number = 0
+                # if len(selected_verts)>2:
+                #     linked_faces_all = []
+                #     verts_all = []
+                #     verts_edge_all = []
+                #     needed_face_list = []
+                #     area_true = 0
+                #     center_median = mathutils.Vector((0,0,0))
+                #     # verts_free = []
+                #     # needed_face_number = 0
                     
-                    for i in range(0, len(selected_edges) ):
-                        for k in range(0, len(selected_edges[i].verts) ):
-                            verts_edge_all.append( selected_edges[i].verts[k] )
+                #     for i in range(0, len(selected_edges) ):
+                #         for k in range(0, len(selected_edges[i].verts) ):
+                #             verts_edge_all.append( selected_edges[i].verts[k] )
+                #     for i in range(0, len(selected_verts)):
+                #         verts_all.append(selected_verts[i])
+                #     verts_other = list(set(verts_all) - set(verts_edge_all))
+                #     for i in range(0, len(verts_other)):
+                #         for k in range(0, len(verts_other[i].link_faces)):
+                #             linked_faces_all.append(verts_other[i].link_faces[k])
 
-                    for i in range(0, len(selected_verts)):
-                        verts_all.append(selected_verts[i])
-
-                    verts_other = list(set(verts_all) - set(verts_edge_all))
-
-                    for i in range(0, len(selected_edges)):
-                        for k in range(0, len(selected_edges[i].link_faces)):
-                            linked_faces_all.append(selected_edges[i].link_faces[k])
-
-                    for i in range(0, len(verts_other)):
-                        for k in range(0, len(verts_other[i].link_faces)):
-                            linked_faces_all.append(verts_other[i].link_faces[k])
+                #     for i in range(0, len(selected_edges)):
+                #         for k in range(0, len(selected_edges[i].link_faces)):
+                #             linked_faces_all.append(selected_edges[i].link_faces[k])
 
 
-                    for i in range(0, len(linked_faces_all) -1):
-                        for j in range(i+1, len(linked_faces_all) ):
-                            if linked_faces_all[i].index == linked_faces_all[j].index:
-                                # needed_face_number += 1
-                                needed_face = linked_faces_all[i]
-                                needed_face_list.append(linked_faces_all[i])
-                                area_true = needed_face.calc_area() + area_true
-                                center_median = needed_face.calc_center_median() + center_median
-                                needed_face.select = True
-                                break
+                #     for i in range(0, len(linked_faces_all) -1):
+                #         for j in range(i+1, len(linked_faces_all) ):
+                #             if linked_faces_all[i].index == linked_faces_all[j].index:
+                #                 # needed_face_number += 1
+                #                 needed_face = linked_faces_all[i]
+                #                 needed_face_list.append(linked_faces_all[i])
+                #                 area_true = needed_face.calc_area() + area_true
+                #                 center_median = needed_face.calc_center_median() + center_median
+                #                 needed_face.select = True
+                #                 print(123123123123)
+                #                 # break
 
-                    center_median = center_median/len(needed_face_list)
+                #     center_median = center_median/len(needed_face_list)
                     
-                else:
-                    text = text_description
-                    war = "ERROR"
-                    self.report({war}, text)
-                    return{"FINISHED"}
+                # else:
+                text = text_description
+                war = "ERROR"
+                self.report({war}, text)
+                return{"FINISHED"}
 
             elif len(selected_edges) > 1:
                 # linked_faces = {}
@@ -447,7 +445,7 @@ class SetArea(bpy.types.Operator):
 
             else:
                 report("median", self)
-                
+
 
         S.translation -= center_median
 
