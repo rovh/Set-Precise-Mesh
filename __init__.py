@@ -703,7 +703,7 @@ class Popup_Menu_SetPreciseMesh_SetLength (bpy.types.Operator):
 
 class Popup_Menu_SetPreciseMesh_SetArea (bpy.types.Operator):
     bl_idname = "wm.menu_setprecisemesh_setarea"
-    bl_label = "Pop-up Menu | Set Area " + name
+    bl_label = "Pop-up Menu | Set Area    " + name
     bl_description = "To make it convenient to use the pop-up menu You can assign shortcut \n \
          ( For exaple Ctrl + Alt + Wheel Up )\n \
         How to do it: > right-click on this button > Assign Shortcut"
