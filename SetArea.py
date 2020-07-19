@@ -85,10 +85,6 @@ class Dialog_Info_Operator_Set_Area (bpy.types.Operator):
         elif self.type == 'median':
             layout.label(icon = 'SNAP_FACE_CENTER', text = text)
 
-        
-
-
-
 class SetArea(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "mesh.change_area"
@@ -241,30 +237,52 @@ class SetArea(bpy.types.Operator):
                 center_median = needed_face.calc_center_median()
 
             elif len(selected_edges) == 1 and len(selected_edges[0].link_faces) != 1:
-                # if len(selected_verts)>2:
-                #     linked_faces_all = []
-                #     index_number = 0
+                if len(selected_verts)>2:
+                    linked_faces_all = []
+                    verts_all = []
+                    verts_edge_all = []
+                    needed_face_list = []
+                    area_true = 0
+                    center_median = mathutils.Vector((0,0,0))
+                    # verts_free = []
+                    # needed_face_number = 0
                     
-                #     for i in range(0, len(selected_verts) ):
-                #         for k in range(0, len(selected_verts[i].link_faces) ):
-                #             linked_faces_all.append( selected_verts[i].link_faces[k] )
+                    for i in range(0, len(selected_edges) ):
+                        for k in range(0, len(selected_edges[i].verts) ):
+                            verts_edge_all.append( selected_edges[i].verts[k] )
 
-                #     for i in range(0, len(linked_faces_all) -1):
-                #         for j in range(i+1, len(linked_faces_all) ):
-                #             if linked_faces_all[i].index == linked_faces_all[j].index:
-                #                 index_number += 1
-                #                 needed_face = linked_faces_all[i]
-                #                 needed_face.select = True
-                #                 break
+                    for i in range(0, len(selected_verts)):
+                        verts_all.append(selected_verts[i])
 
-                #     area_true = needed_face.calc_area()
-                #     center_median = needed_face.calc_center_median()
+                    verts_other = list(set(verts_all) - set(verts_edge_all))
+
+                    for i in range(0, len(selected_edges)):
+                        for k in range(0, len(selected_edges[i].link_faces)):
+                            linked_faces_all.append(selected_edges[i].link_faces[k])
+
+                    for i in range(0, len(verts_other)):
+                        for k in range(0, len(verts_other[i].link_faces)):
+                            linked_faces_all.append(verts_other[i].link_faces[k])
+
+
+                    for i in range(0, len(linked_faces_all) -1):
+                        for j in range(i+1, len(linked_faces_all) ):
+                            if linked_faces_all[i].index == linked_faces_all[j].index:
+                                # needed_face_number += 1
+                                needed_face = linked_faces_all[i]
+                                needed_face_list.append(linked_faces_all[i])
+                                area_true = needed_face.calc_area() + area_true
+                                center_median = needed_face.calc_center_median() + center_median
+                                needed_face.select = True
+                                break
+
+                    center_median = center_median/len(needed_face_list)
                     
-                # else:
-                text = text_description
-                war = "ERROR"
-                self.report({war}, text)
-                return{"FINISHED"}
+                else:
+                    text = text_description
+                    war = "ERROR"
+                    self.report({war}, text)
+                    return{"FINISHED"}
 
             elif len(selected_edges) > 1:
                 # linked_faces = {}

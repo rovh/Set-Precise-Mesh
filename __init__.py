@@ -1355,7 +1355,7 @@ class SetPreciseMesh_Props (bpy.types.PropertyGroup):
     )
     scale_point: bpy.props.EnumProperty(
         name = "Scale point",
-        default = "auto_point",
+        default = "madian_point",
         description = "",
         items=(
             ("madian_point"   , "Median Point" , "" , "PIVOT_MEDIAN" , 0),
