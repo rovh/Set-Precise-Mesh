@@ -6,6 +6,7 @@ Right now “Set Precise Mesh” allows users to:
 * Set Length – set the exact length of the edge or length between selected elements(vertices/edges/faces).
 * Set Area – set area of the face/faces.
 * and has extra features for it.
+
 Also don’t forget to leave a like ! :+1:
 
 ## Contents
