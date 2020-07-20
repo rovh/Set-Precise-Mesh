@@ -1,7 +1,13 @@
 
 # Set Precise Mesh Add-on
 
-Right now “Set Precise Mesh” allows users to set exact values of the angle between three vertexes and also sets the exact length of the edge and has extra features for it.
+Right now “Set Precise Mesh” allows users to:
+
+Set Angle – set exact values of the angle between three vertexes
+Set Length – set the exact length of the edge or length between selected elements(vertices/edges/faces).
+Set Area – set area of the face/faces.
+and has extra features for it.
+Also don’t forget to leave a like ! :+1:
 
 ## Contents
 * <a href="#example_of_use">Example of use</a>
