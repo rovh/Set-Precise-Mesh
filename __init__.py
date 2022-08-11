@@ -13,10 +13,10 @@
 
 name = "(Set Precise Mesh)"
 bl_info = {
-    "name" : "Set Precise Mesh /CAD",
+    "name" : "Set Precise Mesh",
     "author" : "Rovh",
     "description" : "This addon allows you to set exact values for the mesh",
-    "blender" : (2, 83, 0),
+    "blender" : (3, 2, 2),
     "version" : (1,3,0),
     "location" : "View3D > Sidebar in Edit Mode > Item Tab, View Tab and Edit Tab",
     "warning" : "",

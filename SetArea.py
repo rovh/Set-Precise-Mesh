@@ -608,7 +608,7 @@ class SetArea(bpy.types.Operator):
                 verts=[v for v in bm.verts if v.select],
                 space=S
                 )
-            bmesh.update_edit_mesh(me, True)
+            bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
         # if len(selected_faces) == 1:
         #     needed_face.select = False

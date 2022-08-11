@@ -26,7 +26,7 @@ class Pop_Up_Set_Cursor_To_Normal (bpy.types.Operator):
 
         bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
         bpy.context.object.update_from_editmode()
-        bmesh.update_edit_mesh(me, True)
+        bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
         selected_verts = [verts for verts in bm.verts if verts.select]
         selected_edges = [edge for edge in bm.edges if edge.select]
@@ -83,7 +83,7 @@ class Pop_Up_Set_Cursor_To_Normal (bpy.types.Operator):
 
         bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
         bpy.context.object.update_from_editmode()
-        bmesh.update_edit_mesh(me, True)
+        bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
         selected_verts = [verts for verts in bm.verts if verts.select]
         selected_edges = [edge for edge in bm.edges if edge.select]
@@ -143,7 +143,7 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
         bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
         bpy.context.object.update_from_editmode()
-        bmesh.update_edit_mesh(me, True)
+        bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
         
         #Create lists
@@ -320,7 +320,7 @@ class Set_Cursor_To_Normal (bpy.types.Operator):
 
         bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
         bpy.context.object.update_from_editmode()
-        bmesh.update_edit_mesh(me, True)
+        bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
 
         return {'FINISHED'}

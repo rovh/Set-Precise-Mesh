@@ -252,7 +252,7 @@ class SetLength(bpy.types.Operator):
             if prog == "global_matrix":
 
                 bpy.context.object.update_from_editmode()
-                bmesh.update_edit_mesh(me, True, True)
+                bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
                 wm = bpy.context.active_object.matrix_world.copy()
                 wm = wm.inverted()
@@ -274,7 +274,7 @@ class SetLength(bpy.types.Operator):
 
 
                 bpy.context.object.update_from_editmode()
-                bmesh.update_edit_mesh(me, True, True)
+                bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
             elif prog == "local_matrix":
 
@@ -313,7 +313,7 @@ class SetLength(bpy.types.Operator):
             elif prog == "cursor_matrix":
 
                 bpy.context.object.update_from_editmode()
-                bmesh.update_edit_mesh(me, True, True)
+                bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
                 # bpy.context.scene.update_tag()
                 # bpy.context.view_layer.update()
                 # bpy.context.depsgraph.update()
@@ -351,7 +351,7 @@ class SetLength(bpy.types.Operator):
                 
 
                 bpy.context.object.update_from_editmode()
-                bmesh.update_edit_mesh(me, True, True)
+                bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
                 # bpy.context.scene.update_tag()
                 # bpy.context.view_layer.update()
 
@@ -375,7 +375,7 @@ class SetLength(bpy.types.Operator):
             elif prog == "custom_object_matrix":
 
                 bpy.context.object.update_from_editmode()
-                bmesh.update_edit_mesh(me, True, True)
+                bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
                 # bpy.context.scene.update_tag()
                 # bpy.context.view_layer.update()
 
@@ -412,7 +412,7 @@ class SetLength(bpy.types.Operator):
 
 
                 bpy.context.object.update_from_editmode()
-                bmesh.update_edit_mesh(me, True, True)
+                bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
                 # bpy.context.scene.update_tag()
                 # bpy.context.view_layer.update()
 
@@ -638,7 +638,7 @@ class SetLength(bpy.types.Operator):
             
             bpy.context.scene.tool_settings.transform_pivot_point = m
 
-            bmesh.update_edit_mesh(me, True)        
+            bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)        
         
         else:
 
@@ -717,11 +717,11 @@ class SetLength(bpy.types.Operator):
             #         space=S
             #         )
 
-            bmesh.update_edit_mesh(me, True)
+            bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
                   
         bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
         bpy.context.object.update_from_editmode()
-        bmesh.update_edit_mesh(me, True, True)
+        bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
         return {'FINISHED'}
 

@@ -211,10 +211,10 @@ class Set_Mesh_Position (bpy.types.Operator):
         bm = bmesh.from_edit_mesh(me)
 
         bpy.context.object.update_from_editmode()
-        bmesh.update_edit_mesh(me, True)
+        bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
         # bpy.context.object.update_from_editmode()
-        # bmesh.update_edit_mesh(me, True, True)
+        # bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
         # bpy.context.scene.update_tag()
         # bpy.context.view_layer.update()
         # mat_loc =  mathutils.Matrix.Translation(( 0.0 ,  0.0 ,  0.0 ))        
@@ -244,7 +244,7 @@ class Set_Mesh_Position (bpy.types.Operator):
 
         bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
         bpy.context.object.update_from_editmode()
-        bmesh.update_edit_mesh(me, True)
+        bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
         selected_verts = [verts for verts in bm.verts if verts.select]
         selected_edges = [edge for edge in bm.edges if edge.select]
@@ -365,7 +365,7 @@ class Set_Mesh_Position (bpy.types.Operator):
 
 
         bpy.context.object.update_from_editmode()
-        bmesh.update_edit_mesh(me, True)
+        bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
         scale_remember_1 = bpy.context.object.scale[0]
         scale_remember_2 = bpy.context.object.scale[1]
@@ -513,7 +513,7 @@ class Set_Mesh_Position (bpy.types.Operator):
         bpy.context.object.scale[2] = scale_remember_3
 
         bpy.context.object.update_from_editmode()
-        bmesh.update_edit_mesh(me, True)
+        bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
         wm = bpy.context.active_object.matrix_world.copy()
         wm_inverted = wm.inverted()
@@ -548,14 +548,14 @@ class Set_Mesh_Position (bpy.types.Operator):
             bpy.ops.object.mode_set(mode='EDIT')
             
         bpy.context.object.update_from_editmode()
-        bmesh.update_edit_mesh(me, True, True)
+        bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
         bpy.context.scene.cursor.location = cursor_location_old
         bpy.context.scene.cursor.matrix = cursor_matrix_old
 
 
         bpy.context.object.update_from_editmode()
-        bmesh.update_edit_mesh(me, True, True)
+        bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
         return {"FINISHED"}
 

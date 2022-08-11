@@ -103,14 +103,15 @@ class SetAngle(bpy.types.Operator):
         bm = bmesh.from_edit_mesh(me)
 
         bpy.context.object.update_from_editmode()
-        bmesh.update_edit_mesh(me, True, True)
+        # bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
+        bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
         # recalculate = 0
         # for cycle in range (0, recalculate + 1):
         #     print("cycle")
 
         # bpy.context.object.update_from_editmode()
-        # bmesh.update_edit_mesh(me, True)
+        # bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
         #Create lists
         vec = []
@@ -145,7 +146,8 @@ class SetAngle(bpy.types.Operator):
         prog = context.window_manager.setprecisemesh.projection_type
 
         bpy.context.object.update_from_editmode()
-        bmesh.update_edit_mesh(me, True, True)
+        # bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
+        bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
         """Check list of selected vertices"""
         Clear_angle = False
@@ -171,7 +173,7 @@ class SetAngle(bpy.types.Operator):
                 Clear_angle = False
 
                 bpy.context.object.update_from_editmode()
-                bmesh.update_edit_mesh(me, True, True)
+                bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
                 v2_prg = bpy.context.active_object.matrix_world  @ v2
                 v1 = bpy.context.active_object.matrix_world  @ v3
@@ -201,7 +203,7 @@ class SetAngle(bpy.types.Operator):
                 v1 = wm @ v1  
 
                 bpy.context.object.update_from_editmode()
-                bmesh.update_edit_mesh(me, True, True)
+                bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
             elif prog == "local_matrix":
 
@@ -249,7 +251,7 @@ class SetAngle(bpy.types.Operator):
             elif prog == "cursor_matrix":
 
                 bpy.context.object.update_from_editmode()
-                bmesh.update_edit_mesh(me, True, True)
+                bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
                 # bpy.context.scene.update_tag()
                 # bpy.context.view_layer.update()
                 # bpy.context.depsgraph.update()
@@ -310,7 +312,7 @@ class SetAngle(bpy.types.Operator):
                 
 
                 bpy.context.object.update_from_editmode()
-                bmesh.update_edit_mesh(me, True, True)
+                bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
                 # bpy.context.scene.update_tag()
                 # bpy.context.view_layer.update()
 
@@ -339,7 +341,7 @@ class SetAngle(bpy.types.Operator):
             elif prog == "custom_object_matrix":
 
                 bpy.context.object.update_from_editmode()
-                bmesh.update_edit_mesh(me, True, True)
+                bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
                 # bpy.context.scene.update_tag()
                 # bpy.context.view_layer.update()
 
@@ -389,14 +391,14 @@ class SetAngle(bpy.types.Operator):
 
 
                 bpy.context.object.update_from_editmode()
-                bmesh.update_edit_mesh(me, True, True)
+                bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
                 # bpy.context.scene.update_tag()
                 # bpy.context.view_layer.update()
 
             # elif prog == "normal_matrix":
 
             #     bpy.context.object.update_from_editmode()
-            #     bmesh.update_edit_mesh(me, True, True)
+            #     bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
             #     # bpy.context.scene.update_tag()
             #     # bpy.context.view_layer.update()
             #     # bpy.context.depsgraph.update()
@@ -474,7 +476,8 @@ class SetAngle(bpy.types.Operator):
             oldv3 = mathutils.Vector( vec[2] ) # 3 selected
 
         bpy.context.object.update_from_editmode()
-        bmesh.update_edit_mesh(me, True, True)
+        # bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
+        bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
 
         if Clear_angle == 1:
@@ -493,7 +496,8 @@ class SetAngle(bpy.types.Operator):
             bpy.context.window_manager.setprecisemesh.angle = angle
             return {"FINISHED"}
         
-        bmesh.update_edit_mesh(me, True, True)
+        # bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
+        bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
         """Select cases for number of selected vertices"""
         if length_selected_vert == "Four":
@@ -577,7 +581,7 @@ class SetAngle(bpy.types.Operator):
 
                         
             bpy.context.object.update_from_editmode()
-            bmesh.update_edit_mesh(me, True, True)
+            bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
 
             bpy.ops.transform.rotate("INVOKE_DEFAULT")
@@ -585,7 +589,7 @@ class SetAngle(bpy.types.Operator):
         
 
             bpy.context.object.update_from_editmode()
-            bmesh.update_edit_mesh(me, True, True)
+            bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
         else:
             # print(oldv3 , "Before old location of v3")
             # oldv3_for_test = oldv3
@@ -604,11 +608,11 @@ class SetAngle(bpy.types.Operator):
             obj = context.active_object
             
             bpy.context.object.update_from_editmode()
-            bmesh.update_edit_mesh(me, True, True)
+            bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
             if length_selected_vert == "Four":
 
-                bmesh.update_edit_mesh(me, True, True)
+                bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
                 newv3 = obj.data.vertices[ind[3]].co
 
@@ -628,11 +632,11 @@ class SetAngle(bpy.types.Operator):
                     bm.verts[ind[3]].co = iv
                     
                     bpy.context.object.update_from_editmode()
-                    bmesh.update_edit_mesh(me, True, True)
+                    bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
             if length_selected_vert == "Three":     
                 bpy.context.object.update_from_editmode()
-                bmesh.update_edit_mesh(me, True, True)
+                bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
                 newv3 = obj.data.vertices[ind[2]].co
                 
@@ -657,11 +661,11 @@ class SetAngle(bpy.types.Operator):
                     bm.verts[ind[2]].co = iv
                     
                     bpy.context.object.update_from_editmode()
-                    bmesh.update_edit_mesh(me, True, True)
+                    bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
             
             if length_selected_vert == "Two":
                 bpy.context.object.update_from_editmode()
-                bmesh.update_edit_mesh(me, True, True)
+                bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
                 
                 newv3 = obj.data.vertices[ind[1]].co
@@ -688,11 +692,12 @@ class SetAngle(bpy.types.Operator):
                     
                     
                     bpy.context.object.update_from_editmode()
-                    bmesh.update_edit_mesh(me, True, True)
+                    bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
         
         bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
         bpy.context.object.update_from_editmode()
-        bmesh.update_edit_mesh(me, True, True)
+        # bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
+        bmesh.update_edit_mesh(me, loop_triangles=True, destructive=True)
 
          
         return {'FINISHED'}
